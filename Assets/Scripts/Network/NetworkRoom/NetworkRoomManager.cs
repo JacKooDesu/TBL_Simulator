@@ -6,7 +6,7 @@ namespace TBL
 {
     public class NetworkRoomManager : Mirror.NetworkRoomManager
     {
-        bool showStartButton;
+        public bool showStartButton;
         public override void OnRoomServerPlayersReady()
         {
 #if UNITY_SERVER

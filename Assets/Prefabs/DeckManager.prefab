@@ -43,4 +43,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7c6c5103be456c47aa08e3cc197ae84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cardConfigs: []
+  deck: {fileID: 11400000, guid: c54e33251bf451e419d0d8cb274d71f2, type: 2}
+  cards: []
+  inGameCards: []
+  garbageCards: []

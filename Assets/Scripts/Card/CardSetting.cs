@@ -14,15 +14,16 @@ namespace TBL.Card
         CardSendType sendType;
 
         CardColor cardColor;
-        public CardColor CardColor
-        {
-            set { cardColor = value; }
-        }
 
         [SerializeField] ushort id;
         public ushort ID
         {
-            get => System.Convert.ToUInt16((int)cardType + (int)cardColor + (int)sendType);
+            get
+            {
+                return id == 0 ?
+                    System.Convert.ToUInt16((int)cardType + (int)cardColor + (int)sendType) :
+                    id;
+            }
             set
             {
                 id = value;
@@ -159,6 +160,13 @@ namespace TBL.Card
         public string GetCardNameFully()
         {
             return "(" + SendTypeText + ") " + CardName + " " + ColorText;
+        }
+
+        public static CardSetting IDConvertCard(ushort id)
+        {
+            CardSetting c = new CardSetting();
+            c.ID = id;
+            return c;
         }
     }
 }
