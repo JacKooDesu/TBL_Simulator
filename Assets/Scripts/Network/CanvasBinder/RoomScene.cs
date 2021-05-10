@@ -13,6 +13,7 @@ namespace TBL.NetCanvas
         Button cancel = default;
         [SerializeField]
         Button start = default;
+        public GameObject playerListUI = default;
 
         NetworkRoomPlayer localPlayer;
 
