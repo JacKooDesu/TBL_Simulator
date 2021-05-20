@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TBL.NetCanvas;
-
+using Mirror;
 namespace TBL
 {
     public class NetworkRoomPlayer : Mirror.NetworkRoomPlayer
     {
+        [SerializeField]
+        string playerName;
         [SerializeField]
         GameObject playerUIPrefab = default;
         GameObject playerUI;

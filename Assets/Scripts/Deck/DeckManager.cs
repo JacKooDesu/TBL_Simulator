@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TBL.Card;
+using Mirror;
 
 namespace TBL
 {
-    public class DeckManager : MonoBehaviour
+    public class DeckManager : NetworkBehaviour
     {
         [SerializeField] DeckSetting deck;
 
@@ -64,7 +65,7 @@ namespace TBL
             cards.RemoveAt(0);
             return c;
         }
-        
+
         public void CardToGarbage(ulong id)
         {
             foreach (CardSetting c in inGameCards)
@@ -76,6 +77,7 @@ namespace TBL
                 }
             }
         }
+
     }
 }
 

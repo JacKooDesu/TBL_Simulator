@@ -9,7 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8794170685803433291}
-  - component: {fileID: 1634497072589297473}
+  - component: {fileID: 5163062243220364458}
+  - component: {fileID: 5824895100140089665}
   m_Layer: 0
   m_Name: DeckManager
   m_TagString: Untagged
@@ -31,7 +32,24 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1634497072589297473
+--- !u!114 &5163062243220364458
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3351430209532791837}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 0
+  serverOnly: 0
+  visible: 0
+  m_AssetId: 
+  hasSpawned: 0
+--- !u!114 &5824895100140089665
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -43,6 +61,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7c6c5103be456c47aa08e3cc197ae84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
   deck: {fileID: 11400000, guid: c54e33251bf451e419d0d8cb274d71f2, type: 2}
   cards: []
   inGameCards: []

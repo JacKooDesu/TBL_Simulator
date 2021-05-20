@@ -68,6 +68,28 @@ namespace TBL
             return texture;
         }
 
+        public static void LoadImage(string path, string fileName, string fileType, out byte[] bytes)
+        {
+            var filePath = Application.dataPath + path + fileName + "." + fileType;
+            var deserializeData = (byte[])(null);
+
+            try
+            {
+                deserializeData = File.ReadAllBytes(filePath);
+            }
+            catch (System.IO.FileNotFoundException)
+            {
+                bytes = null;
+                return;
+            }
+            catch (System.IO.DirectoryNotFoundException)
+            {
+                bytes = null;
+                return;
+            }
+
+            bytes = deserializeData;
+        }
         public static List<string> LoadDirFiles(string dir, string type)
         {
             DirectoryInfo di = new DirectoryInfo(Application.dataPath + dir);

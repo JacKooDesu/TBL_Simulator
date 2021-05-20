@@ -8,6 +8,11 @@ namespace TBL
     public class NetworkRoomManager : Mirror.NetworkRoomManager
     {
         public bool showStartButton;
+        [SerializeField] GameObject deckManagerPrefab;
+        public DeckManager deckManager;
+
+        public List<NetworkPlayer> players = new List<NetworkPlayer>();
+
         public override void OnRoomServerPlayersReady()
         {
 #if UNITY_SERVER
@@ -15,6 +20,15 @@ namespace TBL
 #else
             showStartButton = true;
 #endif
+        }
+
+        public override void OnRoomServerSceneChanged(string sceneName)
+        {
+            base.OnRoomServerSceneChanged(sceneName);
+            if (deckManager == null)
+                deckManager = Instantiate(deckManagerPrefab).GetComponent<DeckManager>();
+
+            NetworkServer.Spawn(deckManager.gameObject);
         }
 
         public override void OnGUI()

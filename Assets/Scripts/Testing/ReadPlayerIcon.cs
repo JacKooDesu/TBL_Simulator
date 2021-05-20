@@ -2,23 +2,31 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Mirror;
 
 namespace TBL.Testing
 {
-    public class ReadPlayerIcon : MonoBehaviour
+    public class ReadPlayerIcon : NetworkBehaviour
     {
-        public RawImage image;
-        void Start()
+        [SyncVar(hook = nameof(OnValueChanged))]
+        public int value;
+
+        public Text UIText;
+
+        private void Update()
         {
-            Texture2D texture = FileManager.LoadImage("/Temp/", "temp", "png");
-            image.texture = texture;
+            UIText.text = value.ToString();
         }
 
-        // Update is called once per frame
-        void Update()
+        public void OnValueChanged(int oldValue, int newValue)
         {
+            RpcChangeValue(newValue);
+        }
 
+        [ClientRpc]
+        public void RpcChangeValue(int i)
+        {
+            value = i;
         }
     }
-
 }
