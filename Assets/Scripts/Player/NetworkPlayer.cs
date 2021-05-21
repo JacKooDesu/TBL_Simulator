@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 using TBL.Card;
+using System;
 
 namespace TBL
 {
     public class NetworkPlayer : NetworkBehaviour
     {
+        public string playerName;
+
         [SerializeField, Header("手牌")]
         List<CardObject> handCards = new List<CardObject>();
 
@@ -33,6 +36,25 @@ namespace TBL
             netHandCard.Add(((NetworkRoomManager)NetworkManager.singleton).deckManager.DrawCardFromTop().ID);
         }
 
+
+        #region CHAT
+        public static event Action<NetworkPlayer, string> OnChatMessage;
+        [Command]
+        public void CmdChatMessage(string message)
+        {
+            if (message.Trim() != "")
+            {
+                RpcChatReceive(message.Trim());
+            }
+        }
+
+        [ClientRpc]
+        public void RpcChatReceive(string message)
+        {
+            OnChatMessage?.Invoke(this, message);
+        }
+
+        #endregion
     }
 }
 

@@ -7,7 +7,7 @@ using UnityEngine.Events;
 
 namespace TBL.NetCanvas
 {
-    public class NetCanvasBinderBase : NetworkBehaviour
+    public class NetCanvasBinderBase : MonoBehaviour
     {
         protected NetworkRoomManager manager;
 

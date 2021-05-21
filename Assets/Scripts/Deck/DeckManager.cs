@@ -28,6 +28,7 @@ namespace TBL
                         CardSetting card = g.AddComponent<CardSetting>();
                         card.ID = (ushort)(temp.ID + (ushort)(deck.CardConfigs[i].ColorConfigs[j].Color));
                         g.name = card.GetCardNameFully();
+                        g.transform.SetParent(transform);
 
                         cards.Add(card);
                     }
