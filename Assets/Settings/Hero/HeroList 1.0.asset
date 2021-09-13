@@ -14,3 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   heros:
   - {fileID: 4586220333743073279, guid: 60d53b5788149e148908f998e9dd1f14, type: 3}
+  - {fileID: 4711446211714667248, guid: a728321a24225d745801fee4baf5be65, type: 3}
+  - {fileID: 7840624120385195165, guid: 74db06ddbecdf734a9b437f9c465a884, type: 3}
+  - {fileID: 6574575317972908060, guid: 210f7c16f2b2d064b92cca103167127b, type: 3}
+  - {fileID: 2407746934942780049, guid: f2760446659010349bb9e0a7b58811d1, type: 3}
+  - {fileID: 3000302891728669176, guid: c3beb11ed194e454a996037f3c2b6821, type: 3}
+  - {fileID: -8171487019405511994, guid: 5ae9e1889162b844bb40ad14fe093de5, type: 3}
+  - {fileID: 2940624703149146698, guid: 6a987d37bc2b8474dbcba802a8d614de, type: 3}

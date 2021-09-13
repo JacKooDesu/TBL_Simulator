@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2697842909964609049}
   - component: {fileID: 4586220333743073279}
   m_Layer: 0
-  m_Name: 7Hundreds
+  m_Name: "\u67D2\u4F70"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -44,5 +44,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   heroName: "\u67D2\u4F70"
+  avatar: {fileID: 21300000, guid: a0af6324f89d8e7469a4e9b5a5101762, type: 3}
   heroType: 0
+  gender: 0
   playerStatus: {fileID: 0}

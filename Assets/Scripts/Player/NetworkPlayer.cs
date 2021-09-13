@@ -9,6 +9,7 @@ namespace TBL
 {
     public class NetworkPlayer : NetworkBehaviour
     {
+        [SyncVar]
         public string playerName;
 
         [SerializeField, Header("手牌")]
@@ -23,15 +24,24 @@ namespace TBL
 
         private void Start()
         {
-            if (isServer)
-                ((NetworkRoomManager)NetworkManager.singleton).players.Add(this);
+            // if (isServer)
+            ((NetworkRoomManager)NetworkManager.singleton).players.Add(this);
 
             if (isClient)
+            {
+                CmdSetName();
                 CmdDraw();
+            }
         }
 
         [Command]
-        void CmdDraw()
+        public void CmdSetName()
+        {
+            playerName = GameUtils.PlayerName;
+        }
+
+        [Command]
+        public void CmdDraw()
         {
             netHandCard.Add(((NetworkRoomManager)NetworkManager.singleton).deckManager.DrawCardFromTop().ID);
         }

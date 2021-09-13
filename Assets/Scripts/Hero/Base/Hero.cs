@@ -9,13 +9,20 @@ namespace TBL
     {
         [SerializeField, Header("角色名")]
         protected string heroName = "None";
-
+        [SerializeField]
+        protected Sprite avatar;
 
         [SerializeField, Header("角色屬性")]
         protected HeroType heroType;
         public HeroType HeroType
         {
             get => heroType;
+        }
+        [SerializeField]
+        protected HeroGender gender;
+        public HeroGender Gender
+        {
+            get => gender;
         }
 
         [SerializeField, Header("使用者")]
@@ -28,7 +35,7 @@ namespace TBL
 
         public virtual void OnGetCard(CardObject card)
         {
-            
+
         }
     }
 }

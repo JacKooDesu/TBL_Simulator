@@ -17,9 +17,13 @@ namespace TBL.NetCanvas
         InputField ip = default;
         [SerializeField]
         Button hostOnly = default;
+        [SerializeField]
+        InputField nameField = default;
 
         protected override void Start()
         {
+            nameField.text = GameUtils.PlayerName;
+
             base.Start();
 
             BindEvent(
@@ -38,6 +42,11 @@ namespace TBL.NetCanvas
                 hostOnly.onClick,
                 () => manager.StartServer()
             );
+
+            nameField.onEndEdit.AddListener((string s) =>
+            {
+                GameUtils.PlayerName = s;
+            });
         }
     }
 

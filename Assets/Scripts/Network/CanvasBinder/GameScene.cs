@@ -24,9 +24,9 @@ namespace TBL.NetCanvas
             {
                 GameObject g = Instantiate(playerIconPrefab, playerMapping.transform);
             }
-        // ((RectTransform)playerMapping.transform).sizeDelta = new Vector2(
-        //     ((RectTransform)playerMapping.transform).sizeDelta.x,
-        //     ((RectTransform)playerIconPrefab.transform).sizeDelta.y * testPlayerCount + playerMapping.GetComponent<VerticalLayoutGroup>().spacing * (testPlayerCount - 1));
+            // ((RectTransform)playerMapping.transform).sizeDelta = new Vector2(
+            //     ((RectTransform)playerMapping.transform).sizeDelta.x,
+            //     ((RectTransform)playerIconPrefab.transform).sizeDelta.y * testPlayerCount + playerMapping.GetComponent<VerticalLayoutGroup>().spacing * (testPlayerCount - 1));
         }
         #endregion
 
@@ -85,11 +85,30 @@ namespace TBL.NetCanvas
         }
         #endregion
 
+        #region BUTTON
+        [Header("按鈕")]
+        [SerializeField]
+        Button drawButton;
+        [SerializeField]
+        Button useButton;
+
+        void BindButtons()
+        {
+            drawButton.onClick.AddListener(() => { manager.GetLocalPlayer().CmdDraw(); });
+        }
+
+        #endregion
+
+        #region PLAYER_STATUS
+        
+        #endregion
+
         protected override void Start()
         {
             base.Start();
             InitPlayerMapping();
             InitChatWindow();
+            BindButtons();
         }
     }
 }

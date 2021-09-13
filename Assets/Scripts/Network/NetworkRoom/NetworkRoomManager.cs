@@ -43,6 +43,18 @@ namespace TBL
             //     ServerChangeScene(GameplayScene);
             // }
         }
+
+        public NetworkPlayer GetLocalPlayer()
+        {
+            foreach (NetworkPlayer p in players)
+            {
+                print(p.netId);
+                if (p.isLocalPlayer)
+                    return p;
+            }
+
+            return null;
+        }
     }
 }
 
