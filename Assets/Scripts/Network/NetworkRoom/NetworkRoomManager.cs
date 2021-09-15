@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Mirror;
 using UnityEngine;
+using TBL.Settings;
 
 namespace TBL
 {
@@ -12,6 +13,8 @@ namespace TBL
         public DeckManager deckManager;
 
         public List<NetworkPlayer> players = new List<NetworkPlayer>();
+
+        public HeroList heroList;
 
         public override void OnRoomServerPlayersReady()
         {

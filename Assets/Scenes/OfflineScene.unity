@@ -1408,6 +1408,7 @@ MonoBehaviour:
     type: 3}
   deckManager: {fileID: 0}
   players: []
+  heroList: {fileID: 11400000, guid: 40c7dba7aae66704db3829769696fac0, type: 2}
 --- !u!4 &1168907539
 Transform:
   m_ObjectHideFlags: 0
@@ -1852,6 +1853,7 @@ MonoBehaviour:
   client: {fileID: 1924687069}
   ip: {fileID: 1315916686}
   hostOnly: {fileID: 919991312}
+  nameField: {fileID: 975267222}
 --- !u!1 &1793304183
 GameObject:
   m_ObjectHideFlags: 0

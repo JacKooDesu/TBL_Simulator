@@ -100,7 +100,13 @@ namespace TBL.NetCanvas
         #endregion
 
         #region PLAYER_STATUS
-        
+        [SerializeField] Image heroAvatarUI;
+        [SerializeField] Image teamIconUI;
+        public void InitPlayerStatus()
+        {
+            heroAvatarUI.sprite = manager.GetLocalPlayer().hero.Avatar;
+            // teamIconUI.sprite = manager.GetLocalPlayer().
+        }
         #endregion
 
         protected override void Start()

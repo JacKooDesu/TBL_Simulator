@@ -16,6 +16,9 @@ namespace TBL
 
         private void OnEnable()
         {
+            if(isClient)
+                return;
+                
             for (int i = 0; i < deck.CardConfigs.Count; ++i)
             {
                 for (int j = 0; j < deck.CardConfigs[i].ColorConfigs.Count; ++j)
@@ -36,7 +39,9 @@ namespace TBL
                 }
             }
 
-            Shuffle();
+            GameUtils.Shuffle<CardSetting>(ref cards);
+
+            // Shuffle();
         }
 
         void Shuffle()

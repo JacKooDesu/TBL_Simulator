@@ -22,6 +22,8 @@ namespace TBL
         public SyncList<int> netHandCard = new SyncList<int>();
         public SyncList<int> netCards = new SyncList<int>();
 
+        public Hero hero;
+
         private void Start()
         {
             // if (isServer)
@@ -29,8 +31,15 @@ namespace TBL
 
             if (isClient)
             {
+                hero = ((NetworkRoomManager)NetworkManager.singleton).heroList.heros[UnityEngine.Random.Range(0, ((NetworkRoomManager)NetworkManager.singleton).heroList.heros.Count)];
+                
                 CmdSetName();
                 CmdDraw();
+            }
+
+            if(isLocalPlayer){
+                hero = ((NetworkRoomManager)NetworkManager.singleton).heroList.heros[UnityEngine.Random.Range(0, ((NetworkRoomManager)NetworkManager.singleton).heroList.heros.Count)];
+                FindObjectOfType<TBL.NetCanvas.GameScene>().InitPlayerStatus();
             }
         }
 

@@ -61,5 +61,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 399e70cf1726c5e43a8f725e14542231, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  playerName: 
   handCards: []
   cards: []

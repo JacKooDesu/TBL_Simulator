@@ -11,6 +11,10 @@ namespace TBL
         protected string heroName = "None";
         [SerializeField]
         protected Sprite avatar;
+        public Sprite Avatar
+        {
+            get => avatar;
+        }
 
         [SerializeField, Header("角色屬性")]
         protected HeroType heroType;
