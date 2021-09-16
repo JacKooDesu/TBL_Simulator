@@ -14,6 +14,10 @@ namespace TBL.Card
         CardSendType sendType;
 
         CardColor cardColor;
+        public CardColor CardColor
+        {
+            get => cardColor;
+        }
 
         [SerializeField] ushort id;
         public ushort ID
