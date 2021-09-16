@@ -1409,6 +1409,7 @@ MonoBehaviour:
   deckManager: {fileID: 0}
   players: []
   heroList: {fileID: 11400000, guid: 40c7dba7aae66704db3829769696fac0, type: 2}
+  teamSetting: {fileID: 11400000, guid: e930df21bb60f894f9894dbfe111b4b4, type: 2}
 --- !u!4 &1168907539
 Transform:
   m_ObjectHideFlags: 0

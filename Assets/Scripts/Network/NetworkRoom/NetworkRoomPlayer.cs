@@ -16,11 +16,14 @@ namespace TBL
 
         private void OnEnable()
         {
-            
+
         }
 
         private void Update()
         {
+            if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "GameScene")
+                return;
+
             if (!hasGenerateUI)
             {
                 playerUI = Instantiate(playerUIPrefab);

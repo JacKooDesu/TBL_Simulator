@@ -14,7 +14,11 @@ namespace TBL
 
         public List<NetworkPlayer> players = new List<NetworkPlayer>();
 
-        public HeroList heroList;
+        public HeroList heroList;       // 英雄列表
+        public TeamSetting teamSetting; // 隊伍圖像、名稱
+
+
+        public List<TBL.Settings.TeamSetting.Team> teamList = new List<TeamSetting.Team>();
 
         public override void OnRoomServerPlayersReady()
         {
@@ -22,6 +26,7 @@ namespace TBL
             base.OnRoomServerPlayersReady();
 #else
             showStartButton = true;
+            InitTeamList();
 #endif
         }
 
@@ -51,12 +56,49 @@ namespace TBL
         {
             foreach (NetworkPlayer p in players)
             {
-                print(p.netId);
+                // print(p.netId);
                 if (p.isLocalPlayer)
                     return p;
             }
 
             return null;
+        }
+
+        public int GetLocalPlayerSlotIndex()
+        {
+            int i = 0;
+            foreach (NetworkPlayer p in players)
+            {
+                // print(p.netId);
+                if (p.isLocalPlayer)
+                    return i;
+
+                ++i;
+            }
+
+            return 0;
+        }
+    
+        
+        public void InitTeamList()
+        {
+            print("init");
+            foreach (TBL.Settings.TeamSetting.TeamPlayerCount setting in teamSetting.teamPlayerCountSetting)
+            {
+                if (setting.playerCount != roomSlots.Count)
+                    continue;
+
+                for (int i = 0; i < setting.Blue; ++i)
+                    teamList.Add(teamSetting.BlueTeam);
+
+                for (int i = 0; i < setting.Red; ++i)
+                    teamList.Add(teamSetting.RedTeam);
+
+                for (int i = 0; i < setting.Green; ++i)
+                    teamList.Add(teamSetting.GreenTeam);
+            }
+
+            GameUtils.Shuffle<TBL.Settings.TeamSetting.Team>(ref teamList);
         }
     }
 }

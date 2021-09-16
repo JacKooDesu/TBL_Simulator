@@ -7,6 +7,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.Events;
 using Mirror;
 
+
 namespace TBL.NetCanvas
 {
     public class GameScene : NetCanvasBinderBase
@@ -18,11 +19,14 @@ namespace TBL.NetCanvas
         GameObject playerIconPrefab;
         [SerializeField]
         int testPlayerCount = 5;
+
+        public List<TBL.UI.GameScene.PlayerData> playerUIs = new List<UI.GameScene.PlayerData>();
         void InitPlayerMapping()
         {
-            for (int i = 0; i < testPlayerCount; ++i)
+            for (int i = 0; i < manager.roomSlots.Count; ++i)
             {
                 GameObject g = Instantiate(playerIconPrefab, playerMapping.transform);
+                playerUIs.Add(g.GetComponent<TBL.UI.GameScene.PlayerData>());
             }
             // ((RectTransform)playerMapping.transform).sizeDelta = new Vector2(
             //     ((RectTransform)playerMapping.transform).sizeDelta.x,
@@ -31,7 +35,7 @@ namespace TBL.NetCanvas
         #endregion
 
         #region CHAT
-        [Header("Chat")]
+        [Header("聊天室")]
         [SerializeField]
         InputField chatInput;
         InputFieldSubmit chatSubmit;
@@ -100,12 +104,19 @@ namespace TBL.NetCanvas
         #endregion
 
         #region PLAYER_STATUS
+        [Header("玩家資訊")]
         [SerializeField] Image heroAvatarUI;
+        [SerializeField] Text heroNameUI;
         [SerializeField] Image teamIconUI;
+        [SerializeField] Text teamNameUI;
+
         public void InitPlayerStatus()
         {
             heroAvatarUI.sprite = manager.GetLocalPlayer().hero.Avatar;
-            // teamIconUI.sprite = manager.GetLocalPlayer().
+            heroNameUI.text = manager.GetLocalPlayer().hero.name;
+
+            teamIconUI.sprite = manager.GetLocalPlayer().team.icon;
+            teamNameUI.text = manager.GetLocalPlayer().team.name;
         }
         #endregion
 
