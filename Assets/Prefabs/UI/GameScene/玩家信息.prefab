@@ -338,7 +338,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.392}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1499,6 +1499,7 @@ GameObject:
   - component: {fileID: 4289249555758416406}
   - component: {fileID: 4289249555758416405}
   - component: {fileID: 4289249555758416407}
+  - component: {fileID: 8857629880653041488}
   m_Layer: 5
   m_Name: "\u73A9\u5BB6\u4FE1\u606F"
   m_TagString: Untagged
@@ -1592,6 +1593,31 @@ MonoBehaviour:
   m_ChildControlHeight: 1
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
+--- !u!114 &8857629880653041488
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4289249555758416403}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d937df3b21f7664595bff12430f5cd3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  heroAvatar: {fileID: 4289249554809904513}
+  skill1: {fileID: 4289249555233251321}
+  skill2: {fileID: 4289249556033447281}
+  skill3: {fileID: 4289249555346265417}
+  blueCount: {fileID: 4289249554792094773}
+  redCount: {fileID: 4289249554865887681}
+  blackCount: {fileID: 4289249554345582200}
+  skipBg: {fileID: 4289249555726984618}
+  lockBg: {fileID: 4289249555545756572}
+  activeColor: {r: 1, g: 0.97515523, b: 0, a: 1}
+  inactiveColor: {r: 0.29799998, g: 0.29799998, b: 0.29799998, a: 1}
+  handCardCount: {fileID: 4289249554672447631}
+  greenMission: {fileID: 4289249556084254725}
 --- !u!1 &4289249555881257596
 GameObject:
   m_ObjectHideFlags: 0
