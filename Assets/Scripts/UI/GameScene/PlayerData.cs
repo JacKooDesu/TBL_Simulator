@@ -39,7 +39,7 @@ namespace TBL.UI.GameScene
         public void UpdateHero(NetworkPlayer player)
         {
             if (player.hero.HeroType == HeroType.Hidden)
-                heroAvatar.sprite = ((NetworkRoomManager.singleton) as NetworkRoomManager).heroList.hiddenAvatar;
+                heroAvatar.sprite = ((NetworkRoomManager.singleton) as NetworkRoomManager).judgement.heroList.hiddenAvatar;
             else
                 heroAvatar.sprite = player.hero.Avatar;
         }

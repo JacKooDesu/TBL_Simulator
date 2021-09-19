@@ -63,4 +63,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
+  heroList: {fileID: 11400000, guid: 40c7dba7aae66704db3829769696fac0, type: 2}
   timer: 0
+  currentPlayerIndex: 0

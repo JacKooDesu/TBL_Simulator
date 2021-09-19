@@ -16,7 +16,6 @@ namespace TBL
 
         public List<NetworkPlayer> players = new List<NetworkPlayer>();
 
-        public HeroList heroList;       // 英雄列表
         public TeamSetting teamSetting; // 隊伍圖像、名稱
 
 

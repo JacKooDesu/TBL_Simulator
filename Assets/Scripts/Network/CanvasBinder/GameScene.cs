@@ -99,7 +99,7 @@ namespace TBL.NetCanvas
 
         void BindButtons()
         {
-            drawButton.onClick.AddListener(() => { manager.GetLocalPlayer().CmdDraw(); });
+            drawButton.onClick.AddListener(() => { manager.GetLocalPlayer().CmdDrawCard(2); });
         }
 
         #endregion

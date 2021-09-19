@@ -11,6 +11,7 @@ namespace TBL
     {
         [SyncVar]
         public int playerIndex = 0;
+
         [Command]
         void CmdSetPlayerIndex(int i)
         {
@@ -104,7 +105,7 @@ namespace TBL
         [SyncVar(hook = nameof(OnHeroIndexChange))] public int heroIndex = -1;
         void OnHeroIndexChange(int oldVar, int newVar)
         {
-            hero = manager.heroList.heros[newVar];
+            hero = manager.judgement.heroList.heros[newVar];
             if (isLocalPlayer)
                 netCanvas.InitPlayerStatus();
 
@@ -138,13 +139,14 @@ namespace TBL
                 CmdDrawTeam();
                 CmdDrawHero();
                 CmdSetName();
+                CmdDrawCard(3);
                 // CmdDraw();
             }
             else if (!isServer)
             {
                 if (heroIndex != -1)
                 {
-                    hero = manager.heroList.heros[heroIndex];
+                    hero = manager.judgement.heroList.heros[heroIndex];
                     netCanvas.playerUIs[manager.players.IndexOf(this)].UpdateHero(this);
                 }
             }
@@ -157,9 +159,12 @@ namespace TBL
         }
 
         [Command]
-        public void CmdDraw()
+        public void CmdDrawCard(int amount)
         {
-            netHandCard.Add(manager.deckManager.DrawCardFromTop().ID);
+            for (int i = 0; i < amount; ++i)
+            {
+                netHandCard.Add(manager.deckManager.DrawCardFromTop().ID);
+            }
         }
 
         // [ClientRpc]
@@ -176,7 +181,12 @@ namespace TBL
         [Command]
         public void CmdDrawHero()
         {
-            int rand = UnityEngine.Random.Range(0, manager.heroList.heros.Count);
+            int rand;
+            do
+            {
+                rand = UnityEngine.Random.Range(0, manager.judgement.heroList.heros.Count);
+            } while (manager.judgement.hasUsedHeros.IndexOf(rand) != -1);
+
             heroIndex = rand;
         }
 
@@ -184,7 +194,7 @@ namespace TBL
         public void RpcUpdateHero(int i)
         {
             heroIndex = i;
-            hero = manager.heroList.heros[heroIndex];
+            hero = manager.judgement.heroList.heros[heroIndex];
 
             if (isLocalPlayer)
                 netCanvas.InitPlayerStatus();

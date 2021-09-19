@@ -8,48 +8,8 @@ namespace TBL
 {
     public class NetworkJudgement : NetworkBehaviour
     {
-        public SyncList<int> netIdList = new SyncList<int>();
-        // net hand card callback
-        public void OnUpdateNetIdList(SyncList<int>.Operation op, int index, int oldItem, int newItem)
-        {
-            switch (op)
-            {
-                case SyncList<int>.Operation.OP_ADD:
-                    // index is where it got added in the list
-                    // newItem is the new item
-
-                    break;
-                case SyncList<int>.Operation.OP_CLEAR:
-                    // list got cleared
-                    break;
-                case SyncList<int>.Operation.OP_INSERT:
-                    // index is where it got added in the list
-                    // newItem is the new item
-                    break;
-                case SyncList<int>.Operation.OP_REMOVEAT:
-                    // index is where it got removed in the list
-                    // oldItem is the item that was removed
-                    break;
-                case SyncList<int>.Operation.OP_SET:
-                    // index is the index of the item that was updated
-                    // oldItem is the previous value for the item at the index
-                    // newItem is the new value for the item at the index
-                    break;
-            }
-
-            List<NetworkPlayer> newPlayerList = new List<NetworkPlayer>();
-            foreach (int i in netIdList)
-            {
-                foreach (NetworkPlayer p in manager.players)
-                {
-                    if ((int)p.netId == i)
-                        newPlayerList.Add(p);
-                }
-            }
-
-            manager.players = newPlayerList;
-            netCanvas.InitPlayerStatus();
-        }
+        public TBL.Settings.HeroList heroList;       // 英雄列表
+        public SyncList<int> hasUsedHeros = new SyncList<int>();
 
         [SerializeField, SyncVar(hook = nameof(OnTimeChange))] int timer;
         void OnTimeChange(int oldTime, int newTime)
@@ -72,12 +32,10 @@ namespace TBL
             netCanvas = FindObjectOfType<TBL.NetCanvas.GameScene>();
             manager = ((NetworkRoomManager)NetworkManager.singleton);
 
-            netIdList.Callback += OnUpdateNetIdList;
-
-            StartCoroutine(WaitAllPlayerConnect());
+            StartCoroutine(WaitAllPlayerInit());
         }
 
-        IEnumerator WaitAllPlayerConnect()
+        IEnumerator WaitAllPlayerInit()
         {
             while (manager.players.Count != manager.roomSlots.Count)
                 yield return null;
