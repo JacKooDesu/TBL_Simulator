@@ -8,5 +8,6 @@ namespace TBL.Settings
     public class HeroList : ScriptableObject
     {
         public List<Hero> heros;
+        public Sprite hiddenAvatar;
     }
 }
