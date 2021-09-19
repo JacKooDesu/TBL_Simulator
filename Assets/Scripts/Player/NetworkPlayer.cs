@@ -269,6 +269,12 @@ namespace TBL
 
 
         #endregion
+
+        public override void OnStopClient()
+        {
+            base.OnStopClient();
+            OnChatMessage = null;
+        }
     }
 }
 
