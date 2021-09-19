@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace TBL.Settings
 {
-    [CreateAssetMenu(fileName = "TeamList", menuName = "TBL/Team/Team List", order = 0)]
+    [CreateAssetMenu(fileName = "TeamList", menuName = "TBL/Settings/Team List", order = 0)]
     public class TeamSetting : ScriptableObject
     {
         public enum TeamEnum
