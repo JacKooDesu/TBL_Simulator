@@ -12,7 +12,15 @@ namespace TBL
         [SerializeField] GameObject deckManagerPrefab;
         public DeckManager deckManager;
         [SerializeField] GameObject judgementPrefab;
-        public NetworkJudgement judgement;
+        NetworkJudgement judgement;
+        public NetworkJudgement Judgement{
+            get{
+                if(judgement==null)
+                    judgement = FindObjectOfType<NetworkJudgement>();
+                
+                return judgement;
+            }
+        }
 
         public List<NetworkPlayer> players = new List<NetworkPlayer>();
 
@@ -41,6 +49,7 @@ namespace TBL
                     deckManager = Instantiate(deckManagerPrefab).GetComponent<DeckManager>();
 
                 NetworkServer.Spawn(deckManager.gameObject);
+                
 
                 if (judgement == null)
                     judgement = Instantiate(judgementPrefab).GetComponent<NetworkJudgement>();
