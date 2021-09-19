@@ -8,13 +8,14 @@ namespace TBL
 {
     public class NetworkJudgement : NetworkBehaviour
     {
-        public TBL.Settings.HeroList heroList;       // 英雄列表
+        public Settings.RoundSetting roundSetting;
+        public Settings.HeroList heroList;       // 英雄列表
         public SyncList<int> hasUsedHeros = new SyncList<int>();
 
         [SerializeField, SyncVar(hook = nameof(OnTimeChange))] int timer;
         void OnTimeChange(int oldTime, int newTime)
         {
-
+            netCanvas.timeTextUI.text = newTime.ToString();
         }
 
         [SerializeField, SyncVar(hook = nameof(OnCurrentPlayerChange))] int currentPlayerIndex;
@@ -26,6 +27,11 @@ namespace TBL
 
         TBL.NetCanvas.GameScene netCanvas;
         NetworkRoomManager manager;
+
+        [Header("輪設定")]
+        [SyncVar] public int currentRoundPlayerIndex;
+        [SyncVar] public bool currentRoundHasSendCard;
+        [SyncVar] public int currentRoundSendingCardId;
 
         private void Start()
         {
@@ -61,6 +67,28 @@ namespace TBL
             foreach (NetworkPlayer p in manager.players)
             {
                 p.InitPlayer();
+            }
+
+            if(isServer)
+                StartNewRound();
+        }
+
+        void StartNewRound()
+        {
+            currentRoundHasSendCard = false;
+            currentRoundSendingCardId = 0;
+
+            StartCoroutine(RoundUpdate());
+        }
+
+        IEnumerator RoundUpdate()
+        {
+            float time = roundSetting.roundTime;
+            while (!currentRoundHasSendCard && time >= 0)
+            {
+                time -= Time.deltaTime;
+                timer = (int)time;
+                yield return null;
             }
         }
 

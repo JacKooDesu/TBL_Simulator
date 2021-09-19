@@ -143,6 +143,8 @@ namespace TBL.NetCanvas
 
         #endregion
 
+        public Text timeTextUI;
+        
         protected override void Start()
         {
             base.Start();
