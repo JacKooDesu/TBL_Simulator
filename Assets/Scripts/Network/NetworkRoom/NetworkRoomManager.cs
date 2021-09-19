@@ -11,6 +11,8 @@ namespace TBL
         public bool showStartButton;
         [SerializeField] GameObject deckManagerPrefab;
         public DeckManager deckManager;
+        [SerializeField] GameObject judgementPrefab;
+        public NetworkJudgement judgement;
 
         public List<NetworkPlayer> players = new List<NetworkPlayer>();
 
@@ -33,10 +35,19 @@ namespace TBL
         public override void OnRoomServerSceneChanged(string sceneName)
         {
             base.OnRoomServerSceneChanged(sceneName);
-            if (deckManager == null)
-                deckManager = Instantiate(deckManagerPrefab).GetComponent<DeckManager>();
 
-            NetworkServer.Spawn(deckManager.gameObject);
+            if (sceneName == GameplayScene)
+            {
+                if (deckManager == null)
+                    deckManager = Instantiate(deckManagerPrefab).GetComponent<DeckManager>();
+
+                NetworkServer.Spawn(deckManager.gameObject);
+
+                if (judgement == null)
+                    judgement = Instantiate(judgementPrefab).GetComponent<NetworkJudgement>();
+
+                NetworkServer.Spawn(judgement.gameObject);
+            }
         }
 
         public override void OnGUI()
@@ -78,11 +89,35 @@ namespace TBL
 
             return 0;
         }
-    
-        
+        public int GetPlayerSlotIndex(NetworkPlayer player)
+        {
+            int i = 0;
+            foreach (NetworkPlayer p in players)
+            {
+                if (p == player)
+                    return i;
+
+                ++i;
+            }
+
+            return 0;
+        }
+
+        public int GetLocalRoomPlayerIndex()
+        {
+            foreach (NetworkRoomPlayer p in roomSlots)
+            {
+                // print(p.netId);
+                if (p.isLocalPlayer)
+                    return p.index;
+            }
+
+            return 0;
+        }
+
         public void InitTeamList()
         {
-            print("init");
+            // print("init");
             foreach (TBL.Settings.TeamSetting.TeamPlayerCount setting in teamSetting.teamPlayerCountSetting)
             {
                 if (setting.playerCount != roomSlots.Count)

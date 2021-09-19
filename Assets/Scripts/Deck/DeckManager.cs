@@ -14,11 +14,10 @@ namespace TBL
         [SerializeField] List<CardSetting> inGameCards = new List<CardSetting>();
         [SerializeField] List<CardSetting> garbageCards = new List<CardSetting>();
 
-        private void OnEnable()
+        public override void OnStartServer()
         {
-            if(isClient)
-                return;
-                
+            base.OnStartServer();
+
             for (int i = 0; i < deck.CardConfigs.Count; ++i)
             {
                 for (int j = 0; j < deck.CardConfigs[i].ColorConfigs.Count; ++j)
@@ -41,7 +40,6 @@ namespace TBL
 
             GameUtils.Shuffle<CardSetting>(ref cards);
 
-            // Shuffle();
         }
 
         void Shuffle()

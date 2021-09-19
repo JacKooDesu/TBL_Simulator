@@ -8,7 +8,12 @@ namespace TBL
     public class NetworkRoomPlayer : Mirror.NetworkRoomPlayer
     {
 
-        [SyncVar] public string playerName;
+        [SyncVar(hook = nameof(OnPlayerNameChange))] public string playerName;
+        void OnPlayerNameChange(string oldName, string newName)
+        {
+            playerUI.GetComponentInChildren<UnityEngine.UI.Text>().text = playerName;
+        }
+
         [SerializeField]
         GameObject playerUIPrefab = default;
         GameObject playerUI;
@@ -34,14 +39,14 @@ namespace TBL
             }
 
             // 效能問題 ?
-            if (isClient)
+            if (isLocalPlayer)
             {
                 if (playerName != GameUtils.PlayerName)
                 {
                     CmdSetName();
-                    playerUI.GetComponentInChildren<UnityEngine.UI.Text>().text = playerName;
                 }
             }
+            playerUI.GetComponentInChildren<UnityEngine.UI.Text>().text = playerName;
 
             UnityEngine.UI.Image statusImage = playerUI.transform.Find("Ready").GetComponent<UnityEngine.UI.Image>();
             if (readyToBegin)

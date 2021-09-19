@@ -1394,6 +1394,7 @@ MonoBehaviour:
   playerSpawnMethod: 0
   spawnPrefabs:
   - {fileID: 3351430209532791837, guid: b9629a3ad1242c545b094a3ca5bebd7d, type: 3}
+  - {fileID: 3362482621731827435, guid: 23a964c46f787044687d29199533de1c, type: 3}
   showRoomGUI: 1
   minPlayers: 1
   roomPlayerPrefab: {fileID: 1974281241544497987, guid: 0d0db8cde458bd4419da2c0b053a1a7a,
@@ -1407,9 +1408,13 @@ MonoBehaviour:
   deckManagerPrefab: {fileID: 3351430209532791837, guid: b9629a3ad1242c545b094a3ca5bebd7d,
     type: 3}
   deckManager: {fileID: 0}
+  judgementPrefab: {fileID: 3362482621731827435, guid: 23a964c46f787044687d29199533de1c,
+    type: 3}
+  judgement: {fileID: 0}
   players: []
   heroList: {fileID: 11400000, guid: 40c7dba7aae66704db3829769696fac0, type: 2}
   teamSetting: {fileID: 11400000, guid: e930df21bb60f894f9894dbfe111b4b4, type: 2}
+  teamList: []
 --- !u!4 &1168907539
 Transform:
   m_ObjectHideFlags: 0

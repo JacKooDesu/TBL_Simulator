@@ -10,7 +10,19 @@ namespace TBL
     public class NetworkPlayer : NetworkBehaviour
     {
         [SyncVar]
+        public int playerIndex = 0;
+        [Command]
+        void CmdSetPlayerIndex(int i)
+        {
+            playerIndex = i;
+        }
+
+        [SyncVar(hook = nameof(OnPlayerNameChange))]
         public string playerName;
+        void OnPlayerNameChange(string oldName, string newName)
+        {
+
+        }
 
         [SerializeField, Header("手牌")]
         List<CardObject> handCards = new List<CardObject>();
@@ -20,9 +32,85 @@ namespace TBL
 
         [Header("NetLists")]
         public SyncList<int> netHandCard = new SyncList<int>();
-        public SyncList<int> netCards = new SyncList<int>();
+        // net hand card callback
+        public void OnUpdateHandCard(SyncList<int>.Operation op, int index, int oldItem, int newItem)
+        {
+            switch (op)
+            {
+                case SyncList<int>.Operation.OP_ADD:
+                    // index is where it got added in the list
+                    // newItem is the new item
+                    if (isLocalPlayer)
+                    {
+                        netCanvas.UpdateCardList();
+                    }
 
-        [SyncVar] public int heroIndex = -1;
+                    netCanvas.playerUIs[manager.GetPlayerSlotIndex(this)].handCardCount.text = netHandCard.Count.ToString();
+                    break;
+                case SyncList<int>.Operation.OP_CLEAR:
+                    // list got cleared
+                    break;
+                case SyncList<int>.Operation.OP_INSERT:
+                    // index is where it got added in the list
+                    // newItem is the new item
+                    break;
+                case SyncList<int>.Operation.OP_REMOVEAT:
+                    // index is where it got removed in the list
+                    // oldItem is the item that was removed
+                    break;
+                case SyncList<int>.Operation.OP_SET:
+                    // index is the index of the item that was updated
+                    // oldItem is the previous value for the item at the index
+                    // newItem is the new value for the item at the index
+                    break;
+            }
+        }
+
+        public SyncList<int> netCards = new SyncList<int>();
+        // net hand card callback
+        public void OnUpdateCard(SyncList<int>.Operation op, int index, int oldItem, int newItem)
+        {
+            switch (op)
+            {
+                case SyncList<int>.Operation.OP_ADD:
+                    // index is where it got added in the list
+                    // newItem is the new item
+                    if (isLocalPlayer)
+                    {
+                        // netCanvas.UpdateCardList();
+                    }
+
+                    // netCanvas.playerUIs[manager.GetPlayerSlotIndex(this)].handCardCount.text = netHandCard.Count.ToString();
+                    break;
+                case SyncList<int>.Operation.OP_CLEAR:
+                    // list got cleared
+                    break;
+                case SyncList<int>.Operation.OP_INSERT:
+                    // index is where it got added in the list
+                    // newItem is the new item
+                    break;
+                case SyncList<int>.Operation.OP_REMOVEAT:
+                    // index is where it got removed in the list
+                    // oldItem is the item that was removed
+                    break;
+                case SyncList<int>.Operation.OP_SET:
+                    // index is the index of the item that was updated
+                    // oldItem is the previous value for the item at the index
+                    // newItem is the new value for the item at the index
+                    break;
+            }
+        }
+
+        [SyncVar(hook = nameof(OnHeroIndexChange))] public int heroIndex = -1;
+        void OnHeroIndexChange(int oldVar, int newVar)
+        {
+            hero = manager.heroList.heros[newVar];
+            if (isLocalPlayer)
+                netCanvas.InitPlayerStatus();
+
+            netCanvas.playerUIs[manager.players.IndexOf(this)].UpdateHero(this);
+        }
+
         public Hero hero;
         public TBL.Settings.TeamSetting.Team team;
 
@@ -36,12 +124,21 @@ namespace TBL
             // if (isServer)
             manager.players.Add(this);
 
+            netHandCard.Callback += OnUpdateHandCard;
+            netCards.Callback += OnUpdateCard;
+
+            if (isLocalPlayer)
+                CmdSetPlayerIndex(manager.GetLocalRoomPlayerIndex());
+        }
+
+        public void InitPlayer()
+        {
             if (isLocalPlayer)
             {
                 CmdDrawTeam();
                 CmdDrawHero();
                 CmdSetName();
-                CmdDraw();
+                // CmdDraw();
             }
             else if (!isServer)
             {
@@ -65,15 +162,22 @@ namespace TBL
             netHandCard.Add(manager.deckManager.DrawCardFromTop().ID);
         }
 
+        // [ClientRpc]
+        // public void RpcUpdateCardList()
+        // {
+        //     if (isLocalPlayer)
+        //     {
+        //         netCanvas.UpdateCardList();
+        //     }
+
+        //     netCanvas.playerUIs[manager.GetPlayerSlotIndex(this)].handCardCount.text = netHandCard.Count.ToString();
+        // }
+
         [Command]
         public void CmdDrawHero()
         {
             int rand = UnityEngine.Random.Range(0, manager.heroList.heros.Count);
-            hero = manager.heroList.heros[rand];
             heroIndex = rand;
-            RpcUpdateHero(rand);
-
-            RpcUpdatePlayerHeroUI();
         }
 
         [ClientRpc]
@@ -82,7 +186,7 @@ namespace TBL
             heroIndex = i;
             hero = manager.heroList.heros[heroIndex];
 
-            if(isLocalPlayer)
+            if (isLocalPlayer)
                 netCanvas.InitPlayerStatus();
         }
 
@@ -141,18 +245,6 @@ namespace TBL
 
         #region  UPDATE_UI
         [Command]
-        public void CmdUpdatePlayerHeroUI()
-        {
-
-        }
-
-        [ClientRpc]
-        public void RpcUpdatePlayerHeroUI()
-        {
-            netCanvas.playerUIs[manager.players.IndexOf(this)].UpdateHero(this);
-        }
-
-        [Command]
         public void CmdUpdatePlayerStatusUI()
         {
             for (int i = 0; i < manager.players.Count; ++i)
@@ -164,6 +256,8 @@ namespace TBL
         {
             netCanvas.playerUIs[i].UpdateStatus(manager.players[i]);
         }
+
+
         #endregion
     }
 }

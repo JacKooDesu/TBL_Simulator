@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.Events;
 using Mirror;
+using TBL.Card;
 
 
 namespace TBL.NetCanvas
@@ -17,20 +18,20 @@ namespace TBL.NetCanvas
         GameObject playerMapping;
         [SerializeField]
         GameObject playerIconPrefab;
-        [SerializeField]
-        int testPlayerCount = 5;
 
         public List<TBL.UI.GameScene.PlayerData> playerUIs = new List<UI.GameScene.PlayerData>();
-        void InitPlayerMapping()
+        public void InitPlayerMapping()
         {
+            for (int i = playerMapping.transform.childCount; i >= 1; --i)
+            {
+                Destroy(playerMapping.transform.GetChild(i-1).gameObject);
+            }
+
             for (int i = 0; i < manager.roomSlots.Count; ++i)
             {
                 GameObject g = Instantiate(playerIconPrefab, playerMapping.transform);
                 playerUIs.Add(g.GetComponent<TBL.UI.GameScene.PlayerData>());
             }
-            // ((RectTransform)playerMapping.transform).sizeDelta = new Vector2(
-            //     ((RectTransform)playerMapping.transform).sizeDelta.x,
-            //     ((RectTransform)playerIconPrefab.transform).sizeDelta.y * testPlayerCount + playerMapping.GetComponent<VerticalLayoutGroup>().spacing * (testPlayerCount - 1));
         }
         #endregion
 
@@ -109,6 +110,8 @@ namespace TBL.NetCanvas
         [SerializeField] Text heroNameUI;
         [SerializeField] Image teamIconUI;
         [SerializeField] Text teamNameUI;
+        [SerializeField] Transform cardListUI;
+        [SerializeField] GameObject cardTextPrefab;
 
         public void InitPlayerStatus()
         {
@@ -118,15 +121,34 @@ namespace TBL.NetCanvas
             teamIconUI.sprite = manager.GetLocalPlayer().team.icon;
             teamNameUI.text = manager.GetLocalPlayer().team.name;
         }
+
+        public void UpdateCardList()
+        {
+            for (int i = cardListUI.childCount - 1; i >= 0; --i)
+                Destroy(cardListUI.GetChild(i).gameObject);
+
+            foreach (int id in manager.GetLocalPlayer().netHandCard)
+            {
+                CardSetting tempCard = CardSetting.IDConvertCard((ushort)id);
+                Text cardName = Instantiate(cardTextPrefab, cardListUI).GetComponent<Text>();
+                cardName.text = tempCard.CardName;
+                cardName.color = tempCard.Color;
+            }
+        }
+        #endregion
+
+        #region TOOLTIP
+        [Header("說明欄位")]
+        [SerializeField] Text tipTextUI;
+
         #endregion
 
         protected override void Start()
         {
             base.Start();
-            InitPlayerMapping();
+            // InitPlayerMapping();
             InitChatWindow();
             BindButtons();
         }
     }
 }
-
