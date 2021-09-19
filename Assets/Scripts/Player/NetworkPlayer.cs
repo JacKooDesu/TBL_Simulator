@@ -105,7 +105,7 @@ namespace TBL
         [SyncVar(hook = nameof(OnHeroIndexChange))] public int heroIndex = -1;
         void OnHeroIndexChange(int oldVar, int newVar)
         {
-            hero = manager.judgement.heroList.heros[newVar];
+            hero = manager.Judgement.heroList.heros[newVar];
             if (isLocalPlayer)
                 netCanvas.InitPlayerStatus();
 
@@ -142,11 +142,11 @@ namespace TBL
                 CmdDrawCard(3);
                 // CmdDraw();
             }
-            else if (!isServer)
+            else
             {
                 if (heroIndex != -1)
                 {
-                    hero = manager.judgement.heroList.heros[heroIndex];
+                    hero = manager.Judgement.heroList.heros[heroIndex];
                     netCanvas.playerUIs[manager.players.IndexOf(this)].UpdateHero(this);
                 }
             }
@@ -184,8 +184,8 @@ namespace TBL
             int rand;
             do
             {
-                rand = UnityEngine.Random.Range(0, manager.judgement.heroList.heros.Count);
-            } while (manager.judgement.hasUsedHeros.IndexOf(rand) != -1);
+                rand = UnityEngine.Random.Range(0, manager.Judgement.heroList.heros.Count);
+            } while (manager.Judgement.hasUsedHeros.IndexOf(rand) != -1);
 
             heroIndex = rand;
         }
@@ -194,7 +194,7 @@ namespace TBL
         public void RpcUpdateHero(int i)
         {
             heroIndex = i;
-            hero = manager.judgement.heroList.heros[heroIndex];
+            hero = manager.Judgement.heroList.heros[heroIndex];
 
             if (isLocalPlayer)
                 netCanvas.InitPlayerStatus();

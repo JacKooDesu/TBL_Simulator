@@ -63,6 +63,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
+  roundSetting: {fileID: 11400000, guid: 6bd1afa09c91b3840b517f9779ecf819, type: 2}
   heroList: {fileID: 11400000, guid: 40c7dba7aae66704db3829769696fac0, type: 2}
   timer: 0
   currentPlayerIndex: 0
+  currentRoundPlayerIndex: 0
+  currentRoundHasSendCard: 0
+  currentRoundSendingCardId: 0
