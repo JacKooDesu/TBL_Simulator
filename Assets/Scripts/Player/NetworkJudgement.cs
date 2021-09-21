@@ -24,6 +24,7 @@ namespace TBL
 
         }
 
+        [SyncVar] public int playerReadyCount = 0;
 
         TBL.NetCanvas.GameScene netCanvas;
         NetworkRoomManager manager;
@@ -43,8 +44,20 @@ namespace TBL
 
         IEnumerator WaitAllPlayerInit()
         {
-            while (manager.players.Count != manager.roomSlots.Count)
-                yield return null;
+            while (true)
+            {
+                int i = 0;
+                foreach (NetworkPlayer p in manager.players)
+                {
+                    if (p.isReady)
+                        ++i;
+                }
+
+                if (i == manager.roomSlots.Count)
+                    break;
+                else
+                    yield return null;
+            }
 
             // 排序
             NetworkPlayer tempPlayer;
@@ -63,13 +76,15 @@ namespace TBL
             }
 
             netCanvas.InitPlayerMapping();
-            print("Player init finished");
+
             foreach (NetworkPlayer p in manager.players)
             {
                 p.InitPlayer();
             }
 
-            if(isServer)
+
+
+            if (isServer)
                 StartNewRound();
         }
 

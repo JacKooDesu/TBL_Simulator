@@ -115,6 +115,18 @@ namespace TBL
         public Hero hero;
         public TBL.Settings.TeamSetting.Team team;
 
+
+        #region STATUS
+        [Header("狀態")]
+        [SyncVar] public bool isReady;
+        [SyncVar] public bool isReadyLast;
+
+        [SyncVar] public bool isLocked;
+        [SyncVar] public bool isLockedLast;
+        [SyncVar] public bool isSkipped;
+        [SyncVar] public bool isSkippedLast;
+        #endregion
+
         TBL.NetCanvas.GameScene netCanvas;
         NetworkRoomManager manager;
 
@@ -129,7 +141,10 @@ namespace TBL
             netCards.Callback += OnUpdateCard;
 
             if (isLocalPlayer)
+            {
                 CmdSetPlayerIndex(manager.GetLocalRoomPlayerIndex());
+                CmdSetReady(true);
+            }
         }
 
         public void InitPlayer()
@@ -253,7 +268,7 @@ namespace TBL
 
         #endregion
 
-        #region  UPDATE_UI
+        #region UPDATE_UI
         [Command]
         public void CmdUpdatePlayerStatusUI()
         {
@@ -270,6 +285,15 @@ namespace TBL
 
         #endregion
 
+        #region PLAYER_STATE
+        [Command]
+        void CmdSetReady(bool status)
+        {
+            isReady = status;
+        }
+
+
+        #endregion
         public override void OnStopClient()
         {
             base.OnStopClient();
