@@ -12,6 +12,10 @@ namespace TBL.Card
 
         [SerializeField, Header("傳遞方式")]
         CardSendType sendType;
+        public CardSendType SendType
+        {
+            get => sendType;
+        }
 
         CardColor cardColor;
         public CardColor CardColor

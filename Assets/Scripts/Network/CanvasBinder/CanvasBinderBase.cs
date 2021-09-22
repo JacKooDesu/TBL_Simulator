@@ -16,7 +16,7 @@ namespace TBL.NetCanvas
             manager = GameObject.FindObjectOfType<NetworkRoomManager>();
         }
 
-        protected void BindEvent<T>(T e, UnityAction action) where T : UnityEvent
+        public void BindEvent<T>(T e, UnityAction action) where T : UnityEvent
         {
             e.AddListener(action);
         }

@@ -10,6 +10,8 @@ namespace TBL.UI.GameScene
     public class PlayerData : MonoBehaviour
     {
         #region VARIABLES
+        public NetworkPlayer player;
+
         [Header("角色圖")]
         public Image heroAvatar;
 
@@ -36,7 +38,12 @@ namespace TBL.UI.GameScene
         public Text greenMission;
         #endregion
 
-        public void UpdateHero(NetworkPlayer player)
+        private void Start() {
+            UpdateStatus();
+            UpdateHero();
+        }
+
+        public void UpdateHero()
         {
             if (player.hero.HeroType == HeroType.Hidden)
                 heroAvatar.sprite = ((NetworkRoomManager.singleton) as NetworkRoomManager).Judgement.heroList.hiddenAvatar;
@@ -44,7 +51,7 @@ namespace TBL.UI.GameScene
                 heroAvatar.sprite = player.hero.Avatar;
         }
 
-        public void UpdateStatus(NetworkPlayer player)
+        public void UpdateStatus()
         {
             int blue = 0, red = 0, black = 0;
             foreach (int id in player.netCards)
@@ -78,6 +85,8 @@ namespace TBL.UI.GameScene
 
             // lockBg.color = player.statu
         }
+    
+        
     }
 }
 

@@ -31,6 +31,46 @@ namespace TBL.NetCanvas
             {
                 GameObject g = Instantiate(playerIconPrefab, playerMapping.transform);
                 playerUIs.Add(g.GetComponent<TBL.UI.GameScene.PlayerData>());
+                playerUIs[i].player = manager.players[i];
+            }
+        }
+        public void CheckCanSend(int localIndex)
+        {
+            List<int> sendList = new List<int>();
+            if (CardSetting.IDConvertCard(selectCard.cardID).SendType == CardSendType.Direct)
+            {
+                foreach (NetworkPlayer p in manager.players)
+                {
+                    if (p.playerIndex != localIndex)
+                        sendList.Add(p.playerIndex);
+                }
+            }
+            else
+            {
+                int last, next;
+                last = (localIndex - 1 > 0 ? localIndex - 1 : manager.players.Count - 1);
+                next = (localIndex + 1 > manager.players.Count - 1 ? 0 : localIndex + 1);
+                sendList.Add(next);
+                sendList.Add(last);
+            }
+
+            BindSelectPlayer(
+                sendList,
+                async (i) => { playerUIs[localIndex].player.CmdSendCard(i, selectCard.cardID); });
+        }
+        public void BindSelectPlayer(List<int> list, UnityAction<int> action)
+        {
+            foreach (int i in list)
+            {
+                UI.GameScene.PlayerData pUI = playerUIs[i];
+                JacDev.Utils.EventBinder.Bind(
+                    pUI.GetComponent<EventTrigger>(),
+                    EventTriggerType.PointerClick,
+                    (e) =>
+                    {
+                        action.Invoke(pUI.player.playerIndex);
+                        print($"select {pUI.player.playerIndex}");
+                    });
             }
         }
         #endregion
@@ -174,16 +214,17 @@ namespace TBL.NetCanvas
             EventSystem es = FindObjectOfType<EventSystem>();
             if (Input.GetMouseButton(0))
             {
-                if (es.currentSelectedGameObject == null || !es.currentSelectedGameObject.GetComponent<EventTrigger>())
-                {
-                    if (selectCard != null)
-                    {
-                        selectCard.GetComponent<JacDev.Utils.UISlicker.ColorSlicker>().SlickBack();
-                        selectCard.isSelected = false;
-                        selectCard = null;
-                    }
+                //                if (es.IsPointerOverGameObject() || !es.currentSelectedGameObject.GetComponent<EventTrigger>())
+                // if (es.IsPointerOverGameObject())
+                // {
+                //     if (selectCard != null)
+                //     {
+                //         selectCard.GetComponent<JacDev.Utils.UISlicker.ColorSlicker>().SlickBack();
+                //         selectCard.isSelected = false;
+                //         selectCard = null;
+                //     }
 
-                }
+                // }
             }
         }
     }

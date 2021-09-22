@@ -80,8 +80,7 @@ namespace TBL
                     {
                         // netCanvas.UpdateCardList();
                     }
-
-                    // netCanvas.playerUIs[manager.GetPlayerSlotIndex(this)].handCardCount.text = netHandCard.Count.ToString();
+                    netCanvas.playerUIs[playerIndex].UpdateStatus();
                     break;
                 case SyncList<int>.Operation.OP_CLEAR:
                     // list got cleared
@@ -109,7 +108,7 @@ namespace TBL
             if (isLocalPlayer)
                 netCanvas.InitPlayerStatus();
 
-            netCanvas.playerUIs[manager.players.IndexOf(this)].UpdateHero(this);
+            netCanvas.playerUIs[manager.players.IndexOf(this)].UpdateHero();
         }
 
         public Hero hero;
@@ -127,6 +126,9 @@ namespace TBL
         [SyncVar] public bool isSkippedLast;
 
         [SyncVar] public bool hasDraw;
+
+        [SyncVar] public bool acceptCard;
+        [SyncVar] public bool rejectCard;
         #endregion
 
         TBL.NetCanvas.GameScene netCanvas;
@@ -164,7 +166,7 @@ namespace TBL
                 if (heroIndex != -1)
                 {
                     hero = manager.Judgement.heroList.heros[heroIndex];
-                    netCanvas.playerUIs[manager.players.IndexOf(this)].UpdateHero(this);
+                    netCanvas.playerUIs[manager.players.IndexOf(this)].UpdateHero();
                 }
             }
         }
@@ -284,7 +286,7 @@ namespace TBL
         [ClientRpc]
         public void RpcUpdatePlayerStatusUI(int i)
         {
-            netCanvas.playerUIs[i].UpdateStatus(manager.players[i]);
+            netCanvas.playerUIs[i].UpdateStatus();
         }
 
 
@@ -297,6 +299,15 @@ namespace TBL
             isReady = status;
         }
 
+        [Command]
+        void CmdResetStatus()
+        {
+            isLocked = false;
+            isSkipped = false;
+            hasDraw = false;
+            acceptCard = false;
+            rejectCard = false;
+        }
 
         #endregion
 
@@ -311,15 +322,92 @@ namespace TBL
         public void TargetStartRound()
         {
             netCanvas.SetButtonInteractable(draw: 0, send: 1);
+            netCanvas.BindEvent(netCanvas.sendButton.onClick, () =>
+            {
+                netCanvas.CheckCanSend(playerIndex);
+                print("Check can send");
+            });
             StartCoroutine(RoundUpdate());
+        }
+
+        [Command]
+        public void CmdSendCard(int to, ushort id)
+        {
+            List<NetworkPlayer> queue = new List<NetworkPlayer>();
+
+            if (CardSetting.IDConvertCard(id).SendType == CardSendType.Direct)
+            {
+                queue.Add(manager.players[to]);
+            }
+            else
+            {
+                int iter = 0;
+                int current = to;
+                if (Mathf.Abs(to - playerIndex) != 1)
+                {
+                    if (to > playerIndex)
+                        iter = -1;
+                    else if (to < playerIndex)
+                        iter = 1;
+                }
+                else
+                {
+                    iter = to - playerIndex;
+                }
+
+                while (queue.Count == manager.players.Count - 1)
+                {
+                    if (current > manager.players.Count - 1)
+                    {
+                        current = 0;
+                    }
+                    else if (current < 0)
+                    {
+                        current = manager.players.Count - 1;
+                    }
+
+                    queue.Add(manager.players[current]);
+
+                    current += iter;
+                }
+            }
+
+            queue.Add(this);
+
+            manager.Judgement.cardSendQueue = queue;
+            manager.Judgement.currentRoundSendingCardId = id;
+            manager.Judgement.currentRoundHasSendCard = true;
+        }
+
+        [ClientRpc]
+        public void RpcAskCard()
+        {
+            if (isLocalPlayer)
+            {
+
+            }
         }
 
         IEnumerator RoundUpdate()
         {
             while (true)
             {
+                if (netCanvas.selectCard != null)
+                {
+                    netCanvas.SetButtonInteractable(send: 1);
+                }
+                else
+                {
+                    netCanvas.SetButtonInteractable(send: 0);
+                }
                 yield return null;
             }
+        }
+
+        [Command]
+        public void CmdAddCard(ushort id)
+        {
+            netCards.Add((int)id);
         }
 
         [TargetRpc]

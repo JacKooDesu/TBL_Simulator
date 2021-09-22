@@ -34,6 +34,9 @@ namespace TBL
         [SyncVar] public bool currentRoundHasSendCard;
         [SyncVar] public int currentRoundSendingCardId;
 
+        // server only
+        public List<NetworkPlayer> cardSendQueue = new List<NetworkPlayer>();
+
         private void Start()
         {
             netCanvas = FindObjectOfType<TBL.NetCanvas.GameScene>();
@@ -109,6 +112,30 @@ namespace TBL
                 time -= Time.deltaTime;
                 timer = (int)time;
                 yield return null;
+            }
+        }
+
+        public void StartSendCard()
+        {
+            StartCoroutine(SendingCardUpdate());
+        }
+
+        IEnumerator SendingCardUpdate()
+        {
+            float time = roundSetting.roundTime;
+            foreach (NetworkPlayer p in cardSendQueue)
+            {
+                while (!p.rejectCard && !p.acceptCard && time >= 0)
+                {
+                    time -= Time.deltaTime;
+                    timer = (int)time;
+                    yield return null;
+                }
+
+                if (p.rejectCard)
+                    continue;
+                if (p.acceptCard)
+                    p.CmdAddCard((ushort)currentRoundSendingCardId);
             }
         }
 
