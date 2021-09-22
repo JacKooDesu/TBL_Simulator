@@ -85,11 +85,12 @@ namespace TBL
 
 
             if (isServer)
-                StartNewRound();
+                StartNewRound(UnityEngine.Random.Range(0, manager.players.Count));
         }
 
-        void StartNewRound()
+        void StartNewRound(int index)
         {
+            currentPlayerIndex = index;
             currentRoundHasSendCard = false;
             currentRoundSendingCardId = 0;
 
@@ -98,6 +99,10 @@ namespace TBL
 
         IEnumerator RoundUpdate()
         {
+            manager.players[currentPlayerIndex].TargetDraw();
+            yield return StartCoroutine(WaitDraw());
+
+            manager.players[currentPlayerIndex].TargetStartRound();
             float time = roundSetting.roundTime;
             while (!currentRoundHasSendCard && time >= 0)
             {
@@ -105,6 +110,23 @@ namespace TBL
                 timer = (int)time;
                 yield return null;
             }
+        }
+
+        IEnumerator WaitDraw()
+        {
+            manager.players[currentPlayerIndex].hasDraw = false;
+            float time = roundSetting.drawTime;
+            while (!manager.players[currentPlayerIndex].hasDraw && time >= 0)
+            {
+                time -= Time.deltaTime;
+                timer = (int)time;
+                yield return null;
+            }
+            if (!manager.players[currentPlayerIndex].hasDraw)
+            {
+                manager.players[currentPlayerIndex].CmdDrawCard(2);
+            }
+
         }
 
         public override void OnStartClient()

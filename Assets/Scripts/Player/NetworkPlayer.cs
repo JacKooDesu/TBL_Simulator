@@ -125,6 +125,8 @@ namespace TBL
         [SyncVar] public bool isLockedLast;
         [SyncVar] public bool isSkipped;
         [SyncVar] public bool isSkippedLast;
+
+        [SyncVar] public bool hasDraw;
         #endregion
 
         TBL.NetCanvas.GameScene netCanvas;
@@ -180,6 +182,9 @@ namespace TBL
             {
                 netHandCard.Add(manager.deckManager.DrawCardFromTop().ID);
             }
+
+            if (manager.Judgement.currentRoundPlayerIndex == playerIndex)
+                hasDraw = true;
         }
 
         // [ClientRpc]
@@ -294,6 +299,37 @@ namespace TBL
 
 
         #endregion
+
+        #region ROUND_ACTION
+        [TargetRpc]
+        public void TargetDraw()
+        {
+            netCanvas.SetButtonInteractable(draw: 1);
+        }
+
+        [TargetRpc]
+        public void TargetStartRound()
+        {
+            netCanvas.SetButtonInteractable(draw: 0, send: 1);
+            StartCoroutine(RoundUpdate());
+        }
+
+        IEnumerator RoundUpdate()
+        {
+            while (true)
+            {
+                yield return null;
+            }
+        }
+
+        [TargetRpc]
+        public void TargetEndRound()
+        {
+            StopCoroutine(RoundUpdate());
+        }
+
+        #endregion
+
         public override void OnStopClient()
         {
             base.OnStopClient();
