@@ -24,7 +24,7 @@ namespace TBL.NetCanvas
         {
             for (int i = playerMapping.transform.childCount; i >= 1; --i)
             {
-                Destroy(playerMapping.transform.GetChild(i-1).gameObject);
+                Destroy(playerMapping.transform.GetChild(i - 1).gameObject);
             }
 
             for (int i = 0; i < manager.roomSlots.Count; ++i)
@@ -91,11 +91,26 @@ namespace TBL.NetCanvas
         #endregion
 
         #region BUTTON
+        public TBL.UI.GameScene.CardData selectCard;
         [Header("按鈕")]
-        [SerializeField]
-        Button drawButton;
-        [SerializeField]
-        Button useButton;
+        public Button drawButton;
+        public Button sendButton;
+        public Button acceptButton;
+        public Button rejectButton;
+        public Button useButton;
+        public void SetButtonInteractable(
+            int draw = -1,
+            int send = -1,
+            int accept = -1,
+            int reject = -1,
+            int use = -1)
+        {
+            drawButton.interactable = (draw == -1 ? drawButton.interactable : (draw == 1 ? true : false));
+            sendButton.interactable = (send == -1 ? sendButton.interactable : (send == 1 ? true : false));
+            acceptButton.interactable = (accept == -1 ? acceptButton.interactable : (accept == 1 ? true : false));
+            rejectButton.interactable = (reject == -1 ? rejectButton.interactable : (reject == 1 ? true : false));
+            useButton.interactable = (use == -1 ? useButton.interactable : (use == 1 ? true : false));
+        }
 
         void BindButtons()
         {
@@ -130,9 +145,8 @@ namespace TBL.NetCanvas
             foreach (int id in manager.GetLocalPlayer().netHandCard)
             {
                 CardSetting tempCard = CardSetting.IDConvertCard((ushort)id);
-                Text cardName = Instantiate(cardTextPrefab, cardListUI).GetComponent<Text>();
-                cardName.text = tempCard.CardName;
-                cardName.color = tempCard.Color;
+                UI.GameScene.CardData ui = Instantiate(cardTextPrefab, cardListUI).GetComponent<UI.GameScene.CardData>();
+                ui.SetUI(tempCard);
             }
         }
         #endregion
@@ -144,13 +158,33 @@ namespace TBL.NetCanvas
         #endregion
 
         public Text timeTextUI;
-        
+
         protected override void Start()
         {
             base.Start();
+
+            SetButtonInteractable(0, 0, 0, 0, 0);
             // InitPlayerMapping();
             InitChatWindow();
             BindButtons();
+        }
+
+        private void Update()
+        {
+            EventSystem es = FindObjectOfType<EventSystem>();
+            if (Input.GetMouseButton(0))
+            {
+                if (es.currentSelectedGameObject == null || !es.currentSelectedGameObject.GetComponent<EventTrigger>())
+                {
+                    if (selectCard != null)
+                    {
+                        selectCard.GetComponent<JacDev.Utils.UISlicker.ColorSlicker>().SlickBack();
+                        selectCard.isSelected = false;
+                        selectCard = null;
+                    }
+
+                }
+            }
         }
     }
 }

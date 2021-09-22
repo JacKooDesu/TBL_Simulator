@@ -172,6 +172,11 @@ namespace TBL.Card
             c.ID = id;
             return c;
         }
+
+        public virtual void OnUse(NetworkPlayer user)
+        {
+
+        }
     }
 }
 

@@ -2046,6 +2046,9 @@ MonoBehaviour:
   chatScroll: {fileID: 0}
   chatHistory: {fileID: 0}
   drawButton: {fileID: 0}
+  sendButton: {fileID: 0}
+  acceptButton: {fileID: 0}
+  rejectButton: {fileID: 0}
   useButton: {fileID: 0}
   heroAvatarUI: {fileID: 0}
   heroNameUI: {fileID: 0}
@@ -3092,7 +3095,10 @@ MonoBehaviour:
   chatScroll: {fileID: 1427160399}
   chatHistory: {fileID: 134047876}
   drawButton: {fileID: 154946083}
-  useButton: {fileID: 0}
+  sendButton: {fileID: 1639517653}
+  acceptButton: {fileID: 89577497}
+  rejectButton: {fileID: 33518142}
+  useButton: {fileID: 1662247257}
   heroAvatarUI: {fileID: 2085308915}
   heroNameUI: {fileID: 1405300764}
   teamIconUI: {fileID: 1172991586}
@@ -4082,7 +4088,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 286416968}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.9999901
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -5471,7 +5477,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.000004411435}
+  m_AnchoredPosition: {x: 0, y: 0.0003922172}
   m_SizeDelta: {x: 0, y: 210.16412}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &1587525480
