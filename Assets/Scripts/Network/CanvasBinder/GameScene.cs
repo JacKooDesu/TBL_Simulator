@@ -34,15 +34,22 @@ namespace TBL.NetCanvas
                 playerUIs[i].player = manager.players[i];
             }
         }
+
         public void CheckCanSend(int localIndex)
         {
+            print($"Player {localIndex} Checking");
+
+            sendButton.interactable = false;
+            
             List<int> sendList = new List<int>();
             if (CardSetting.IDConvertCard(selectCard.cardID).SendType == CardSendType.Direct)
             {
                 foreach (NetworkPlayer p in manager.players)
                 {
-                    if (p.playerIndex != localIndex)
-                        sendList.Add(p.playerIndex);
+                    if (p.playerIndex == localIndex)
+                        continue;
+
+                    sendList.Add(p.playerIndex);
                 }
             }
             else
@@ -56,8 +63,9 @@ namespace TBL.NetCanvas
 
             BindSelectPlayer(
                 sendList,
-                async (i) => { playerUIs[localIndex].player.CmdSendCard(i, selectCard.cardID); });
+                (i) => { playerUIs[localIndex].player.CmdSendCard(i, selectCard.cardID); });
         }
+
         public void BindSelectPlayer(List<int> list, UnityAction<int> action)
         {
             foreach (int i in list)
@@ -69,9 +77,19 @@ namespace TBL.NetCanvas
                     (e) =>
                     {
                         action.Invoke(pUI.player.playerIndex);
+                        ResetPlayerUIAnimation();
                         print($"select {pUI.player.playerIndex}");
                     });
+
+                pUI.GetComponent<Animator>().SetTrigger("Blink");
             }
+        }
+
+        public void ResetPlayerUIAnimation()
+        {
+            foreach (UI.GameScene.PlayerData pUI in playerUIs)
+                pUI.gameObject.GetComponent<Animator>().SetTrigger("Return");
+
         }
         #endregion
 
@@ -154,9 +172,27 @@ namespace TBL.NetCanvas
 
         void BindButtons()
         {
-            drawButton.onClick.AddListener(() => { manager.GetLocalPlayer().CmdDrawCard(2); });
+            drawButton.onClick.AddListener(() =>
+            {
+                manager.GetLocalPlayer().CmdDrawCard(2);
+                manager.GetLocalPlayer().CmdSetDraw(true);
+            });
         }
 
+        public void ClearButtonEvent()
+        {
+            drawButton.onClick.RemoveAllListeners();
+            sendButton.onClick.RemoveAllListeners();
+            acceptButton.onClick.RemoveAllListeners();
+            rejectButton.onClick.RemoveAllListeners();
+            useButton.onClick.RemoveAllListeners();
+
+            drawButton.interactable = false;
+            sendButton.interactable = false;
+            acceptButton.interactable = false;
+            rejectButton.interactable = false;
+            useButton.interactable = false;
+        }
         #endregion
 
         #region PLAYER_STATUS

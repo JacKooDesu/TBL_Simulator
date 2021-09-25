@@ -102,10 +102,10 @@ namespace TBL
 
         IEnumerator RoundUpdate()
         {
-            manager.players[currentPlayerIndex].TargetDraw();
+            manager.players[currentPlayerIndex].TargetDrawStart();
             yield return StartCoroutine(WaitDraw());
 
-            manager.players[currentPlayerIndex].TargetStartRound();
+            manager.players[currentPlayerIndex].TargetRoundStart();
             float time = roundSetting.roundTime;
             while (!currentRoundHasSendCard && time >= 0)
             {
@@ -113,18 +113,30 @@ namespace TBL
                 timer = (int)time;
                 yield return null;
             }
-        }
 
-        public void StartSendCard()
-        {
-            StartCoroutine(SendingCardUpdate());
+            if (!currentRoundHasSendCard)
+            {
+                // remove all hand card
+                manager.players[currentPlayerIndex].netHandCard.Clear();
+            }
+            else
+            {
+                yield return StartCoroutine(SendingCardUpdate());
+            }
+
+            StartNewRound(
+                (currentPlayerIndex + 1 > manager.players.Count - 1) ?
+                0 : currentPlayerIndex + 1
+            );
         }
 
         IEnumerator SendingCardUpdate()
         {
-            float time = roundSetting.roundTime;
+            print("卡片傳送中");
             foreach (NetworkPlayer p in cardSendQueue)
             {
+                p.RpcAskCardStart();
+                float time = roundSetting.reactionTime;
                 while (!p.rejectCard && !p.acceptCard && time >= 0)
                 {
                     time -= Time.deltaTime;
@@ -132,10 +144,15 @@ namespace TBL
                     yield return null;
                 }
 
+                if (!p.rejectCard && !p.acceptCard)
+                    p.CmdSetRejectCard(true);
+
+                p.RpcAskCardEnd();
+
                 if (p.rejectCard)
                     continue;
                 if (p.acceptCard)
-                    p.CmdAddCard((ushort)currentRoundSendingCardId);
+                    p.AddCard((ushort)currentRoundSendingCardId);
             }
         }
 

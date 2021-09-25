@@ -40,7 +40,7 @@ namespace TBL.UI.GameScene
 
         private void Start() {
             UpdateStatus();
-            UpdateHero();
+            // UpdateHero();
         }
 
         public void UpdateHero()

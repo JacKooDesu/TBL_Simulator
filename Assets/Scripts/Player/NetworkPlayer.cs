@@ -49,6 +49,12 @@ namespace TBL
                     netCanvas.playerUIs[manager.GetPlayerSlotIndex(this)].handCardCount.text = netHandCard.Count.ToString();
                     break;
                 case SyncList<int>.Operation.OP_CLEAR:
+                    if (isLocalPlayer)
+                    {
+                        netCanvas.UpdateCardList();
+                    }
+
+                    netCanvas.playerUIs[manager.GetPlayerSlotIndex(this)].handCardCount.text = netHandCard.Count.ToString();
                     // list got cleared
                     break;
                 case SyncList<int>.Operation.OP_INSERT:
@@ -118,17 +124,22 @@ namespace TBL
         #region STATUS
         [Header("狀態")]
         [SyncVar] public bool isReady;
-        [SyncVar] public bool isReadyLast;
+        [Command] public void CmdSetReady(bool b) { isReady = b; }
+        // [SyncVar] public bool isReadyLast;
 
         [SyncVar] public bool isLocked;
-        [SyncVar] public bool isLockedLast;
+        [Command] public void CmdSetLocked(bool b) { isLocked = b; }
+        // [SyncVar] public bool isLockedLast;
         [SyncVar] public bool isSkipped;
-        [SyncVar] public bool isSkippedLast;
+        [Command] public void CmdSetSkipped(bool b) { isSkipped = b; }
 
         [SyncVar] public bool hasDraw;
+        [Command] public void CmdSetDraw(bool b) { hasDraw = b; }
 
         [SyncVar] public bool acceptCard;
+        [Command] public void CmdSetAcceptCard(bool b) { acceptCard = b; }
         [SyncVar] public bool rejectCard;
+        [Command] public void CmdSetRejectCard(bool b) { rejectCard = b; }
         #endregion
 
         TBL.NetCanvas.GameScene netCanvas;
@@ -184,9 +195,6 @@ namespace TBL
             {
                 netHandCard.Add(manager.deckManager.DrawCardFromTop().ID);
             }
-
-            if (manager.Judgement.currentRoundPlayerIndex == playerIndex)
-                hasDraw = true;
         }
 
         // [ClientRpc]
@@ -293,11 +301,6 @@ namespace TBL
         #endregion
 
         #region PLAYER_STATE
-        [Command]
-        void CmdSetReady(bool status)
-        {
-            isReady = status;
-        }
 
         [Command]
         void CmdResetStatus()
@@ -313,13 +316,14 @@ namespace TBL
 
         #region ROUND_ACTION
         [TargetRpc]
-        public void TargetDraw()
+        public void TargetDrawStart()
         {
             netCanvas.SetButtonInteractable(draw: 1);
+            netCanvas.BindEvent(netCanvas.drawButton.onClick, () => CmdDrawCard(2));
         }
 
         [TargetRpc]
-        public void TargetStartRound()
+        public void TargetRoundStart()
         {
             netCanvas.SetButtonInteractable(draw: 0, send: 1);
             netCanvas.BindEvent(netCanvas.sendButton.onClick, () =>
@@ -328,6 +332,24 @@ namespace TBL
                 print("Check can send");
             });
             StartCoroutine(RoundUpdate());
+        }
+
+        IEnumerator RoundUpdate()
+        {
+            while (!manager.Judgement.currentRoundHasSendCard)
+            {
+                if (netCanvas.selectCard != null)
+                {
+                    netCanvas.SetButtonInteractable(send: 1);
+                }
+                else
+                {
+                    netCanvas.SetButtonInteractable(send: 0);
+                }
+                yield return null;
+            }
+
+            netCanvas.SetButtonInteractable(send: 0);
         }
 
         [Command]
@@ -380,33 +402,41 @@ namespace TBL
         }
 
         [ClientRpc]
-        public void RpcAskCard()
+        public void RpcAskCardStart()
         {
             if (isLocalPlayer)
             {
-
+                netCanvas.acceptButton.interactable = true;
+                netCanvas.rejectButton.interactable = true;
+                netCanvas.BindEvent(
+                    netCanvas.acceptButton.onClick,
+                    () => { CmdSetAcceptCard(true); netCanvas.ClearButtonEvent(); });
+                netCanvas.BindEvent(
+                    netCanvas.rejectButton.onClick,
+                    () =>
+                    { CmdSetRejectCard(true); netCanvas.ClearButtonEvent(); });
             }
         }
 
-        IEnumerator RoundUpdate()
+        [ClientRpc]
+        public void RpcAskCardEnd()
         {
-            while (true)
+            if (isLocalPlayer)
             {
-                if (netCanvas.selectCard != null)
-                {
-                    netCanvas.SetButtonInteractable(send: 1);
-                }
-                else
-                {
-                    netCanvas.SetButtonInteractable(send: 0);
-                }
-                yield return null;
+                netCanvas.acceptButton.interactable = false;
+                netCanvas.rejectButton.interactable = false;
             }
         }
 
         [Command]
         public void CmdAddCard(ushort id)
         {
+            print($"檯面新增 {id}");
+            netCards.Add((int)id);
+        }
+        public void AddCard(ushort id)
+        {
+            print($"檯面新增 {id}");
             netCards.Add((int)id);
         }
 

@@ -39,7 +39,6 @@ namespace TBL
             }
 
             GameUtils.Shuffle<CardSetting>(ref cards);
-
         }
 
         void Shuffle()
