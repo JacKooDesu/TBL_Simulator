@@ -170,9 +170,16 @@ namespace TBL.Card
             return "(" + SendTypeText + ") " + CardName + " " + ColorText;
         }
 
+        static GameObject tempCard;
+
         public static CardSetting IDConvertCard(ushort id)
         {
-            CardSetting c = new CardSetting();
+            if (tempCard == null)
+            {
+                tempCard = new GameObject("Temp Card", typeof(CardSetting));
+            }
+
+            CardSetting c = tempCard.GetComponent<CardSetting>();
             c.ID = id;
             return c;
         }
