@@ -135,6 +135,12 @@ namespace TBL
             print("卡片傳送中");
             foreach (NetworkPlayer p in cardSendQueue)
             {
+                if (p.playerIndex == currentPlayerIndex)
+                {
+                    p.AddCard((ushort)currentRoundSendingCardId);
+                    break;
+                }
+
                 p.RpcAskCardStart();
                 float time = roundSetting.reactionTime;
                 while (!p.rejectCard && !p.acceptCard && time >= 0)

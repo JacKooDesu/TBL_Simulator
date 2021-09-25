@@ -377,7 +377,7 @@ namespace TBL
                     iter = to - playerIndex;
                 }
 
-                while (queue.Count == manager.players.Count - 1)
+                while (queue.Count != manager.players.Count - 1)
                 {
                     if (current > manager.players.Count - 1)
                     {
