@@ -97,6 +97,16 @@ namespace TBL
             currentRoundHasSendCard = false;
             currentRoundSendingCardId = 0;
 
+            foreach (NetworkPlayer p in manager.players)
+            {
+                p.CmdSetDraw(false);
+                p.CmdSetReady(false);
+                p.CmdSetRejectCard(false);
+                p.CmdSetAcceptCard(false);
+                p.CmdSetLocked(false);
+                p.CmdSetSkipped(false);
+            }
+
             StartCoroutine(RoundUpdate());
         }
 
@@ -158,7 +168,11 @@ namespace TBL
                 if (p.rejectCard)
                     continue;
                 if (p.acceptCard)
+                {
                     p.AddCard((ushort)currentRoundSendingCardId);
+                    break;
+                }
+
             }
         }
 

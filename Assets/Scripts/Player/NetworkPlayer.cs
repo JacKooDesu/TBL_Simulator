@@ -195,6 +195,9 @@ namespace TBL
             {
                 netHandCard.Add(manager.deckManager.DrawCardFromTop().ID);
             }
+
+            if (manager.Judgement.currentRoundPlayerIndex == playerIndex)
+                CmdSetDraw(true);
         }
 
         // [ClientRpc]

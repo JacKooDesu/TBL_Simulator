@@ -40,7 +40,7 @@ namespace TBL.NetCanvas
             print($"Player {localIndex} Checking");
 
             sendButton.interactable = false;
-            
+
             List<int> sendList = new List<int>();
             if (CardSetting.IDConvertCard(selectCard.cardID).SendType == CardSendType.Direct)
             {
@@ -172,11 +172,11 @@ namespace TBL.NetCanvas
 
         void BindButtons()
         {
-            drawButton.onClick.AddListener(() =>
-            {
-                manager.GetLocalPlayer().CmdDrawCard(2);
-                manager.GetLocalPlayer().CmdSetDraw(true);
-            });
+            // drawButton.onClick.AddListener(() =>
+            // {
+            //     manager.GetLocalPlayer().CmdDrawCard(2);
+            //     manager.GetLocalPlayer().CmdSetDraw(true);
+            // });
         }
 
         public void ClearButtonEvent()
