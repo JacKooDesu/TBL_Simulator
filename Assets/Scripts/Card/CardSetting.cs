@@ -190,7 +190,7 @@ namespace TBL.Card
 
         public virtual void OnUse(NetworkPlayer user)
         {
-
+            
         }
     }
 }

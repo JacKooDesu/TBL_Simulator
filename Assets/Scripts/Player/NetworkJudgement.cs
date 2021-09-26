@@ -170,7 +170,7 @@ namespace TBL
             }
 
             StartNewRound(
-                (currentPlayerIndex + 1 > manager.players.Count - 1) ?
+                (currentPlayerIndex + 1 >= manager.players.Count) ?
                 0 : currentPlayerIndex + 1
             );
         }

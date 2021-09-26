@@ -201,7 +201,7 @@ namespace TBL
         {
             for (int i = 0; i < amount; ++i)
             {
-                netHandCard.Add(manager.deckManager.DrawCardFromTop().ID);
+                netHandCard.Add(manager.DeckManager.DrawCardFromTop().ID);
             }
 
             // if (manager.Judgement.currentRoundPlayerIndex == playerIndex)
@@ -213,7 +213,7 @@ namespace TBL
         {
             for (int i = 0; i < amount; ++i)
             {
-                netHandCard.Add(manager.deckManager.DrawCardFromTop().ID);
+                netHandCard.Add(manager.DeckManager.DrawCardFromTop().ID);
             }
 
             if (manager.Judgement.currentRoundPlayerIndex == playerIndex)
@@ -357,9 +357,9 @@ namespace TBL
 
             netCanvas.SetButtonInteractable(draw: 0, send: 1);
             netCanvas.BindEvent(netCanvas.sendButton.onClick, () =>
-            {                
+            {
                 netCanvas.CheckCanSend(playerIndex);
-                
+
                 print("Check can send");
             });
             StartCoroutine(RoundUpdate());
@@ -472,6 +472,11 @@ namespace TBL
             StopCoroutine(RoundUpdate());
         }
 
+        [Command]
+        public void CmdTestCardAction(CardAction ca)
+        {
+            print($"玩家({ca.userIndex}) 對 玩家({ca.targetIndex}) 使用 {CardSetting.IDConvertCard(ca.cardID).GetCardNameFully()}");
+        }
         #endregion
 
         public override void OnStopClient()

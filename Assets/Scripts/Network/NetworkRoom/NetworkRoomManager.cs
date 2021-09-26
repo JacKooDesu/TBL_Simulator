@@ -10,14 +10,26 @@ namespace TBL
     {
         public bool showStartButton;
         [SerializeField] GameObject deckManagerPrefab;
-        public DeckManager deckManager;
+        DeckManager deckManager;
+        public DeckManager DeckManager
+        {
+            get
+            {
+                if (deckManager == null)
+                    deckManager = FindObjectOfType<DeckManager>();
+
+                return deckManager;
+            }
+        }
         [SerializeField] GameObject judgementPrefab;
         NetworkJudgement judgement;
-        public NetworkJudgement Judgement{
-            get{
-                if(judgement==null)
+        public NetworkJudgement Judgement
+        {
+            get
+            {
+                if (judgement == null)
                     judgement = FindObjectOfType<NetworkJudgement>();
-                
+
                 return judgement;
             }
         }
@@ -49,7 +61,7 @@ namespace TBL
                     deckManager = Instantiate(deckManagerPrefab).GetComponent<DeckManager>();
 
                 NetworkServer.Spawn(deckManager.gameObject);
-                
+
 
                 if (judgement == null)
                     judgement = Instantiate(judgementPrefab).GetComponent<NetworkJudgement>();
@@ -121,6 +133,17 @@ namespace TBL
             }
 
             return 0;
+        }
+
+        public List<int> GetOtherPlayers()
+        {
+            List<int> list = new List<int>();
+            foreach (NetworkPlayer p in players)
+            {
+                if (!p.isLocalPlayer)
+                    list.Add(p.playerIndex);
+            }
+            return list;
         }
 
         public void InitTeamList()

@@ -60,13 +60,7 @@ namespace TBL.NetCanvas
             List<int> sendList = new List<int>();
             if (CardSetting.IDConvertCard(selectCard.cardID).SendType == CardSendType.Direct)
             {
-                foreach (NetworkPlayer p in manager.players)
-                {
-                    if (p.playerIndex == localIndex)
-                        continue;
-
-                    sendList.Add(p.playerIndex);
-                }
+                sendList.AddRange(manager.GetOtherPlayers());
             }
             else
             {
@@ -98,6 +92,7 @@ namespace TBL.NetCanvas
                         isSelectingPlayer = false;
                         action.Invoke(pUI.player.playerIndex);
                         ResetPlayerUIAnimation();
+                        ClearPlayerUIEvent();
                         print($"select {pUI.player.playerIndex}");
                     });
 
@@ -110,6 +105,14 @@ namespace TBL.NetCanvas
             foreach (UI.GameScene.PlayerData pUI in playerUIs)
                 pUI.gameObject.GetComponent<Animator>().SetTrigger("Return");
 
+        }
+
+        public void ClearPlayerUIEvent()
+        {
+            foreach (UI.GameScene.PlayerData pUI in playerUIs)
+            {
+                pUI.GetComponent<EventTrigger>().triggers.Clear();
+            }
         }
         #endregion
 
@@ -197,6 +200,21 @@ namespace TBL.NetCanvas
             //     manager.GetLocalPlayer().CmdDrawCard(2);
             //     manager.GetLocalPlayer().CmdSetDraw(true);
             // });
+
+            useButton.onClick.AddListener(() =>
+            {
+                BindSelectPlayer(
+                    manager.GetOtherPlayers(),
+                    (x) => manager.GetLocalPlayer().CmdTestCardAction(
+                        new CardAction(
+                            manager.GetLocalPlayer().playerIndex,
+                            x,
+                            selectCard.cardID,
+                            0
+                        )
+                    ));
+                //manager.GetLocalPlayer().CmdTestCardAction(new CardAction(0, 500, 10000, 0));
+            });
         }
 
         public void ClearButtonEvent()
@@ -274,7 +292,7 @@ namespace TBL.NetCanvas
                 switch (manager.Judgement.currentPhase)
                 {
                     case NetworkJudgement.Phase.ChooseToSend:
-                        if (!manager.Judgement.currentRoundHasSendCard)
+                        if (!manager.Judgement.currentRoundHasSendCard && manager.Judgement.currentRoundPlayerIndex == manager.GetLocalPlayer().playerIndex)
                         {
                             SetButtonInteractable(send: 1);
                         }
@@ -288,7 +306,7 @@ namespace TBL.NetCanvas
                         break;
                 }
 
-                if (manager.deckManager.Deck.GetCardPhaseSetting(selectCard.cardID).IndexOf(manager.Judgement.currentPhase) != -1)
+                if (manager.DeckManager.Deck.GetCardPhaseSetting(selectCard.cardID).IndexOf(manager.Judgement.currentPhase) != -1)
                 {
                     SetButtonInteractable(use: 1);
                 }
