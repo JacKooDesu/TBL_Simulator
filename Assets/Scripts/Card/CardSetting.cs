@@ -9,6 +9,10 @@ namespace TBL.Card
     {
         [SerializeField, Header("種類")]
         CardType cardType;
+        public CardType CardType
+        {
+            get => cardType;
+        }
 
         [SerializeField, Header("傳遞方式")]
         CardSendType sendType;

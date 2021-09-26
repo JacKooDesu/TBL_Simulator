@@ -133,10 +133,12 @@ namespace TBL
         [Command] public void CmdSetReady(bool b) { isReady = b; }
         // [SyncVar] public bool isReadyLast;
 
-        [SyncVar] public bool isLocked;
+        [SyncVar(hook = nameof(OnLockStatusChange))] public bool isLocked;
+        void OnLockStatusChange(bool oldStatus, bool newStatus) { netCanvas.playerUIs[playerIndex].UpdateStatus(); }
         [Command] public void CmdSetLocked(bool b) { isLocked = b; }
         // [SyncVar] public bool isLockedLast;
-        [SyncVar] public bool isSkipped;
+        [SyncVar(hook = nameof(OnSkipStatusChange))] public bool isSkipped;
+        void OnSkipStatusChange(bool oldStatus, bool newStatus) { netCanvas.playerUIs[playerIndex].UpdateStatus(); }
         [Command] public void CmdSetSkipped(bool b) { isSkipped = b; }
 
         [SyncVar] public bool hasDraw;
@@ -355,8 +357,9 @@ namespace TBL
 
             netCanvas.SetButtonInteractable(draw: 0, send: 1);
             netCanvas.BindEvent(netCanvas.sendButton.onClick, () =>
-            {
+            {                
                 netCanvas.CheckCanSend(playerIndex);
+                
                 print("Check can send");
             });
             StartCoroutine(RoundUpdate());
@@ -366,14 +369,6 @@ namespace TBL
         {
             while (!manager.Judgement.currentRoundHasSendCard)
             {
-                if (netCanvas.selectCard != null)
-                {
-                    netCanvas.SetButtonInteractable(send: 1);
-                }
-                else
-                {
-                    netCanvas.SetButtonInteractable(send: 0);
-                }
                 yield return null;
             }
 

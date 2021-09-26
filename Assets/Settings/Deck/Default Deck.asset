@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardConfigs:
   - card: {fileID: 5348667741019955837, guid: 7678dd494c566e843bba36d3ff63d7c2, type: 3}
+    canUsePhases: 0100000002000000
     colorConfigs:
     - color: 1
       amount: 2
@@ -22,6 +23,7 @@ MonoBehaviour:
     - color: 4
       amount: 2
   - card: {fileID: 5344953847198608338, guid: 48f6b3ee92f8f1648b86f48f405084df, type: 3}
+    canUsePhases: 01000000
     colorConfigs:
     - color: 1
       amount: 1
@@ -30,6 +32,7 @@ MonoBehaviour:
     - color: 4
       amount: 1
   - card: {fileID: 3542289086647414841, guid: fa4458ccf9c0383439258adf65ff6266, type: 3}
+    canUsePhases: 02000000
     colorConfigs:
     - color: 1
       amount: 2
@@ -38,6 +41,7 @@ MonoBehaviour:
     - color: 4
       amount: 2
   - card: {fileID: 3377925098125802316, guid: e5fa10ddeb040a54997f9dff79195697, type: 3}
+    canUsePhases: 
     colorConfigs:
     - color: 1
       amount: 6
@@ -46,6 +50,7 @@ MonoBehaviour:
     - color: 4
       amount: 1
   - card: {fileID: 7383021355112031216, guid: a6a6aab5e7d200143b9d020ec308128f, type: 3}
+    canUsePhases: 
     colorConfigs:
     - color: 1
       amount: 4
@@ -54,6 +59,7 @@ MonoBehaviour:
     - color: 4
       amount: 5
   - card: {fileID: 2599387722799750160, guid: d919f5da29548f84c8c3171a4bad93b9, type: 3}
+    canUsePhases: 01000000
     colorConfigs:
     - color: 1
       amount: 6
@@ -62,6 +68,7 @@ MonoBehaviour:
     - color: 4
       amount: 3
   - card: {fileID: 5055220880807591878, guid: c391021882549bc4e89c370901569c59, type: 3}
+    canUsePhases: 
     colorConfigs:
     - color: 1
       amount: 6
@@ -70,6 +77,7 @@ MonoBehaviour:
     - color: 4
       amount: 1
   - card: {fileID: 750791969945043217, guid: 1021cb48d494f1247b6ba16d0df78763, type: 3}
+    canUsePhases: 
     colorConfigs:
     - color: 1
       amount: 2
@@ -78,6 +86,7 @@ MonoBehaviour:
     - color: 4
       amount: 2
   - card: {fileID: 2002517430371847898, guid: d1ba15c8b16b2a346a0024a8591d85e6, type: 3}
+    canUsePhases: 
     colorConfigs:
     - color: 1
       amount: 6

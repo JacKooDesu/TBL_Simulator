@@ -16,6 +16,8 @@ namespace TBL
                 get => card;
             }
 
+            public List<NetworkJudgement.Phase> canUsePhases = new List<NetworkJudgement.Phase>();
+
             [System.Serializable]
             public class ColorConfig
             {
@@ -42,6 +44,21 @@ namespace TBL
         public List<CardConfig> CardConfigs
         {
             get => cardConfigs;
+        }
+
+        public List<TBL.NetworkJudgement.Phase> GetCardPhaseSetting(int id)
+        {
+            List<TBL.NetworkJudgement.Phase> setting = new List<NetworkJudgement.Phase>();
+            CardSetting cs = CardSetting.IDConvertCard(id);
+            foreach (CardConfig config in cardConfigs)
+            {
+                if (config.Card.CardType == cs.CardType)
+                {
+                    setting.AddRange(config.canUsePhases);
+                }
+            }
+
+            return setting;
         }
     }
 }

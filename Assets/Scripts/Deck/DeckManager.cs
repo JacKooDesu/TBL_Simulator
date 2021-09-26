@@ -9,6 +9,10 @@ namespace TBL
     public class DeckManager : NetworkBehaviour
     {
         [SerializeField] DeckSetting deck;
+        public DeckSetting Deck
+        {
+            get => deck;
+        }
 
         [SerializeField] List<CardSetting> cards = new List<CardSetting>();
         [SerializeField] List<CardSetting> inGameCards = new List<CardSetting>();

@@ -38,7 +38,8 @@ namespace TBL.UI.GameScene
         public Text greenMission;
         #endregion
 
-        private void Start() {
+        private void Start()
+        {
             UpdateStatus();
             // UpdateHero();
         }
@@ -83,10 +84,11 @@ namespace TBL.UI.GameScene
 
             handCardCount.text = player.netHandCard.Count.ToString();
 
-            // lockBg.color = player.statu
+            lockBg.color = player.isLocked ? activeColor : inactiveColor;
+            skipBg.color = player.isSkipped ? activeColor : inactiveColor;
         }
-    
-        
+
+
     }
 }
 

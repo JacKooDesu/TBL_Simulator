@@ -54,7 +54,8 @@ namespace TBL.NetCanvas
         {
             print($"Player {localIndex} Checking");
 
-            sendButton.interactable = false;
+            SetButtonInteractable(send: 0);
+            // sendButton.gameObject.SetActive(false);
 
             List<int> sendList = new List<int>();
             if (CardSetting.IDConvertCard(selectCard.cardID).SendType == CardSendType.Direct)
@@ -81,8 +82,11 @@ namespace TBL.NetCanvas
                 (i) => { playerUIs[localIndex].player.CmdSendCard(i, selectCard.cardID); });
         }
 
+        public bool isSelectingPlayer = false;
         public void BindSelectPlayer(List<int> list, UnityAction<int> action)
         {
+            isSelectingPlayer = true;
+
             foreach (int i in list)
             {
                 UI.GameScene.PlayerData pUI = playerUIs[i];
@@ -91,6 +95,7 @@ namespace TBL.NetCanvas
                     EventTriggerType.PointerClick,
                     (e) =>
                     {
+                        isSelectingPlayer = false;
                         action.Invoke(pUI.player.playerIndex);
                         ResetPlayerUIAnimation();
                         print($"select {pUI.player.playerIndex}");
@@ -263,6 +268,40 @@ namespace TBL.NetCanvas
         private void Update()
         {
             EventSystem es = FindObjectOfType<EventSystem>();
+
+            if (selectCard != null && !isSelectingPlayer)
+            {
+                switch (manager.Judgement.currentPhase)
+                {
+                    case NetworkJudgement.Phase.ChooseToSend:
+                        if (!manager.Judgement.currentRoundHasSendCard)
+                        {
+                            SetButtonInteractable(send: 1);
+                        }
+
+                        break;
+
+                    case NetworkJudgement.Phase.Draw:
+                        break;
+
+                    case NetworkJudgement.Phase.Sending:
+                        break;
+                }
+
+                if (manager.deckManager.Deck.GetCardPhaseSetting(selectCard.cardID).IndexOf(manager.Judgement.currentPhase) != -1)
+                {
+                    SetButtonInteractable(use: 1);
+                }
+                else
+                {
+                    SetButtonInteractable(use: 0);
+                }
+            }
+            else
+            {
+                SetButtonInteractable(send: 0, use: 0);
+            }
+
             if (Input.GetMouseButton(0))
             {
                 //                if (es.IsPointerOverGameObject() || !es.currentSelectedGameObject.GetComponent<EventTrigger>())

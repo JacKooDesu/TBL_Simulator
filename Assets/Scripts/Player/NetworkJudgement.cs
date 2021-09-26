@@ -29,13 +29,26 @@ namespace TBL
         TBL.NetCanvas.GameScene netCanvas;
         NetworkRoomManager manager;
 
+        // 階段
+        public enum Phase
+        {
+            Draw,
+            ChooseToSend,
+            Sending
+        }
+
         [Header("輪設定")]
+        [SyncVar] public Phase currentPhase;
+        [SyncVar] Phase lastPhase;
         [SyncVar] public int currentRoundPlayerIndex;
         [SyncVar] public bool currentRoundHasSendCard;
         [SyncVar] public int currentRoundSendingCardId;
 
         // server only
         public List<NetworkPlayer> cardSendQueue = new List<NetworkPlayer>();
+        public SyncList<int> cardSendQueueID = new SyncList<int>(); // 測試是否可用SyncList
+
+        public List<Card.CardSetting> cardActionQueue = new List<Card.CardSetting>();
 
         private void Start()
         {
@@ -110,12 +123,32 @@ namespace TBL
             StartCoroutine(RoundUpdate());
         }
 
+        IEnumerator WaitDraw()
+        {
+            currentPhase = Phase.Draw;
+
+            manager.players[currentPlayerIndex].hasDraw = false;
+            float time = roundSetting.drawTime;
+            while (!manager.players[currentPlayerIndex].hasDraw && time >= 0)
+            {
+                time -= Time.deltaTime;
+                timer = (int)time;
+                yield return null;
+            }
+            if (!manager.players[currentPlayerIndex].hasDraw)
+            {
+                manager.players[currentPlayerIndex].DrawCard(2);
+            }
+        }
+
         IEnumerator RoundUpdate()
         {
             manager.players[currentPlayerIndex].RpcUpdateHostPlayer();
 
             manager.players[currentPlayerIndex].TargetDrawStart();
             yield return StartCoroutine(WaitDraw());
+
+            currentPhase = Phase.ChooseToSend;
 
             manager.players[currentPlayerIndex].TargetRoundStart();
             float time = roundSetting.roundTime;
@@ -144,6 +177,8 @@ namespace TBL
 
         IEnumerator SendingCardUpdate()
         {
+            currentPhase = Phase.Sending;
+
             print("卡片傳送中");
             foreach (NetworkPlayer p in cardSendQueue)
             {
@@ -178,21 +213,15 @@ namespace TBL
             }
         }
 
-        IEnumerator WaitDraw()
+        IEnumerator CardEventUpdate()
         {
-            manager.players[currentPlayerIndex].hasDraw = false;
-            float time = roundSetting.drawTime;
-            while (!manager.players[currentPlayerIndex].hasDraw && time >= 0)
+            float time = roundSetting.reactionTime;
+            while (time >= 0)
             {
                 time -= Time.deltaTime;
                 timer = (int)time;
                 yield return null;
             }
-            if (!manager.players[currentPlayerIndex].hasDraw)
-            {
-                manager.players[currentPlayerIndex].DrawCard(2);
-            }
-
         }
 
         public override void OnStartClient()
