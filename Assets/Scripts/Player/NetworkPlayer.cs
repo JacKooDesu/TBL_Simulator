@@ -64,6 +64,12 @@ namespace TBL
                 case SyncList<int>.Operation.OP_REMOVEAT:
                     // index is where it got removed in the list
                     // oldItem is the item that was removed
+                    if (isLocalPlayer)
+                    {
+                        netCanvas.UpdateCardList();
+                    }
+
+                    netCanvas.playerUIs[manager.GetPlayerSlotIndex(this)].handCardCount.text = netHandCard.Count.ToString();
                     break;
                 case SyncList<int>.Operation.OP_SET:
                     // index is the index of the item that was updated
@@ -196,6 +202,18 @@ namespace TBL
                 netHandCard.Add(manager.deckManager.DrawCardFromTop().ID);
             }
 
+            // if (manager.Judgement.currentRoundPlayerIndex == playerIndex)
+            //     CmdSetDraw(true);
+        }
+
+        [Server]
+        public void DrawCard(int amount)
+        {
+            for (int i = 0; i < amount; ++i)
+            {
+                netHandCard.Add(manager.deckManager.DrawCardFromTop().ID);
+            }
+
             if (manager.Judgement.currentRoundPlayerIndex == playerIndex)
                 CmdSetDraw(true);
         }
@@ -318,16 +336,23 @@ namespace TBL
         #endregion
 
         #region ROUND_ACTION
+        [ClientRpc]
+        public void RpcUpdateHostPlayer()
+        {
+            netCanvas.PlayerAnimation(new List<int>() { playerIndex }, "Host");
+        }
+
         [TargetRpc]
         public void TargetDrawStart()
         {
             netCanvas.SetButtonInteractable(draw: 1);
-            netCanvas.BindEvent(netCanvas.drawButton.onClick, () => CmdDrawCard(2));
+            netCanvas.BindEvent(netCanvas.drawButton.onClick, () => { CmdDrawCard(2); CmdSetDraw(true); });
         }
 
         [TargetRpc]
         public void TargetRoundStart()
         {
+
             netCanvas.SetButtonInteractable(draw: 0, send: 1);
             netCanvas.BindEvent(netCanvas.sendButton.onClick, () =>
             {
@@ -356,8 +381,10 @@ namespace TBL
         }
 
         [Command]
-        public void CmdSendCard(int to, ushort id)
+        public void CmdSendCard(int to, int id)
         {
+            netHandCard.Remove(id);
+
             List<NetworkPlayer> queue = new List<NetworkPlayer>();
 
             if (CardSetting.IDConvertCard(id).SendType == CardSendType.Direct)
@@ -407,6 +434,7 @@ namespace TBL
         [ClientRpc]
         public void RpcAskCardStart()
         {
+            netCanvas.PlayerAnimation(new List<int>() { playerIndex }, "Asking");
             if (isLocalPlayer)
             {
                 netCanvas.acceptButton.interactable = true;

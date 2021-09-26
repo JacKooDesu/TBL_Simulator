@@ -99,12 +99,12 @@ namespace TBL
 
             foreach (NetworkPlayer p in manager.players)
             {
-                p.CmdSetDraw(false);
-                p.CmdSetReady(false);
-                p.CmdSetRejectCard(false);
-                p.CmdSetAcceptCard(false);
-                p.CmdSetLocked(false);
-                p.CmdSetSkipped(false);
+                p.hasDraw = (false);
+                // p.isReady = (false);
+                p.rejectCard = (false);
+                p.acceptCard = (false);
+                p.isLocked = (false);
+                p.isSkipped = (false);
             }
 
             StartCoroutine(RoundUpdate());
@@ -112,6 +112,8 @@ namespace TBL
 
         IEnumerator RoundUpdate()
         {
+            manager.players[currentPlayerIndex].RpcUpdateHostPlayer();
+
             manager.players[currentPlayerIndex].TargetDrawStart();
             yield return StartCoroutine(WaitDraw());
 
@@ -161,7 +163,7 @@ namespace TBL
                 }
 
                 if (!p.rejectCard && !p.acceptCard)
-                    p.CmdSetRejectCard(true);
+                    p.rejectCard = true;
 
                 p.RpcAskCardEnd();
 
@@ -188,7 +190,7 @@ namespace TBL
             }
             if (!manager.players[currentPlayerIndex].hasDraw)
             {
-                manager.players[currentPlayerIndex].CmdDrawCard(2);
+                manager.players[currentPlayerIndex].DrawCard(2);
             }
 
         }

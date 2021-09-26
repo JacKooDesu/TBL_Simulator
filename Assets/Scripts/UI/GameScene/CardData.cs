@@ -9,7 +9,7 @@ namespace TBL.UI.GameScene
     public class CardData : MonoBehaviour
     {
         public Text nameTextUI;
-        public ushort cardID;
+        public int cardID;
         public bool isSelected = false;
 
         NetCanvas.GameScene netCanvas;

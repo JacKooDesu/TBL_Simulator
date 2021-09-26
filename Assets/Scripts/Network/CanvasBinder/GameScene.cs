@@ -35,6 +35,21 @@ namespace TBL.NetCanvas
             }
         }
 
+        public void PlayerAnimation(List<int> index, string ani)
+        {
+            for (int i = 0; i < playerUIs.Count; ++i)
+            {
+                if (index.IndexOf(i) != -1)
+                {
+                    playerUIs[i].GetComponent<Animator>().SetTrigger(ani);
+                }
+                else
+                {
+                    playerUIs[i].GetComponent<Animator>().SetTrigger("Return");
+                }
+            }
+        }
+
         public void CheckCanSend(int localIndex)
         {
             print($"Player {localIndex} Checking");
@@ -220,7 +235,7 @@ namespace TBL.NetCanvas
 
             foreach (int id in manager.GetLocalPlayer().netHandCard)
             {
-                CardSetting tempCard = CardSetting.IDConvertCard((ushort)id);
+                CardSetting tempCard = CardSetting.IDConvertCard(id);
                 UI.GameScene.CardData ui = Instantiate(cardTextPrefab, cardListUI).GetComponent<UI.GameScene.CardData>();
                 ui.SetUI(tempCard);
             }
