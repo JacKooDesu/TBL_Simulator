@@ -1,6 +1,6 @@
 namespace TBL.Card
 {
-    public enum CardColor : ushort
+    public enum CardColor : uint
     {
         Black = 1 << 0,
         Red = 1 << 1,

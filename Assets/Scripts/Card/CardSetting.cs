@@ -23,8 +23,8 @@ namespace TBL.Card
             get => cardColor;
         }
 
-        [SerializeField] ushort id;
-        public ushort ID
+        [SerializeField] int id;
+        public int ID
         {
             get
             {
@@ -36,39 +36,39 @@ namespace TBL.Card
             {
                 id = value;
                 // Color
-                if ((value & (ushort)CardColor.Black) == (ushort)CardColor.Black)
+                if ((value & (int)CardColor.Black) == (int)CardColor.Black)
                     cardColor = CardColor.Black;
-                if ((value & (ushort)CardColor.Red) == (ushort)CardColor.Red)
+                if ((value & (int)CardColor.Red) == (int)CardColor.Red)
                     cardColor = CardColor.Red;
-                if ((value & (ushort)CardColor.Blue) == (ushort)CardColor.Blue)
+                if ((value & (int)CardColor.Blue) == (int)CardColor.Blue)
                     cardColor = CardColor.Blue;
 
                 // SendType
-                if ((value & (ushort)CardSendType.Direct) == (ushort)CardSendType.Direct)
+                if ((value & (int)CardSendType.Direct) == (int)CardSendType.Direct)
                     sendType = CardSendType.Direct;
-                if ((value & (ushort)CardSendType.Secret) == (ushort)CardSendType.Secret)
+                if ((value & (int)CardSendType.Secret) == (int)CardSendType.Secret)
                     sendType = CardSendType.Secret;
-                if ((value & (ushort)CardSendType.Public) == (ushort)CardSendType.Public)
+                if ((value & (int)CardSendType.Public) == (int)CardSendType.Public)
                     sendType = CardSendType.Public;
 
                 // CardType
-                if ((value & (ushort)CardType.Burn) == (ushort)CardType.Burn)
+                if ((value & (int)CardType.Burn) == (int)CardType.Burn)
                     cardType = CardType.Burn;
-                if ((value & (ushort)CardType.Gameble) == (ushort)CardType.Gameble)
+                if ((value & (int)CardType.Gameble) == (int)CardType.Gameble)
                     cardType = CardType.Gameble;
-                if ((value & (ushort)CardType.Guess) == (ushort)CardType.Guess)
+                if ((value & (int)CardType.Guess) == (int)CardType.Guess)
                     cardType = CardType.Guess;
-                if ((value & (ushort)CardType.Intercept) == (ushort)CardType.Intercept)
+                if ((value & (int)CardType.Intercept) == (int)CardType.Intercept)
                     cardType = CardType.Intercept;
-                if ((value & (ushort)CardType.Invalidate) == (ushort)CardType.Invalidate)
+                if ((value & (int)CardType.Invalidate) == (int)CardType.Invalidate)
                     cardType = CardType.Invalidate;
-                if ((value & (ushort)CardType.Lock) == (ushort)CardType.Lock)
+                if ((value & (int)CardType.Lock) == (int)CardType.Lock)
                     cardType = CardType.Lock;
-                if ((value & (ushort)CardType.Return) == (ushort)CardType.Return)
+                if ((value & (int)CardType.Return) == (int)CardType.Return)
                     cardType = CardType.Return;
-                if ((value & (ushort)CardType.Skip) == (ushort)CardType.Skip)
+                if ((value & (int)CardType.Skip) == (int)CardType.Skip)
                     cardType = CardType.Skip;
-                if ((value & (ushort)CardType.Test) == (ushort)CardType.Test)
+                if ((value & (int)CardType.Test) == (int)CardType.Test)
                     cardType = CardType.Test;
 
             }
@@ -172,7 +172,7 @@ namespace TBL.Card
 
         static GameObject tempCard;
 
-        public static CardSetting IDConvertCard(ushort id)
+        public static CardSetting IDConvertCard(int id)
         {
             if (tempCard == null)
             {

@@ -1,6 +1,6 @@
 namespace TBL.Card
 {
-    public enum CardSendType : ushort
+    public enum CardSendType : int
     {
         Direct = 1 << 12, // 直達
         Secret = 1 << 13,     // 密電

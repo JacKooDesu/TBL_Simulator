@@ -1,6 +1,6 @@
 namespace TBL.Card
 {
-    public enum CardType : ushort
+    public enum CardType : int
     {
         Lock = 1 << 3,   //鎖定
         Skip = 1 << 4,       //調虎離山
