@@ -44,5 +44,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   heroName: "\u602A\u76DC\u4E5D\u4E5D"
+  avatar: {fileID: 21300000, guid: 128642f9360c0d04f9cec64cea599e60, type: 3}
   heroType: 0
+  gender: 0
   playerStatus: {fileID: 0}
