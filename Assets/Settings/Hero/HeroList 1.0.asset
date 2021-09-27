@@ -21,4 +21,5 @@ MonoBehaviour:
   - {fileID: 3000302891728669176, guid: c3beb11ed194e454a996037f3c2b6821, type: 3}
   - {fileID: -8171487019405511994, guid: 5ae9e1889162b844bb40ad14fe093de5, type: 3}
   - {fileID: 2940624703149146698, guid: 6a987d37bc2b8474dbcba802a8d614de, type: 3}
+  - {fileID: -7557183232082617439, guid: 8129e68dc15cf0443abc851823973580, type: 3}
   hiddenAvatar: {fileID: 21300000, guid: 47fa8c9d57803f84db1a3cef46fb52b5, type: 3}

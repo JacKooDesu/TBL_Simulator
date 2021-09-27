@@ -37,6 +37,8 @@ namespace TBL
             get => playerStatus;
         }
 
+        
+
         public virtual void OnGetCard(CardObject card)
         {
 
