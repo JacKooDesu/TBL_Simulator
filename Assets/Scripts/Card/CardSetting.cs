@@ -190,7 +190,13 @@ namespace TBL.Card
 
         public virtual void OnUse(NetworkPlayer user)
         {
-            
+
+        }
+
+        // only run on server
+        public virtual void OnEffect(NetworkRoomManager manager, CardAction ca)
+        {
+
         }
     }
 }
