@@ -18,8 +18,6 @@ namespace TBL
         [SerializeField] List<CardSetting> inGameCards = new List<CardSetting>();
         [SerializeField] List<CardSetting> garbageCards = new List<CardSetting>();
 
-        int cardUniqueId = 15;
-
         public override void OnStartServer()
         {
             base.OnStartServer();
@@ -34,7 +32,7 @@ namespace TBL
                         Debug.Log((temp.ID & (int)CardSendType.Direct) == (int)CardSendType.Direct);
                         GameObject g = new GameObject();
                         CardSetting card = g.AddComponent<CardSetting>();
-                        card.ID = (temp.ID + (int)(deck.CardConfigs[i].ColorConfigs[j].Color)) + (1 << (cardUniqueId + k));
+                        card.ID = (temp.ID + (int)(deck.CardConfigs[i].ColorConfigs[j].Color)) + (1 << (deck.cardUniqueId + k));
                         g.name = card.GetCardNameFully();
                         g.transform.SetParent(transform);
 

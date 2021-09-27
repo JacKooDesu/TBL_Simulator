@@ -65,7 +65,7 @@ namespace TBL.NetCanvas
             else
             {
                 int last, next;
-                last = (localIndex - 1 > 0 ? localIndex - 1 : manager.players.Count - 1);
+                last = (localIndex - 1 >= 0 ? localIndex - 1 : manager.players.Count - 1);
                 next = (localIndex + 1 > manager.players.Count - 1 ? 0 : localIndex + 1);
                 sendList.Add(next);
                 sendList.Add(last);
@@ -103,7 +103,13 @@ namespace TBL.NetCanvas
         public void ResetPlayerUIAnimation()
         {
             foreach (UI.GameScene.PlayerData pUI in playerUIs)
-                pUI.gameObject.GetComponent<Animator>().SetTrigger("Return");
+            {
+                if (pUI.player.playerIndex == manager.Judgement.currentPlayerIndex)
+                    pUI.gameObject.GetComponent<Animator>().SetTrigger("Host");
+                else
+                    pUI.gameObject.GetComponent<Animator>().SetTrigger("Return");
+            }
+
 
         }
 
@@ -201,19 +207,23 @@ namespace TBL.NetCanvas
             //     manager.GetLocalPlayer().CmdSetDraw(true);
             // });
 
+            // useButton.onClick.AddListener(() =>
+            // {
+            //     BindSelectPlayer(
+            //         manager.GetOtherPlayers(),
+            //         (x) => manager.GetLocalPlayer().CmdTestCardAction(
+            //             new CardAction(
+            //                 manager.GetLocalPlayer().playerIndex,
+            //                 x,
+            //                 selectCard.cardID,
+            //                 0
+            //             )
+            //         ));
+            // });
+
             useButton.onClick.AddListener(() =>
             {
-                BindSelectPlayer(
-                    manager.GetOtherPlayers(),
-                    (x) => manager.GetLocalPlayer().CmdTestCardAction(
-                        new CardAction(
-                            manager.GetLocalPlayer().playerIndex,
-                            x,
-                            selectCard.cardID,
-                            0
-                        )
-                    ));
-                //manager.GetLocalPlayer().CmdTestCardAction(new CardAction(0, 500, 10000, 0));
+                manager.DeckManager.Deck.GetCardPrototype(selectCard.cardID).OnUse(manager.GetLocalPlayer());
             });
         }
 
@@ -223,7 +233,7 @@ namespace TBL.NetCanvas
             sendButton.onClick.RemoveAllListeners();
             acceptButton.onClick.RemoveAllListeners();
             rejectButton.onClick.RemoveAllListeners();
-            useButton.onClick.RemoveAllListeners();
+            // useButton.onClick.RemoveAllListeners();
 
             drawButton.interactable = false;
             sendButton.interactable = false;
@@ -292,7 +302,7 @@ namespace TBL.NetCanvas
                 switch (manager.Judgement.currentPhase)
                 {
                     case NetworkJudgement.Phase.ChooseToSend:
-                        if (!manager.Judgement.currentRoundHasSendCard && manager.Judgement.currentRoundPlayerIndex == manager.GetLocalPlayer().playerIndex)
+                        if (!manager.Judgement.currentRoundHasSendCard && manager.Judgement.currentPlayerIndex == manager.GetLocalPlayer().playerIndex)
                         {
                             SetButtonInteractable(send: 1);
                         }
@@ -306,13 +316,31 @@ namespace TBL.NetCanvas
                         break;
                 }
 
-                if (manager.DeckManager.Deck.GetCardPhaseSetting(selectCard.cardID).IndexOf(manager.Judgement.currentPhase) != -1)
+
+                foreach (DeckSetting.CardConfig.PhaseSetting setting in manager.DeckManager.Deck.GetCardPhaseSetting(selectCard.cardID))
                 {
-                    SetButtonInteractable(use: 1);
-                }
-                else
-                {
-                    SetButtonInteractable(use: 0);
+                    if (setting.phase == manager.Judgement.currentPhase)
+                    {
+                        SetButtonInteractable(use: 1);
+
+                        if (setting.roundHost)
+                        {
+                            if (manager.Judgement.currentPlayerIndex != manager.GetLocalPlayer().playerIndex)
+                                SetButtonInteractable(use: 0);
+                        }
+
+                        if (setting.sendingHost)
+                        {
+                            if (manager.Judgement.currentSendingPlayer != manager.GetLocalPlayer().playerIndex)
+                                SetButtonInteractable(use: 0);
+                        }
+
+                        break;
+                    }
+                    else
+                    {
+                        SetButtonInteractable(use: 0);
+                    }
                 }
             }
             else

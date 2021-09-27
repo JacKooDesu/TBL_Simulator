@@ -18,7 +18,7 @@ namespace TBL
             netCanvas.timeTextUI.text = newTime.ToString();
         }
 
-        [SerializeField, SyncVar(hook = nameof(OnCurrentPlayerChange))] int currentPlayerIndex;
+        [SerializeField, SyncVar(hook = nameof(OnCurrentPlayerChange))] public int currentPlayerIndex;
         void OnCurrentPlayerChange(int oldPlayer, int newPlayer)
         {
 
@@ -43,6 +43,8 @@ namespace TBL
         [SyncVar] public int currentRoundPlayerIndex;
         [SyncVar] public bool currentRoundHasSendCard;
         [SyncVar] public int currentRoundSendingCardId;
+        [SyncVar] public int currentSendingPlayer;
+        [SyncVar] public bool currentSendReverse;
 
         // server only
         public List<NetworkPlayer> cardSendQueue = new List<NetworkPlayer>();
@@ -109,6 +111,8 @@ namespace TBL
             currentPlayerIndex = index;
             currentRoundHasSendCard = false;
             currentRoundSendingCardId = 0;
+            currentSendReverse = false;
+            currentSendingPlayer = -1;
 
             foreach (NetworkPlayer p in manager.players)
             {
@@ -163,16 +167,16 @@ namespace TBL
             {
                 // remove all hand card
                 manager.players[currentPlayerIndex].netHandCard.Clear();
+
+                StartNewRound(
+                (currentPlayerIndex + 1 == manager.players.Count) ?
+                0 : currentPlayerIndex + 1
+                );
             }
             else
             {
-                yield return StartCoroutine(SendingCardUpdate());
+                StartCoroutine(SendingCardUpdate());
             }
-
-            StartNewRound(
-                (currentPlayerIndex + 1 >= manager.players.Count) ?
-                0 : currentPlayerIndex + 1
-            );
         }
 
         IEnumerator SendingCardUpdate()
@@ -180,11 +184,26 @@ namespace TBL
             currentPhase = Phase.Sending;
 
             print("卡片傳送中");
-            foreach (NetworkPlayer p in cardSendQueue)
+            int iter = 1;
+            // foreach (NetworkPlayer p in cardSendQueue)
+            for (int i = 0; i < cardSendQueue.Count; i += iter)
             {
+                if (i <= -1)
+                {
+                    i = cardSendQueue.Count - 1;
+                }
+                NetworkPlayer p = cardSendQueue[i];
+                currentSendingPlayer = p.playerIndex;
+
                 if (p.playerIndex == currentPlayerIndex)
                 {
-                    p.AddCard((ushort)currentRoundSendingCardId);
+                    p.AddCard(currentRoundSendingCardId);
+                    break;
+                }
+
+                if (p.isLocked)
+                {
+                    p.AddCard(currentRoundSendingCardId);
                     break;
                 }
 
@@ -194,6 +213,10 @@ namespace TBL
                 {
                     time -= Time.deltaTime;
                     timer = (int)time;
+
+                    if (currentSendReverse)
+                        iter = -1;
+
                     yield return null;
                 }
 
@@ -206,11 +229,16 @@ namespace TBL
                     continue;
                 if (p.acceptCard)
                 {
-                    p.AddCard((ushort)currentRoundSendingCardId);
+                    p.AddCard(currentRoundSendingCardId);
                     break;
                 }
 
             }
+
+            StartNewRound(
+                (currentPlayerIndex + 1 == manager.players.Count) ?
+                0 : currentPlayerIndex + 1
+                );
         }
 
         IEnumerator CardEventUpdate()

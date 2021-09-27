@@ -216,7 +216,7 @@ namespace TBL
                 netHandCard.Add(manager.DeckManager.DrawCardFromTop().ID);
             }
 
-            if (manager.Judgement.currentRoundPlayerIndex == playerIndex)
+            if (manager.Judgement.currentPlayerIndex == playerIndex)
                 CmdSetDraw(true);
         }
 
@@ -413,7 +413,8 @@ namespace TBL
                         current = manager.players.Count - 1;
                     }
 
-                    queue.Add(manager.players[current]);
+                    if (!manager.players[current].isSkipped)
+                        queue.Add(manager.players[current]);
 
                     current += iter;
                 }
@@ -432,8 +433,7 @@ namespace TBL
             netCanvas.PlayerAnimation(new List<int>() { playerIndex }, "Asking");
             if (isLocalPlayer)
             {
-                netCanvas.acceptButton.interactable = true;
-                netCanvas.rejectButton.interactable = true;
+                netCanvas.SetButtonInteractable(accept: 1, reject: 1);
                 netCanvas.BindEvent(
                     netCanvas.acceptButton.onClick,
                     () => { CmdSetAcceptCard(true); netCanvas.ClearButtonEvent(); });
@@ -455,12 +455,12 @@ namespace TBL
         }
 
         [Command]
-        public void CmdAddCard(ushort id)
+        public void CmdAddCard(int id)
         {
             print($"檯面新增 {id}");
             netCards.Add((int)id);
         }
-        public void AddCard(ushort id)
+        public void AddCard(int id)
         {
             print($"檯面新增 {id}");
             netCards.Add((int)id);
@@ -475,6 +475,7 @@ namespace TBL
         [Command]
         public void CmdTestCardAction(CardAction ca)
         {
+            manager.DeckManager.Deck.GetCardPrototype(ca.cardID).OnEffect(manager, ca);
             print($"玩家({ca.userIndex}) 對 玩家({ca.targetIndex}) 使用 {CardSetting.IDConvertCard(ca.cardID).GetCardNameFully()}");
         }
         #endregion

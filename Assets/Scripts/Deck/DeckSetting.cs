@@ -16,7 +16,14 @@ namespace TBL
                 get => card;
             }
 
-            public List<NetworkJudgement.Phase> canUsePhases = new List<NetworkJudgement.Phase>();
+            [System.Serializable]
+            public class PhaseSetting
+            {
+                public NetworkJudgement.Phase phase;
+                public bool roundHost;
+                public bool sendingHost;
+            }
+            public List<PhaseSetting> canUsePhases = new List<PhaseSetting>();
 
             [System.Serializable]
             public class ColorConfig
@@ -46,9 +53,11 @@ namespace TBL
             get => cardConfigs;
         }
 
-        public List<TBL.NetworkJudgement.Phase> GetCardPhaseSetting(int id)
+        public int cardUniqueId = 15;
+
+        public List<CardConfig.PhaseSetting> GetCardPhaseSetting(int id)
         {
-            List<TBL.NetworkJudgement.Phase> setting = new List<NetworkJudgement.Phase>();
+            List<CardConfig.PhaseSetting> setting = new List<CardConfig.PhaseSetting>();
             CardSetting cs = CardSetting.IDConvertCard(id);
             foreach (CardConfig config in cardConfigs)
             {
@@ -59,6 +68,30 @@ namespace TBL
             }
 
             return setting;
+        }
+
+        public CardSetting GetCardPrototype(int id)
+        {
+            CardSetting card = CardSetting.IDConvertCard(id);
+            foreach (CardConfig config in cardConfigs)
+            {
+                if (config.Card.CardType == card.CardType)
+                {
+                    return config.Card;
+                }
+            }
+
+            return null;
+        }
+
+        public int GetCardUniqueID(int id)
+        {
+            int i = cardUniqueId;
+            while ((id & 1 << i) != (1 << i) && i < 32)
+            {
+                ++i;
+            }
+            return i;
         }
     }
 }
