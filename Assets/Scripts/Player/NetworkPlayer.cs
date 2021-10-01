@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 using TBL.Card;
+using TBL.Action;
 using System;
 
 namespace TBL
@@ -475,8 +476,8 @@ namespace TBL
         [Command]
         public void CmdTestCardAction(CardAction ca)
         {
-            manager.DeckManager.Deck.GetCardPrototype(ca.cardID).OnEffect(manager, ca);
-            print($"玩家({ca.userIndex}) 對 玩家({ca.targetIndex}) 使用 {CardSetting.IDConvertCard(ca.cardID).GetCardNameFully()}");
+            manager.DeckManager.Deck.GetCardPrototype(ca.cardId).OnEffect(manager, ca);
+            print($"玩家({ca.user}) 對 玩家({ca.target}) 使用 {CardSetting.IDConvertCard(ca.cardId).GetCardNameFully()}");
         }
         #endregion
 
