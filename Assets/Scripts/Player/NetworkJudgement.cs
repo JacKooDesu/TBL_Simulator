@@ -34,23 +34,39 @@ namespace TBL
         {
             Draw,
             ChooseToSend,
-            Sending
+            Sending,
+            Reacting
         }
 
         [Header("輪設定")]
         [SyncVar] public Phase currentPhase;
         [SyncVar] Phase lastPhase;
+        public void ChangePhase(Phase phase)
+        {
+            lastPhase = currentPhase;
+            currentPhase = phase;
+        }
         [SyncVar] public int currentRoundPlayerIndex;
         [SyncVar] public bool currentRoundHasSendCard;
         [SyncVar] public int currentRoundSendingCardId;
         [SyncVar] public int currentSendingPlayer;
         [SyncVar] public bool currentSendReverse;
+        [SyncVar] public int playerIntercept = -1;
+
+        public void ResetRoundTrigger(int hasSendCard = -1, int sendReverse = -1)
+        {
+            if (hasSendCard != -1)
+                currentRoundHasSendCard = hasSendCard == 1;
+
+            if (sendReverse != -1)
+                currentSendReverse = sendReverse == 1;
+        }
 
         // server only
         public List<NetworkPlayer> cardSendQueue = new List<NetworkPlayer>();
         public SyncList<int> cardSendQueueID = new SyncList<int>(); // 測試是否可用SyncList
 
-        public List<Card.CardSetting> cardActionQueue = new List<Card.CardSetting>();
+        public List<Action.CardAction> cardActionQueue = new List<Action.CardAction>();
 
         private void Start()
         {
@@ -100,28 +116,22 @@ namespace TBL
                 p.InitPlayer();
             }
 
-
-
             if (isServer)
                 StartNewRound(UnityEngine.Random.Range(0, manager.players.Count));
         }
 
         void StartNewRound(int index)
         {
+            ResetRoundTrigger(0, 0);
             currentPlayerIndex = index;
-            currentRoundHasSendCard = false;
             currentRoundSendingCardId = 0;
-            currentSendReverse = false;
             currentSendingPlayer = -1;
+            playerIntercept = -1;
 
             foreach (NetworkPlayer p in manager.players)
             {
-                p.hasDraw = (false);
-                // p.isReady = (false);
-                p.rejectCard = (false);
-                p.acceptCard = (false);
-                p.isLocked = (false);
-                p.isSkipped = (false);
+                p.ResetStatus(0, 0, 0, 0, 0);
+                // p.isReady = false;
             }
 
             StartCoroutine(RoundUpdate());
@@ -129,7 +139,7 @@ namespace TBL
 
         IEnumerator WaitDraw()
         {
-            currentPhase = Phase.Draw;
+            ChangePhase(Phase.Draw);
 
             manager.players[currentPlayerIndex].hasDraw = false;
             float time = roundSetting.drawTime;
@@ -137,6 +147,10 @@ namespace TBL
             {
                 time -= Time.deltaTime;
                 timer = (int)time;
+
+                if (currentPhase == Phase.Reacting)
+                    yield return StartCoroutine(CardEventUpdate());
+
                 yield return null;
             }
             if (!manager.players[currentPlayerIndex].hasDraw)
@@ -152,7 +166,7 @@ namespace TBL
             manager.players[currentPlayerIndex].TargetDrawStart();
             yield return StartCoroutine(WaitDraw());
 
-            currentPhase = Phase.ChooseToSend;
+            ChangePhase(Phase.ChooseToSend);
 
             manager.players[currentPlayerIndex].TargetRoundStart();
             float time = roundSetting.roundTime;
@@ -160,6 +174,10 @@ namespace TBL
             {
                 time -= Time.deltaTime;
                 timer = (int)time;
+
+                if (currentPhase == Phase.Reacting)
+                    yield return StartCoroutine(CardEventUpdate());
+
                 yield return null;
             }
 
@@ -167,6 +185,7 @@ namespace TBL
             {
                 // remove all hand card
                 manager.players[currentPlayerIndex].netHandCard.Clear();
+                manager.players[currentPlayerIndex].TargetEndRound();
 
                 StartNewRound(
                 (currentPlayerIndex + 1 == manager.players.Count) ?
@@ -175,13 +194,14 @@ namespace TBL
             }
             else
             {
+                manager.players[currentPlayerIndex].TargetEndRound();
                 StartCoroutine(SendingCardUpdate());
             }
         }
 
         IEnumerator SendingCardUpdate()
         {
-            currentPhase = Phase.Sending;
+            ChangePhase(Phase.Sending);
 
             print("卡片傳送中");
             int iter = 1;
@@ -217,6 +237,16 @@ namespace TBL
                     if (currentSendReverse)
                         iter = -1;
 
+                    if (playerIntercept != -1)
+                    {
+                        p = manager.players[manager.players.FindIndex(x => x.playerIndex == playerIntercept)];
+                        p.acceptCard = true;
+                        break;
+                    }
+
+                    if (currentPhase == Phase.Reacting)
+                        yield return StartCoroutine(CardEventUpdate());
+
                     yield return null;
                 }
 
@@ -241,21 +271,68 @@ namespace TBL
                 );
         }
 
+        public void AddCardAction(Action.CardAction ca)
+        {
+            if (currentPhase != Phase.Reacting)
+            {
+                ChangePhase(Phase.Reacting);
+                cardActionQueue = new List<Action.CardAction>();
+                cardActionQueue.Add(ca);
+            }
+            else
+            {
+                cardActionQueue.Add(ca);
+            }
+        }
+
         IEnumerator CardEventUpdate()
         {
+            int lastActionQueueCount = cardActionQueue.Count;
             float time = roundSetting.reactionTime;
             while (time >= 0)
             {
                 time -= Time.deltaTime;
                 timer = (int)time;
+
+                if (lastActionQueueCount != cardActionQueue.Count)
+                {
+                    time = roundSetting.reactionTime;
+                    lastActionQueueCount = cardActionQueue.Count;
+                }
+
                 yield return null;
             }
+
+            cardActionQueue.Reverse();
+
+            // 處理卡片效果
+            for (int i = 0; i < cardActionQueue.Count; ++i)
+            {
+                if (i >= cardActionQueue.Count)
+                    break;
+
+                Card.CardSetting tempCard = Card.CardSetting.IDConvertCard(cardActionQueue[i].cardId);
+                if (tempCard.CardType == Card.CardType.Invalidate)
+                {
+                    Card.CardSetting nextCard = Card.CardSetting.IDConvertCard(cardActionQueue[i + 1].cardId);
+                    i += 1;
+
+                    print($"{tempCard.GetCardNameFully()} 無效化 {nextCard.GetCardNameFully()}");
+                    continue;
+                }
+                else
+                {
+                    manager.DeckManager.Deck.GetCardPrototype(cardActionQueue[i].cardId).OnEffect(manager, cardActionQueue[i]);
+                    print(tempCard.CardName);
+                }
+            }
+
+            ChangePhase(lastPhase);
         }
 
         public override void OnStartClient()
         {
             base.OnStartClient();
-
         }
     }
 

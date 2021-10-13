@@ -261,7 +261,7 @@ namespace TBL.NetCanvas
             teamNameUI.text = manager.GetLocalPlayer().team.name;
         }
 
-        public void UpdateCardList()
+        public void UpdateHandCardList()
         {
             for (int i = cardListUI.childCount - 1; i >= 0; --i)
                 Destroy(cardListUI.GetChild(i).gameObject);

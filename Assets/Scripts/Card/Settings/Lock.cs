@@ -24,6 +24,8 @@ namespace TBL.Card
         {
             base.OnEffect(manager, ca);
             manager.players[ca.target].isLocked = true;
+
+            print($"玩家{ca.user} 鎖定 玩家{ca.target}");
         }
     }
 }

@@ -44,7 +44,7 @@ namespace TBL
                     // newItem is the new item
                     if (isLocalPlayer)
                     {
-                        netCanvas.UpdateCardList();
+                        netCanvas.UpdateHandCardList();
                     }
 
                     netCanvas.playerUIs[manager.GetPlayerSlotIndex(this)].handCardCount.text = netHandCard.Count.ToString();
@@ -52,7 +52,7 @@ namespace TBL
                 case SyncList<int>.Operation.OP_CLEAR:
                     if (isLocalPlayer)
                     {
-                        netCanvas.UpdateCardList();
+                        netCanvas.UpdateHandCardList();
                     }
 
                     netCanvas.playerUIs[manager.GetPlayerSlotIndex(this)].handCardCount.text = netHandCard.Count.ToString();
@@ -67,7 +67,7 @@ namespace TBL
                     // oldItem is the item that was removed
                     if (isLocalPlayer)
                     {
-                        netCanvas.UpdateCardList();
+                        netCanvas.UpdateHandCardList();
                     }
 
                     netCanvas.playerUIs[manager.GetPlayerSlotIndex(this)].handCardCount.text = netHandCard.Count.ToString();
@@ -149,6 +149,24 @@ namespace TBL
         [Command] public void CmdSetAcceptCard(bool b) { acceptCard = b; }
         [SyncVar] public bool rejectCard;
         [Command] public void CmdSetRejectCard(bool b) { rejectCard = b; }
+
+        public void ResetStatus(int isLocked = -1, int isSkipped = -1, int hasDraw = -1, int acceptCard = -1, int rejectCard = -1)
+        {
+            if (isLocked != -1)
+                this.isLocked = isLocked == 1;
+
+            if (isSkipped != -1)
+                this.isSkipped = isSkipped == 1;
+
+            if (hasDraw != -1)
+                this.hasDraw = hasDraw == 1;
+
+            if (acceptCard != -1)
+                this.acceptCard = acceptCard == 1;
+
+            if (rejectCard != -1)
+                this.rejectCard = rejectCard == 1;
+        }
         #endregion
 
         TBL.NetCanvas.GameScene netCanvas;
@@ -324,20 +342,6 @@ namespace TBL
 
         #endregion
 
-        #region PLAYER_STATE
-
-        [Command]
-        void CmdResetStatus()
-        {
-            isLocked = false;
-            isSkipped = false;
-            hasDraw = false;
-            acceptCard = false;
-            rejectCard = false;
-        }
-
-        #endregion
-
         #region ROUND_ACTION
         [ClientRpc]
         public void RpcUpdateHostPlayer()
@@ -349,7 +353,15 @@ namespace TBL
         public void TargetDrawStart()
         {
             netCanvas.SetButtonInteractable(draw: 1);
+            netCanvas.ClearEvent(netCanvas.drawButton.onClick);
             netCanvas.BindEvent(netCanvas.drawButton.onClick, () => { CmdDrawCard(2); CmdSetDraw(true); });
+        }
+
+        [TargetRpc]
+        public void TargetEndRound()
+        {
+            netCanvas.isSelectingPlayer = false;
+            // StopCoroutine(RoundUpdate());
         }
 
         [TargetRpc]
@@ -467,16 +479,11 @@ namespace TBL
             netCards.Add((int)id);
         }
 
-        [TargetRpc]
-        public void TargetEndRound()
-        {
-            StopCoroutine(RoundUpdate());
-        }
-
         [Command]
         public void CmdTestCardAction(CardAction ca)
         {
-            manager.DeckManager.Deck.GetCardPrototype(ca.cardId).OnEffect(manager, ca);
+            // .OnEffect(manager, ca);
+            manager.Judgement.AddCardAction(ca);
             print($"玩家({ca.user}) 對 玩家({ca.target}) 使用 {CardSetting.IDConvertCard(ca.cardId).GetCardNameFully()}");
         }
         #endregion

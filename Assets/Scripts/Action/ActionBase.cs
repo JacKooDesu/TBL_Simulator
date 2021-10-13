@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace TBL.Action
 {
+    [System.Serializable]
     public struct CardAction
     {
         public int user;

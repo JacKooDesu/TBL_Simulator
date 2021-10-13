@@ -65,7 +65,10 @@ MonoBehaviour:
     - color: 4
       amount: 1
   - card: {fileID: 7383021355112031216, guid: a6a6aab5e7d200143b9d020ec308128f, type: 3}
-    canUsePhases: []
+    canUsePhases:
+    - phase: 3
+      roundHost: 0
+      sendingHost: 0
     colorConfigs:
     - color: 1
       amount: 4

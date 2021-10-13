@@ -20,6 +20,11 @@ namespace TBL.NetCanvas
         {
             e.AddListener(action);
         }
+
+        public void ClearEvent<T>(T e) where T : UnityEvent
+        {
+            e.RemoveAllListeners();
+        }
     }
 }
 
