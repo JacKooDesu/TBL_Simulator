@@ -148,6 +148,9 @@ namespace TBL.NetCanvas
 
             NetworkPlayer player = NetworkClient.connection.identity.GetComponent<NetworkPlayer>();
 
+            if (player.isServer && s[0] == '/')
+                Command.CommandManager.CheckCommand(s.Remove(0, 1));
+
             player.CmdChatMessage(chatInput.text.Trim());
 
             chatInput.text = "";
