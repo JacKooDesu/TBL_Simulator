@@ -291,11 +291,13 @@ namespace TBL.NetCanvas
             // InitPlayerMapping();
             InitChatWindow();
             BindButtons();
+
+            UILayer = LayerMask.NameToLayer("UI");
         }
 
         private void Update()
         {
-            EventSystem es = FindObjectOfType<EventSystem>();
+            EventSystem es = EventSystem.current;
 
             if (selectCard != null && !isSelectingPlayer)
             {
@@ -348,20 +350,82 @@ namespace TBL.NetCanvas
                 SetButtonInteractable(send: 0, use: 0);
             }
 
-            if (Input.GetMouseButton(0))
-            {
-                //                if (es.IsPointerOverGameObject() || !es.currentSelectedGameObject.GetComponent<EventTrigger>())
-                // if (es.IsPointerOverGameObject())
-                // {
-                //     if (selectCard != null)
-                //     {
-                //         selectCard.GetComponent<JacDev.Utils.UISlicker.ColorSlicker>().SlickBack();
-                //         selectCard.isSelected = false;
-                //         selectCard = null;
-                //     }
+            // if (Input.GetMouseButtonDown(0))
+            // {
+            //     //                if (es.IsPointerOverGameObject() || !es.currentSelectedGameObject.GetComponent<EventTrigger>())
+            //     // if (es.IsPointerOverGameObject())
+            //     // {
+            //     //     if (selectCard != null)
+            //     //     {
+            //     //         selectCard.GetComponent<JacDev.Utils.UISlicker.ColorSlicker>().SlickBack();
+            //     //         selectCard.isSelected = false;
+            //     //         selectCard = null;
+            //     //     }
 
-                // }
+            //     // }
+
+            //     if (es.IsPointerOverGameObject())
+            //     {
+            //         GameObject g = GetPointerHovering();
+            //         if (g != null)
+            //         {
+            //             if (!g.GetComponent<Button>())
+            //             {
+            //                 if (selectCard != null)
+            //                 {
+            //                     selectCard.GetComponent<JacDev.Utils.UISlicker.ColorSlicker>().SlickBack();
+            //                     selectCard.isSelected = false;
+            //                     selectCard = null;
+            //                 }
+            //                 print(GetPointerHovering().name);
+            //             }
+            //         }
+            //     }
+            // }
+
+            if (Input.GetMouseButtonDown(1))
+            {
+                if (selectCard != null)
+                {
+                    selectCard.GetComponent<JacDev.Utils.UISlicker.ColorSlicker>().SlickBack();
+                    selectCard.isSelected = false;
+                    selectCard = null;
+                }
             }
+        }
+
+
+        // from: https://forum.unity.com/threads/how-to-detect-if-mouse-is-over-ui.1025533/
+        //Returns 'true' if we touched or hovering on Unity UI element.
+        int UILayer;
+
+        public GameObject GetPointerHovering()
+        {
+            return GetPointerOverUIElement(GetEventSystemRaycastResults());
+        }
+
+
+        //Returns 'true' if we touched or hovering on Unity UI element.
+        private GameObject GetPointerOverUIElement(List<RaycastResult> eventSystemRaysastResults)
+        {
+            for (int index = 0; index < eventSystemRaysastResults.Count; index++)
+            {
+                RaycastResult curRaysastResult = eventSystemRaysastResults[index];
+                if (curRaysastResult.gameObject.layer == UILayer)
+                    return curRaysastResult.gameObject;
+            }
+            return null;
+        }
+
+
+        //Gets all event system raycast results of current mouse or touch position.
+        static List<RaycastResult> GetEventSystemRaycastResults()
+        {
+            PointerEventData eventData = new PointerEventData(EventSystem.current);
+            eventData.position = Input.mousePosition;
+            List<RaycastResult> raysastResults = new List<RaycastResult>();
+            EventSystem.current.RaycastAll(eventData, raysastResults);
+            return raysastResults;
         }
     }
 }
