@@ -15,8 +15,8 @@ namespace TBL.Command
 
     public class Command : CommandBase
     {
-        Action command;
-        public Command(string id, Action command) : base(id)
+        System.Action command;
+        public Command(string id, System.Action command) : base(id)
         {
             this.command = command;
         }
@@ -29,8 +29,8 @@ namespace TBL.Command
 
     public class Command<T1> : CommandBase
     {
-        Action<T1> command;
-        public Command(string id, Action<T1> command) : base(id)
+        System.Action<T1> command;
+        public Command(string id, System.Action<T1> command) : base(id)
         {
             this.command = command;
         }
@@ -43,8 +43,8 @@ namespace TBL.Command
 
     public class Command<T1, T2> : CommandBase
     {
-        Action<T1, T2> command;
-        public Command(string id, Action<T1, T2> command) : base(id)
+        System.Action<T1, T2> command;
+        public Command(string id, System.Action<T1, T2> command) : base(id)
         {
             this.command = command;
         }
