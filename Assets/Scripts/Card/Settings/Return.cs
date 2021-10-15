@@ -7,11 +7,11 @@ namespace TBL.Card
 {
     public class Return : CardSetting
     {
-        public override void OnUse(NetworkPlayer user)
+        public override void OnUse(NetworkPlayer user, int originID)
         {
-            base.OnUse(user);
+            base.OnUse(user, originID);
 
-            user.CmdTestCardAction(new CardAction(user.playerIndex, 0, ID, 0));
+            user.CmdTestCardAction(new CardAction(user.playerIndex, 0, ID, originID, 0));
         }
 
         // only run on server

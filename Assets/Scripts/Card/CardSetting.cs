@@ -189,7 +189,7 @@ namespace TBL.Card
             return c;
         }
 
-        public virtual void OnUse(NetworkPlayer user)
+        public virtual void OnUse(NetworkPlayer user, int originID)
         {
 
         }

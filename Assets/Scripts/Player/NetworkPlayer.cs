@@ -483,6 +483,7 @@ namespace TBL
         public void CmdTestCardAction(CardAction ca)
         {
             // .OnEffect(manager, ca);
+            netHandCard.Remove(ca.originCardId);
             manager.Judgement.AddCardAction(ca);
             print($"玩家({ca.user}) 對 玩家({ca.target}) 使用 {CardSetting.IDConvertCard(ca.cardId).GetCardNameFully()}");
         }

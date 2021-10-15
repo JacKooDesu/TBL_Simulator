@@ -7,15 +7,15 @@ namespace TBL.Card
 {
     public class Skip : CardSetting
     {
-        public override void OnUse(NetworkPlayer user)
+        public override void OnUse(NetworkPlayer user, int originID)
         {
-            base.OnUse(user);
+            base.OnUse(user, originID);
             NetworkRoomManager manager = NetworkRoomManager.singleton as NetworkRoomManager;
             NetCanvas.GameScene netCanvas = FindObjectOfType<NetCanvas.GameScene>();
 
             netCanvas.BindSelectPlayer(manager.GetOtherPlayers(), (i) =>
             {
-                user.CmdTestCardAction(new CardAction(user.playerIndex, i, ID, 0));
+                user.CmdTestCardAction(new CardAction(user.playerIndex, i, ID, originID, 0));
             });
         }
 

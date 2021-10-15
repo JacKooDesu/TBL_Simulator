@@ -239,6 +239,7 @@ namespace TBL
 
                     if (playerIntercept != -1)
                     {
+                        p.RpcAskCardEnd();
                         p = manager.players[manager.players.FindIndex(x => x.playerIndex == playerIntercept)];
                         p.acceptCard = true;
                         break;

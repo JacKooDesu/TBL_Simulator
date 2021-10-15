@@ -226,7 +226,8 @@ namespace TBL.NetCanvas
 
             useButton.onClick.AddListener(() =>
             {
-                manager.DeckManager.Deck.GetCardPrototype(selectCard.cardID).OnUse(manager.GetLocalPlayer());
+                manager.DeckManager.Deck.GetCardPrototype(selectCard.cardID).OnUse(
+                    manager.GetLocalPlayer(), selectCard.cardID);
             });
         }
 
@@ -315,9 +316,15 @@ namespace TBL.NetCanvas
                         break;
 
                     case NetworkJudgement.Phase.Draw:
+                        SetButtonInteractable(send: 0);
                         break;
 
                     case NetworkJudgement.Phase.Sending:
+                        SetButtonInteractable(send: 0);
+                        break;
+
+                    case NetworkJudgement.Phase.Reacting:
+                        SetButtonInteractable(send: 0);
                         break;
                 }
 

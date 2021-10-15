@@ -10,13 +10,15 @@ namespace TBL.Action
         public int user;
         public int target;
         public int cardId;
+        public int originCardId;
         public int suffix;
 
-        public CardAction(int user, int target, int cardId, int suffix)
+        public CardAction(int user, int target, int cardId, int originCardId, int suffix)
         {
             this.user = user;
             this.target = target;
             this.cardId = cardId;
+            this.originCardId = originCardId;
             this.suffix = suffix;
         }
     }

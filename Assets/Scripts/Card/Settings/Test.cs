@@ -7,9 +7,9 @@ namespace TBL.Card
 {
     public class Test : CardSetting
     {
-        public override void OnUse(NetworkPlayer user)
+        public override void OnUse(NetworkPlayer user, int originID)
         {
-            base.OnUse(user);
+            base.OnUse(user, originID);
         }
 
         // only run on server
