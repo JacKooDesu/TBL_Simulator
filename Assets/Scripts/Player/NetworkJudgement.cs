@@ -39,13 +39,21 @@ namespace TBL
         }
 
         [Header("輪設定")]
-        [SyncVar] public Phase currentPhase;
+        [SyncVar(hook = nameof(OnCurrentPhaseChange))] public Phase currentPhase;
         [SyncVar] Phase lastPhase;
         public void ChangePhase(Phase phase)
         {
             lastPhase = currentPhase;
             currentPhase = phase;
         }
+        public void OnCurrentPhaseChange(Phase oldPhase, Phase newPhase)
+        {
+            if (newPhase == Phase.Reacting || newPhase == Phase.Sending)
+            {
+                netCanvas.ResetUI();
+            }
+        }
+
         [SyncVar] public int currentRoundPlayerIndex;
         [SyncVar] public bool currentRoundHasSendCard;
         [SyncVar] public int currentRoundSendingCardId;

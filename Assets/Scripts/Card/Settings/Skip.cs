@@ -13,7 +13,7 @@ namespace TBL.Card
             NetworkRoomManager manager = NetworkRoomManager.singleton as NetworkRoomManager;
             NetCanvas.GameScene netCanvas = FindObjectOfType<NetCanvas.GameScene>();
 
-            netCanvas.BindSelectPlayer(manager.GetOtherPlayers(), (i) =>
+            netCanvas.BindSelectPlayer(manager.GetAllPlayers(), (i) =>
             {
                 user.CmdTestCardAction(new CardAction(user.playerIndex, i, ID, originID, 0));
             });

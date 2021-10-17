@@ -285,7 +285,32 @@ namespace TBL.NetCanvas
 
         #endregion
 
+        #region TEMP_MENU
+        [Header("暫存選單")]
+        public UI.GameScene.Menu tempMenu;
+
+        public void ShowPlayerCard(int index, UnityAction<int> action, List<CardColor> requestColor)
+        {
+            List<int> cardIdList = new List<int>();
+            foreach (int i in manager.players[index].netCards)
+            {
+                if (requestColor.IndexOf(CardSetting.IDConvertCard(i).CardColor) != -1)
+                {
+                    cardIdList.Add(i);
+                }
+            }
+            tempMenu.InitCardMenu(cardIdList, action);
+        }
+        #endregion
+
         public Text timeTextUI;
+
+        public void ResetUI()
+        {
+            tempMenu.Clear();
+            ResetPlayerUIAnimation();
+            ClearPlayerUIEvent();
+        }
 
         protected override void Start()
         {
@@ -328,32 +353,54 @@ namespace TBL.NetCanvas
                         break;
                 }
 
-
-                foreach (DeckSetting.CardConfig.PhaseSetting setting in manager.DeckManager.Deck.GetCardPhaseSetting(selectCard.cardID))
+                if (manager.DeckManager.Deck.GetCardPhaseSetting(selectCard.cardID).FindIndex((x) => x.phase == manager.Judgement.currentPhase) != -1)
                 {
-                    if (setting.phase == manager.Judgement.currentPhase)
-                    {
+                    DeckSetting.CardConfig.PhaseSetting setting = manager.DeckManager.Deck.GetCardPhaseSetting(selectCard.cardID).Find((x) => x.phase == manager.Judgement.currentPhase);
+
+                    if (!setting.roundHost && !setting.sendingHost)
                         SetButtonInteractable(use: 1);
 
-                        if (setting.roundHost)
-                        {
-                            if (manager.Judgement.currentPlayerIndex != manager.GetLocalPlayer().playerIndex)
-                                SetButtonInteractable(use: 0);
-                        }
-
-                        if (setting.sendingHost)
-                        {
-                            if (manager.Judgement.currentSendingPlayer != manager.GetLocalPlayer().playerIndex)
-                                SetButtonInteractable(use: 0);
-                        }
-
-                        break;
-                    }
-                    else
+                    if (setting.roundHost)
                     {
-                        SetButtonInteractable(use: 0);
+                        if (manager.Judgement.currentPlayerIndex != manager.GetLocalPlayer().playerIndex)
+                            SetButtonInteractable(use: 0);
+                        else
+                            SetButtonInteractable(use: 1);
+                    }
+
+                    if (setting.sendingHost)
+                    {
+                        if (manager.Judgement.currentSendingPlayer != manager.GetLocalPlayer().playerIndex)
+                            SetButtonInteractable(use: 0);
+                        else
+                            SetButtonInteractable(use: 1);
                     }
                 }
+                // foreach (DeckSetting.CardConfig.PhaseSetting setting in manager.DeckManager.Deck.GetCardPhaseSetting(selectCard.cardID))
+                // {
+                //     if (setting.phase == manager.Judgement.currentPhase)
+                //     {
+                //         SetButtonInteractable(use: 1);
+
+                //         if (setting.roundHost)
+                //         {
+                //             if (manager.Judgement.currentPlayerIndex != manager.GetLocalPlayer().playerIndex)
+                //                 SetButtonInteractable(use: 0);
+                //         }
+
+                //         if (setting.sendingHost)
+                //         {
+                //             if (manager.Judgement.currentSendingPlayer != manager.GetLocalPlayer().playerIndex)
+                //                 SetButtonInteractable(use: 0);
+                //         }
+
+                //         break;
+                //     }
+                //     else
+                //     {
+                //         SetButtonInteractable(use: 0);
+                //     }
+                // }
             }
             else
             {

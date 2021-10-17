@@ -146,6 +146,16 @@ namespace TBL
             return list;
         }
 
+        public List<int> GetAllPlayers()
+        {
+            List<int> list = new List<int>();
+            foreach (NetworkPlayer p in players)
+            {
+                list.Add(p.playerIndex);
+            }
+            return list;
+        }
+
         public void InitTeamList()
         {
             // print("init");

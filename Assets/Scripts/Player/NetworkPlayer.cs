@@ -84,6 +84,8 @@ namespace TBL
         // net hand card callback
         public void OnUpdateCard(SyncList<int>.Operation op, int index, int oldItem, int newItem)
         {
+            netCanvas.playerUIs[playerIndex].UpdateStatus();
+            /*
             switch (op)
             {
                 case SyncList<int>.Operation.OP_ADD:
@@ -112,6 +114,7 @@ namespace TBL
                     // newItem is the new value for the item at the index
                     break;
             }
+            */
         }
 
         [SyncVar(hook = nameof(OnHeroIndexChange))] public int heroIndex = -1;
