@@ -34,6 +34,46 @@ namespace TBL.UI.GameScene
             gameObject.SetActive(true);
         }
 
+        public void InitColorMenu(List<Card.CardColor> colors, UnityAction<int> action)
+        {
+            foreach (Card.CardColor c in colors)
+            {
+                Option option = Instantiate(optionPrefab).GetComponent<Option>();
+                switch (c)
+                {
+                    case Card.CardColor.Black:
+                        option.GetComponentInChildren<Text>().text = "黑";
+                        option.GetComponentInChildren<Text>().color = new Color(.4f, .4f, .4f);
+                        break;
+
+                    case Card.CardColor.Red:
+                        option.GetComponentInChildren<Text>().text = "紅";
+                        option.GetComponentInChildren<Text>().color = new Color(.75f, .15f, .15f);
+                        break;
+
+                    case Card.CardColor.Blue:
+                        option.GetComponentInChildren<Text>().text = "藍";
+                        option.GetComponentInChildren<Text>().color = new Color(.15f, .15f, .8f);
+                        break;
+                }
+
+                JacDev.Utils.EventBinder.Bind(
+                    option.GetComponent<EventTrigger>(),
+                    EventTriggerType.PointerClick,
+                    (e) =>
+                    {
+                        action.Invoke((int)c);
+                        Clear();
+                        print($"選擇 {c}");
+                        gameObject.SetActive(true);
+                    });
+
+                option.transform.SetParent(transform);
+            }
+
+            gameObject.SetActive(true);
+        }
+
         public void Clear()
         {
             for (int i = transform.childCount - 1; i >= 0; --i)

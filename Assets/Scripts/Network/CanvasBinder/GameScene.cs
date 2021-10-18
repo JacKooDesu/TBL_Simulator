@@ -301,6 +301,11 @@ namespace TBL.NetCanvas
             }
             tempMenu.InitCardMenu(cardIdList, action);
         }
+
+        public void AskColorCard(UnityAction<int> action, List<CardColor> requestColor)
+        {
+            tempMenu.InitColorMenu(requestColor, action);
+        }
         #endregion
 
         public Text timeTextUI;
