@@ -22,6 +22,9 @@ namespace TBL.Card
             get => sendType;
         }
 
+        [Header("使用方法"), TextArea(3, 10)]
+        public string tip;
+
         CardColor cardColor;
         public CardColor CardColor
         {

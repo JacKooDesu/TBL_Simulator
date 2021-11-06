@@ -92,6 +92,7 @@ GameObject:
   - component: {fileID: 1025871934335758186}
   - component: {fileID: 7624421841105022357}
   - component: {fileID: 2285325768025666519}
+  - component: {fileID: 2015303727492299217}
   m_Layer: 5
   m_Name: "\u5361\u7247\u540D\u7A31"
   m_TagString: Untagged
@@ -141,6 +142,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nameTextUI: {fileID: 4985726324879678390}
   cardID: 0
+  isSelected: 0
 --- !u!114 &1025871934335758186
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -209,3 +211,17 @@ MonoBehaviour:
     set: {r: 0, g: 0, b: 0, a: 0}
     time: 0.2
     easeType: 6
+--- !u!114 &2015303727492299217
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4992001238697331696}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0767896038e66e4dbfee101be7e47cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clickHide: 0
+  content: 
