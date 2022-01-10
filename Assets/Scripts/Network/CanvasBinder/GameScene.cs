@@ -381,69 +381,15 @@ namespace TBL.NetCanvas
                             SetButtonInteractable(use: 1);
                     }
                 }
-                // foreach (DeckSetting.CardConfig.PhaseSetting setting in manager.DeckManager.Deck.GetCardPhaseSetting(selectCard.cardID))
-                // {
-                //     if (setting.phase == manager.Judgement.currentPhase)
-                //     {
-                //         SetButtonInteractable(use: 1);
-
-                //         if (setting.roundHost)
-                //         {
-                //             if (manager.Judgement.currentPlayerIndex != manager.GetLocalPlayer().playerIndex)
-                //                 SetButtonInteractable(use: 0);
-                //         }
-
-                //         if (setting.sendingHost)
-                //         {
-                //             if (manager.Judgement.currentSendingPlayer != manager.GetLocalPlayer().playerIndex)
-                //                 SetButtonInteractable(use: 0);
-                //         }
-
-                //         break;
-                //     }
-                //     else
-                //     {
-                //         SetButtonInteractable(use: 0);
-                //     }
-                // }
+                else
+                {
+                    SetButtonInteractable(use: 0);
+                }
             }
             else
             {
                 SetButtonInteractable(send: 0, use: 0);
             }
-
-            // if (Input.GetMouseButtonDown(0))
-            // {
-            //     //                if (es.IsPointerOverGameObject() || !es.currentSelectedGameObject.GetComponent<EventTrigger>())
-            //     // if (es.IsPointerOverGameObject())
-            //     // {
-            //     //     if (selectCard != null)
-            //     //     {
-            //     //         selectCard.GetComponent<JacDev.Utils.UISlicker.ColorSlicker>().SlickBack();
-            //     //         selectCard.isSelected = false;
-            //     //         selectCard = null;
-            //     //     }
-
-            //     // }
-
-            //     if (es.IsPointerOverGameObject())
-            //     {
-            //         GameObject g = GetPointerHovering();
-            //         if (g != null)
-            //         {
-            //             if (!g.GetComponent<Button>())
-            //             {
-            //                 if (selectCard != null)
-            //                 {
-            //                     selectCard.GetComponent<JacDev.Utils.UISlicker.ColorSlicker>().SlickBack();
-            //                     selectCard.isSelected = false;
-            //                     selectCard = null;
-            //                 }
-            //                 print(GetPointerHovering().name);
-            //             }
-            //         }
-            //     }
-            // }
 
             if (Input.GetMouseButtonDown(1))
             {

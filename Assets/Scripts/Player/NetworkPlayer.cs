@@ -490,6 +490,12 @@ namespace TBL
             manager.Judgement.AddCardAction(ca);
             print($"玩家({ca.user}) 對 玩家({ca.target}) 使用 {CardSetting.IDConvertCard(ca.cardId).GetCardNameFully()}");
         }
+
+        [TargetRpc]
+        public void TargetGetTest()
+        {
+            
+        }
         #endregion
 
         public override void OnStopClient()

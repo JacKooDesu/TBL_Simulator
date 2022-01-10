@@ -74,6 +74,30 @@ namespace TBL.UI.GameScene
             gameObject.SetActive(true);
         }
 
+        public void InitCustomMenu(List<string> options, UnityAction<int> action)
+        {
+            for (int i = 0; i < options.Count; ++i)
+            {
+                int x = i;
+                var s = options[i];
+                Option option = Instantiate(optionPrefab).GetComponent<Option>();
+                option.GetComponent<Text>().text = s;
+
+                JacDev.Utils.EventBinder.Bind(
+                    option.GetComponent<EventTrigger>(),
+                    EventTriggerType.PointerClick,
+                    (e) =>
+                    {
+                        action.Invoke(i);
+                        Clear();
+                        print($"選擇 {s}");
+                        gameObject.SetActive(true);
+                    });
+
+                option.transform.SetParent(transform);
+            }
+        }
+
         public void Clear()
         {
             for (int i = transform.childCount - 1; i >= 0; --i)
