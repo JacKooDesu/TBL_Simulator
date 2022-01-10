@@ -57,6 +57,8 @@ namespace TBL.UI.GameScene
                     GetComponent<JacDev.Utils.UISlicker.ColorSlicker>().Slick("select");
                 }
             );
+
+            GetComponent<TipTrigger>().content = ((NetworkRoomManager)NetworkRoomManager.singleton).DeckManager.Deck.GetCardPrototype(setting.ID).tip;
         }
 
         // Start is called before the first frame update

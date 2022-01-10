@@ -45,3 +45,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardType: 8
   sendType: 4096
+  tip: "\u9396\u5B9A\u4E59\u540D\u73A9\u5BB6\u3002(\u50C5\u56DE\u5408\u4E3B\u6301\u8005\u53EF\u4F7F\u7528)"
+  id: 0
