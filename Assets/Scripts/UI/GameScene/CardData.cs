@@ -58,7 +58,7 @@ namespace TBL.UI.GameScene
                 }
             );
 
-            GetComponent<TipTrigger>().content = ((NetworkRoomManager)NetworkRoomManager.singleton).DeckManager.Deck.GetCardPrototype(setting.ID).tip;
+            GetComponent<TipTrigger>().content = ((NetworkRoomManager)NetworkRoomManager.singleton).DeckManager.Deck.GetCardPrototype(setting.ID).Tip;
         }
 
         // Start is called before the first frame update

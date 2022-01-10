@@ -7,6 +7,35 @@ namespace TBL.Card
 {
     public class Test : CardSetting
     {
+        public override string Tip
+        {
+            get
+            {
+                var setting = actionSettings[GetUniqueID() % 6];
+                var manager = NetworkRoomManager.singleton as NetworkRoomManager;
+                string finalText = "";
+                switch (setting.specifyTeam)
+                {
+                    case Settings.TeamSetting.TeamEnum.Blue:
+                        finalText += $"{manager.teamSetting.BlueTeam.GetRichName()} - " + (setting.type == ActionType.Draw ? "抽一張牌。" : "說：我是一名好人。") + '\n';
+                        finalText += $"{manager.teamSetting.RedTeam.GetRichName()} / {manager.teamSetting.GreenTeam.GetRichName()} - " + (setting.type == ActionType.Draw ? "說：我是一名好人。" : "抽一張牌。");
+                        break;
+
+                    case Settings.TeamSetting.TeamEnum.Red:
+                        finalText += $"{manager.teamSetting.RedTeam.GetRichName()} - " + (setting.type == ActionType.Draw ? "抽一張牌。" : "說：我是一名好人。") + '\n';
+                        finalText += $"{manager.teamSetting.GreenTeam.GetRichName()} / {manager.teamSetting.BlueTeam.GetRichName()} - " + (setting.type == ActionType.Draw ? "說：我是一名好人。" : "抽一張牌。");
+                        break;
+
+                    case Settings.TeamSetting.TeamEnum.Green:
+                        finalText += $"{manager.teamSetting.GreenTeam.GetRichName()} - " + (setting.type == ActionType.Draw ? "抽一張牌。" : "說：我是一名好人。") + '\n';
+                        finalText += $"{manager.teamSetting.RedTeam.GetRichName()} / {manager.teamSetting.BlueTeam.GetRichName()} - " + (setting.type == ActionType.Draw ? "說：我是一名好人。" : "抽一張牌。");
+                        break;
+                }
+
+                return finalText;
+            }
+        }
+
         public override void OnUse(NetworkPlayer user, int originID)
         {
             base.OnUse(user, originID);

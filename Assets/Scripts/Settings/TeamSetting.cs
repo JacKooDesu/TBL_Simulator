@@ -19,6 +19,9 @@ namespace TBL.Settings
             public string name;
             public Sprite icon;
             public TeamEnum team;
+            public Color color;
+
+            public string GetRichName() { return $"<color=#{ColorUtility.ToHtmlStringRGBA(color)}>{name}</color>"; }
         }
 
         public Team BlueTeam;

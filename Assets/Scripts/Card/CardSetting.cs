@@ -23,7 +23,11 @@ namespace TBL.Card
         }
 
         [Header("使用方法"), TextArea(3, 10)]
-        public string tip;
+        [SerializeField] protected string tip;
+        public virtual string Tip
+        {
+            get => tip;
+        }
 
         CardColor cardColor;
         public CardColor CardColor
