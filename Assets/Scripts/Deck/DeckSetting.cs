@@ -53,7 +53,7 @@ namespace TBL
             get => cardConfigs;
         }
 
-        public int cardUniqueId = 15;
+        public static int cardUniqueId = 15;   // 此處指的是第15位元
 
         public List<CardConfig.PhaseSetting> GetCardPhaseSetting(int id)
         {
@@ -82,16 +82,6 @@ namespace TBL
             }
 
             return null;
-        }
-
-        public int GetCardUniqueID(int id)
-        {
-            int i = cardUniqueId;
-            while ((id & 1 << i) != (1 << i) && i < 32)
-            {
-                ++i;
-            }
-            return i;
         }
     }
 }
