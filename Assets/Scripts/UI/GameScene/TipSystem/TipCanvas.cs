@@ -29,13 +29,25 @@ namespace TBL.UI.GameScene
 
         public Text text;
 
+        public string priorityMessage = "";
+        public void ResetPriorityMessage() { priorityMessage = ""; }
+
         public void Clear()
         {
             text.text = "";
         }
 
-        public void Show(string s)
+        public void Show(string s, bool highPriority = false)
         {
+            if (highPriority)
+            {
+                priorityMessage = s;
+                text.text = priorityMessage;
+            }
+
+            if (priorityMessage.Length != 0)
+                return;
+
             text.text = s;
         }
     }

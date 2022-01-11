@@ -475,6 +475,15 @@ namespace TBL
             netCanvas.PlayerAnimation(new List<int>() { playerIndex }, "Asking");
             if (isLocalPlayer)
             {
+                var card = CardSetting.IDConvertCard(manager.Judgement.currentRoundSendingCardId);
+                string message = "情報來了！\n";
+                message += "這是一份 ";
+                if (card.SendType == CardSendType.Public)
+                    message += $"公開文本 - <color=#{ColorUtility.ToHtmlStringRGBA(card.Color)}>{card.CardName}</color>";
+                else
+                    message += (card.SendType == Card.CardSendType.Secret ? "密電" : "直達密電");
+                UI.GameScene.TipCanvas.Singleton.Show(message, true);
+
                 netCanvas.SetButtonInteractable(accept: 1, reject: 1);
                 netCanvas.BindEvent(
                     netCanvas.acceptButton.onClick,
@@ -493,6 +502,8 @@ namespace TBL
             {
                 netCanvas.acceptButton.interactable = false;
                 netCanvas.rejectButton.interactable = false;
+
+                UI.GameScene.TipCanvas.Singleton.ResetPriorityMessage();
             }
         }
 
