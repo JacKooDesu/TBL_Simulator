@@ -1,11 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using TBL.Card;
 
 namespace TBL
 {
-    public class Hero : MonoBehaviour
+    public abstract class Hero : MonoBehaviour
     {
         [SerializeField, Header("角色名")]
         protected string heroName = "None";
@@ -37,16 +35,35 @@ namespace TBL
             get => playerStatus;
         }
 
-        
+        public TBL.HeroSkill[] skills;
+
+        public void Init(NetworkPlayer player)
+        {
+            PlayerStatus = player;
+            skills = new HeroSkill[0];
+            BindSkill();
+        }
+
+        protected abstract void BindSkill();
 
         public virtual void OnGetCard(CardObject card)
         {
 
         }
 
-        public virtual void CheckSkill()
+        // only run on server
+        public void CheckSkill()
         {
+            for (int i = 0; i < skills.Length; ++i)
+            {
+                var s = skills[i];
+                if (s.autoActivate)
+                    continue;
 
+                if (s.checker.Invoke())
+                    playerStatus.netHeroSkillCanActivate[i] = true;
+
+            }
         }
     }
 }

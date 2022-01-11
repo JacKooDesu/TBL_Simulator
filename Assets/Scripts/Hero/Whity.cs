@@ -1,12 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-namespace TBL
+﻿namespace TBL
 {
     public class Whity : Hero
     {
-        
+        protected override void BindSkill()
+        {
+            
+        }
     }
 }
 

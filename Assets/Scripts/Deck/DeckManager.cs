@@ -29,7 +29,7 @@ namespace TBL
                     for (int k = 0; k < deck.CardConfigs[i].ColorConfigs[j].Amount; ++k)
                     {
                         CardSetting temp = deck.CardConfigs[i].Card;
-                        Debug.Log((temp.ID & (int)CardSendType.Direct) == (int)CardSendType.Direct);
+                        // Debug.Log((temp.ID & (int)CardSendType.Direct) == (int)CardSendType.Direct);
                         GameObject g = new GameObject();
                         CardSetting card = g.AddComponent<CardSetting>();
                         card.ID = (temp.ID + (int)(deck.CardConfigs[i].ColorConfigs[j].Color)) + (1 << (DeckSetting.cardUniqueId + k));

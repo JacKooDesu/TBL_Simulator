@@ -75,6 +75,7 @@ namespace TBL
         public SyncList<int> cardSendQueueID = new SyncList<int>(); // 測試是否可用SyncList
 
         public List<Action.CardAction> cardActionQueue = new List<Action.CardAction>();
+        [SyncVar] public Action.CardAction currentCardAction;   // 用於檢查技能發動
 
         private void Start()
         {
@@ -320,6 +321,8 @@ namespace TBL
                 if (i >= cardActionQueue.Count)
                     break;
 
+                currentCardAction = cardActionQueue[i];
+
                 Card.CardSetting tempCard = Card.CardSetting.IDConvertCard(cardActionQueue[i].cardId);
                 if (tempCard.CardType == Card.CardType.Invalidate)
                 {
@@ -332,7 +335,21 @@ namespace TBL
                 else
                 {
                     manager.DeckManager.Deck.GetCardPrototype(cardActionQueue[i].cardId).OnEffect(manager, cardActionQueue[i]);
-                    print(tempCard.CardName);
+                    print($"{tempCard.CardName} 效果發動");
+
+                    //////////////////////////////////////////////////
+                    foreach(var p in manager.players)
+                        p.hero.CheckSkill();
+                    //////////////////////////////////////////////////
+
+                    time = roundSetting.reactionTime;
+                    while (time >= 0)
+                    {
+                        time -= Time.deltaTime;
+                        timer = (int)time;
+
+                        yield return null;
+                    }
                 }
             }
 

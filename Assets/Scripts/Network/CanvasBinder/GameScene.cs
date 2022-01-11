@@ -93,7 +93,7 @@ namespace TBL.NetCanvas
                         action.Invoke(pUI.player.playerIndex);
                         ResetPlayerUIAnimation();
                         ClearPlayerUIEvent();
-                        print($"select {pUI.player.playerIndex}");
+                        print($"選擇玩家 {pUI.player.playerIndex}");
                     });
 
                 pUI.GetComponent<Animator>().SetTrigger("Blink");
@@ -289,8 +289,11 @@ namespace TBL.NetCanvas
         [Header("暫存選單")]
         public UI.GameScene.Menu tempMenu;
 
-        public void ShowPlayerCard(int index, UnityAction<int> action, List<CardColor> requestColor)
+        public void ShowPlayerCard(int index, UnityAction<int> action, List<CardColor> requestColor = null)
         {
+            if (requestColor == null)
+                requestColor = new List<CardColor> { CardColor.Black, CardColor.Red, CardColor.Blue };
+
             List<int> cardIdList = new List<int>();
             foreach (int i in manager.players[index].netCards)
             {

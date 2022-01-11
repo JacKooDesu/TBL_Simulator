@@ -1,12 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-namespace TBL
+﻿namespace TBL
 {
     public class Killer : Hero
     {
-        
+        protected override void BindSkill()
+        {
+        }
     }
 }
 

@@ -120,14 +120,33 @@ namespace TBL
         [SyncVar(hook = nameof(OnHeroIndexChange))] public int heroIndex = -1;
         void OnHeroIndexChange(int oldVar, int newVar)
         {
-            hero = manager.Judgement.heroList.heros[newVar];
+            hero = Instantiate(manager.Judgement.heroList.heros[newVar]);
             if (isLocalPlayer)
                 netCanvas.InitPlayerStatus();
+
+            if (isLocalPlayer || isServer)
+            {
+                hero.Init(this);
+            }
+
+            if (isServer)
+            {
+                netHeroSkillCanActivate = new SyncList<bool>();
+                for (int i = 0; i < hero.skills.Length; ++i)
+                    netHeroSkillCanActivate.Add(false);
+            }
 
             netCanvas.playerUIs[manager.players.IndexOf(this)].UpdateHero();
         }
 
         public Hero hero;
+        public SyncList<bool> netHeroSkillCanActivate = new SyncList<bool>();
+        public void OnUpdateHeroSkillCanActivate(SyncList<bool>.Operation op, int index, bool oldItem, bool newItem)
+        {
+            print($"Can Activate {index}");
+            if (isLocalPlayer)
+                UseSkill(index);
+        }
         public TBL.Settings.TeamSetting.Team team;
 
 
@@ -184,6 +203,7 @@ namespace TBL
 
             netHandCard.Callback += OnUpdateHandCard;
             netCards.Callback += OnUpdateCard;
+            netHeroSkillCanActivate.Callback += OnUpdateHeroSkillCanActivate;
 
             if (isLocalPlayer)
             {
@@ -256,6 +276,12 @@ namespace TBL
         [Command]
         public void CmdDrawHero()
         {
+            if (isLocalPlayer)
+            {
+                heroIndex = 0;
+                return;
+            }
+
             int rand;
             do
             {
@@ -483,6 +509,14 @@ namespace TBL
         }
 
         [Command]
+        public void CmdGiveCardTo(int id, int target)
+        {
+            print($"玩家 {playerIndex} 給予 玩家 {target} - {Card.CardSetting.IDConvertCard(id).name}");
+            netCards.Remove((int)id);
+            manager.players[target].AddCard(id);
+        }
+
+        [Command]
         public void CmdTestCardAction(CardAction ca)
         {
             // .OnEffect(manager, ca);
@@ -494,7 +528,13 @@ namespace TBL
         [TargetRpc]
         public void TargetGetTest()
         {
-            
+
+        }
+
+        public void UseSkill(int index)
+        {
+            print($"{hero.skills[index].name} 效果發動");
+            hero.skills[index].action.Invoke();
         }
         #endregion
 
