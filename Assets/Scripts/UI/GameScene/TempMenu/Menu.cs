@@ -15,7 +15,7 @@ namespace TBL.UI.GameScene
         {
             foreach (int i in cardList)
             {
-                Option option = Instantiate(optionPrefab).GetComponent<Option>();
+                Option option = Instantiate(optionPrefab, transform).GetComponent<Option>();
                 option.GetComponentInChildren<Text>().text = Card.CardSetting.IDConvertCard(i).CardName;
                 JacDev.Utils.EventBinder.Bind(
                     option.GetComponent<EventTrigger>(),
@@ -27,8 +27,6 @@ namespace TBL.UI.GameScene
                         print($"選擇 {i}");
                         gameObject.SetActive(true);
                     });
-
-                option.transform.SetParent(transform);
             }
 
             gameObject.SetActive(true);
@@ -38,7 +36,7 @@ namespace TBL.UI.GameScene
         {
             foreach (Card.CardColor c in colors)
             {
-                Option option = Instantiate(optionPrefab).GetComponent<Option>();
+                Option option = Instantiate(optionPrefab, transform).GetComponent<Option>();
                 switch (c)
                 {
                     case Card.CardColor.Black:
@@ -67,8 +65,6 @@ namespace TBL.UI.GameScene
                         print($"選擇 {c}");
                         gameObject.SetActive(true);
                     });
-
-                option.transform.SetParent(transform);
             }
 
             gameObject.SetActive(true);
@@ -80,7 +76,7 @@ namespace TBL.UI.GameScene
             {
                 int x = i;
                 var s = options[i];
-                Option option = Instantiate(optionPrefab).GetComponent<Option>();
+                Option option = Instantiate(optionPrefab, transform).GetComponent<Option>();
                 option.GetComponent<Text>().text = s;
 
                 JacDev.Utils.EventBinder.Bind(
@@ -93,8 +89,6 @@ namespace TBL.UI.GameScene
                         print($"選擇 {s}");
                         gameObject.SetActive(true);
                     });
-
-                option.transform.SetParent(transform);
             }
         }
 

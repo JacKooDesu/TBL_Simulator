@@ -16,11 +16,11 @@
                     playerStatus.CmdDrawCard(3);
                     netCanvas.BindSelectPlayer(manager.GetOtherPlayers(), (target) =>
                     {
-                        netCanvas.ShowPlayerCard(
+                        netCanvas.ShowPlayerHandCard(
                             playerStatus.playerIndex,
                             (id) =>
                             {
-                                playerStatus.CmdGiveCardTo(id, target);
+                                playerStatus.CmdCardHToH(id, target);
                             });
                     });
                 },
@@ -32,7 +32,7 @@
                         cardAction.user == playerStatus.playerIndex &&
                         manager.DeckManager.Deck.GetCardPrototype(cardAction.originCardId).CardType == Card.CardType.Lock;
                 });
-            
+
             skills = new HeroSkill[] {
                 skill1,
                 skill2

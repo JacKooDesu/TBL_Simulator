@@ -259,7 +259,7 @@ namespace TBL.NetCanvas
         public void InitPlayerStatus()
         {
             heroAvatarUI.sprite = manager.GetLocalPlayer().hero.Avatar;
-            heroNameUI.text = manager.GetLocalPlayer().hero.name;
+            heroNameUI.text = manager.GetLocalPlayer().hero.HeroName;
 
             teamIconUI.sprite = manager.GetLocalPlayer().team.icon;
             teamNameUI.text = manager.GetLocalPlayer().team.name;
@@ -295,7 +295,25 @@ namespace TBL.NetCanvas
                 requestColor = new List<CardColor> { CardColor.Black, CardColor.Red, CardColor.Blue };
 
             List<int> cardIdList = new List<int>();
+
             foreach (int i in manager.players[index].netCards)
+            {
+                if (requestColor.IndexOf(CardSetting.IDConvertCard(i).CardColor) != -1)
+                {
+                    cardIdList.Add(i);
+                }
+            }
+            tempMenu.InitCardMenu(cardIdList, action);
+        }
+
+        public void ShowPlayerHandCard(int index, UnityAction<int> action, List<CardColor> requestColor = null)
+        {
+            if (requestColor == null)
+                requestColor = new List<CardColor> { CardColor.Black, CardColor.Red, CardColor.Blue };
+
+            List<int> cardIdList = new List<int>();
+
+            foreach (int i in manager.players[index].netHandCard)
             {
                 if (requestColor.IndexOf(CardSetting.IDConvertCard(i).CardColor) != -1)
                 {

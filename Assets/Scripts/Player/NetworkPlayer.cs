@@ -136,6 +136,8 @@ namespace TBL
                     netHeroSkillCanActivate.Add(false);
             }
 
+            netHeroSkillCanActivate.Callback += OnUpdateHeroSkillCanActivate;
+
             netCanvas.playerUIs[manager.players.IndexOf(this)].UpdateHero();
         }
 
@@ -143,7 +145,6 @@ namespace TBL
         public SyncList<bool> netHeroSkillCanActivate = new SyncList<bool>();
         public void OnUpdateHeroSkillCanActivate(SyncList<bool>.Operation op, int index, bool oldItem, bool newItem)
         {
-            print($"Can Activate {index}");
             if (isLocalPlayer)
                 UseSkill(index);
         }
@@ -203,7 +204,6 @@ namespace TBL
 
             netHandCard.Callback += OnUpdateHandCard;
             netCards.Callback += OnUpdateCard;
-            netHeroSkillCanActivate.Callback += OnUpdateHeroSkillCanActivate;
 
             if (isLocalPlayer)
             {
@@ -479,7 +479,7 @@ namespace TBL
                 string message = "情報來了！\n";
                 message += "這是一份 ";
                 if (card.SendType == CardSendType.Public)
-                    message += $"公開文本 - <color=#{ColorUtility.ToHtmlStringRGBA(card.Color)}>{card.CardName}</color>";
+                    message += $"公開文本 - {RichTextHelper.TextWithColor(card.name, card.Color)}</color>";
                 else
                     message += (card.SendType == Card.CardSendType.Secret ? "密電" : "直達密電");
                 UI.GameScene.TipCanvas.Singleton.Show(message, true);
@@ -520,10 +520,30 @@ namespace TBL
         }
 
         [Command]
-        public void CmdGiveCardTo(int id, int target)
+        public void CmdAddHandCard(int id)
+        {
+            print($"手牌新增 {id}");
+            netHandCard.Add((int)id);
+        }
+        public void AddHandCard(int id)
+        {
+            print($"手牌新增 {id}");
+            netHandCard.Add((int)id);
+        }
+
+        [Command]
+        public void CmdCardHToH(int id, int target)     // Hand To Hand
         {
             print($"玩家 {playerIndex} 給予 玩家 {target} - {Card.CardSetting.IDConvertCard(id).name}");
-            netCards.Remove((int)id);
+            netHandCard.Remove((int)id);
+            manager.players[target].AddHandCard(id);
+        }
+
+        [Command]
+        public void CmdCardHToD(int id, int target)     // Hand to Desk
+        {
+            print($"玩家 {playerIndex} 給予 玩家 {target} - {Card.CardSetting.IDConvertCard(id).name}");
+            netHandCard.Remove((int)id);
             manager.players[target].AddCard(id);
         }
 

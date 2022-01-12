@@ -1816,6 +1816,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   text: {fileID: 1910901093}
+  priorityMessage: 
 --- !u!114 &466450947
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4351,6 +4352,21 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1103185287}
     m_Modifications:
+    - target: {fileID: 2248119619729677816, guid: 1afaf431ce7514c41854383d7fbffa59,
+        type: 3}
+      propertyPath: m_ChildScaleWidth
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2248119619729677816, guid: 1afaf431ce7514c41854383d7fbffa59,
+        type: 3}
+      propertyPath: m_ChildScaleHeight
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2248119619729677816, guid: 1afaf431ce7514c41854383d7fbffa59,
+        type: 3}
+      propertyPath: m_ChildControlWidth
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2248119619729677818, guid: 1afaf431ce7514c41854383d7fbffa59,
         type: 3}
       propertyPath: m_Name
@@ -4374,22 +4390,22 @@ PrefabInstance:
     - target: {fileID: 2248119619729677819, guid: 1afaf431ce7514c41854383d7fbffa59,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2248119619729677819, guid: 1afaf431ce7514c41854383d7fbffa59,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2248119619729677819, guid: 1afaf431ce7514c41854383d7fbffa59,
         type: 3}
       propertyPath: m_AnchorMin.x
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2248119619729677819, guid: 1afaf431ce7514c41854383d7fbffa59,
         type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2248119619729677819, guid: 1afaf431ce7514c41854383d7fbffa59,
         type: 3}
@@ -5698,7 +5714,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.000030516987}
+  m_AnchoredPosition: {x: 0, y: 0.00024948665}
   m_SizeDelta: {x: 0, y: 210.16412}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &1587525480

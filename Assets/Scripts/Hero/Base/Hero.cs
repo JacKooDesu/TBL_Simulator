@@ -7,6 +7,7 @@ namespace TBL
     {
         [SerializeField, Header("角色名")]
         protected string heroName = "None";
+        public string HeroName { get => heroName; }
         [SerializeField]
         protected Sprite avatar;
         public Sprite Avatar
