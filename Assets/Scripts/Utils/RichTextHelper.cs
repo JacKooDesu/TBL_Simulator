@@ -38,15 +38,15 @@ public class RichTextHelper
         string final = s;
         List<SettingBase> sList = new List<SettingBase>(settings);
 
-        if (sList.Find((s) => s.style == Style.Bold) != null)
+        if (sList.Find((bSetting) => bSetting.style == Style.Bold) != null)
             final = TextWithBold(final);
 
-        if (sList.Find((s) => s.style == Style.Italics) != null)
+        if (sList.Find((iSetting) => iSetting.style == Style.Italics) != null)
             final = TextWithItalics(final);
 
-        if (sList.Find((s) => s.style == Style.Color) != null)
+        if (sList.Find((cSetting) => cSetting.style == Style.Color) != null)
         {
-            var setting = sList.Find((s) => s.style == Style.Color) as Setting<Color>;
+            var setting = sList.Find((cs) => cs.style == Style.Color) as Setting<Color>;
             final = TextWithColor(final, setting.suffix);
         }
 
