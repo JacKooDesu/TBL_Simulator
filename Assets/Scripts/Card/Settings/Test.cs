@@ -35,7 +35,7 @@ namespace TBL.Card
                 return finalText;
             }
         }
-
+        
         public override void OnUse(NetworkPlayer user, int originID)
         {
             base.OnUse(user, originID);

@@ -96,6 +96,16 @@ namespace TBL.Card
             return i + 1 - DeckSetting.cardUniqueId;
         }
 
+        public int GetUniqueID(int id)
+        {
+            int i = DeckSetting.cardUniqueId;
+            while ((id & 1 << i) != (1 << i) && i < 32)
+            {
+                ++i;
+            }
+            return i + 1 - DeckSetting.cardUniqueId;
+        }
+
         public string SendTypeText
         {
             get
