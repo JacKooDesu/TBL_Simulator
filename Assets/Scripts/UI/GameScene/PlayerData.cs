@@ -46,7 +46,7 @@ namespace TBL.UI.GameScene
 
         public void UpdateHero()
         {
-            if (player.hero.HeroType == HeroType.Hidden)
+            if (player.hero.isHiding)
                 heroAvatar.sprite = ((NetworkRoomManager.singleton) as NetworkRoomManager).Judgement.heroList.hiddenAvatar;
             else
                 heroAvatar.sprite = player.hero.Avatar;

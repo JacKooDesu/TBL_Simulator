@@ -85,49 +85,21 @@ namespace TBL
         public void OnUpdateCard(SyncList<int>.Operation op, int index, int oldItem, int newItem)
         {
             netCanvas.playerUIs[playerIndex].UpdateStatus();
-            /*
-            switch (op)
-            {
-                case SyncList<int>.Operation.OP_ADD:
-                    // index is where it got added in the list
-                    // newItem is the new item
-                    if (isLocalPlayer)
-                    {
-                        // netCanvas.UpdateCardList();
-                    }
-                    netCanvas.playerUIs[playerIndex].UpdateStatus();
-                    break;
-                case SyncList<int>.Operation.OP_CLEAR:
-                    // list got cleared
-                    break;
-                case SyncList<int>.Operation.OP_INSERT:
-                    // index is where it got added in the list
-                    // newItem is the new item
-                    break;
-                case SyncList<int>.Operation.OP_REMOVEAT:
-                    // index is where it got removed in the list
-                    // oldItem is the item that was removed
-                    break;
-                case SyncList<int>.Operation.OP_SET:
-                    // index is the index of the item that was updated
-                    // oldItem is the previous value for the item at the index
-                    // newItem is the new value for the item at the index
-                    break;
-            }
-            */
+
         }
 
         [SyncVar(hook = nameof(OnHeroIndexChange))] public int heroIndex = -1;
         void OnHeroIndexChange(int oldVar, int newVar)
         {
             hero = Instantiate(manager.Judgement.heroList.heros[newVar]);
-            if (isLocalPlayer)
-                netCanvas.InitPlayerStatus();
 
             if (isLocalPlayer || isServer)
             {
                 hero.Init(this);
             }
+
+            if (isLocalPlayer)
+                netCanvas.InitPlayerStatus();
 
             if (isServer)
             {
@@ -146,8 +118,42 @@ namespace TBL
         public void OnUpdateHeroSkillCanActivate(SyncList<bool>.Operation op, int index, bool oldItem, bool newItem)
         {
             if (isLocalPlayer)
-                UseSkill(index);
+            {
+                List<string> options = new List<string>();
+                List<UnityEngine.Events.UnityAction> actions = new List<UnityEngine.Events.UnityAction>();
+                for (int i = 0; i < netHeroSkillCanActivate.Count; ++i)
+                {
+                    if (netHeroSkillCanActivate[i])
+                    {
+                        var skill = hero.skills[i];
+                        int x = i;
+                        if (skill.autoActivate)
+                            UseSkill(x);
+                        else
+                        {
+                            options.Add(skill.name);
+                            actions.Add(() => UseSkill(x));
+                        }
+                    }
+                }
+
+                if (options.Count == 0)
+                {
+                    netCanvas.heroSkillData.animator.SetTrigger("Return");
+                    return;
+                }
+
+                netCanvas.heroSkillData.animator.SetTrigger("Blink");
+                netCanvas.heroSkillData.BindEvent(() => netCanvas.tempMenu.InitCustomMenu(options, actions));
+            }
+
         }
+        [Command]
+        public void CmdSetSkillCanActivate(int index, bool b)
+        {
+            netHeroSkillCanActivate[index] = b;
+        }
+
         public TBL.Settings.TeamSetting.Team team;
 
 
@@ -276,11 +282,13 @@ namespace TBL
         [Command]
         public void CmdDrawHero()
         {
-            if (isLocalPlayer)
-            {
-                heroIndex = 0;
-                return;
-            }
+            //////////////////////////////////////////////////////////////////
+            // if (isLocalPlayer)
+            // {
+            //     heroIndex = 7;
+            //     return;
+            // }
+            //////////////////////////////////////////////////////////////////
 
             int rand;
             do
@@ -299,6 +307,11 @@ namespace TBL
 
             if (isLocalPlayer)
                 netCanvas.InitPlayerStatus();
+        }
+
+        public void RpcUpdateHeroUI()
+        {
+            netCanvas.playerUIs[playerIndex].UpdateHero();
         }
 
         [Command]
@@ -548,6 +561,25 @@ namespace TBL
         }
 
         [Command]
+        public void CmdCardHToG(int id) // Hand To Graveyard
+        {
+            netHandCard.Remove((int)id);
+        }
+
+        [Command]
+        public void CmdCardTToG(int player, int id) // Table ToGraveyard
+        {
+            manager.players[player].netCards.Remove(id);
+        }
+
+        [Command]
+        public void CmdChangeHeroState(bool hiding)
+        {
+            hero.isHiding = hiding;
+            RpcUpdateHeroUI();
+        }
+
+        [Command]
         public void CmdTestCardAction(CardAction ca)
         {
             // .OnEffect(manager, ca);
@@ -555,6 +587,8 @@ namespace TBL
             manager.Judgement.AddCardAction(ca);
             print($"玩家({ca.user}) 對 玩家({ca.target}) 使用 {CardSetting.IDConvertCard(ca.cardId).GetCardNameFully()}");
         }
+
+
 
         [TargetRpc]
         public void TargetGetTest()

@@ -1,9 +1,59 @@
-﻿namespace TBL
+﻿using System.Collections.Generic;
+
+namespace TBL
 {
     public class CIA : Hero
     {
         protected override void BindSkill()
         {
+            var skill1 = new HeroSkill(
+                "隔牆有耳",
+                $"當一位玩家被 {RichTextHelper.TextWithBold("試探")} 時，你可以抽一張牌，然後捨棄一張手牌或 {RichTextHelper.TextWithBold("燒毀")} 你的一張 {RichTextHelper.TextWithBold("非假情報")} 。",
+                false,
+                () =>
+                {
+                    var manager = ((NetworkRoomManager.singleton) as NetworkRoomManager);
+                    var netCanvas = FindObjectOfType<NetCanvas.GameScene>();
+
+                    playerStatus.CmdDrawCard(1);
+
+                    List<string> options = new List<string>();
+                    List<UnityEngine.Events.UnityAction> actions = new List<UnityEngine.Events.UnityAction>();
+                    options.Add("捨棄一張手牌");
+                    actions.Add(() =>
+                        netCanvas.ShowPlayerHandCard(playerStatus.playerIndex, (handCardIndex) =>
+                        {
+                            playerStatus.CmdCardHToG(handCardIndex);
+                        })
+                    );
+
+                    if (PlayerStatus.netCards.FindIndex((card) => manager.DeckManager.Deck.GetCardPrototype(card).CardColor == Card.CardColor.Black) != -1)
+                    {
+                        options.Add("燒毀一張黑情報");
+                        actions.Add(() =>
+                            netCanvas.ShowPlayerCard(playerStatus.playerIndex, (cardIndex) =>
+                            {
+                                playerStatus.CmdCardHToG(playerStatus.netCards[cardIndex]);
+                            })
+                        );
+                    }
+                    netCanvas.tempMenu.InitCustomMenu(options, actions);
+                },
+                () =>
+                {
+                    var manager = ((NetworkRoomManager.singleton) as NetworkRoomManager);
+                    var netCanvas = FindObjectOfType<NetCanvas.GameScene>();
+
+                    if (manager.Judgement.currentPhase != NetworkJudgement.Phase.Reacting)
+                        return false;
+
+                    return ((Card.CardSetting)manager.Judgement.currentCardAction.cardId).CardType == Card.CardType.Test;
+                }
+            );
+
+            skills = new HeroSkill[] {
+                skill1
+            };
         }
     }
 }

@@ -249,6 +249,7 @@ namespace TBL.NetCanvas
 
         #region PLAYER_STATUS
         [Header("玩家資訊")]
+        public TBL.UI.GameScene.HeroSkillData heroSkillData;
         [SerializeField] Image heroAvatarUI;
         [SerializeField] Text heroNameUI;
         [SerializeField] Image teamIconUI;
@@ -263,6 +264,8 @@ namespace TBL.NetCanvas
 
             teamIconUI.sprite = manager.GetLocalPlayer().team.icon;
             teamNameUI.text = manager.GetLocalPlayer().team.name;
+
+            heroSkillData.Init(manager.GetLocalPlayer().hero);
         }
 
         public void UpdateHandCardList()

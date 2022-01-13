@@ -216,6 +216,11 @@ namespace TBL.Card
             return c;
         }
 
+        public static explicit operator CardSetting(int id)
+        {
+            return IDConvertCard(id);
+        }
+
         public virtual void OnUse(NetworkPlayer user, int originID)
         {
 

@@ -150,6 +150,8 @@ namespace TBL
         {
             ChangePhase(Phase.Draw);
 
+            // manager.CheckAllHeroSkill();
+
             manager.players[currentPlayerIndex].hasDraw = false;
             float time = roundSetting.drawTime;
             while (!manager.players[currentPlayerIndex].hasDraw && time >= 0)
@@ -176,6 +178,8 @@ namespace TBL
             yield return StartCoroutine(WaitDraw());
 
             ChangePhase(Phase.ChooseToSend);
+
+            manager.CheckAllHeroSkill();
 
             manager.players[currentPlayerIndex].TargetRoundStart();
             float time = roundSetting.roundTime;
@@ -314,7 +318,6 @@ namespace TBL
             }
 
             cardActionQueue.Reverse();
-
             // 處理卡片效果
             for (int i = 0; i < cardActionQueue.Count; ++i)
             {
@@ -337,10 +340,7 @@ namespace TBL
                     manager.DeckManager.Deck.GetCardPrototype(cardActionQueue[i].cardId).OnEffect(manager, cardActionQueue[i]);
                     print($"{tempCard.CardName} 效果發動");
 
-                    //////////////////////////////////////////////////
-                    foreach(var p in manager.players)
-                        p.hero.CheckSkill();
-                    //////////////////////////////////////////////////
+                    manager.CheckAllHeroSkill();     
 
                     time = roundSetting.reactionTime;
                     while (time >= 0)

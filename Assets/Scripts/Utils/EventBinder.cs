@@ -17,6 +17,14 @@ namespace JacDev.Utils
             targetTrigger.triggers.Add(entry);
         }
 
+        public static void Bind(EventTrigger targetTrigger, EventTriggerType triggerType, System.Action action)
+        {
+            EventTrigger.Entry entry = new EventTrigger.Entry();
+            entry.eventID = triggerType;
+            entry.callback.AddListener((e) => action.Invoke());
+            targetTrigger.triggers.Add(entry);
+        }
+
         public static IEnumerator FunctionDelay(float delay, System.Action action)
         {
             yield return new WaitForSeconds(delay);

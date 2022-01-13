@@ -176,6 +176,12 @@ namespace TBL
 
             GameUtils.Shuffle<TBL.Settings.TeamSetting.Team>(ref teamList);
         }
+
+        public void CheckAllHeroSkill()
+        {
+            foreach (var p in players)
+                p.hero.CheckSkill();
+        }
     }
 }
 

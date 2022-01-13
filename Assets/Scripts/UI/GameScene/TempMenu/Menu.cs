@@ -13,6 +13,9 @@ namespace TBL.UI.GameScene
 
         public void InitCardMenu(List<int> cardList, UnityAction<int> action)
         {
+            if (cardList.Count == 0)
+                return;
+
             foreach (int i in cardList)
             {
                 Option option = Instantiate(optionPrefab, transform).GetComponent<Option>();
@@ -34,6 +37,9 @@ namespace TBL.UI.GameScene
 
         public void InitColorMenu(List<Card.CardColor> colors, UnityAction<int> action)
         {
+            if (colors.Count == 0)
+                return;
+
             foreach (Card.CardColor c in colors)
             {
                 Option option = Instantiate(optionPrefab, transform).GetComponent<Option>();
@@ -70,26 +76,31 @@ namespace TBL.UI.GameScene
             gameObject.SetActive(true);
         }
 
-        public void InitCustomMenu(List<string> options, UnityAction<int> action)
+        public void InitCustomMenu(List<string> options, List<UnityAction> actions)
         {
+            if (options.Count == 0)
+                return;
+
             for (int i = 0; i < options.Count; ++i)
             {
                 int x = i;
                 var s = options[i];
                 Option option = Instantiate(optionPrefab, transform).GetComponent<Option>();
-                option.GetComponent<Text>().text = s;
+                option.GetComponentInChildren<Text>().text = s;
 
                 JacDev.Utils.EventBinder.Bind(
                     option.GetComponent<EventTrigger>(),
                     EventTriggerType.PointerClick,
                     (e) =>
                     {
-                        action.Invoke(i);
+                        actions[x].Invoke();
                         Clear();
                         print($"選擇 {s}");
                         gameObject.SetActive(true);
                     });
             }
+
+            gameObject.SetActive(true);
         }
 
         public void Clear()

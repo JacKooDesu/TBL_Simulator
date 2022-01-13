@@ -21,6 +21,8 @@ namespace TBL
         {
             get => heroType;
         }
+
+        public bool isHiding = false;
         [SerializeField]
         protected HeroGender gender;
         public HeroGender Gender
@@ -41,6 +43,9 @@ namespace TBL
         public void Init(NetworkPlayer player)
         {
             PlayerStatus = player;
+            if (heroType == HeroType.Hidden)
+                isHiding = true;
+
             skills = new HeroSkill[0];
             BindSkill();
         }
@@ -58,7 +63,11 @@ namespace TBL
             for (int i = 0; i < skills.Length; ++i)
             {
                 var s = skills[i];
-                if (s.autoActivate)
+
+                if (s.limited)
+                    continue;
+
+                if (s.checker == null)
                     continue;
 
                 if (s.checker.Invoke())

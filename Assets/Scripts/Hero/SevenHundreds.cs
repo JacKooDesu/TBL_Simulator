@@ -27,6 +27,9 @@
                 () =>
                 {
                     var manager = ((NetworkRoomManager.singleton) as NetworkRoomManager);
+                    if (manager.Judgement.currentPhase != NetworkJudgement.Phase.Reacting)
+                        return false;
+
                     var cardAction = manager.Judgement.currentCardAction;
                     return
                         cardAction.user == playerStatus.playerIndex &&
