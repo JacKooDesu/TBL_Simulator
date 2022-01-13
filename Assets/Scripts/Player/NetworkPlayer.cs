@@ -141,7 +141,7 @@ namespace TBL
 
             if (isServer)
             {
-                netHeroSkillCanActivate = new SyncList<bool>();
+                netHeroSkillCanActivate.Clear();
                 for (int i = 0; i < hero.skills.Length; ++i)
                     netHeroSkillCanActivate.Add(false);
             }
@@ -157,6 +157,7 @@ namespace TBL
         {
             if (isLocalPlayer)
             {
+                print(hero.skills.Length);
                 List<string> options = new List<string>();
                 List<UnityEngine.Events.UnityAction> actions = new List<UnityEngine.Events.UnityAction>();
                 for (int i = 0; i < netHeroSkillCanActivate.Count; ++i)
