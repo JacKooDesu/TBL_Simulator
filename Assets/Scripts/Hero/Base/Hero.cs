@@ -39,6 +39,7 @@ namespace TBL
         }
 
         public TBL.HeroSkill[] skills;
+        public System.Func<bool> specialMission;
 
         public void Init(NetworkPlayer player)
         {

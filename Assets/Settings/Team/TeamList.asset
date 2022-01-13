@@ -48,3 +48,7 @@ MonoBehaviour:
     Blue: 2
     Red: 2
     Green: 1
+  - playerCount: 6
+    Blue: 3
+    Red: 3
+    Green: 0

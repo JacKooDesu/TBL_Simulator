@@ -240,7 +240,7 @@ namespace TBL
                     break;
                 }
 
-                p.RpcAskCardStart();
+                p.RpcAskCardStart(currentRoundSendingCardId);
                 float time = roundSetting.reactionTime;
                 while (!p.rejectCard && !p.acceptCard && time >= 0)
                 {

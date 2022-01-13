@@ -58,14 +58,32 @@ namespace TBL.UI.GameScene
                 }
             );
 
+            string tipContent = "";
+
+            switch (((Card.CardSetting)setting.ID).SendType)
+            {
+                case Card.CardSendType.Direct:
+                    tipContent += "直達密電\n";
+                    break;
+                case Card.CardSendType.Secret:
+                    tipContent += "密電\n";
+                    break;
+                case Card.CardSendType.Public:
+                    tipContent += "公開文本\n";
+                    break;
+            }
+
+
             if (setting.CardType == Card.CardType.Test)
             {
                 Card.Test t = new Card.Test();
                 t.ID = setting.ID;
-                GetComponent<TipTrigger>().content = t.Tip;
+                tipContent += t.Tip;
             }
             else
-                GetComponent<TipTrigger>().content = ((NetworkRoomManager)NetworkRoomManager.singleton).DeckManager.Deck.GetCardPrototype(setting.ID).Tip;
+                tipContent += ((NetworkRoomManager)NetworkRoomManager.singleton).DeckManager.Deck.GetCardPrototype(setting.ID).Tip;
+
+            GetComponent<TipTrigger>().content = tipContent;
         }
 
         // Start is called before the first frame update

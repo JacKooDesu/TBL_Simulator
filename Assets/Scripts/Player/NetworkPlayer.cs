@@ -33,6 +33,7 @@ namespace TBL
         List<CardObject> cards = new List<CardObject>();
 
         [Header("NetLists")]
+        #region  NetHandCard
         public SyncList<int> netHandCard = new SyncList<int>();
         // net hand card callback
         public void OnUpdateHandCard(SyncList<int>.Operation op, int index, int oldItem, int newItem)
@@ -80,23 +81,60 @@ namespace TBL
             }
         }
 
+        [Command]
+        public void CmdAddHandCard(int id)
+        {
+            print($"手牌新增 {id}");
+            netHandCard.Add((int)id);
+        }
+        public void AddHandCard(int id)
+        {
+            print($"手牌新增 {id}");
+            netHandCard.Add((int)id);
+        }
+        #endregion
+
+        #region NetCard
         public SyncList<int> netCards = new SyncList<int>();
         // net hand card callback
         public void OnUpdateCard(SyncList<int>.Operation op, int index, int oldItem, int newItem)
         {
             netCanvas.playerUIs[playerIndex].UpdateStatus();
 
+            if (isServer)
+                CheckWin();
         }
+        public int GetCardColorCount(CardColor color)
+        {
+            int result = 0;
+            foreach (var c in netCards)
+            {
+                if (((CardSetting)c).CardColor == color)
+                    result++;
+            }
+
+            return result;
+        }
+
+        [Command]
+        public void CmdAddCard(int id)
+        {
+            print($"檯面新增 {id}");
+            netCards.Add((int)id);
+        }
+        public void AddCard(int id)
+        {
+            print($"檯面新增 {id}");
+            netCards.Add((int)id);
+        }
+        #endregion
 
         [SyncVar(hook = nameof(OnHeroIndexChange))] public int heroIndex = -1;
         void OnHeroIndexChange(int oldVar, int newVar)
         {
             hero = Instantiate(manager.Judgement.heroList.heros[newVar]);
 
-            if (isLocalPlayer || isServer)
-            {
-                hero.Init(this);
-            }
+            hero.Init(this);
 
             if (isLocalPlayer)
                 netCanvas.InitPlayerStatus();
@@ -152,6 +190,19 @@ namespace TBL
         public void CmdSetSkillCanActivate(int index, bool b)
         {
             netHeroSkillCanActivate[index] = b;
+        }
+
+        [Command]
+        public void CmdChangeHeroState(bool hiding)
+        {
+            hero.isHiding = hiding;
+            RpcChangeHeroState(hiding);
+            RpcUpdateHeroUI();
+        }
+        [ClientRpc]
+        public void RpcChangeHeroState(bool hiding)
+        {
+            hero.isHiding = hiding;
         }
 
         public TBL.Settings.TeamSetting.Team team;
@@ -483,16 +534,16 @@ namespace TBL
         }
 
         [ClientRpc]
-        public void RpcAskCardStart()
+        public void RpcAskCardStart(int id)
         {
             netCanvas.PlayerAnimation(new List<int>() { playerIndex }, "Asking");
             if (isLocalPlayer)
             {
-                var card = CardSetting.IDConvertCard(manager.Judgement.currentRoundSendingCardId);
+                var card = (CardSetting)(id);
                 string message = "情報來了！\n";
                 message += "這是一份 ";
                 if (card.SendType == CardSendType.Public)
-                    message += $"公開文本 - {RichTextHelper.TextWithColor(card.name, card.Color)}</color>";
+                    message += $"公開文本 - {RichTextHelper.TextWithColor(card.CardName, card.Color)}";
                 else
                     message += (card.SendType == Card.CardSendType.Secret ? "密電" : "直達密電");
                 UI.GameScene.TipCanvas.Singleton.Show(message, true);
@@ -518,30 +569,6 @@ namespace TBL
 
                 UI.GameScene.TipCanvas.Singleton.ResetPriorityMessage();
             }
-        }
-
-        [Command]
-        public void CmdAddCard(int id)
-        {
-            print($"檯面新增 {id}");
-            netCards.Add((int)id);
-        }
-        public void AddCard(int id)
-        {
-            print($"檯面新增 {id}");
-            netCards.Add((int)id);
-        }
-
-        [Command]
-        public void CmdAddHandCard(int id)
-        {
-            print($"手牌新增 {id}");
-            netHandCard.Add((int)id);
-        }
-        public void AddHandCard(int id)
-        {
-            print($"手牌新增 {id}");
-            netHandCard.Add((int)id);
         }
 
         [Command]
@@ -573,13 +600,6 @@ namespace TBL
         }
 
         [Command]
-        public void CmdChangeHeroState(bool hiding)
-        {
-            hero.isHiding = hiding;
-            RpcUpdateHeroUI();
-        }
-
-        [Command]
         public void CmdTestCardAction(CardAction ca)
         {
             // .OnEffect(manager, ca);
@@ -588,7 +608,25 @@ namespace TBL
             print($"玩家({ca.user}) 對 玩家({ca.target}) 使用 {CardSetting.IDConvertCard(ca.cardId).GetCardNameFully()}");
         }
 
+        public bool CheckWin()
+        {
+            switch (team.team)
+            {
+                case Settings.TeamSetting.TeamEnum.Blue:
+                    if (GetCardColorCount(CardColor.Blue) >= 3)
+                        return true;
+                    else
+                        return false;
 
+                case Settings.TeamSetting.TeamEnum.Red:
+                    if (GetCardColorCount(CardColor.Red) >= 3)
+                        return true;
+                    else
+                        return false;
+            }
+
+            return false;
+        }
 
         [TargetRpc]
         public void TargetGetTest()
