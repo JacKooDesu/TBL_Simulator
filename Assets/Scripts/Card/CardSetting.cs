@@ -114,7 +114,7 @@ namespace TBL.Card
                 {
                     case CardSendType.Direct: return "直達";
                     case CardSendType.Secret: return "密電";
-                    case CardSendType.Public: return "文本";
+                    case CardSendType.Public: return "公開文本";
                 }
 
                 return "MISSING SEND TYPE";
