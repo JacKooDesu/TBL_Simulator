@@ -143,6 +143,9 @@ namespace TBL
                 // p.isReady = false;
             }
 
+            var player = manager.players[currentPlayerIndex];
+            manager.RpcLog(UI.LogGeneral.RoundStart(player), player);
+
             StartCoroutine(RoundUpdate());
         }
 
@@ -172,16 +175,17 @@ namespace TBL
 
         IEnumerator RoundUpdate()
         {
-            manager.players[currentPlayerIndex].RpcUpdateHostPlayer();
+            var player = manager.players[currentPlayerIndex];
+            player.RpcUpdateHostPlayer();
 
-            manager.players[currentPlayerIndex].TargetDrawStart();
+            player.TargetDrawStart();
             yield return StartCoroutine(WaitDraw());
 
             ChangePhase(Phase.ChooseToSend);
 
             manager.CheckAllHeroSkill();
 
-            manager.players[currentPlayerIndex].TargetRoundStart();
+            player.TargetRoundStart();
             float time = roundSetting.roundTime;
             while (!currentRoundHasSendCard && time >= 0)
             {
@@ -197,9 +201,9 @@ namespace TBL
             if (!currentRoundHasSendCard)
             {
                 // remove all hand card
-                manager.players[currentPlayerIndex].netHandCard.Clear();
-                manager.players[currentPlayerIndex].TargetEndRound();
-
+                player.netHandCard.Clear();
+                player.TargetEndRound();
+                manager.RpcLog(UI.LogGeneral.RoundTimeOver(player), player);
                 StartNewRound(
                 (currentPlayerIndex + 1 == manager.players.Count) ?
                 0 : currentPlayerIndex + 1
@@ -207,7 +211,7 @@ namespace TBL
             }
             else
             {
-                manager.players[currentPlayerIndex].TargetEndRound();
+                player.TargetEndRound();
                 StartCoroutine(SendingCardUpdate());
             }
         }
@@ -216,7 +220,11 @@ namespace TBL
         {
             ChangePhase(Phase.Sending);
 
+            var player = manager.players[currentPlayerIndex];
+
             print("卡片傳送中");
+            manager.RpcLog(UI.LogGeneral.SendCard(player, (Card.CardSetting)currentRoundSendingCardId), player);
+
             int iter = 1;
             // foreach (NetworkPlayer p in cardSendQueue)
             for (int i = 0; i < cardSendQueue.Count; i += iter)
@@ -231,12 +239,14 @@ namespace TBL
                 if (p.playerIndex == currentPlayerIndex)
                 {
                     p.AddCard(currentRoundSendingCardId);
+                    manager.RpcLog(UI.LogGeneral.AcceptCard(p, (Card.CardSetting)currentRoundSendingCardId), p);
                     break;
                 }
 
                 if (p.isLocked)
                 {
                     p.AddCard(currentRoundSendingCardId);
+                    manager.RpcLog(UI.LogGeneral.AcceptCard(p, (Card.CardSetting)currentRoundSendingCardId), p);
                     break;
                 }
 
@@ -274,6 +284,7 @@ namespace TBL
                 if (p.acceptCard)
                 {
                     p.AddCard(currentRoundSendingCardId);
+                    manager.RpcLog(UI.LogGeneral.AcceptCard(p, (Card.CardSetting)currentRoundSendingCardId), p);
                     break;
                 }
 
@@ -281,8 +292,8 @@ namespace TBL
 
             StartNewRound(
                 (currentPlayerIndex + 1 == manager.players.Count) ?
-                0 : currentPlayerIndex + 1
-                );
+                        0 : currentPlayerIndex + 1
+                        );
         }
 
         public void AddCardAction(Action.CardAction ca)
@@ -291,12 +302,10 @@ namespace TBL
             {
                 ChangePhase(Phase.Reacting);
                 cardActionQueue = new List<Action.CardAction>();
-                cardActionQueue.Add(ca);
             }
-            else
-            {
-                cardActionQueue.Add(ca);
-            }
+            cardActionQueue.Add(ca);
+
+            manager.TargetLogAll(UI.LogGeneral.UseCard(ca));
         }
 
         IEnumerator CardEventUpdate()
@@ -340,7 +349,7 @@ namespace TBL
                     manager.DeckManager.Deck.GetCardPrototype(cardActionQueue[i].cardId).OnEffect(manager, cardActionQueue[i]);
                     print($"{tempCard.CardName} 效果發動");
 
-                    manager.CheckAllHeroSkill();     
+                    manager.CheckAllHeroSkill();
 
                     time = roundSetting.reactionTime;
                     while (time >= 0)

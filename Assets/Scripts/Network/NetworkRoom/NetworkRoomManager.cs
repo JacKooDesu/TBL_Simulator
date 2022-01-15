@@ -183,27 +183,40 @@ namespace TBL
                 p.hero.CheckSkill();
         }
 
-        // public void Log(UI.LogBase log)
-        // {
-        //     List<int> targetList = new List<int>(); ;
-        //     if (log.TargetPlayers.Length == 0)
-        //     {
-        //         for (int i = 0; i < players.Count; ++i)
-        //         {
-        //             int x = i;
-        //             targetList.Add(x);
-        //         }
-        //     }
-        //     else
-        //     {
-        //         targetList.AddRange(log.TargetPlayers);
-        //     }
+        public void TargetLog(UI.LogBase log)
+        {
+            List<int> targetList = new List<int>(); ;
+            if (log.TargetPlayers.Length == 0)
+            {
+                for (int i = 0; i < players.Count; ++i)
+                {
+                    int x = i;
+                    targetList.Add(x);
+                }
+            }
+            else
+            {
+                targetList.AddRange(log.TargetPlayers);
+            }
 
-        //     foreach (var p in players)
-        //     {
-        //         p.TargetAddLog(log.Message,log.TargetPlayers, targetList.IndexOf(p.playerIndex) != -1);
-        //     }
-        // }
+            foreach (var p in players)
+            {
+                p.TargetAddLog(log.Message, log.IsServer, log.IsPrivate, log.TargetPlayers, targetList.IndexOf(p.playerIndex) != -1);
+            }
+        }
+
+        public void TargetLogAll(UI.LogBase log)
+        {
+            foreach (var p in players)
+            {
+                p.TargetAddLog(log.Message, log.IsServer, log.IsPrivate, log.TargetPlayers, true);
+            }
+        }
+
+        public void RpcLog(UI.LogBase log, NetworkPlayer player)
+        {
+            player.RpcAddLog(log.Message, log.IsServer, log.IsPrivate, log.TargetPlayers);
+        }
     }
 }
 

@@ -342,11 +342,23 @@ namespace TBL.NetCanvas
         }
 
         #region LOG
+        public ScrollRect logScrollRect;
         public Text logText;
 
         public void AddLog(int index)
         {
-            logText.text += $"{UI.LogBase.logs[index].Message}\n";
+            var log = UI.LogBase.logs[index];
+            string prefix = $"[{(log.IsPrivate ? "私人" : "公開")}]";
+            prefix = RichTextHelper.TextWithStyles(
+                prefix,
+                log.IsPrivate ?
+                    new RichTextHelper.Setting<Color>(RichTextHelper.Style.Color, new Color(.6f, 0f, 0f)) :
+                    new RichTextHelper.Setting<Color>(RichTextHelper.Style.Color, new Color(0f, .6f, 0f)),
+                new RichTextHelper.SettingBase(RichTextHelper.Style.Bold));
+
+            logText.text += $"{prefix} {UI.LogBase.logs[index].Message}\n";
+
+            logScrollRect.verticalNormalizedPosition = 1;
         }
 
         #endregion

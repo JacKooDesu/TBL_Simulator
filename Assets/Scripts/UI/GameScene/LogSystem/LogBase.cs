@@ -11,25 +11,18 @@ namespace TBL.UI
         {
             get
             {
-                string prefix = $"【{(isPrivate ? "私人" : "公開")}】";
-                prefix = RichTextHelper.TextWithStyles(
-                    prefix,
-                    isPrivate ?
-                        new RichTextHelper.Setting<Color>(RichTextHelper.Style.Color, Color.red) :
-                        new RichTextHelper.Setting<Color>(RichTextHelper.Style.Color, Color.yellow),
-                    new RichTextHelper.SettingBase(RichTextHelper.Style.Bold));
-                return $"{prefix} {message}";
+                return message;
             }
         }
 
         bool isServer;
-        bool IsServer
+        public bool IsServer
         {
             get => isServer;
         }
 
         bool isPrivate;
-        bool IsPrivate
+        public bool IsPrivate
         {
             get => isPrivate;
         }
