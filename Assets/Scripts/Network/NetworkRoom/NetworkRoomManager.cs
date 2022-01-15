@@ -182,6 +182,28 @@ namespace TBL
             foreach (var p in players)
                 p.hero.CheckSkill();
         }
+
+        // public void Log(UI.LogBase log)
+        // {
+        //     List<int> targetList = new List<int>(); ;
+        //     if (log.TargetPlayers.Length == 0)
+        //     {
+        //         for (int i = 0; i < players.Count; ++i)
+        //         {
+        //             int x = i;
+        //             targetList.Add(x);
+        //         }
+        //     }
+        //     else
+        //     {
+        //         targetList.AddRange(log.TargetPlayers);
+        //     }
+
+        //     foreach (var p in players)
+        //     {
+        //         p.TargetAddLog(log.Message,log.TargetPlayers, targetList.IndexOf(p.playerIndex) != -1);
+        //     }
+        // }
     }
 }
 

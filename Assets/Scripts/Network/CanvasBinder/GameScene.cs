@@ -341,6 +341,16 @@ namespace TBL.NetCanvas
             ClearPlayerUIEvent();
         }
 
+        #region LOG
+        public Text logText;
+
+        public void AddLog(int index)
+        {
+            logText.text += $"{UI.LogBase.logs[index].Message}\n";
+        }
+
+        #endregion
+
         protected override void Start()
         {
             base.Start();

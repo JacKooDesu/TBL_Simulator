@@ -642,6 +642,50 @@ namespace TBL
         }
         #endregion
 
+        #region LOG
+        [ClientRpc]
+        public void RpcAddLog(string message, bool isServer, bool isPrivate, int[] targetPlayers)
+        {
+            var log = new UI.LogBase(message, isServer, isPrivate, targetPlayers);
+            UI.LogBase.logs.Add(log);
+
+            List<int> targetList = new List<int>();
+            if (log.TargetPlayers.Length == 0)
+            {
+                for (int i = 0; i < manager.players.Count; ++i)
+                {
+                    int x = i;
+                    targetList.Add(x);
+                }
+            }
+            else
+            {
+                targetList.AddRange(log.TargetPlayers);
+            }
+
+            if (targetList.IndexOf(manager.GetLocalRoomPlayerIndex()) != -1)
+                netCanvas.AddLog(UI.LogBase.logs.Count - 1);
+        }
+
+        [TargetRpc]
+        public void TargetAddLog(string message, bool isServer, bool isPrivate, int[] targetPlayers, bool canvasLog)
+        {
+            var log = new UI.LogBase(message, isServer, isPrivate, targetPlayers);
+            UI.LogBase.logs.Add(log);
+
+            if (canvasLog)
+                netCanvas.AddLog(UI.LogBase.logs.Count - 1);
+        }
+
+        public void AddLog(string message)
+        {
+            var log = new UI.LogBase(message, false, true, new int[] { playerIndex });
+            UI.LogBase.logs.Add(log);
+
+            netCanvas.AddLog(UI.LogBase.logs.Count - 1);
+        }
+        #endregion
+
         public override void OnStopClient()
         {
             base.OnStopClient();
