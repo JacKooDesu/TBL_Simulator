@@ -92,6 +92,42 @@ namespace TBL
             print($"手牌新增 {id}");
             netHandCard.Add((int)id);
         }
+
+        public int GetHandCardColorCount(CardColor color)
+        {
+            int result = 0;
+            foreach (var c in netHandCard)
+            {
+                if (((CardSetting)c).CardColor == color)
+                    result++;
+            }
+
+            return result;
+        }
+
+        public int GetHandCardTypeCount(CardType cardType)
+        {
+            int result = 0;
+            foreach (var c in netHandCard)
+            {
+                if (((CardSetting)c).CardType == cardType)
+                    result++;
+            }
+
+            return result;
+        }
+
+        public int GetHandCardSendTypeCount(CardSendType sendType)
+        {
+            int result = 0;
+            foreach (var c in netHandCard)
+            {
+                if (((CardSetting)c).SendType == sendType)
+                    result++;
+            }
+
+            return result;
+        }
         #endregion
 
         #region NetCard
@@ -609,7 +645,7 @@ namespace TBL
         }
 
         [Command]
-        public void CmdCardHToD(int id, int target)     // Hand to Desk
+        public void CmdCardHToT(int id, int target)     // Hand to Table
         {
             print($"玩家 {playerIndex} 給予 玩家 {target} - {Card.CardSetting.IDConvertCard(id).name}");
             netHandCard.Remove((int)id);
@@ -629,6 +665,13 @@ namespace TBL
         }
 
         [Command]
+        public void CmdCardTToH(int player, int id)  // Table to Hand
+        {
+            manager.players[player].netCards.Remove(id);
+            manager.players[player].netHandCard.Add(id);
+        }
+
+        [Command]
         public void CmdTestCardAction(CardAction ca)
         {
             // .OnEffect(manager, ca);
@@ -639,6 +682,9 @@ namespace TBL
 
         public void CheckWin()
         {
+            if (isDead)
+                return;
+
             switch (team.team)
             {
                 case Settings.TeamSetting.TeamEnum.Blue:

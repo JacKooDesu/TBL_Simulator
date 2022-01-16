@@ -292,7 +292,7 @@ namespace TBL.NetCanvas
         [Header("暫存選單")]
         public UI.GameScene.Menu tempMenu;
 
-        public void ShowPlayerCard(int index, UnityAction<int> action, List<CardColor> requestColor = null)
+        public UI.GameScene.Menu ShowPlayerCard(int index, UnityAction<int> action, List<CardColor> requestColor = null)
         {
             if (requestColor == null)
                 requestColor = new List<CardColor> { CardColor.Black, CardColor.Red, CardColor.Blue };
@@ -306,10 +306,22 @@ namespace TBL.NetCanvas
                     cardIdList.Add(i);
                 }
             }
-            tempMenu.InitCardMenu(cardIdList, action);
+            return tempMenu.InitCardMenu(cardIdList, action);
         }
 
-        public void ShowPlayerHandCard(int index, UnityAction<int> action, List<CardColor> requestColor = null)
+        public UI.GameScene.Menu ShowPlayerHandCard(int index, UnityAction<int> action)
+        {
+            List<int> cardIdList = new List<int>();
+
+            foreach (int i in manager.players[index].netHandCard)
+            {
+                int x = i;
+                cardIdList.Add(x);
+            }
+            return tempMenu.InitCardMenu(cardIdList, action);
+        }
+
+        public UI.GameScene.Menu ShowPlayerHandCard(int index, UnityAction<int> action, List<CardColor> requestColor = null)
         {
             if (requestColor == null)
                 requestColor = new List<CardColor> { CardColor.Black, CardColor.Red, CardColor.Blue };
@@ -323,12 +335,29 @@ namespace TBL.NetCanvas
                     cardIdList.Add(i);
                 }
             }
-            tempMenu.InitCardMenu(cardIdList, action);
+            return tempMenu.InitCardMenu(cardIdList, action);
         }
 
-        public void AskColorCard(UnityAction<int> action, List<CardColor> requestColor)
+        public UI.GameScene.Menu ShowPlayerHandCard(int index, UnityAction<int> action, List<CardSendType> requestSendType = null)
         {
-            tempMenu.InitColorMenu(requestColor, action);
+            if (requestSendType == null)
+                requestSendType = new List<CardSendType> { CardSendType.Direct, CardSendType.Secret, CardSendType.Public };
+
+            List<int> cardIdList = new List<int>();
+
+            foreach (int i in manager.players[index].netHandCard)
+            {
+                if (requestSendType.IndexOf(((CardSetting)i).SendType) != -1)
+                {
+                    cardIdList.Add(i);
+                }
+            }
+            return tempMenu.InitCardMenu(cardIdList, action);
+        }
+
+        public UI.GameScene.Menu AskColorCard(UnityAction<int> action, List<CardColor> requestColor)
+        {
+            return tempMenu.InitColorMenu(requestColor, action);
         }
         #endregion
 

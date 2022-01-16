@@ -31,7 +31,7 @@ namespace TBL
                 {
                     if (playerStatus.hero.skills[0].limited)
                         return false;
-                        
+
                     var manager = ((NetworkRoomManager.singleton) as NetworkRoomManager);
                     bool haveCard = false;
                     foreach (var p in manager.players)
@@ -53,7 +53,23 @@ namespace TBL
 
         protected override void BindSpecialMission()
         {
-            
+            this.mission = new HeroMission(
+                "親手讓另一位沒有獲得紅藍情報的玩家死亡。",
+                () =>
+                {
+                    var manager = ((NetworkRoomManager.singleton) as NetworkRoomManager);
+                    var judgment = ((NetworkRoomManager.singleton) as NetworkRoomManager).Judgement;
+
+                    if (judgment.currentPhase != NetworkJudgement.Phase.Sending)
+                        return false;
+
+                    var targetPlayer = manager.players[judgment.currentSendingPlayer];
+                    if (targetPlayer.isDead && judgment.currentRoundPlayerIndex == playerStatus.playerIndex)
+                        return true;
+
+                    return false;
+                }
+            );
         }
 
         async void Snipe(NetworkPlayer target)

@@ -226,6 +226,17 @@ namespace TBL
             }
         }
 
+        public int GetDeadPlayerCount()
+        {
+            int iter = 0;
+            foreach (var p in players)
+            {
+                if (p.isDead)
+                    iter++;
+            }
+            return iter;
+        }
+
         public int GetTeamPlayerCount(TeamSetting.TeamEnum team)
         {
             int iter = 0;

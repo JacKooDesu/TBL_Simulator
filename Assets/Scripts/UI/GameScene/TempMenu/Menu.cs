@@ -11,10 +11,10 @@ namespace TBL.UI.GameScene
     {
         public GameObject optionPrefab;
 
-        public void InitCardMenu(List<int> cardList, UnityAction<int> action)
+        public Menu InitCardMenu(List<int> cardList, UnityAction<int> action)
         {
             if (cardList.Count == 0)
-                return;
+                return null;
 
             foreach (int i in cardList)
             {
@@ -33,12 +33,14 @@ namespace TBL.UI.GameScene
             }
 
             gameObject.SetActive(true);
+
+            return this;
         }
 
-        public void InitColorMenu(List<Card.CardColor> colors, UnityAction<int> action)
+        public Menu InitColorMenu(List<Card.CardColor> colors, UnityAction<int> action)
         {
             if (colors.Count == 0)
-                return;
+                return null;
 
             foreach (Card.CardColor c in colors)
             {
@@ -74,12 +76,14 @@ namespace TBL.UI.GameScene
             }
 
             gameObject.SetActive(true);
+
+            return this;
         }
 
-        public void InitCustomMenu(List<string> options, List<UnityAction> actions)
+        public Menu InitCustomMenu(List<string> options, List<UnityAction> actions)
         {
             if (options.Count == 0)
-                return;
+                return null;
 
             for (int i = 0; i < options.Count; ++i)
             {
@@ -101,6 +105,23 @@ namespace TBL.UI.GameScene
             }
 
             gameObject.SetActive(true);
+
+            return this;
+        }
+
+        public Menu AddCustomOption(string text, UnityAction action)
+        {
+            Option option = Instantiate(optionPrefab, transform).GetComponent<Option>();
+            option.GetComponentInChildren<Text>().text = text;
+            JacDev.Utils.EventBinder.Bind(
+                option.GetComponent<EventTrigger>(),
+                EventTriggerType.PointerClick,
+                (e) =>
+                {
+                    action.Invoke();
+                });
+
+            return this;
         }
 
         public void Clear()
