@@ -358,7 +358,7 @@ namespace TBL.NetCanvas
 
             logText.text += $"{prefix} {UI.LogBase.logs[index].Message}\n";
 
-            logScrollRect.verticalNormalizedPosition = 0;
+            logScrollRect.verticalNormalizedPosition = -1;
         }
 
         #endregion
