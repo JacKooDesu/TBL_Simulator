@@ -41,6 +41,11 @@
                 skill2
             };
         }
+
+        protected override void BindSpecialMission()
+        {
+            
+        }
     }
 }
 

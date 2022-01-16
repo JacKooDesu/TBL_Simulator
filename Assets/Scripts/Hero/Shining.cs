@@ -29,13 +29,31 @@ namespace TBL
                 },
                 () =>
                 {
-                    return playerStatus.hero.isHiding;
+                    if (playerStatus.hero.skills[0].limited)
+                        return false;
+                        
+                    var manager = ((NetworkRoomManager.singleton) as NetworkRoomManager);
+                    bool haveCard = false;
+                    foreach (var p in manager.players)
+                    {
+                        if (p.netCards.Count != 0)
+                        {
+                            haveCard = true;
+                            break;
+                        }
+                    }
+                    return playerStatus.hero.isHiding && haveCard;
                 }
             );
 
             skills = new HeroSkill[] {
                 skill1
             };
+        }
+
+        protected override void BindSpecialMission()
+        {
+            
         }
 
         async void Snipe(NetworkPlayer target)
@@ -72,9 +90,9 @@ namespace TBL
             }
 
             playerStatus.CmdChangeHeroState(false);
-            this.skills[0].limited = true;
 
             playerStatus.CmdSetSkillCanActivate(0, false);
+            playerStatus.CmdSetSkillLimited(0, true);
         }
     }
 }

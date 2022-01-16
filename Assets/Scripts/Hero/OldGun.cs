@@ -5,6 +5,11 @@
         protected override void BindSkill()
         {
         }
+
+        protected override void BindSpecialMission()
+        {
+           
+        }
     }
 }
 

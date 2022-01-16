@@ -239,6 +239,7 @@ namespace TBL
                 if (p.playerIndex == currentPlayerIndex)
                 {
                     p.AddCard(currentRoundSendingCardId);
+                    p.acceptCard = true;
                     manager.RpcLog(UI.LogGeneral.AcceptCard(p, (Card.CardSetting)currentRoundSendingCardId), p);
                     break;
                 }
@@ -246,6 +247,7 @@ namespace TBL
                 if (p.isLocked)
                 {
                     p.AddCard(currentRoundSendingCardId);
+                    p.acceptCard = true;
                     manager.RpcLog(UI.LogGeneral.AcceptCard(p, (Card.CardSetting)currentRoundSendingCardId), p);
                     break;
                 }
@@ -290,6 +292,8 @@ namespace TBL
 
             }
 
+            manager.CheckAllHeroSkill();
+
             StartNewRound(
                 (currentPlayerIndex + 1 == manager.players.Count) ?
                         0 : currentPlayerIndex + 1
@@ -322,6 +326,12 @@ namespace TBL
                     time = roundSetting.reactionTime;
                     lastActionQueueCount = cardActionQueue.Count;
                 }
+
+                var lastAction = cardActionQueue[cardActionQueue.Count - 1];
+                // 鋼鐵特JK的技能當作識破使用，但又不可被識破，故強制退出迴圈
+                if (((Card.CardSetting)lastAction.cardId).CardType == Card.CardType.Invalidate &&
+                    lastAction.suffix == 1)
+                    time = -1;
 
                 yield return null;
             }

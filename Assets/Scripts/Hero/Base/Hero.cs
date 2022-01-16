@@ -49,9 +49,12 @@ namespace TBL
 
             skills = new HeroSkill[0];
             BindSkill();
+            BindSpecialMission();
         }
 
         protected abstract void BindSkill();
+
+        protected abstract void BindSpecialMission();
 
         public virtual void OnGetCard(CardObject card)
         {

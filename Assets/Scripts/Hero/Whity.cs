@@ -6,6 +6,11 @@
         {
             
         }
+
+        protected override void BindSpecialMission()
+        {
+            
+        }
     }
 }
 

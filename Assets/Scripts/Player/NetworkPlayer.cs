@@ -192,6 +192,11 @@ namespace TBL
         {
             netHeroSkillCanActivate[index] = b;
         }
+        [Command]
+        public void CmdSetSkillLimited(int index, bool b)
+        {
+            hero.skills[index].limited = b;
+        }
 
         [Command]
         public void CmdChangeHeroState(bool hiding)

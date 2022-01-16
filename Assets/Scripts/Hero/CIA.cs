@@ -27,14 +27,16 @@ namespace TBL
                         })
                     );
 
-                    if (PlayerStatus.netCards.FindIndex((card) => manager.DeckManager.Deck.GetCardPrototype(card).CardColor == Card.CardColor.Black) != -1)
+                    if (PlayerStatus.netCards.FindIndex((card) => manager.DeckManager.Deck.GetCardPrototype(card).CardColor == Card.CardColor.Blue) != -1 ||
+                        PlayerStatus.netCards.FindIndex((card) => manager.DeckManager.Deck.GetCardPrototype(card).CardColor == Card.CardColor.Red) != -1)
                     {
-                        options.Add("燒毀一張黑情報");
+                        options.Add("燒毀一張非假情報");
                         actions.Add(() =>
                             netCanvas.ShowPlayerCard(playerStatus.playerIndex, (cardIndex) =>
                             {
                                 playerStatus.CmdCardHToG(playerStatus.netCards[cardIndex]);
-                            })
+                            },
+                            new List<Card.CardColor>() { Card.CardColor.Red, Card.CardColor.Blue })
                         );
                     }
                     netCanvas.tempMenu.InitCustomMenu(options, actions);
@@ -54,6 +56,11 @@ namespace TBL
             skills = new HeroSkill[] {
                 skill1
             };
+        }
+
+        protected override void BindSpecialMission()
+        {
+           
         }
     }
 }
