@@ -35,7 +35,8 @@ namespace TBL
             Draw,
             ChooseToSend,
             Sending,
-            Reacting
+            Reacting,
+            Result
         }
 
         [Header("輪設定")]
@@ -143,6 +144,9 @@ namespace TBL
                 // p.isReady = false;
             }
 
+            if (currentPhase == Phase.Result)
+                return;
+
             var player = manager.players[currentPlayerIndex];
             manager.RpcLog(UI.LogGeneral.RoundStart(player), player);
 
@@ -238,17 +242,17 @@ namespace TBL
 
                 if (p.playerIndex == currentPlayerIndex)
                 {
+                    manager.RpcLog(UI.LogGeneral.AcceptCard(p, (Card.CardSetting)currentRoundSendingCardId), p);
                     p.AddCard(currentRoundSendingCardId);
                     p.acceptCard = true;
-                    manager.RpcLog(UI.LogGeneral.AcceptCard(p, (Card.CardSetting)currentRoundSendingCardId), p);
                     break;
                 }
 
                 if (p.isLocked)
                 {
+                    manager.RpcLog(UI.LogGeneral.AcceptCard(p, (Card.CardSetting)currentRoundSendingCardId), p);
                     p.AddCard(currentRoundSendingCardId);
                     p.acceptCard = true;
-                    manager.RpcLog(UI.LogGeneral.AcceptCard(p, (Card.CardSetting)currentRoundSendingCardId), p);
                     break;
                 }
 
@@ -285,13 +289,14 @@ namespace TBL
                     continue;
                 if (p.acceptCard)
                 {
-                    p.AddCard(currentRoundSendingCardId);
                     manager.RpcLog(UI.LogGeneral.AcceptCard(p, (Card.CardSetting)currentRoundSendingCardId), p);
+                    p.AddCard(currentRoundSendingCardId);
                     break;
                 }
 
             }
 
+            manager.CheckAllWin();
             manager.CheckAllHeroSkill();
 
             StartNewRound(
@@ -373,6 +378,16 @@ namespace TBL
             }
 
             ChangePhase(lastPhase);
+        }
+
+        public void PlayerWin(NetworkPlayer p)
+        {
+            if (currentPhase == Phase.Result)
+                return;
+
+            ChangePhase(Phase.Result);
+
+            manager.TargetLogAll(UI.LogGeneral.PlayerWin(p));
         }
 
         public override void OnStartClient()

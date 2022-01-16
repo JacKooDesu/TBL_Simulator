@@ -65,5 +65,32 @@ namespace TBL.UI
                 new int[0]
             );
         }
+
+        public static LogBase PlayerDead(NetworkPlayer p)
+        {
+            return new LogBase(
+                $"玩家 {p.playerIndex} ({p.playerName}) 死亡",
+                true,
+                false,
+                new int[0]
+            );
+        }
+
+        public static LogBase PlayerWin(NetworkPlayer p)
+        {
+            string msg = "";
+
+            if (p.team.team != Settings.TeamSetting.TeamEnum.Green)
+                msg = $"{p.team.name} 獲勝";
+            else
+                msg = $"玩家 {p.playerIndex} ({p.playerName}) 完成醬油任務";
+
+            return new LogBase(
+                msg,
+                true,
+                false,
+                new int[0]
+            );
+        }
     }
 }

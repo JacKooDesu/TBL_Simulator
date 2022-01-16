@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using UnityEngine;
+using System.Collections.Generic;
 
 namespace TBL
 {
@@ -60,7 +61,12 @@ namespace TBL
 
         protected override void BindSpecialMission()
         {
-           
+            this.mission = new HeroMission(
+                $"獲得三張或以上的 {RichTextHelper.TextWithStyles("紅色情報", new RichTextHelper.SettingBase(RichTextHelper.Style.Bold), new RichTextHelper.Setting<Color>(RichTextHelper.Style.Color, Color.red)) } 。",
+                () =>
+                {
+                    return playerStatus.GetCardColorCount(Card.CardColor.Red) >= 3;
+                });
         }
     }
 }

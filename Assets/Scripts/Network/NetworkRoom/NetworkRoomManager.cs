@@ -217,6 +217,25 @@ namespace TBL
         {
             player.RpcAddLog(log.Message, log.IsServer, log.IsPrivate, log.TargetPlayers);
         }
+
+        public void CheckAllWin()
+        {
+            foreach (var p in players)
+            {
+                p.CheckWin();
+            }
+        }
+
+        public int GetTeamPlayerCount(TeamSetting.TeamEnum team)
+        {
+            int iter = 0;
+            foreach (var p in players)
+            {
+                if (p.team.team == team)
+                    iter++;
+            }
+            return iter;
+        }
     }
 }
 

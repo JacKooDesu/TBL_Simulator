@@ -102,7 +102,12 @@ namespace TBL
             netCanvas.playerUIs[playerIndex].UpdateStatus();
 
             if (isServer)
+            {
+                if (GetCardColorCount(CardColor.Black) >= 3)
+                    isDead = true;
+
                 CheckWin();
+            }
         }
         public int GetCardColorCount(CardColor color)
         {
@@ -253,6 +258,24 @@ namespace TBL
             if (rejectCard != -1)
                 this.rejectCard = rejectCard == 1;
         }
+
+        [SyncVar(hook = nameof(OnWinStatusChange))] public bool isWin = false;
+        void OnWinStatusChange(bool oldStatus, bool newStatus)
+        {
+            if (newStatus == true)
+            {
+                manager.Judgement.PlayerWin(this);
+            }
+        }
+
+        [SyncVar(hook = nameof(OnDeadStatusChange))] public bool isDead = false;
+        void OnDeadStatusChange(bool oldStatus, bool newStatus)
+        {
+            if (newStatus == true)
+            {
+                manager.RpcLog(UI.LogGeneral.PlayerDead(this), this);
+            }
+        }
         #endregion
 
         TBL.NetCanvas.GameScene netCanvas;
@@ -342,7 +365,7 @@ namespace TBL
             //////////////////////////////////////////////////////////////////
             // if (isLocalPlayer)
             // {
-            //     heroIndex = 7;
+            //     heroIndex = 8;
             //     return;
             // }
             //////////////////////////////////////////////////////////////////
@@ -614,24 +637,25 @@ namespace TBL
             print($"玩家({ca.user}) 對 玩家({ca.target}) 使用 {CardSetting.IDConvertCard(ca.cardId).GetCardNameFully()}");
         }
 
-        public bool CheckWin()
+        public void CheckWin()
         {
             switch (team.team)
             {
                 case Settings.TeamSetting.TeamEnum.Blue:
-                    if (GetCardColorCount(CardColor.Blue) >= 3)
-                        return true;
-                    else
-                        return false;
+                    if (GetCardColorCount(CardColor.Blue) >= 3 || manager.GetTeamPlayerCount(Settings.TeamSetting.TeamEnum.Red) == 0)
+                        this.isWin = true;
+                    break;
 
                 case Settings.TeamSetting.TeamEnum.Red:
-                    if (GetCardColorCount(CardColor.Red) >= 3)
-                        return true;
-                    else
-                        return false;
-            }
+                    if (GetCardColorCount(CardColor.Red) >= 3 || manager.GetTeamPlayerCount(Settings.TeamSetting.TeamEnum.Blue) == 0)
+                        this.isWin = true;
+                    break;
 
-            return false;
+                case Settings.TeamSetting.TeamEnum.Green:
+                    if (hero.mission != null)
+                        this.isWin = hero.mission.checker.Invoke();
+                    break;
+            }
         }
 
         [TargetRpc]
