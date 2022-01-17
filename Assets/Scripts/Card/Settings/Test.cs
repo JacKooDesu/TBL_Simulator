@@ -82,17 +82,20 @@ namespace TBL.Card
             base.OnEffect(manager, ca);
 
             var setting = actionSettings[ca.suffix % 6];
+            var target = manager.players[ca.target];
 
-            if (manager.players[ca.target].team.team == setting.specifyTeam)
+            if (target.team.team == setting.specifyTeam)
             {
                 switch (setting.type)
                 {
                     case ActionType.Draw:
                         print("抽牌");
+                        target.TargetGetTest(true);
                         break;
 
                     case ActionType.IMGood:
                         print("我是一個好人");
+                        target.TargetGetTest(false);
                         break;
                 }
             }
@@ -102,10 +105,12 @@ namespace TBL.Card
                 {
                     case ActionType.Draw:
                         print("我是一個好人");
+                        target.TargetGetTest(false);
                         break;
 
                     case ActionType.IMGood:
                         print("抽牌");
+                        target.TargetGetTest(true);
                         break;
                 }
             }

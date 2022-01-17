@@ -711,9 +711,26 @@ namespace TBL
         }
 
         [TargetRpc]
-        public void TargetGetTest()
+        public void TargetGetTest(bool isDraw)
         {
-
+            string msg = $"玩家 {playerIndex} ({playerName}) ：" + (isDraw ? "抽一張牌" : "我是一個好人");
+            netCanvas.tempMenu.InitCustomMenu(
+                new List<string>(){
+                    msg
+                },
+                new List<UnityEngine.Events.UnityAction>(){
+                    ()=>{
+                        if(isDraw)
+                            CmdDrawCard(1);
+                        CmdAddLog(
+                            msg,
+                            true,
+                            false,
+                            new int[]{}
+                        );
+                    }
+                }
+            );
         }
 
         public void UseSkill(int index)
@@ -724,6 +741,12 @@ namespace TBL
         #endregion
 
         #region LOG
+        [Command]
+        public void CmdAddLog(string message, bool isServer, bool isPrivate, int[] targetPlayers)
+        {
+            RpcAddLog(message, isServer, isPrivate, targetPlayers);
+        }
+
         [ClientRpc]
         public void RpcAddLog(string message, bool isServer, bool isPrivate, int[] targetPlayers)
         {
