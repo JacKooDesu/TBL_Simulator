@@ -85,6 +85,10 @@ namespace TBL
             }
         }
 
+        public void CardToTop(int id)
+        {
+            cards.Insert(0, (CardSetting)id);
+        }
     }
 }
 

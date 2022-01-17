@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace TBL.UI
+namespace TBL.UI.LogSystem
 {
     public class LogGeneral
     {
@@ -91,6 +91,45 @@ namespace TBL.UI
                 false,
                 new int[0]
             );
+        }
+    }
+
+    public class RichTextGeneral
+    {
+        public static string red
+        {
+            get
+            {
+                return RichTextHelper.TextWithStyles(
+                    "紅色",
+                    new RichTextHelper.Setting<Color>(RichTextHelper.Style.Color, new Color(.75f, .15f, .15f)),
+                    new RichTextHelper.SettingBase(RichTextHelper.Style.Bold)
+                );
+            }
+        }
+
+        public static string blue
+        {
+            get
+            {
+                return RichTextHelper.TextWithStyles(
+                    "藍色",
+                    new RichTextHelper.Setting<Color>(RichTextHelper.Style.Color, new Color(.15f, .15f, .8f)),
+                    new RichTextHelper.SettingBase(RichTextHelper.Style.Bold)
+                );
+            }
+        }
+
+        public static string black
+        {
+            get
+            {
+                return RichTextHelper.TextWithStyles(
+                    "黑色",
+                    new RichTextHelper.Setting<Color>(RichTextHelper.Style.Color, new Color(.4f, .4f, .4f)),
+                    new RichTextHelper.SettingBase(RichTextHelper.Style.Bold)
+                );
+            }
         }
     }
 }

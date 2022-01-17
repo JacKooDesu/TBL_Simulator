@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace TBL.UI
+namespace TBL.UI.LogSystem
 {
     public class LogBase
     {

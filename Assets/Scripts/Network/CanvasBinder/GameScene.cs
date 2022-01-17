@@ -376,7 +376,7 @@ namespace TBL.NetCanvas
 
         public void AddLog(int index)
         {
-            var log = UI.LogBase.logs[index];
+            var log = UI.LogSystem.LogBase.logs[index];
             string prefix = $"[{(log.IsPrivate ? "私人" : "公開")}]";
             prefix = RichTextHelper.TextWithStyles(
                 prefix,
@@ -385,7 +385,7 @@ namespace TBL.NetCanvas
                     new RichTextHelper.Setting<Color>(RichTextHelper.Style.Color, new Color(0f, .6f, 0f)),
                 new RichTextHelper.SettingBase(RichTextHelper.Style.Bold));
 
-            logText.text += $"{prefix} {UI.LogBase.logs[index].Message}\n";
+            logText.text += $"{prefix} {UI.LogSystem.LogBase.logs[index].Message}\n";
 
             logScrollRect.verticalNormalizedPosition = -1;
         }

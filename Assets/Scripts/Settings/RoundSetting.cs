@@ -9,6 +9,7 @@ namespace TBL.Settings
     {
         public float roundTime;     // 輪操作時間
         public float reactionTime;  // 反制發動時間
+        public float heroReactionTime;  // 英雄技能發動等待時間
         public float drawTime;  // 抽牌時間
     }
 }

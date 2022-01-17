@@ -309,7 +309,7 @@ namespace TBL
         {
             if (newStatus == true)
             {
-                manager.RpcLog(UI.LogGeneral.PlayerDead(this), this);
+                manager.RpcLog(UI.LogSystem.LogGeneral.PlayerDead(this), this);
             }
         }
         #endregion
@@ -672,6 +672,12 @@ namespace TBL
         }
 
         [Command]
+        public void CmdCardHToD(int id)     // Hand to Deck
+        {
+            manager.DeckManager.CardToTop(id);
+        }
+
+        [Command]
         public void CmdTestCardAction(CardAction ca)
         {
             // .OnEffect(manager, ca);
@@ -721,8 +727,8 @@ namespace TBL
         [ClientRpc]
         public void RpcAddLog(string message, bool isServer, bool isPrivate, int[] targetPlayers)
         {
-            var log = new UI.LogBase(message, isServer, isPrivate, targetPlayers);
-            UI.LogBase.logs.Add(log);
+            var log = new UI.LogSystem.LogBase(message, isServer, isPrivate, targetPlayers);
+            UI.LogSystem.LogBase.logs.Add(log);
 
             List<int> targetList = new List<int>();
             if (log.TargetPlayers.Length == 0)
@@ -739,25 +745,25 @@ namespace TBL
             }
 
             if (targetList.IndexOf(manager.GetLocalRoomPlayerIndex()) != -1)
-                netCanvas.AddLog(UI.LogBase.logs.Count - 1);
+                netCanvas.AddLog(UI.LogSystem.LogBase.logs.Count - 1);
         }
 
         [TargetRpc]
         public void TargetAddLog(string message, bool isServer, bool isPrivate, int[] targetPlayers, bool canvasLog)
         {
-            var log = new UI.LogBase(message, isServer, isPrivate, targetPlayers);
-            UI.LogBase.logs.Add(log);
+            var log = new UI.LogSystem.LogBase(message, isServer, isPrivate, targetPlayers);
+            UI.LogSystem.LogBase.logs.Add(log);
 
             if (canvasLog)
-                netCanvas.AddLog(UI.LogBase.logs.Count - 1);
+                netCanvas.AddLog(UI.LogSystem.LogBase.logs.Count - 1);
         }
 
         public void AddLog(string message)
         {
-            var log = new UI.LogBase(message, false, true, new int[] { playerIndex });
-            UI.LogBase.logs.Add(log);
+            var log = new UI.LogSystem.LogBase(message, false, true, new int[] { playerIndex });
+            UI.LogSystem.LogBase.logs.Add(log);
 
-            netCanvas.AddLog(UI.LogBase.logs.Count - 1);
+            netCanvas.AddLog(UI.LogSystem.LogBase.logs.Count - 1);
         }
         #endregion
 

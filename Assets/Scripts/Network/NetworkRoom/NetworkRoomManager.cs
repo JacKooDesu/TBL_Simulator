@@ -183,7 +183,7 @@ namespace TBL
                 p.hero.CheckSkill();
         }
 
-        public void TargetLog(UI.LogBase log)
+        public void TargetLog(UI.LogSystem.LogBase log)
         {
             List<int> targetList = new List<int>(); ;
             if (log.TargetPlayers.Length == 0)
@@ -205,7 +205,7 @@ namespace TBL
             }
         }
 
-        public void TargetLogAll(UI.LogBase log)
+        public void TargetLogAll(UI.LogSystem.LogBase log)
         {
             foreach (var p in players)
             {
@@ -213,7 +213,7 @@ namespace TBL
             }
         }
 
-        public void RpcLog(UI.LogBase log, NetworkPlayer player)
+        public void RpcLog(UI.LogSystem.LogBase log, NetworkPlayer player)
         {
             player.RpcAddLog(log.Message, log.IsServer, log.IsPrivate, log.TargetPlayers);
         }
