@@ -50,7 +50,10 @@ namespace TBL.Action
                     log += $"對 玩家 {target.playerIndex} ({target.playerName}) 的 {RichTextHelper.TextWithBold(targetCard.CardName)} ";
                     break;
             }
-            log += $"使用 {RichTextHelper.TextWithBold(card.CardName)}";
+            if (suffix == -1)
+                log += $"用技能發動 {RichTextHelper.TextWithBold(card.CardName)}";
+            else
+                log += $"使用 {RichTextHelper.TextWithBold(card.CardName)}";
 
             return log;
         }

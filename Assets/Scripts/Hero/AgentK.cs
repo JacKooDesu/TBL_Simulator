@@ -21,7 +21,8 @@
                         return false;
 
                     var manager = ((NetworkRoomManager.singleton) as NetworkRoomManager);
-                    return manager.Judgement.currentPhase == NetworkJudgement.Phase.Reacting;
+                    return manager.Judgement.currentPhase == NetworkJudgement.Phase.Reacting &&
+                            manager.Judgement.currentCardAction.cardId == 0;
                 }
             );
 
@@ -68,10 +69,13 @@
 
                     var judgement = ((NetworkRoomManager.singleton) as NetworkRoomManager).Judgement;
 
-                    if (judgement.currentPhase != NetworkJudgement.Phase.Reacting)
+                    if (judgement.currentPhase != NetworkJudgement.Phase.Reacting || judgement.cardActionQueue.Count == 0)
                         return false;
 
-                    if (((Card.CardSetting)judgement.cardActionQueue[judgement.cardActionQueue.Count - 1].cardId).CardType == Card.CardType.Invalidate)
+                    var lastCardAction = judgement.cardActionQueue[judgement.cardActionQueue.Count - 1];
+
+                    if (((Card.CardSetting)lastCardAction.cardId).CardType == Card.CardType.Invalidate &&
+                        lastCardAction.suffix != -1)
                         return true;
 
                     return false;
@@ -86,7 +90,7 @@
 
         protected override void BindSpecialMission()
         {
-            
+
         }
     }
 }

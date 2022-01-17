@@ -144,6 +144,9 @@ namespace TBL
             foreach (NetworkPlayer p in manager.players)
             {
                 p.ResetStatus(0, 0, 0, 0, 0);
+
+                for (int i = 0; i < p.netHeroSkillCanActivate.Count; ++i)
+                    p.CmdSetSkillCanActivate(i, false);
                 // p.isReady = false;
             }
 
@@ -278,7 +281,11 @@ namespace TBL
                     }
 
                     if (currentPhase == Phase.Reacting)
+                    {
                         yield return StartCoroutine(CardEventUpdate());
+                        manager.CheckAllHeroSkill();
+                    }
+
 
                     yield return null;
                 }
@@ -317,6 +324,8 @@ namespace TBL
             }
             cardActionQueue.Add(ca);
 
+            manager.CheckAllHeroSkill();
+
             manager.TargetLogAll(UI.LogSystem.LogGeneral.UseCard(ca));
         }
 
@@ -339,10 +348,16 @@ namespace TBL
                 // 鋼鐵特JK的技能當作識破使用，但又不可被識破，故強制退出迴圈
                 if (((Card.CardSetting)lastAction.cardId).CardType == Card.CardType.Invalidate &&
                     lastAction.suffix == 1)
-                    time = -1;
+                {
+                    timer = 0;
+                    cardActionQueue.Clear();
+                    break;
+                }
 
                 yield return null;
             }
+
+            manager.CheckAllHeroSkill();
 
             cardActionQueue.Reverse();
             // 處理卡片效果
@@ -380,6 +395,8 @@ namespace TBL
             }
 
             ChangePhase(lastPhase);
+
+            manager.CheckAllHeroSkill();
         }
 
         public void PlayerWin(NetworkPlayer p)

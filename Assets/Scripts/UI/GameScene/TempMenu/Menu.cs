@@ -82,6 +82,8 @@ namespace TBL.UI.GameScene
 
         public Menu InitCustomMenu(List<string> options, List<UnityAction> actions)
         {
+            Clear();
+            
             if (options.Count == 0)
                 return null;
 

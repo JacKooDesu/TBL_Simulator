@@ -219,6 +219,7 @@ namespace TBL
 
                 if (options.Count == 0)
                 {
+                    netCanvas.heroSkillData.ClearEvent(UnityEngine.EventSystems.EventTriggerType.PointerClick);
                     netCanvas.heroSkillData.animator.SetTrigger("Return");
                     return;
                 }
@@ -244,12 +245,12 @@ namespace TBL
         {
             hero.isHiding = hiding;
             RpcChangeHeroState(hiding);
-            RpcUpdateHeroUI();
         }
         [ClientRpc]
         public void RpcChangeHeroState(bool hiding)
         {
             hero.isHiding = hiding;
+            RpcUpdateHeroUI();
         }
 
         public TBL.Settings.TeamSetting.Team team;
@@ -399,11 +400,11 @@ namespace TBL
         public void CmdDrawHero()
         {
             //////////////////////////////////////////////////////////////////
-            // if (isLocalPlayer)
-            // {
-            //     heroIndex = 8;
-            //     return;
-            // }
+            if (isLocalPlayer)
+            {
+                heroIndex = 8;
+                return;
+            }
             //////////////////////////////////////////////////////////////////
 
             int rand;
@@ -412,6 +413,7 @@ namespace TBL
                 rand = UnityEngine.Random.Range(0, manager.Judgement.heroList.heros.Count);
             } while (manager.Judgement.hasUsedHeros.IndexOf(rand) != -1);
 
+            manager.Judgement.hasUsedHeros.Add(rand);
             heroIndex = rand;
         }
 
@@ -737,6 +739,7 @@ namespace TBL
         {
             print($"{hero.skills[index].name} 效果發動");
             hero.skills[index].action.Invoke();
+            CmdSetSkillCanActivate(index, false);
         }
         #endregion
 

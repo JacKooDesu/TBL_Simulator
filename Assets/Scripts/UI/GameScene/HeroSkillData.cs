@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace TBL.UI.GameScene
 {
@@ -16,7 +17,7 @@ namespace TBL.UI.GameScene
 
             foreach (var skill in hero.skills)
             {
-                tipStr += $"{skill.name} - {skill.description}\n";
+                tipStr += $"{RichTextHelper.TextWithBold(skill.name)} - {skill.description}\n";
             }
 
             tip.content = tipStr;
@@ -24,11 +25,23 @@ namespace TBL.UI.GameScene
 
         public void BindEvent(System.Action action)
         {
+            var trigger = GetComponent<EventTrigger>();
+
+            ClearEvent(EventTriggerType.PointerClick);
+
             JacDev.Utils.EventBinder.Bind(
-                GetComponent<UnityEngine.EventSystems.EventTrigger>(),
+                trigger,
                 UnityEngine.EventSystems.EventTriggerType.PointerClick,
                 action
             );
+        }
+
+        public void ClearEvent(EventTriggerType type)
+        {
+            var trigger = GetComponent<EventTrigger>();
+
+            if (trigger.triggers.Find((e) => e.eventID == type) != null)
+                trigger.triggers.RemoveAll((e) => e.eventID == type);
         }
     }
 }

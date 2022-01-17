@@ -74,8 +74,7 @@ namespace TBL
                 if (s.checker == null)
                     continue;
 
-                if (s.checker.Invoke())
-                    playerStatus.netHeroSkillCanActivate[i] = true;
+                playerStatus.netHeroSkillCanActivate[i] = s.checker.Invoke();
 
             }
         }
