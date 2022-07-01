@@ -11,9 +11,14 @@ namespace TBL.NetCanvas
     {
         protected NetworkRoomManager manager;
 
-        protected virtual void Start()
+        protected virtual void Awake()
         {
             manager = GameObject.FindObjectOfType<NetworkRoomManager>();
+        }
+
+        protected virtual void Start()
+        {
+
         }
 
         public void BindEvent<T>(T e, UnityAction action) where T : UnityEvent

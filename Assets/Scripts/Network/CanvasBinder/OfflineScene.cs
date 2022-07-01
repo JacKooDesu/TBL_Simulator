@@ -26,27 +26,15 @@ namespace TBL.NetCanvas
 
             base.Start();
 
-            BindEvent(
-                host.onClick,
-                () => manager.StartHost()
-            );
+            host.onClick.AddListener(manager.StartHost);
 
-            BindEvent(
-                client.onClick, () =>
-                {
-                    manager.networkAddress = ip.text;
-                    manager.StartClient();
-                });
+            client.onClick.AddListener(manager.StartClient);
 
-            BindEvent(
-                hostOnly.onClick,
-                () => manager.StartServer()
-            );
+            hostOnly.onClick.AddListener(manager.StartServer);
 
-            nameField.onEndEdit.AddListener((string s) =>
-            {
-                GameUtils.PlayerName = s;
-            });
+            nameField.onEndEdit.AddListener(s => GameUtils.PlayerName = s);
+
+            ip.onValueChanged.AddListener(ip => manager.networkAddress = ip);
         }
     }
 

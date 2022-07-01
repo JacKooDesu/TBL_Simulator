@@ -1425,6 +1425,7 @@ GameObject:
   - component: {fileID: 1168907538}
   - component: {fileID: 1168907537}
   - component: {fileID: 1168907540}
+  - component: {fileID: 1168907541}
   m_Layer: 0
   m_Name: NetworkRoomManager
   m_TagString: Untagged
@@ -1445,12 +1446,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Port: 7777
+  DualMode: 1
   NoDelay: 1
   Interval: 10
+  Timeout: 10000
   FastResend: 2
   CongestionWindow: 0
   SendWindowSize: 4096
   ReceiveWindowSize: 4096
+  MaxRetransmit: 40
+  NonAlloc: 1
+  MaximizeSendReceiveBuffersToOSLimit: 1
+  ReliableMaxMessageSize: 298449
+  UnreliableMaxMessageSize: 1199
   debugLog: 0
   statisticsGUI: 0
   statisticsLog: 0
@@ -1467,20 +1475,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dontDestroyOnLoad: 1
-  PersistNetworkManagerToOfflineScene: 0
   runInBackground: 1
   autoStartServerBuild: 1
   serverTickRate: 30
-  serverBatching: 1
-  serverBatchInterval: 0
   offlineScene: Assets/Scenes/OfflineScene.unity
   onlineScene: Assets/Scenes/RoomScene.unity
   transport: {fileID: 1168907537}
   networkAddress: localhost
   maxConnections: 100
-  disconnectInactiveConnections: 0
-  disconnectInactiveTimeout: 60
-  authenticator: {fileID: 0}
+  authenticator: {fileID: 1168907541}
   playerPrefab: {fileID: 1732745205715259420, guid: bdfca9f78a7b8834facbd2fe7fb8efca,
     type: 3}
   autoCreatePlayer: 1
@@ -1531,9 +1534,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 540f99e443be2fe42a1a8a4f7e4d233d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showGUI: 1
   offsetX: 0
   offsetY: 0
+--- !u!114 &1168907541
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1168907536}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc9d91f13d89507408f92e792ebe1b61, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OnServerAuthenticated:
+    m_PersistentCalls:
+      m_Calls: []
+  OnClientAuthenticated:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1181636467
 GameObject:
   m_ObjectHideFlags: 0

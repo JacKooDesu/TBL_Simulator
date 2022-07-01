@@ -227,7 +227,7 @@ namespace TBL.NetCanvas
             useButton.onClick.AddListener(() =>
             {
                 manager.DeckManager.Deck.GetCardPrototype(selectCard.cardID).OnUse(
-                    manager.GetLocalPlayer(), selectCard.cardID);
+                    manager.LocalPlayer, selectCard.cardID);
             });
         }
 
@@ -259,13 +259,13 @@ namespace TBL.NetCanvas
 
         public void InitPlayerStatus()
         {
-            heroAvatarUI.sprite = manager.GetLocalPlayer().hero.Avatar;
-            heroNameUI.text = manager.GetLocalPlayer().hero.HeroName;
+            heroAvatarUI.sprite = manager.LocalPlayer.hero.Avatar;
+            heroNameUI.text = manager.LocalPlayer.hero.HeroName;
 
-            teamIconUI.sprite = manager.GetLocalPlayer().team.icon;
-            teamNameUI.text = manager.GetLocalPlayer().team.name;
+            teamIconUI.sprite = manager.LocalPlayer.team.icon;
+            teamNameUI.text = manager.LocalPlayer.team.name;
 
-            heroSkillData.Init(manager.GetLocalPlayer().hero);
+            heroSkillData.Init(manager.LocalPlayer.hero);
         }
 
         public void UpdateHandCardList()
@@ -273,7 +273,7 @@ namespace TBL.NetCanvas
             for (int i = cardListUI.childCount - 1; i >= 0; --i)
                 Destroy(cardListUI.GetChild(i).gameObject);
 
-            foreach (int id in manager.GetLocalPlayer().netHandCard)
+            foreach (int id in manager.LocalPlayer.netHandCard)
             {
                 CardSetting tempCard = CardSetting.IDConvertCard(id);
                 UI.GameScene.CardData ui = Instantiate(cardTextPrefab, cardListUI).GetComponent<UI.GameScene.CardData>();
@@ -413,7 +413,7 @@ namespace TBL.NetCanvas
                 switch (manager.Judgement.currentPhase)
                 {
                     case NetworkJudgement.Phase.ChooseToSend:
-                        if (!manager.Judgement.currentRoundHasSendCard && manager.Judgement.currentPlayerIndex == manager.GetLocalPlayer().playerIndex)
+                        if (!manager.Judgement.currentRoundHasSendCard && manager.Judgement.currentPlayerIndex == manager.LocalPlayer.playerIndex)
                         {
                             SetButtonInteractable(send: 1);
                         }
@@ -442,7 +442,7 @@ namespace TBL.NetCanvas
 
                     if (setting.roundHost)
                     {
-                        if (manager.Judgement.currentPlayerIndex != manager.GetLocalPlayer().playerIndex)
+                        if (manager.Judgement.currentPlayerIndex != manager.LocalPlayer.playerIndex)
                             SetButtonInteractable(use: 0);
                         else
                             SetButtonInteractable(use: 1);
@@ -450,7 +450,7 @@ namespace TBL.NetCanvas
 
                     if (setting.sendingHost)
                     {
-                        if (manager.Judgement.currentSendingPlayer != manager.GetLocalPlayer().playerIndex)
+                        if (manager.Judgement.currentSendingPlayer != manager.LocalPlayer.playerIndex)
                             SetButtonInteractable(use: 0);
                         else
                             SetButtonInteractable(use: 1);

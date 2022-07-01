@@ -1,5 +1,12 @@
 {
   "dependencies": {
+    "com.jackoo.utils": {
+      "version": "https://github.com/JacKooDesu/com.jackoo.utils.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "7a0d7e6b71ba23fceab8af0a6b96f821f9990975"
+    },
     "com.unity.2d.animation": {
       "version": "3.2.5",
       "depth": 0,
