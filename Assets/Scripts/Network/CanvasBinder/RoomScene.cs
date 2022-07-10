@@ -20,20 +20,16 @@ namespace TBL.NetCanvas
         {
             base.Start();
 
-            start.interactable = false;
-            ready.interactable = true;
-            cancel.interactable = false;
-
             ready.onClick.AddListener(() => manager.LocalRoomPlayer.CmdChangeReadyState(true));
 
             cancel.onClick.AddListener(() => manager.LocalRoomPlayer.CmdChangeReadyState(false));
-
-            start.onClick.AddListener(() => manager.ServerChangeScene(manager.GameplayScene));
         }
 
         public void UpdatePlayerList()
         {
             print($"更新玩家列表 | 目前玩家數 {manager.roomSlots.Count}");
+            start.interactable = false;
+
             // Clear Prefabs
             for (int i = playerListUiParent.childCount - 1; i >= 0; --i)
                 Destroy(playerListUiParent.GetChild(i).gameObject);
@@ -44,37 +40,15 @@ namespace TBL.NetCanvas
                 var pObject = Instantiate(playerUiPrefab, playerListUiParent);
                 pObject.GetComponentInChildren<Text>().text = player.playerName;
                 pObject.transform.Find("Ready").GetComponent<Image>().color = p.readyToBegin ? Color.green : Color.red;
+
+                if (p.isServer)
+                {
+                    start.onClick.RemoveAllListeners();
+                    start.onClick.AddListener(() => manager.ServerChangeScene(manager.GameplayScene));
+                    start.interactable = true;
+                }
             }
         }
-
-        // private void Update()
-        // {
-        //     if (localPlayer == null)
-        //     {
-        //         foreach (NetworkRoomPlayer nrp in manager.roomSlots)
-        //         {
-        //             if (nrp.isLocalPlayer)
-        //             {
-        //                 localPlayer = nrp;
-        //                 Debug.Log(localPlayer.name);
-        //             }
-        //         }
-        //     }
-        //     else
-        //     {
-        //         if (manager.showStartButton)
-        //             start.interactable = true;
-
-        //         cancel.interactable = localPlayer.readyToBegin;
-        //         ready.interactable = !localPlayer.readyToBegin;
-
-        //         if (!localPlayer.isServer)
-        //             return;
-
-        //         start.interactable = manager.allPlayersReady;
-        //     }
-
-        // }
     }
 
 }

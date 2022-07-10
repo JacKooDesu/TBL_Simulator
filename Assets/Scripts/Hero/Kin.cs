@@ -10,7 +10,7 @@ namespace TBL
         {
             var skill1 = new HeroSkill(
                 "棄卒保帥",
-                $"當你的卡牌被另一位玩家 {RichTextHelper.TextWithBold("識破") } 時，可以翻開此角色牌，抽六張牌，選擇兩張按照任意順序放回牌庫頂。",
+                $"當你的卡牌被另一位玩家 {RichTextHelper.TextWithBold("識破")} 時，可以翻開此角色牌，抽六張牌，選擇兩張按照任意順序放回牌庫頂。",
                 false,
                 () =>
                 {
@@ -20,7 +20,7 @@ namespace TBL
                     List<int> cardList = new List<int>();
                     for (int i = 0; i < 6; ++i)
                     {
-                        cardList.Add(playerStatus.netHandCard[playerStatus.netHandCard.Count - 1 - i]);
+                        cardList.Add(playerStatus.netHandCards[playerStatus.netHandCards.Count - 1 - i]);
                     }
 
                     ChooseCardToDeck(cardList);
@@ -71,7 +71,7 @@ namespace TBL
                 },
                 () =>
                 {
-                    if (playerStatus.netHandCard.Count <= 1 || playerStatus.GetHandCardColorCount(Card.CardColor.Black) == 0)
+                    if (playerStatus.netHandCards.Count <= 1 || playerStatus.GetHandCardColorCount(Card.CardColor.Black) == 0)
                         return false;
 
                     var manager = ((NetworkRoomManager.singleton) as NetworkRoomManager);
@@ -120,12 +120,12 @@ namespace TBL
 
             bool hasSelect = false;
 
-            System.Action selectCard = () => netCanvas.tempMenu.InitCardMenu(
+            System.Action selectCard = () => netCanvas.ShowCardMenu(
                 cardList,
-                (index) =>
+                (id) =>
                 {
-                    playerStatus.CmdCardHToD(cardList[index]);
-                    cardList.RemoveAt(index);
+                    playerStatus.CmdCardHToD(id);
+                    cardList.Remove(id);
                 }
             );
 

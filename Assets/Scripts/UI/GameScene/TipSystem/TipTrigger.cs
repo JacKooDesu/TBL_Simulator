@@ -13,7 +13,7 @@ namespace TBL.UI.GameScene
 
         public void OnPointerEnter(PointerEventData eventData)
         {
-            print(content);
+            // print(content);
             TipCanvas.Singleton.Show(content);
         }
 

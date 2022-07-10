@@ -34,7 +34,7 @@ namespace TBL
 
         [Header("NetLists")]
         #region  NetHandCard
-        public SyncList<int> netHandCard = new SyncList<int>();
+        public SyncList<int> netHandCards = new SyncList<int>();
         // net hand card callback
         public void OnUpdateHandCard(SyncList<int>.Operation op, int index, int oldItem, int newItem)
         {
@@ -48,7 +48,7 @@ namespace TBL
                         netCanvas.UpdateHandCardList();
                     }
 
-                    netCanvas.playerUIs[manager.GetPlayerSlotIndex(this)].handCardCount.text = netHandCard.Count.ToString();
+                    netCanvas.playerUIs[manager.GetPlayerSlotIndex(this)].handCardCount.text = netHandCards.Count.ToString();
                     break;
                 case SyncList<int>.Operation.OP_CLEAR:
                     if (isLocalPlayer)
@@ -56,7 +56,7 @@ namespace TBL
                         netCanvas.UpdateHandCardList();
                     }
 
-                    netCanvas.playerUIs[manager.GetPlayerSlotIndex(this)].handCardCount.text = netHandCard.Count.ToString();
+                    netCanvas.playerUIs[manager.GetPlayerSlotIndex(this)].handCardCount.text = netHandCards.Count.ToString();
                     // list got cleared
                     break;
                 case SyncList<int>.Operation.OP_INSERT:
@@ -71,7 +71,7 @@ namespace TBL
                         netCanvas.UpdateHandCardList();
                     }
 
-                    netCanvas.playerUIs[manager.GetPlayerSlotIndex(this)].handCardCount.text = netHandCard.Count.ToString();
+                    netCanvas.playerUIs[manager.GetPlayerSlotIndex(this)].handCardCount.text = netHandCards.Count.ToString();
                     break;
                 case SyncList<int>.Operation.OP_SET:
                     // index is the index of the item that was updated
@@ -85,18 +85,18 @@ namespace TBL
         public void CmdAddHandCard(int id)
         {
             print($"手牌新增 {id}");
-            netHandCard.Add((int)id);
+            netHandCards.Add((int)id);
         }
         public void AddHandCard(int id)
         {
             print($"手牌新增 {id}");
-            netHandCard.Add((int)id);
+            netHandCards.Add((int)id);
         }
 
         public int GetHandCardColorCount(CardColor color)
         {
             int result = 0;
-            foreach (var c in netHandCard)
+            foreach (var c in netHandCards)
             {
                 if (((CardSetting)c).CardColor == color)
                     result++;
@@ -108,7 +108,7 @@ namespace TBL
         public int GetHandCardTypeCount(CardType cardType)
         {
             int result = 0;
-            foreach (var c in netHandCard)
+            foreach (var c in netHandCards)
             {
                 if (((CardSetting)c).CardType == cardType)
                     result++;
@@ -120,7 +120,7 @@ namespace TBL
         public int GetHandCardSendTypeCount(CardSendType sendType)
         {
             int result = 0;
-            foreach (var c in netHandCard)
+            foreach (var c in netHandCards)
             {
                 if (((CardSetting)c).SendType == sendType)
                     result++;
@@ -325,7 +325,7 @@ namespace TBL
             // if (isServer)
             manager.players.Add(this);
 
-            netHandCard.Callback += OnUpdateHandCard;
+            netHandCards.Callback += OnUpdateHandCard;
             netCards.Callback += OnUpdateCard;
 
             if (isLocalPlayer)
@@ -366,7 +366,7 @@ namespace TBL
         {
             for (int i = 0; i < amount; ++i)
             {
-                netHandCard.Add(manager.DeckManager.DrawCardFromTop().ID);
+                netHandCards.Add(manager.DeckManager.DrawCardFromTop().ID);
             }
 
             // if (manager.Judgement.currentRoundPlayerIndex == playerIndex)
@@ -378,7 +378,7 @@ namespace TBL
         {
             for (int i = 0; i < amount; ++i)
             {
-                netHandCard.Add(manager.DeckManager.DrawCardFromTop().ID);
+                netHandCards.Add(manager.DeckManager.DrawCardFromTop().ID);
             }
 
             if (manager.Judgement.currentPlayerIndex == playerIndex)
@@ -551,11 +551,11 @@ namespace TBL
         [Command]
         public void CmdSendCard(int to, int id)
         {
-            netHandCard.Remove(id);
+            netHandCards.Remove(id);
 
             List<NetworkPlayer> queue = new List<NetworkPlayer>();
 
-            if (CardSetting.IDConvertCard(id).SendType == CardSendType.Direct)
+            if (CardSetting.IdToCard(id).SendType == CardSendType.Direct)
             {
                 queue.Add(manager.players[to]);
             }
@@ -641,23 +641,23 @@ namespace TBL
         [Command]
         public void CmdCardHToH(int id, int target)     // Hand To Hand
         {
-            print($"玩家 {playerIndex} 給予 玩家 {target} - {Card.CardSetting.IDConvertCard(id).name}");
-            netHandCard.Remove((int)id);
+            print($"玩家 {playerIndex} 給予 玩家 {target} - {Card.CardSetting.IdToCard(id).name}");
+            netHandCards.Remove((int)id);
             manager.players[target].AddHandCard(id);
         }
 
         [Command]
         public void CmdCardHToT(int id, int target)     // Hand to Table
         {
-            print($"玩家 {playerIndex} 給予 玩家 {target} - {Card.CardSetting.IDConvertCard(id).name}");
-            netHandCard.Remove((int)id);
+            print($"玩家 {playerIndex} 給予 玩家 {target} - {Card.CardSetting.IdToCard(id).name}");
+            netHandCards.Remove((int)id);
             manager.players[target].AddCard(id);
         }
 
         [Command]
         public void CmdCardHToG(int id) // Hand To Graveyard
         {
-            netHandCard.Remove((int)id);
+            netHandCards.Remove((int)id);
         }
 
         [Command]
@@ -670,7 +670,7 @@ namespace TBL
         public void CmdCardTToH(int player, int id)  // Table to Hand
         {
             manager.players[player].netCards.Remove(id);
-            manager.players[player].netHandCard.Add(id);
+            manager.players[player].netHandCards.Add(id);
         }
 
         [Command]
@@ -683,9 +683,9 @@ namespace TBL
         public void CmdTestCardAction(CardAction ca)
         {
             // .OnEffect(manager, ca);
-            netHandCard.Remove(ca.originCardId);
+            netHandCards.Remove(ca.originCardId);
             manager.Judgement.AddCardAction(ca);
-            print($"玩家({ca.user}) 對 玩家({ca.target}) 使用 {CardSetting.IDConvertCard(ca.cardId).GetCardNameFully()}");
+            print($"玩家({ca.user}) 對 玩家({ca.target}) 使用 {CardSetting.IdToCard(ca.cardId).GetCardNameFully()}");
         }
 
         public void CheckWin()

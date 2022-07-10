@@ -83,6 +83,7 @@ namespace TBL
                                 }
                             );
                         },
+                        null,
                         new List<Card.CardSendType>() { Card.CardSendType.Secret }
                     );
                 },

@@ -2,20 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace TBL.UI.GameScene
+public class Option
 {
-    public class Option : MonoBehaviour
-    {
-        // Start is called before the first frame update
-        void Start()
-        {
-            
-        }
+    public string str;
+    public System.Action onSelect;
+    public OptionType type;
+}
 
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
-    }
+public enum OptionType
+{
+    CARD,
+    COLOR,
+    PLAYER,
+    HERO
 }

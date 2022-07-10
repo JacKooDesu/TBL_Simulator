@@ -57,7 +57,7 @@ namespace TBL.UI.GameScene
             int blue = 0, red = 0, black = 0;
             foreach (int id in player.netCards)
             {
-                CardSetting card = CardSetting.IDConvertCard((ushort)id);
+                CardSetting card = CardSetting.IdToCard((ushort)id);
 
                 switch (card.CardColor)
                 {
@@ -82,7 +82,7 @@ namespace TBL.UI.GameScene
             redCount.text = red.ToString();
             blackCount.text = black.ToString();
 
-            handCardCount.text = player.netHandCard.Count.ToString();
+            handCardCount.text = player.netHandCards.Count.ToString();
 
             lockBg.color = player.isLocked ? activeColor : inactiveColor;
             skipBg.color = player.isSkipped ? activeColor : inactiveColor;

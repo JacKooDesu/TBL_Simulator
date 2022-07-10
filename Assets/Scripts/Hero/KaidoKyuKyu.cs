@@ -18,7 +18,7 @@ namespace TBL
                     List<int> playerList = new List<int>();
                     foreach (var p in manager.players)
                     {
-                        if (p.netHandCard.Count > 0)
+                        if (p.netHandCards.Count > 0)
                             playerList.Add(p.playerIndex);
                     }
 
@@ -53,21 +53,13 @@ namespace TBL
                     List<int> playerList = new List<int>();
                     foreach (var p in manager.players)
                     {
-                        if (p.netHandCard.Count > 0)
+                        if (p.netHandCards.Count > 0)
                             playerList.Add(p.playerIndex);
                     }
 
-                    netCanvas.BindSelectPlayer(playerList, (index) =>
-                    {
-                        netCanvas.ShowPlayerHandCard(index, (c) => DrawTargetCard(index)).AddCustomOption(
-                            "確認完畢",
-                            () =>
-                            {
-                                DrawTargetCard(index);
-                                netCanvas.tempMenu.Clear();
-                            }
-                        );
-                    });
+                    netCanvas.BindSelectPlayer(
+                        playerList,
+                        (index) => netCanvas.ShowPlayerHandCard(index, (c) => DrawTargetCard(index)));
                 },
                 () =>
                 {
@@ -123,7 +115,7 @@ namespace TBL
                 "獲得十張或以上手牌。",
                 () =>
                 {
-                    return playerStatus.netHandCard.Count >= 10;
+                    return playerStatus.netHandCards.Count >= 10;
                 }
             );
         }
@@ -136,10 +128,10 @@ namespace TBL
             List<string> cardList = new List<string>();
             List<UnityEngine.Events.UnityAction> actions = new List<UnityEngine.Events.UnityAction>();
             var player = manager.players[index];
-            for (int i = 0; i < player.netHandCard.Count; ++i)
+            for (int i = 0; i < player.netHandCards.Count; ++i)
             {
                 int x = i;
-                int card = player.netHandCard[i];
+                int card = player.netHandCards[i];
                 cardList.Add("卡牌");
                 actions.Add(() => player.CmdCardHToH(card, playerStatus.playerIndex));
             }

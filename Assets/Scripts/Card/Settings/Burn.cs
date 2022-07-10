@@ -19,7 +19,7 @@ namespace TBL.Card
                 bool hasBlack = false;
                 foreach (int i in p.netCards)
                 {
-                    if (CardSetting.IDConvertCard(i).CardColor == CardColor.Black)
+                    if (CardSetting.IdToCard(i).CardColor == CardColor.Black)
                     {
                         hasBlack = true;
                         break;

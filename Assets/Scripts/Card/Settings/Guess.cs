@@ -13,7 +13,7 @@ namespace TBL.Card
             NetworkRoomManager manager = NetworkRoomManager.singleton as NetworkRoomManager;
             NetCanvas.GameScene netCanvas = FindObjectOfType<NetCanvas.GameScene>();
 
-            netCanvas.AskColorCard(
+            netCanvas.ShowColorMenu(
                 (j) => user.CmdTestCardAction(new CardAction(user.playerIndex, user.playerIndex, ID, originID, j)),
                 new List<CardColor> { CardColor.Red, CardColor.Blue, CardColor.Black }
             );
@@ -23,7 +23,7 @@ namespace TBL.Card
         {
             base.OnEffect(manager, ca);
 
-            if ((CardColor)ca.suffix == CardSetting.IDConvertCard(manager.Judgement.currentRoundSendingCardId).CardColor)
+            if ((CardColor)ca.suffix == CardSetting.IdToCard(manager.Judgement.currentRoundSendingCardId).CardColor)
             {
                 manager.players[ca.user].DrawCard(1);
             }

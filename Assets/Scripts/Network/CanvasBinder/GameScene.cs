@@ -6,12 +6,13 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.Events;
 using Mirror;
-using TBL.Card;
 
 
 namespace TBL.NetCanvas
 {
-    public class GameScene : NetCanvasBinderBase
+    using Card;
+
+    public partial class GameScene : NetCanvasBinderBase
     {
         #region PLAYER_MAPPING
         [SerializeField]
@@ -58,7 +59,7 @@ namespace TBL.NetCanvas
             // sendButton.gameObject.SetActive(false);
 
             List<int> sendList = new List<int>();
-            if (CardSetting.IDConvertCard(selectCard.cardID).SendType == CardSendType.Direct)
+            if (CardSetting.IdToCard(selectCard.cardID).SendType == CardSendType.Direct)
             {
                 sendList.AddRange(manager.GetOtherPlayers());
             }
@@ -119,64 +120,6 @@ namespace TBL.NetCanvas
             {
                 pUI.GetComponent<EventTrigger>().triggers.Clear();
             }
-        }
-        #endregion
-
-        #region CHAT
-        [Header("聊天室")]
-        [SerializeField]
-        InputField chatInput;
-        InputFieldSubmit chatSubmit;
-        [SerializeField]
-        ScrollRect chatScroll;
-        [SerializeField]
-        Text chatHistory;
-        void InitChatWindow()
-        {
-            chatSubmit = chatInput.GetComponent<InputFieldSubmit>();
-            NetworkPlayer.OnChatMessage += OnPlayerChatMessage;
-            chatSubmit.onSubmit.AddListener(OnChatMessageSubmit);
-        }
-
-        // Submit event
-        public void OnChatMessageSubmit(string s)
-        {
-            if (chatInput.text.Trim() == "")
-                return;
-
-            print("send");
-
-            NetworkPlayer player = NetworkClient.connection.identity.GetComponent<NetworkPlayer>();
-
-            if (player.isServer && s[0] == '/')
-                Command.CommandManager.CheckCommand(s.Remove(0, 1));
-
-            player.CmdChatMessage(chatInput.text.Trim());
-
-            chatInput.text = "";
-        }
-
-        // On message evnet
-        void OnPlayerChatMessage(NetworkPlayer player, string message)
-        {
-            string prettyMessage = player.isLocalPlayer ?
-                $"<color=red>{player.playerName}: </color> {message}" :
-                $"<color=blue>{player.playerName}: </color> {message}";
-
-            StartCoroutine(AppendAndScroll(prettyMessage));
-        }
-
-        // Add message
-        IEnumerator AppendAndScroll(string s)
-        {
-            chatHistory.text += s + "\n";
-
-            // it takes 2 frames for the UI to update ?!?!
-            yield return null;
-            yield return null;
-
-            // slam the scrollbar down
-            chatScroll.verticalScrollbar.value = 0;
         }
         #endregion
 
@@ -273,9 +216,9 @@ namespace TBL.NetCanvas
             for (int i = cardListUI.childCount - 1; i >= 0; --i)
                 Destroy(cardListUI.GetChild(i).gameObject);
 
-            foreach (int id in manager.LocalPlayer.netHandCard)
+            foreach (int id in manager.LocalPlayer.netHandCards)
             {
-                CardSetting tempCard = CardSetting.IDConvertCard(id);
+                CardSetting tempCard = CardSetting.IdToCard(id);
                 UI.GameScene.CardData ui = Instantiate(cardTextPrefab, cardListUI).GetComponent<UI.GameScene.CardData>();
                 ui.SetUI(tempCard);
             }
@@ -286,79 +229,6 @@ namespace TBL.NetCanvas
         [Header("說明欄位")]
         [SerializeField] Text tipTextUI;
 
-        #endregion
-
-        #region TEMP_MENU
-        [Header("暫存選單")]
-        public UI.GameScene.Menu tempMenu;
-
-        public UI.GameScene.Menu ShowPlayerCard(int index, UnityAction<int> action, List<CardColor> requestColor = null)
-        {
-            if (requestColor == null)
-                requestColor = new List<CardColor> { CardColor.Black, CardColor.Red, CardColor.Blue };
-
-            List<int> cardIdList = new List<int>();
-
-            foreach (int i in manager.players[index].netCards)
-            {
-                if (requestColor.IndexOf(CardSetting.IDConvertCard(i).CardColor) != -1)
-                {
-                    cardIdList.Add(i);
-                }
-            }
-            return tempMenu.InitCardMenu(cardIdList, action);
-        }
-
-        public UI.GameScene.Menu ShowPlayerHandCard(int index, UnityAction<int> action)
-        {
-            List<int> cardIdList = new List<int>();
-
-            foreach (int i in manager.players[index].netHandCard)
-            {
-                int x = i;
-                cardIdList.Add(x);
-            }
-            return tempMenu.InitCardMenu(cardIdList, action);
-        }
-
-        public UI.GameScene.Menu ShowPlayerHandCard(int index, UnityAction<int> action, List<CardColor> requestColor = null)
-        {
-            if (requestColor == null)
-                requestColor = new List<CardColor> { CardColor.Black, CardColor.Red, CardColor.Blue };
-
-            List<int> cardIdList = new List<int>();
-
-            foreach (int i in manager.players[index].netHandCard)
-            {
-                if (requestColor.IndexOf(CardSetting.IDConvertCard(i).CardColor) != -1)
-                {
-                    cardIdList.Add(i);
-                }
-            }
-            return tempMenu.InitCardMenu(cardIdList, action);
-        }
-
-        public UI.GameScene.Menu ShowPlayerHandCard(int index, UnityAction<int> action, List<CardSendType> requestSendType = null)
-        {
-            if (requestSendType == null)
-                requestSendType = new List<CardSendType> { CardSendType.Direct, CardSendType.Secret, CardSendType.Public };
-
-            List<int> cardIdList = new List<int>();
-
-            foreach (int i in manager.players[index].netHandCard)
-            {
-                if (requestSendType.IndexOf(((CardSetting)i).SendType) != -1)
-                {
-                    cardIdList.Add(i);
-                }
-            }
-            return tempMenu.InitCardMenu(cardIdList, action);
-        }
-
-        public UI.GameScene.Menu AskColorCard(UnityAction<int> action, List<CardColor> requestColor)
-        {
-            return tempMenu.InitColorMenu(requestColor, action);
-        }
         #endregion
 
         public Text timeTextUI;

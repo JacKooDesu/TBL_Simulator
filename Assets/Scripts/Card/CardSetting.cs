@@ -180,21 +180,9 @@ namespace TBL.Card
             }
 
         }
-
         public string ColorText
         {
-            get
-            {
-                switch (cardColor)
-                {
-                    case CardColor.Black: return "(黑)";
-                    case CardColor.Red: return "(紅)";
-                    case CardColor.Blue: return "(藍)";
-                }
-
-                Debug.Log("MISSING CARD COLOR");
-                return "MISSING CARD COLOR";
-            }
+            get => $"({ColorToString(cardColor)})";
         }
 
         public string GetCardNameFully()
@@ -204,7 +192,7 @@ namespace TBL.Card
 
         static GameObject tempCard;
 
-        public static CardSetting IDConvertCard(int id)
+        public static CardSetting IdToCard(int id)
         {
             if (tempCard == null)
             {
@@ -216,7 +204,7 @@ namespace TBL.Card
             return c;
         }
 
-        public static CardSetting IDConvertCardAsObject(int id)
+        public static CardSetting IdToCardAsObject(int id)
         {
             CardSetting c = new CardSetting();
             c.ID = id;
@@ -225,7 +213,20 @@ namespace TBL.Card
 
         public static explicit operator CardSetting(int id)
         {
-            return IDConvertCardAsObject(id);
+            return IdToCardAsObject(id);
+        }
+
+        public static string ColorToString(CardColor cardColor)
+        {
+            switch (cardColor)
+            {
+                case CardColor.Black: return "黑";
+                case CardColor.Red: return "紅";
+                case CardColor.Blue: return "藍";
+            }
+
+            Debug.LogWarning("CARD COLOR CONVERT : Missing card color");
+            return " ";
         }
 
         public virtual void OnUse(NetworkPlayer user, int originID)

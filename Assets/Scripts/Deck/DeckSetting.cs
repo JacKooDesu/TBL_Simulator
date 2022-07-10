@@ -58,7 +58,7 @@ namespace TBL
         public List<CardConfig.PhaseSetting> GetCardPhaseSetting(int id)
         {
             List<CardConfig.PhaseSetting> setting = new List<CardConfig.PhaseSetting>();
-            CardSetting cs = CardSetting.IDConvertCard(id);
+            CardSetting cs = CardSetting.IdToCard(id);
             foreach (CardConfig config in cardConfigs)
             {
                 if (config.Card.CardType == cs.CardType)
@@ -72,7 +72,7 @@ namespace TBL
 
         public CardSetting GetCardPrototype(int id)
         {
-            CardSetting card = CardSetting.IDConvertCard(id);
+            CardSetting card = CardSetting.IdToCard(id);
             foreach (CardConfig config in cardConfigs)
             {
                 if (config.Card.CardType == card.CardType)

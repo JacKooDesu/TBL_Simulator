@@ -44,6 +44,7 @@
     "com.unity.modules.vr": "1.0.0",
     "com.unity.modules.wind": "1.0.0",
     "com.unity.modules.xr": "1.0.0",
-    "com.jackoo.utils": "https://github.com/JacKooDesu/com.jackoo.utils.git"
+    "com.jackoo.utils": "https://github.com/JacKooDesu/com.jackoo.utils.git",
+    "com.veriorpies.parrelsync": "https://github.com/VeriorPies/ParrelSync.git?path=/ParrelSync"
   }
 }
