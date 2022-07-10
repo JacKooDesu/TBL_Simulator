@@ -11,7 +11,7 @@ namespace TBL
     public partial class NetworkPlayer : NetworkBehaviour
     {
         [SyncVar]
-        public int playerIndex = 0;
+        public int playerIndex;
 
         [SyncVar(hook = nameof(OnPlayerNameChange))]
         public string playerName;
@@ -185,6 +185,8 @@ namespace TBL
             netCanvas = FindObjectOfType<TBL.NetCanvas.GameScene>();
             manager = ((NetworkRoomManager)NetworkManager.singleton);
 
+            playerIndex = Int32.MaxValue;
+
             manager.players.Add(this);
         }
 
@@ -208,7 +210,11 @@ namespace TBL
             CmdSetName();
 
             yield return new WaitUntil(() => manager.players.Count == manager.roomSlots.Count);
+            yield return new WaitUntil(() => manager.players.Find(p => p.playerIndex == Int32.MaxValue) == null);
+
+            manager.SortPlayers();
             netCanvas.InitPlayerMapping();
+
             yield return null;
             CmdSetReady(true);
         }
