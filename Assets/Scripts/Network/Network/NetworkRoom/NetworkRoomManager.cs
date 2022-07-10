@@ -39,7 +39,7 @@ namespace TBL
         public TeamSetting teamSetting; // 隊伍圖像、名稱
 
 
-        public List<TBL.Settings.TeamSetting.Team> teamList = new List<TeamSetting.Team>();
+        public List<int> teamList = new List<int>();
 
         public override void OnRoomServerPlayersReady()
         {
@@ -83,7 +83,16 @@ namespace TBL
             // }
         }
 
-        #region  Net Player Getter
+        #region  Net Player
+        public void SortPlayers()
+        {
+            var tempPlayers = new NetworkPlayer[players.Count];
+            foreach (var p in players)
+                tempPlayers[p.playerIndex] = p;
+
+            players = new List<NetworkPlayer>(tempPlayers);
+        }
+
         public NetworkPlayer LocalPlayer
         {
             get => players.Find(p => p.isLocalPlayer);
@@ -154,15 +163,7 @@ namespace TBL
         }
         public int LocalRoomPlayerIndex
         {
-            get => roomSlots.FindIndex(p => p.isLocalPlayer);
-            // foreach (NetworkRoomPlayer p in roomSlots)
-            // {
-            //     // print(p.netId);
-            //     if (p.isLocalPlayer)
-            //         return p.index;
-            // }
-
-            // return 0;
+            get => roomSlots.FindIndex(p => p.hasAuthority);
         }
         #endregion
 
@@ -175,16 +176,16 @@ namespace TBL
                     continue;
 
                 for (int i = 0; i < setting.Blue; ++i)
-                    teamList.Add(teamSetting.BlueTeam);
+                    teamList.Add(((int)TeamSetting.TeamEnum.Blue));
 
                 for (int i = 0; i < setting.Red; ++i)
-                    teamList.Add(teamSetting.RedTeam);
+                    teamList.Add(((int)TeamSetting.TeamEnum.Red));
 
                 for (int i = 0; i < setting.Green; ++i)
-                    teamList.Add(teamSetting.GreenTeam);
+                    teamList.Add(((int)TeamSetting.TeamEnum.Green));
             }
 
-            GameUtils.Shuffle<TBL.Settings.TeamSetting.Team>(ref teamList);
+            GameUtils.Shuffle<int>(ref teamList);
         }
 
         public void CheckAllHeroSkill()
@@ -252,7 +253,7 @@ namespace TBL
             int iter = 0;
             foreach (var p in players)
             {
-                if (p.team.team == team)
+                if (p.Team.team == team)
                     iter++;
             }
             return iter;

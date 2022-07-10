@@ -54,6 +54,9 @@ namespace TBL.UI.GameScene
 
         public void UpdateStatus()
         {
+            if (player == null)
+                return;
+                
             int blue = 0, red = 0, black = 0;
             foreach (int id in player.netCards)
             {

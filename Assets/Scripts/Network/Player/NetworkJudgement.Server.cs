@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 namespace TBL
 {
+    using UI.LogSystem;
     public partial class NetworkJudgement : NetworkBehaviour
     {
         public List<NetworkPlayer> cardSendQueue = new List<NetworkPlayer>();
@@ -14,56 +15,24 @@ namespace TBL
         public List<Action.CardAction> cardActionQueue = new List<Action.CardAction>();
         [SyncVar] public Action.CardAction currentCardAction;   // 用於檢查技能發動
 
-        private void Start()
-        {
-            netCanvas = FindObjectOfType<TBL.NetCanvas.GameScene>();
-            manager = ((NetworkRoomManager)NetworkManager.singleton);
-
-            StartCoroutine(WaitAllPlayerInit());
-        }
-
         IEnumerator WaitAllPlayerInit()
         {
-            while (true)
-            {
-                int i = 0;
-                foreach (NetworkPlayer p in manager.players)
-                {
-                    if (p.isReady)
-                        ++i;
-                }
+            yield return new WaitUntil(
+                () => manager.players.Find(player => !player.isReady) == null);
 
-                if (i == manager.roomSlots.Count)
-                    break;
-                else
-                    yield return null;
-            }
+            InitPlayer();
 
-            // 排序
-            NetworkPlayer tempPlayer;
+            StartNewRound(UnityEngine.Random.Range(0, manager.players.Count));
+        }
 
-            for (int i = 0; i < manager.players.Count; ++i)
-            {
-                for (int j = 0; j < manager.players.Count - 1; ++j)
-                {
-                    if (manager.players[j].playerIndex > manager.players[j + 1].playerIndex)
-                    {
-                        tempPlayer = manager.players[j];
-                        manager.players[j] = manager.players[j + 1];
-                        manager.players[j + 1] = tempPlayer;
-                    }
-                }
-            }
-
-            netCanvas.InitPlayerMapping();
-
+        void InitPlayer()
+        {
             foreach (NetworkPlayer p in manager.players)
             {
-                p.InitPlayer();
+                p.DrawTeam();
+                p.DrawHero();
+                p.DrawCard(3);
             }
-
-            if (isServer)
-                StartNewRound(UnityEngine.Random.Range(0, manager.players.Count));
         }
 
         void StartNewRound(int index)
@@ -82,19 +51,18 @@ namespace TBL
 
                 for (int i = 0; i < p.netHeroSkillCanActivate.Count; ++i)
                     p.CmdSetSkillCanActivate(i, false);
-                // p.isReady = false;
             }
 
             if (currentPhase == Phase.Result)
                 return;
 
             var player = manager.players[currentPlayerIndex];
-            manager.RpcLog(UI.LogSystem.LogGeneral.RoundStart(player), player);
+            manager.RpcLog(LogGeneral.RoundStart(player), player);
 
             StartCoroutine(RoundUpdate());
         }
 
-        IEnumerator WaitDraw()
+        IEnumerator WaitDraw(int amount)
         {
             ChangePhase(Phase.Draw);
 
@@ -112,19 +80,17 @@ namespace TBL
 
                 yield return null;
             }
-            if (!manager.players[currentPlayerIndex].hasDraw)
-            {
-                manager.players[currentPlayerIndex].DrawCard(2);
-            }
+
+            manager.players[currentPlayerIndex].DrawCard(amount);
         }
 
         IEnumerator RoundUpdate()
         {
             var player = manager.players[currentPlayerIndex];
-            player.RpcUpdateHostPlayer();
+            player.RpcUpdateRoundHost();
 
             player.TargetDrawStart();
-            yield return StartCoroutine(WaitDraw());
+            yield return StartCoroutine(WaitDraw(2));
 
             ChangePhase(Phase.ChooseToSend);
 

@@ -8,7 +8,7 @@ using System;
 
 namespace TBL
 {
-    public class NetworkPlayer : NetworkBehaviour
+    public partial class NetworkPlayer : NetworkBehaviour
     {
         [SyncVar]
         public int playerIndex = 0;
@@ -253,106 +253,67 @@ namespace TBL
             RpcUpdateHeroUI();
         }
 
-        public TBL.Settings.TeamSetting.Team team;
-
-
-        #region STATUS
-        [Header("狀態")]
-        [SyncVar] public bool isReady;
-        [Command] public void CmdSetReady(bool b) { isReady = b; }
-        // [SyncVar] public bool isReadyLast;
-
-        [SyncVar(hook = nameof(OnLockStatusChange))] public bool isLocked;
-        void OnLockStatusChange(bool oldStatus, bool newStatus) { netCanvas.playerUIs[playerIndex].UpdateStatus(); }
-        [Command] public void CmdSetLocked(bool b) { isLocked = b; }
-        // [SyncVar] public bool isLockedLast;
-        [SyncVar(hook = nameof(OnSkipStatusChange))] public bool isSkipped;
-        void OnSkipStatusChange(bool oldStatus, bool newStatus) { netCanvas.playerUIs[playerIndex].UpdateStatus(); }
-        [Command] public void CmdSetSkipped(bool b) { isSkipped = b; }
-
-        [SyncVar] public bool hasDraw;
-        [Command] public void CmdSetDraw(bool b) { hasDraw = b; }
-
-        [SyncVar] public bool acceptCard;
-        [Command] public void CmdSetAcceptCard(bool b) { acceptCard = b; }
-        [SyncVar] public bool rejectCard;
-        [Command] public void CmdSetRejectCard(bool b) { rejectCard = b; }
-
-        public void ResetStatus(int isLocked = -1, int isSkipped = -1, int hasDraw = -1, int acceptCard = -1, int rejectCard = -1)
+        public TBL.Settings.TeamSetting.Team Team
         {
-            if (isLocked != -1)
-                this.isLocked = isLocked == 1;
-
-            if (isSkipped != -1)
-                this.isSkipped = isSkipped == 1;
-
-            if (hasDraw != -1)
-                this.hasDraw = hasDraw == 1;
-
-            if (acceptCard != -1)
-                this.acceptCard = acceptCard == 1;
-
-            if (rejectCard != -1)
-                this.rejectCard = rejectCard == 1;
-        }
-
-        [SyncVar(hook = nameof(OnWinStatusChange))] public bool isWin = false;
-        void OnWinStatusChange(bool oldStatus, bool newStatus)
-        {
-            if (newStatus == true)
+            get
             {
-                manager.Judgement.PlayerWin(this);
+                switch (teamIndex)
+                {
+                    case (int)TBL.Settings.TeamSetting.TeamEnum.Blue:
+                        return manager.teamSetting.BlueTeam;
+
+                    case (int)TBL.Settings.TeamSetting.TeamEnum.Red:
+                        return manager.teamSetting.RedTeam;
+
+                    case (int)TBL.Settings.TeamSetting.TeamEnum.Green:
+                        return manager.teamSetting.GreenTeam;
+                }
+
+                Debug.LogWarning("Net Player : Unknow team index");
+                return null;
             }
         }
-
-        [SyncVar(hook = nameof(OnDeadStatusChange))] public bool isDead = false;
-        void OnDeadStatusChange(bool oldStatus, bool newStatus)
+        [SyncVar(hook = nameof(OnTeamIndexChange))] public int teamIndex;
+        public void OnTeamIndexChange(int oldVar, int newVar)
         {
-            if (newStatus == true)
-            {
-                manager.RpcLog(UI.LogSystem.LogGeneral.PlayerDead(this), this);
-            }
+            if (!isLocalPlayer)
+                return;
         }
-        #endregion
 
         TBL.NetCanvas.GameScene netCanvas;
         NetworkRoomManager manager;
 
-        private void Start()
+        public override void OnStartClient()
         {
             netCanvas = FindObjectOfType<TBL.NetCanvas.GameScene>();
             manager = ((NetworkRoomManager)NetworkManager.singleton);
-            // if (isServer)
-            manager.players.Add(this);
 
+            manager.players.Add(this);
+        }
+
+        public override void OnStartLocalPlayer()
+        {
             netHandCards.Callback += OnUpdateHandCard;
             netCards.Callback += OnUpdateCard;
 
-            if (isLocalPlayer)
-            {
-                CmdSetPlayerIndex(manager.LocalRoomPlayerIndex);
-                CmdSetReady(true);
-            }
+            StartCoroutine(WaitServerInit());
         }
 
-        public void InitPlayer()
+        IEnumerator WaitServerInit()
         {
-            if (isLocalPlayer)
-            {
-                CmdDrawTeam();
-                CmdDrawHero();
-                CmdSetName();
-                CmdDrawCard(3);
-                // CmdDraw();
-            }
-            else
-            {
-                if (heroIndex != -1)
-                {
-                    hero = manager.Judgement.heroList.heros[heroIndex];
-                    netCanvas.playerUIs[manager.players.IndexOf(this)].UpdateHero();
-                }
-            }
+            CmdSetPlayerIndex(manager.LocalRoomPlayerIndex);
+            CmdSetName();
+
+            yield return new WaitUntil(() => manager.players.Count == manager.roomSlots.Count);
+            netCanvas.InitPlayerMapping();
+            yield return null;
+            CmdSetReady(true);
+        }
+
+        [Server]
+        public void SetName()
+        {
+            playerName = GameUtils.PlayerName;
         }
 
         [Command]
@@ -395,6 +356,18 @@ namespace TBL
 
         //     netCanvas.playerUIs[manager.GetPlayerSlotIndex(this)].handCardCount.text = netHandCard.Count.ToString();
         // }
+        [Server]
+        public void DrawHero()
+        {
+            int rand;
+            do
+            {
+                rand = UnityEngine.Random.Range(0, manager.Judgement.heroList.heros.Count);
+            } while (manager.Judgement.hasUsedHeros.IndexOf(rand) != -1);
+
+            manager.Judgement.hasUsedHeros.Add(rand);
+            heroIndex = rand;
+        }
 
         [Command]
         public void CmdDrawHero()
@@ -432,37 +405,17 @@ namespace TBL
             netCanvas.playerUIs[playerIndex].UpdateHero();
         }
 
+        [Server]
+        public void DrawTeam()
+        {
+            teamIndex = ((NetworkRoomManager)NetworkManager.singleton).teamList[0];
+            ((NetworkRoomManager)NetworkManager.singleton).teamList.RemoveAt(0);
+        }
         [Command]
         public void CmdDrawTeam()
         {
-            team = ((NetworkRoomManager)NetworkManager.singleton).teamList[0];
+            teamIndex = ((NetworkRoomManager)NetworkManager.singleton).teamList[0];
             ((NetworkRoomManager)NetworkManager.singleton).teamList.RemoveAt(0);
-
-            RpcUpdateTeam((int)team.team);
-        }
-
-        [ClientRpc]
-        public void RpcUpdateTeam(int i)
-        {
-            if (!isLocalPlayer)
-                return;
-
-            switch (i)
-            {
-                case (int)TBL.Settings.TeamSetting.TeamEnum.Blue:
-                    team = manager.teamSetting.BlueTeam;
-                    break;
-
-                case (int)TBL.Settings.TeamSetting.TeamEnum.Red:
-                    team = manager.teamSetting.RedTeam;
-                    break;
-
-                case (int)TBL.Settings.TeamSetting.TeamEnum.Green:
-                    team = manager.teamSetting.GreenTeam;
-                    break;
-            }
-
-            // FindObjectOfType<TBL.NetCanvas.GameScene>().InitPlayerStatus();
         }
 
 
@@ -504,7 +457,7 @@ namespace TBL
 
         #region ROUND_ACTION
         [ClientRpc]
-        public void RpcUpdateHostPlayer()
+        public void RpcUpdateRoundHost()
         {
             netCanvas.PlayerAnimation(new List<int>() { playerIndex }, "Host");
         }
@@ -514,7 +467,7 @@ namespace TBL
         {
             netCanvas.SetButtonInteractable(draw: 1);
             netCanvas.ClearEvent(netCanvas.drawButton.onClick);
-            netCanvas.BindEvent(netCanvas.drawButton.onClick, () => { CmdDrawCard(2); CmdSetDraw(true); });
+            netCanvas.BindEvent(netCanvas.drawButton.onClick, () => CmdSetDraw(true));
         }
 
         [TargetRpc]
@@ -693,7 +646,7 @@ namespace TBL
             if (isDead)
                 return;
 
-            switch (team.team)
+            switch (Team.team)
             {
                 case Settings.TeamSetting.TeamEnum.Blue:
                     if (GetCardColorCount(CardColor.Blue) >= 3 || manager.GetTeamPlayerCount(Settings.TeamSetting.TeamEnum.Red) == 0)

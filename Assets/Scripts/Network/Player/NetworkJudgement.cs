@@ -71,6 +71,15 @@ namespace TBL
             if (sendReverse != -1)
                 currentSendReverse = sendReverse == 1;
         }
+
+        private void Start()
+        {
+            netCanvas = FindObjectOfType<TBL.NetCanvas.GameScene>();
+            manager = ((NetworkRoomManager)NetworkManager.singleton);
+
+            if (isServer)
+                StartCoroutine(WaitAllPlayerInit());
+        }
     }
 
 }

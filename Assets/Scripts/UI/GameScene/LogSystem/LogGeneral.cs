@@ -80,8 +80,8 @@ namespace TBL.UI.LogSystem
         {
             string msg = "";
 
-            if (p.team.team != Settings.TeamSetting.TeamEnum.Green)
-                msg = $"{p.team.name} 獲勝";
+            if (p.Team.team != Settings.TeamSetting.TeamEnum.Green)
+                msg = $"{p.Team.name} 獲勝";
             else
                 msg = $"玩家 {p.playerIndex} ({p.playerName}) 完成醬油任務";
 

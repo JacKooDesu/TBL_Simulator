@@ -84,7 +84,7 @@ namespace TBL.Card
             var setting = actionSettings[ca.suffix % 6];
             var target = manager.players[ca.target];
 
-            if (target.team.team == setting.specifyTeam)
+            if (target.Team.team == setting.specifyTeam)
             {
                 switch (setting.type)
                 {

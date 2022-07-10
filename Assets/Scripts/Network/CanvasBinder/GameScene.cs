@@ -205,8 +205,8 @@ namespace TBL.NetCanvas
             heroAvatarUI.sprite = manager.LocalPlayer.hero.Avatar;
             heroNameUI.text = manager.LocalPlayer.hero.HeroName;
 
-            teamIconUI.sprite = manager.LocalPlayer.team.icon;
-            teamNameUI.text = manager.LocalPlayer.team.name;
+            teamIconUI.sprite = manager.LocalPlayer.Team.icon;
+            teamNameUI.text = manager.LocalPlayer.Team.name;
 
             heroSkillData.Init(manager.LocalPlayer.hero);
         }

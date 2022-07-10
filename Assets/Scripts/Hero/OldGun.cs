@@ -47,7 +47,7 @@ namespace TBL
 
                             manager.RpcLog(
                                 new LogBase(
-                                    $"玩家 {playerStatus.playerIndex} ({playerStatus.playerName}) 為 {playerStatus.team.name} 陣營",
+                                    $"玩家 {playerStatus.playerIndex} ({playerStatus.playerName}) 為 {playerStatus.Team.name} 陣營",
                                     true,
                                     true,
                                     new int[] { targetIndex }),
@@ -56,7 +56,7 @@ namespace TBL
 
                             manager.RpcLog(
                                 new LogBase(
-                                    $"玩家 {target.playerIndex} ({target.playerName}) 為 {target.team.name} 陣營",
+                                    $"玩家 {target.playerIndex} ({target.playerName}) 為 {target.Team.name} 陣營",
                                     true,
                                     true,
                                     new int[] { playerStatus.playerIndex }),
@@ -108,7 +108,7 @@ namespace TBL
 
                             manager.RpcLog(
                                 new LogBase(
-                                    $"玩家 {playerStatus.playerIndex} ({playerStatus.playerName}) 為 {playerStatus.team.name} 陣營",
+                                    $"玩家 {playerStatus.playerIndex} ({playerStatus.playerName}) 為 {playerStatus.Team.name} 陣營",
                                     true,
                                     false,
                                     new int[] { }),
@@ -117,7 +117,7 @@ namespace TBL
 
                             manager.RpcLog(
                                 new LogBase(
-                                    $"玩家 {target.playerIndex} ({target.playerName}) 為 {target.team.name} 陣營",
+                                    $"玩家 {target.playerIndex} ({target.playerName}) 為 {target.Team.name} 陣營",
                                     true,
                                     false,
                                     new int[] { }),
