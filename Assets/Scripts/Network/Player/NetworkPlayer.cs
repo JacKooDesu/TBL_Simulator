@@ -13,12 +13,6 @@ namespace TBL
         [SyncVar]
         public int playerIndex = 0;
 
-        [Command]
-        void CmdSetPlayerIndex(int i)
-        {
-            playerIndex = i;
-        }
-
         [SyncVar(hook = nameof(OnPlayerNameChange))]
         public string playerName;
         void OnPlayerNameChange(string oldName, string newName)
@@ -26,14 +20,14 @@ namespace TBL
 
         }
 
-        [SerializeField, Header("手牌")]
-        List<CardObject> handCards = new List<CardObject>();
+        // use net card instead
+        // [SerializeField, Header("手牌")]
+        // List<CardObject> handCards = new List<CardObject>();
 
-        [SerializeField, Header("情報")]
-        List<CardObject> cards = new List<CardObject>();
+        // [SerializeField, Header("情報")]
+        // List<CardObject> cards = new List<CardObject>();
 
         [Header("NetLists")]
-        #region  NetHandCard
         public SyncList<int> netHandCards = new SyncList<int>();
         // net hand card callback
         public void OnUpdateHandCard(SyncList<int>.Operation op, int index, int oldItem, int newItem)
@@ -81,56 +75,6 @@ namespace TBL
             }
         }
 
-        [Command]
-        public void CmdAddHandCard(int id)
-        {
-            print($"手牌新增 {id}");
-            netHandCards.Add((int)id);
-        }
-        public void AddHandCard(int id)
-        {
-            print($"手牌新增 {id}");
-            netHandCards.Add((int)id);
-        }
-
-        public int GetHandCardColorCount(CardColor color)
-        {
-            int result = 0;
-            foreach (var c in netHandCards)
-            {
-                if (((CardSetting)c).CardColor == color)
-                    result++;
-            }
-
-            return result;
-        }
-
-        public int GetHandCardTypeCount(CardType cardType)
-        {
-            int result = 0;
-            foreach (var c in netHandCards)
-            {
-                if (((CardSetting)c).CardType == cardType)
-                    result++;
-            }
-
-            return result;
-        }
-
-        public int GetHandCardSendTypeCount(CardSendType sendType)
-        {
-            int result = 0;
-            foreach (var c in netHandCards)
-            {
-                if (((CardSetting)c).SendType == sendType)
-                    result++;
-            }
-
-            return result;
-        }
-        #endregion
-
-        #region NetCard
         public SyncList<int> netCards = new SyncList<int>();
         // net hand card callback
         public void OnUpdateCard(SyncList<int>.Operation op, int index, int oldItem, int newItem)
@@ -145,30 +89,6 @@ namespace TBL
                 CheckWin();
             }
         }
-        public int GetCardColorCount(CardColor color)
-        {
-            int result = 0;
-            foreach (var c in netCards)
-            {
-                if (((CardSetting)c).CardColor == color)
-                    result++;
-            }
-
-            return result;
-        }
-
-        [Command]
-        public void CmdAddCard(int id)
-        {
-            print($"檯面新增 {id}");
-            netCards.Add((int)id);
-        }
-        public void AddCard(int id)
-        {
-            print($"檯面新增 {id}");
-            netCards.Add((int)id);
-        }
-        #endregion
 
         [SyncVar(hook = nameof(OnHeroIndexChange))] public int heroIndex = -1;
         void OnHeroIndexChange(int oldVar, int newVar)
@@ -229,29 +149,6 @@ namespace TBL
             }
 
         }
-        [Command]
-        public void CmdSetSkillCanActivate(int index, bool b)
-        {
-            netHeroSkillCanActivate[index] = b;
-        }
-        [Command]
-        public void CmdSetSkillLimited(int index, bool b)
-        {
-            hero.skills[index].limited = b;
-        }
-
-        [Command]
-        public void CmdChangeHeroState(bool hiding)
-        {
-            hero.isHiding = hiding;
-            RpcChangeHeroState(hiding);
-        }
-        [ClientRpc]
-        public void RpcChangeHeroState(bool hiding)
-        {
-            hero.isHiding = hiding;
-            RpcUpdateHeroUI();
-        }
 
         public TBL.Settings.TeamSetting.Team Team
         {
@@ -273,7 +170,7 @@ namespace TBL
                 return null;
             }
         }
-        [SyncVar(hook = nameof(OnTeamIndexChange))] public int teamIndex;
+        [SyncVar(hook = nameof(OnTeamIndexChange)), HideInInspector] public int teamIndex;
         public void OnTeamIndexChange(int oldVar, int newVar)
         {
             if (!isLocalPlayer)
@@ -299,6 +196,12 @@ namespace TBL
             StartCoroutine(WaitServerInit());
         }
 
+        public override void OnStopClient()
+        {
+            base.OnStopClient();
+            OnChatMessage = null;
+        }
+
         IEnumerator WaitServerInit()
         {
             CmdSetPlayerIndex(manager.LocalRoomPlayerIndex);
@@ -310,150 +213,17 @@ namespace TBL
             CmdSetReady(true);
         }
 
-        [Server]
-        public void SetName()
-        {
-            playerName = GameUtils.PlayerName;
-        }
-
         [Command]
-        public void CmdSetName()
+        void CmdSetPlayerIndex(int i)
         {
-            playerName = GameUtils.PlayerName;
-        }
-
-        [Command]
-        public void CmdDrawCard(int amount)
-        {
-            for (int i = 0; i < amount; ++i)
-            {
-                netHandCards.Add(manager.DeckManager.DrawCardFromTop().ID);
-            }
-
-            // if (manager.Judgement.currentRoundPlayerIndex == playerIndex)
-            //     CmdSetDraw(true);
-        }
-
-        [Server]
-        public void DrawCard(int amount)
-        {
-            for (int i = 0; i < amount; ++i)
-            {
-                netHandCards.Add(manager.DeckManager.DrawCardFromTop().ID);
-            }
-
-            if (manager.Judgement.currentPlayerIndex == playerIndex)
-                CmdSetDraw(true);
-        }
-
-        // [ClientRpc]
-        // public void RpcUpdateCardList()
-        // {
-        //     if (isLocalPlayer)
-        //     {
-        //         netCanvas.UpdateCardList();
-        //     }
-
-        //     netCanvas.playerUIs[manager.GetPlayerSlotIndex(this)].handCardCount.text = netHandCard.Count.ToString();
-        // }
-        [Server]
-        public void DrawHero()
-        {
-            int rand;
-            do
-            {
-                rand = UnityEngine.Random.Range(0, manager.Judgement.heroList.heros.Count);
-            } while (manager.Judgement.hasUsedHeros.IndexOf(rand) != -1);
-
-            manager.Judgement.hasUsedHeros.Add(rand);
-            heroIndex = rand;
-        }
-
-        [Command]
-        public void CmdDrawHero()
-        {
-            //////////////////////////////////////////////////////////////////
-            if (isLocalPlayer)
-            {
-                heroIndex = 8;
-                return;
-            }
-            //////////////////////////////////////////////////////////////////
-
-            int rand;
-            do
-            {
-                rand = UnityEngine.Random.Range(0, manager.Judgement.heroList.heros.Count);
-            } while (manager.Judgement.hasUsedHeros.IndexOf(rand) != -1);
-
-            manager.Judgement.hasUsedHeros.Add(rand);
-            heroIndex = rand;
+            playerIndex = i;
         }
 
         [ClientRpc]
-        public void RpcUpdateHero(int i)
-        {
-            heroIndex = i;
-            hero = manager.Judgement.heroList.heros[heroIndex];
-
-            if (isLocalPlayer)
-                netCanvas.InitPlayerStatus();
-        }
-
         public void RpcUpdateHeroUI()
         {
             netCanvas.playerUIs[playerIndex].UpdateHero();
         }
-
-        [Server]
-        public void DrawTeam()
-        {
-            teamIndex = ((NetworkRoomManager)NetworkManager.singleton).teamList[0];
-            ((NetworkRoomManager)NetworkManager.singleton).teamList.RemoveAt(0);
-        }
-        [Command]
-        public void CmdDrawTeam()
-        {
-            teamIndex = ((NetworkRoomManager)NetworkManager.singleton).teamList[0];
-            ((NetworkRoomManager)NetworkManager.singleton).teamList.RemoveAt(0);
-        }
-
-
-        #region CHAT
-        public static event Action<NetworkPlayer, string> OnChatMessage;
-        [Command]
-        public void CmdChatMessage(string message)
-        {
-            if (message.Trim() != "")
-            {
-                RpcChatReceive(message.Trim());
-            }
-        }
-
-        [ClientRpc]
-        public void RpcChatReceive(string message)
-        {
-            OnChatMessage?.Invoke(this, message);
-        }
-
-        #endregion
-
-        #region UPDATE_UI
-        [Command]
-        public void CmdUpdatePlayerStatusUI()
-        {
-            for (int i = 0; i < manager.players.Count; ++i)
-                RpcUpdatePlayerStatusUI(i);
-        }
-
-        [ClientRpc]
-        public void RpcUpdatePlayerStatusUI(int i)
-        {
-            netCanvas.playerUIs[i].UpdateStatus();
-        }
-
-
-        #endregion
 
         #region ROUND_ACTION
         [ClientRpc]
@@ -592,47 +362,6 @@ namespace TBL
         }
 
         [Command]
-        public void CmdCardHToH(int id, int target)     // Hand To Hand
-        {
-            print($"玩家 {playerIndex} 給予 玩家 {target} - {Card.CardSetting.IdToCard(id).name}");
-            netHandCards.Remove((int)id);
-            manager.players[target].AddHandCard(id);
-        }
-
-        [Command]
-        public void CmdCardHToT(int id, int target)     // Hand to Table
-        {
-            print($"玩家 {playerIndex} 給予 玩家 {target} - {Card.CardSetting.IdToCard(id).name}");
-            netHandCards.Remove((int)id);
-            manager.players[target].AddCard(id);
-        }
-
-        [Command]
-        public void CmdCardHToG(int id) // Hand To Graveyard
-        {
-            netHandCards.Remove((int)id);
-        }
-
-        [Command]
-        public void CmdCardTToG(int player, int id) // Table ToGraveyard
-        {
-            manager.players[player].netCards.Remove(id);
-        }
-
-        [Command]
-        public void CmdCardTToH(int player, int id)  // Table to Hand
-        {
-            manager.players[player].netCards.Remove(id);
-            manager.players[player].netHandCards.Add(id);
-        }
-
-        [Command]
-        public void CmdCardHToD(int id)     // Hand to Deck
-        {
-            manager.DeckManager.CardToTop(id);
-        }
-
-        [Command]
         public void CmdTestCardAction(CardAction ca)
         {
             // .OnEffect(manager, ca);
@@ -695,62 +424,6 @@ namespace TBL
             CmdSetSkillCanActivate(index, false);
         }
         #endregion
-
-        #region LOG
-        [Command]
-        public void CmdAddLog(string message, bool isServer, bool isPrivate, int[] targetPlayers)
-        {
-            RpcAddLog(message, isServer, isPrivate, targetPlayers);
-        }
-
-        [ClientRpc]
-        public void RpcAddLog(string message, bool isServer, bool isPrivate, int[] targetPlayers)
-        {
-            var log = new UI.LogSystem.LogBase(message, isServer, isPrivate, targetPlayers);
-            UI.LogSystem.LogBase.logs.Add(log);
-
-            List<int> targetList = new List<int>();
-            if (log.TargetPlayers.Length == 0)
-            {
-                for (int i = 0; i < manager.players.Count; ++i)
-                {
-                    int x = i;
-                    targetList.Add(x);
-                }
-            }
-            else
-            {
-                targetList.AddRange(log.TargetPlayers);
-            }
-
-            if (targetList.IndexOf(manager.LocalRoomPlayerIndex) != -1)
-                netCanvas.AddLog(UI.LogSystem.LogBase.logs.Count - 1);
-        }
-
-        [TargetRpc]
-        public void TargetAddLog(string message, bool isServer, bool isPrivate, int[] targetPlayers, bool canvasLog)
-        {
-            var log = new UI.LogSystem.LogBase(message, isServer, isPrivate, targetPlayers);
-            UI.LogSystem.LogBase.logs.Add(log);
-
-            if (canvasLog)
-                netCanvas.AddLog(UI.LogSystem.LogBase.logs.Count - 1);
-        }
-
-        public void AddLog(string message)
-        {
-            var log = new UI.LogSystem.LogBase(message, false, true, new int[] { playerIndex });
-            UI.LogSystem.LogBase.logs.Add(log);
-
-            netCanvas.AddLog(UI.LogSystem.LogBase.logs.Count - 1);
-        }
-        #endregion
-
-        public override void OnStopClient()
-        {
-            base.OnStopClient();
-            OnChatMessage = null;
-        }
     }
 }
 
