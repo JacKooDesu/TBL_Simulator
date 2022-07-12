@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
-using TBL.Card;
-using TBL.Action;
 using System;
 
 namespace TBL
 {
+    using Hero;
+    using Card;
+    using Action;
+    
     public partial class NetworkPlayer : NetworkBehaviour
     {
         [SyncVar]
@@ -112,7 +114,7 @@ namespace TBL
             netCanvas.playerUIs[manager.players.IndexOf(this)].UpdateHero();
         }
 
-        public Hero hero;
+        public HeroBase hero;
         public SyncList<bool> netHeroSkillCanActivate = new SyncList<bool>();
         public void OnUpdateHeroSkillCanActivate(SyncList<bool>.Operation op, int index, bool oldItem, bool newItem)
         {

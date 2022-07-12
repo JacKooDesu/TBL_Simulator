@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace TBL
+namespace TBL.Hero
 {
-    public class Killer : Hero
+    public class Killer : HeroBase
     {
         protected override void BindSkill()
         {

@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
 
-namespace TBL
+namespace TBL.Hero
 {
-    public class Shining : Hero
+    public class Shining : HeroBase
     {
         protected override void BindSkill()
         {

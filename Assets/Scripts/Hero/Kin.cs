@@ -2,9 +2,9 @@
 using System.Threading.Tasks;
 using TBL.UI.LogSystem;
 
-namespace TBL
+namespace TBL.Hero
 {
-    public class Kin : Hero
+    public class Kin : HeroBase
     {
         protected override void BindSkill()
         {

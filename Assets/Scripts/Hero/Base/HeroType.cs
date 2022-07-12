@@ -1,4 +1,4 @@
-﻿namespace TBL
+﻿namespace TBL.Hero
 {
     public enum HeroType
     {

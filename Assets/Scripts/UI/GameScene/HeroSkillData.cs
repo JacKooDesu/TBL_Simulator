@@ -5,10 +5,11 @@ using UnityEngine.EventSystems;
 
 namespace TBL.UI.GameScene
 {
+    using Hero;
     public class HeroSkillData : MonoBehaviour
     {
         public Animator animator;
-        public void Init(Hero hero)
+        public void Init(HeroBase hero)
         {
             animator = GetComponent<Animator>();
 

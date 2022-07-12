@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-namespace TBL
+namespace TBL.Hero
 {
-    public class CIA : Hero
+    public class CIA : HeroBase
     {
         protected override void BindSkill()
         {

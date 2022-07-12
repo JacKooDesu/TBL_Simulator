@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using TBL.UI.LogSystem;
-namespace TBL
+namespace TBL.Hero
 {
-    public class OldGun : Hero
+    public class OldGun : HeroBase
     {
         protected override void BindSkill()
         {

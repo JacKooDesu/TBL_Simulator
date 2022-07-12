@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using TBL.Card;
 
-namespace TBL
+namespace TBL.Hero
 {
-    public abstract class Hero : MonoBehaviour
+    public abstract class HeroBase : MonoBehaviour
     {
         [SerializeField, Header("角色名")]
         protected string heroName = "None";
@@ -38,7 +38,7 @@ namespace TBL
             get => playerStatus;
         }
 
-        public TBL.HeroSkill[] skills;
+        public HeroSkill[] skills;
         public HeroMission mission;
 
         public void Init(NetworkPlayer player)

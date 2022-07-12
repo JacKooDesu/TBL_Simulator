@@ -4,10 +4,11 @@ using TBL;
 
 namespace TBL.Settings
 {
+    using Hero;
     [CreateAssetMenu(fileName = "HeroList", menuName = "TBL/Settings/Hero List", order = 0)]
     public class HeroList : ScriptableObject
     {
-        public List<Hero> heros;
+        public List<HeroBase> heros;
         public Sprite hiddenAvatar;
     }
 }

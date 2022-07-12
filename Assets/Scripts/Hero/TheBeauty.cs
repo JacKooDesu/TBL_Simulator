@@ -1,6 +1,6 @@
-namespace TBL
+namespace TBL.Hero
 {
-    public class TheBeauty : Hero
+    public class TheBeauty : HeroBase
     {
         protected override void BindSkill()
         {
