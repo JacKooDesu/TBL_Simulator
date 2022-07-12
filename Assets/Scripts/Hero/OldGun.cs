@@ -17,7 +17,6 @@ namespace TBL.Hero
                 },
                 () =>
                 {
-                    var manager = ((NetworkRoomManager.singleton) as NetworkRoomManager);
                     var netCanvas = FindObjectOfType<NetCanvas.GameScene>();
                     var currentAction = manager.Judgement.currentCardAction;
 
@@ -36,7 +35,6 @@ namespace TBL.Hero
                 false,
                 () =>
                 {
-                    var manager = ((NetworkRoomManager.singleton) as NetworkRoomManager);
                     var netCanvas = FindObjectOfType<NetCanvas.GameScene>();
 
                     netCanvas.BindSelectPlayer(
@@ -97,7 +95,6 @@ namespace TBL.Hero
                 false,
                 () =>
                 {
-                    var manager = ((NetworkRoomManager.singleton) as NetworkRoomManager);
                     var netCanvas = FindObjectOfType<NetCanvas.GameScene>();
 
                     netCanvas.BindSelectPlayer(

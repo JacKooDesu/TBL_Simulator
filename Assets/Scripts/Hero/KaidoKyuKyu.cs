@@ -13,7 +13,6 @@ namespace TBL.Hero
                 () =>
                 {
                     var netCanvas = FindObjectOfType<NetCanvas.GameScene>();
-                    var manager = ((NetworkRoomManager.singleton) as NetworkRoomManager);
 
                     List<int> playerList = new List<int>();
                     foreach (var p in manager.players)
@@ -48,7 +47,6 @@ namespace TBL.Hero
                 () =>
                 {
                     var netCanvas = FindObjectOfType<NetCanvas.GameScene>();
-                    var manager = ((NetworkRoomManager.singleton) as NetworkRoomManager);
 
                     List<int> playerList = new List<int>();
                     foreach (var p in manager.players)
@@ -63,15 +61,12 @@ namespace TBL.Hero
                 },
                 () =>
                 {
-                    var manager = ((NetworkRoomManager.singleton) as NetworkRoomManager);
-                    var judgment = ((NetworkRoomManager.singleton) as NetworkRoomManager).Judgement;
-
-                    if (judgment.currentPhase != NetworkJudgement.Phase.Sending)
+                    if (judgement.currentPhase != NetworkJudgement.Phase.Sending)
                         return false;
 
-                    var targetPlayer = manager.players[judgment.currentSendingPlayer];
-                    if (((Card.CardSetting)judgment.currentRoundSendingCardId).CardColor == Card.CardColor.Black &&
-                        judgment.currentSendingPlayer == playerStatus.playerIndex &&
+                    var targetPlayer = manager.players[judgement.currentSendingPlayer];
+                    if (((Card.CardSetting)judgement.currentRoundSendingCardId).CardColor == Card.CardColor.Black &&
+                        judgement.currentSendingPlayer == playerStatus.playerIndex &&
                         playerStatus.acceptCard)
                         return true;
 

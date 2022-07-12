@@ -17,7 +17,6 @@ namespace TBL.Hero
                     if (playerStatus.GetHandCardColorCount(Card.CardColor.Black) > 0)
                     {
                         var netCanvas = FindObjectOfType<NetCanvas.GameScene>();
-                        var manager = ((NetworkRoomManager.singleton) as NetworkRoomManager);
 
                         List<string> options = new List<string>();
                         List<UnityEngine.Events.UnityAction> actions = new List<UnityEngine.Events.UnityAction>();
@@ -40,15 +39,12 @@ namespace TBL.Hero
                 },
                 () =>
                 {
-                    var manager = ((NetworkRoomManager.singleton) as NetworkRoomManager);
-                    var judgment = ((NetworkRoomManager.singleton) as NetworkRoomManager).Judgement;
-
-                    if (judgment.currentPhase != NetworkJudgement.Phase.Sending)
+                    if (judgement.currentPhase != NetworkJudgement.Phase.Sending)
                         return false;
 
-                    var targetPlayer = manager.players[judgment.currentSendingPlayer];
-                    if (((Card.CardSetting)judgment.currentRoundSendingCardId).CardColor == Card.CardColor.Black &&
-                        judgment.currentRoundPlayerIndex == playerStatus.playerIndex)
+                    var targetPlayer = manager.players[judgement.currentSendingPlayer];
+                    if (((Card.CardSetting)judgement.currentRoundSendingCardId).CardColor == Card.CardColor.Black &&
+                        judgement.currentRoundPlayerIndex == playerStatus.playerIndex)
                         return true;
 
                     return false;
@@ -62,7 +58,6 @@ namespace TBL.Hero
                 () =>
                 {
                     var netCanvas = FindObjectOfType<NetCanvas.GameScene>();
-                    var manager = ((NetworkRoomManager.singleton) as NetworkRoomManager);
 
                     netCanvas.ShowPlayerHandCard(
                         playerStatus.playerIndex,
@@ -105,7 +100,6 @@ namespace TBL.Hero
                 false,
                 () =>
                 {
-                    var manager = ((NetworkRoomManager.singleton) as NetworkRoomManager);
                     var netCanvas = FindObjectOfType<NetCanvas.GameScene>();
 
                     netCanvas.ShowPlayerHandCard(
@@ -121,9 +115,8 @@ namespace TBL.Hero
                 },
                 () =>
                 {
-                    var judgment = ((NetworkRoomManager.singleton) as NetworkRoomManager).Judgement;
-                    return judgment.currentRoundPlayerIndex == playerStatus.playerIndex &&
-                            judgment.currentPhase == NetworkJudgement.Phase.ChooseToSend;
+                    return judgement.currentRoundPlayerIndex == playerStatus.playerIndex &&
+                            judgement.currentPhase == NetworkJudgement.Phase.ChooseToSend;
                 }
             );
 
@@ -138,14 +131,11 @@ namespace TBL.Hero
                 "親手讓另一位玩家成為第二位或以後死亡的玩家。",
                 () =>
                 {
-                    var manager = ((NetworkRoomManager.singleton) as NetworkRoomManager);
-                    var judgment = ((NetworkRoomManager.singleton) as NetworkRoomManager).Judgement;
-
-                    if (judgment.currentPhase != NetworkJudgement.Phase.Sending)
+                    if (judgement.currentPhase != NetworkJudgement.Phase.Sending)
                         return false;
 
-                    var targetPlayer = manager.players[judgment.currentSendingPlayer];
-                    if (targetPlayer.isDead && judgment.currentRoundPlayerIndex == playerStatus.playerIndex && manager.GetDeadPlayerCount() >= 2)
+                    var targetPlayer = manager.players[judgement.currentSendingPlayer];
+                    if (targetPlayer.isDead && judgement.currentRoundPlayerIndex == playerStatus.playerIndex && manager.GetDeadPlayerCount() >= 2)
                         return true;
 
                     return false;

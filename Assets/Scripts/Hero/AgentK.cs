@@ -6,12 +6,10 @@
         {
             var skill1 = new HeroSkill(
                 "警覺",
-                $"玩家使用卡牌時，可以翻開此角色牌， {RichTextHelper.TextWithBold("識破") } 目標卡牌。(此技能 {RichTextHelper.TextWithBold("無法被識破") } )",
+                $"玩家使用卡牌時，可以翻開此角色牌， {RichTextHelper.TextWithBold("識破")} 目標卡牌。(此技能 {RichTextHelper.TextWithBold("無法被識破")} )",
                 false,
                 () =>
                 {
-                    var manager = ((NetworkRoomManager.singleton) as NetworkRoomManager);
-
                     playerStatus.CmdChangeHeroState(false);
                     playerStatus.CmdTestCardAction(new Action.CardAction(playerStatus.playerIndex, 0, (int)Card.CardType.Invalidate, 0, 1));
                 },
@@ -32,8 +30,6 @@
                 true,
                 () =>
                 {
-                    var manager = ((NetworkRoomManager.singleton) as NetworkRoomManager);
-
                     playerStatus.CmdChangeHeroState(true);
                 },
                 () =>
@@ -50,12 +46,10 @@
 
             var skill3 = new HeroSkill(
                 "反擊",
-                $"當一位玩家使用 { RichTextHelper.TextWithBold("識破") } 時，獲得該 { RichTextHelper.TextWithBold("識破") } 並取消該識破效果。",
+                $"當一位玩家使用 {RichTextHelper.TextWithBold("識破")} 時，獲得該 {RichTextHelper.TextWithBold("識破")} 並取消該識破效果。",
                 false,
                 () =>
                 {
-                    var judgement = ((NetworkRoomManager.singleton) as NetworkRoomManager).Judgement;
-
                     playerStatus.CmdAddHandCard(judgement.cardActionQueue[judgement.cardActionQueue.Count - 1].originCardId);
                     playerStatus.CmdTestCardAction(new Action.CardAction(playerStatus.playerIndex, 0, (int)Card.CardType.Invalidate, 0, 1));
                 },

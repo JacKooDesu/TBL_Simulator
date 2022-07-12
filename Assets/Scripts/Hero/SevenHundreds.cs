@@ -11,7 +11,6 @@
                 false,
                 () =>
                 {
-                    var manager = ((NetworkRoomManager.singleton) as NetworkRoomManager);
                     var netCanvas = FindObjectOfType<NetCanvas.GameScene>();
                     playerStatus.CmdDrawCard(3);
                     netCanvas.BindSelectPlayer(manager.GetOtherPlayers(), (target) =>
@@ -26,7 +25,6 @@
                 },
                 () =>
                 {
-                    var manager = ((NetworkRoomManager.singleton) as NetworkRoomManager);
                     if (manager.Judgement.currentPhase != NetworkJudgement.Phase.Reacting)
                         return false;
 

@@ -41,6 +41,9 @@ namespace TBL.Hero
         public HeroSkill[] skills;
         public HeroMission mission;
 
+        protected NetworkRoomManager manager;
+        protected NetworkJudgement judgement;
+
         public void Init(NetworkPlayer player)
         {
             PlayerStatus = player;
@@ -50,6 +53,9 @@ namespace TBL.Hero
             skills = new HeroSkill[0];
             BindSkill();
             BindSpecialMission();
+
+            manager = ((NetworkRoomManager.singleton) as NetworkRoomManager);
+            judgement = manager.Judgement;
         }
 
         protected abstract void BindSkill();

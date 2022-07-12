@@ -47,7 +47,6 @@ namespace TBL.Hero
                 false,
                 () =>
                 {
-                    var manager = ((NetworkRoomManager.singleton) as NetworkRoomManager);
                     var netCanvas = FindObjectOfType<NetCanvas.GameScene>();
 
                     playerStatus.CmdChangeHeroState(true);
@@ -74,15 +73,12 @@ namespace TBL.Hero
                     if (playerStatus.netHandCards.Count <= 1 || playerStatus.GetHandCardColorCount(Card.CardColor.Black) == 0)
                         return false;
 
-                    var manager = ((NetworkRoomManager.singleton) as NetworkRoomManager);
-                    var judgment = ((NetworkRoomManager.singleton) as NetworkRoomManager).Judgement;
-
-                    if (judgment.currentPhase != NetworkJudgement.Phase.Sending)
+                    if (judgement.currentPhase != NetworkJudgement.Phase.Sending)
                         return false;
 
-                    var targetPlayer = manager.players[judgment.currentSendingPlayer];
-                    if (((Card.CardSetting)judgment.currentRoundSendingCardId).CardColor == Card.CardColor.Black &&
-                        judgment.currentSendingPlayer == playerStatus.playerIndex &&
+                    var targetPlayer = manager.players[judgement.currentSendingPlayer];
+                    if (((Card.CardSetting)judgement.currentRoundSendingCardId).CardColor == Card.CardColor.Black &&
+                        judgement.currentSendingPlayer == playerStatus.playerIndex &&
                         playerStatus.acceptCard)
                         return true;
 
@@ -113,7 +109,6 @@ namespace TBL.Hero
 
         async void ChooseCardToDeck(List<int> cardList)
         {
-            var manager = ((NetworkRoomManager.singleton) as NetworkRoomManager);
             var netCanvas = FindObjectOfType<NetCanvas.GameScene>();
 
             int cardCount = 0;

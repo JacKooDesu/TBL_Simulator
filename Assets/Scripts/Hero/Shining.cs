@@ -13,7 +13,6 @@ namespace TBL.Hero
                 false,
                 () =>
                 {
-                    var manager = ((NetworkRoomManager.singleton) as NetworkRoomManager);
                     var netCanvas = FindObjectOfType<NetCanvas.GameScene>();
 
                     int targetId = 0;
@@ -32,7 +31,6 @@ namespace TBL.Hero
                     if (playerStatus.hero.skills[0].limited)
                         return false;
 
-                    var manager = ((NetworkRoomManager.singleton) as NetworkRoomManager);
                     bool haveCard = false;
                     foreach (var p in manager.players)
                     {
@@ -57,14 +55,12 @@ namespace TBL.Hero
                 "親手讓另一位沒有獲得紅藍情報的玩家死亡。",
                 () =>
                 {
-                    var manager = ((NetworkRoomManager.singleton) as NetworkRoomManager);
-                    var judgment = ((NetworkRoomManager.singleton) as NetworkRoomManager).Judgement;
 
-                    if (judgment.currentPhase != NetworkJudgement.Phase.Sending)
+                    if (judgement.currentPhase != NetworkJudgement.Phase.Sending)
                         return false;
 
-                    var targetPlayer = manager.players[judgment.currentSendingPlayer];
-                    if (targetPlayer.isDead && judgment.currentRoundPlayerIndex == playerStatus.playerIndex)
+                    var targetPlayer = manager.players[judgement.currentSendingPlayer];
+                    if (targetPlayer.isDead && judgement.currentRoundPlayerIndex == playerStatus.playerIndex)
                         return true;
 
                     return false;
@@ -74,7 +70,6 @@ namespace TBL.Hero
 
         async void Snipe(NetworkPlayer target)
         {
-            var manager = ((NetworkRoomManager.singleton) as NetworkRoomManager);
             var netCanvas = FindObjectOfType<NetCanvas.GameScene>();
 
             int cardCount = 0;

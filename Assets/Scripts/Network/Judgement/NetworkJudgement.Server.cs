@@ -140,14 +140,14 @@ namespace TBL
             // foreach (NetworkPlayer p in cardSendQueue)
             for (int i = 0; i < cardSendQueue.Count; i += iter)
             {
+                // 頭尾
                 if (i <= -1)
-                {
                     i = cardSendQueue.Count - 1;
-                }
+
                 NetworkPlayer p = cardSendQueue[i];
                 currentSendingPlayer = p.playerIndex;
 
-                if (p.playerIndex == currentPlayerIndex)
+                if (currentSendingPlayer == currentPlayerIndex)
                 {
                     manager.RpcLog(UI.LogSystem.LogGeneral.AcceptCard(p, (Card.CardSetting)currentRoundSendingCardId), p);
                     p.AddCard(currentRoundSendingCardId);
@@ -176,7 +176,7 @@ namespace TBL
                     if (playerIntercept != -1)
                     {
                         p.RpcAskCardEnd();
-                        p = manager.players[manager.players.FindIndex(x => x.playerIndex == playerIntercept)];
+                        p = manager.players[playerIntercept];
                         p.acceptCard = true;
                         break;
                     }
@@ -186,7 +186,6 @@ namespace TBL
                         yield return StartCoroutine(CardEventUpdate());
                         manager.CheckAllHeroSkill();
                     }
-
 
                     yield return null;
                 }

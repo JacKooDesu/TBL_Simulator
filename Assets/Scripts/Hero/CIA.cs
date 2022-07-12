@@ -44,7 +44,6 @@ namespace TBL.Hero
                 },
                 () =>
                 {
-                    var manager = ((NetworkRoomManager.singleton) as NetworkRoomManager);
                     var netCanvas = FindObjectOfType<NetCanvas.GameScene>();
 
                     if (manager.Judgement.currentPhase != NetworkJudgement.Phase.Reacting)
