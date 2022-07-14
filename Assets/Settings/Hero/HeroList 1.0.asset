@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: HeroList 1.0
   m_EditorClassIdentifier: 
   heros:
+  - {fileID: -5226672738452631046, guid: 4f7a4a3a2b856a448b0eee5077265165, type: 3}
   - {fileID: 4586220333743073279, guid: 60d53b5788149e148908f998e9dd1f14, type: 3}
   - {fileID: 4711446211714667248, guid: a728321a24225d745801fee4baf5be65, type: 3}
   - {fileID: 7840624120385195165, guid: 74db06ddbecdf734a9b437f9c465a884, type: 3}
