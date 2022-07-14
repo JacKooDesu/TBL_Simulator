@@ -8,11 +8,12 @@ namespace TBL.Hero
     {
         protected override void BindSkill()
         {
-            var skill1 = new HeroSkill(
-                "棄卒保帥",
-                $"當你的卡牌被另一位玩家 {RichTextHelper.TextWithBold("識破")} 時，可以翻開此角色牌，抽六張牌，選擇兩張按照任意順序放回牌庫頂。",
-                false,
-                () =>
+            var skill1 = new HeroSkill
+            {
+                name = "棄卒保帥",
+                description = $"當你的卡牌被另一位玩家 {RichTextHelper.TextWithBold("識破")} 時，可以翻開此角色牌，抽六張牌，選擇兩張按照任意順序放回牌庫頂。",
+                autoActivate = false,
+                action = (_) =>
                 {
                     playerStatus.CmdChangeHeroState(false);
                     playerStatus.CmdDrawCard(6);
@@ -25,7 +26,7 @@ namespace TBL.Hero
 
                     ChooseCardToDeck(cardList);
                 },
-                () =>
+                checker = () =>
                 {
                     var judgment = ((NetworkRoomManager.singleton) as NetworkRoomManager).Judgement;
                     if (judgment.currentPhase == NetworkJudgement.Phase.Reacting)
@@ -39,13 +40,14 @@ namespace TBL.Hero
                     }
                     return false;
                 }
-            );
+            };
 
-            var skill2 = new HeroSkill(
-                "釜底抽薪",
-                "當你獲得黑情報時，可以在自己面前放置一張黑情報，並在另一位玩家面前放置一張任意情報，並蓋伏此角色。",
-                false,
-                () =>
+            var skill2 = new HeroSkill
+            {
+                name = "釜底抽薪",
+                description = "當你獲得黑情報時，可以在自己面前放置一張黑情報，並在另一位玩家面前放置一張任意情報，並蓋伏此角色。",
+                autoActivate = false,
+                action = (_) =>
                 {
                     var netCanvas = FindObjectOfType<NetCanvas.GameScene>();
 
@@ -68,7 +70,7 @@ namespace TBL.Hero
                         },
                         new List<Card.CardColor>() { Card.CardColor.Black });
                 },
-                () =>
+                checker = () =>
                 {
                     if (playerStatus.netHandCards.Count <= 1 || playerStatus.GetHandCardColorCount(Card.CardColor.Black) == 0)
                         return false;
@@ -84,7 +86,7 @@ namespace TBL.Hero
 
                     return false;
                 }
-            );
+            };
 
             // ult - 使用後，你本回合使用的所有卡牌會直接生效。
             // 尚未設計

@@ -235,7 +235,6 @@ namespace TBL.NetCanvas
 
         public void ResetUI()
         {
-            tempMenu.Clear();
             ResetPlayerUIAnimation();
             ClearPlayerUIEvent();
         }

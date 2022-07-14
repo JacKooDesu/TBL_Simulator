@@ -35,7 +35,7 @@ namespace TBL.UI.LogSystem
 
         public static List<LogBase> logs = new List<LogBase>();
 
-        public LogBase(string message, bool isServer, bool isPrivate, int[] targetPlayers)
+        public LogBase(string message, bool isServer, bool isPrivate, params int[] targetPlayers)
         {
             this.message = message;
             this.isServer = isServer;

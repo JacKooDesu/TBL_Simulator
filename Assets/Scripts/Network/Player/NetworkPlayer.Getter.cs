@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 using TBL.Card;
-using TBL.Action;
+using TBL.GameAction;
 using System;
 
 namespace TBL

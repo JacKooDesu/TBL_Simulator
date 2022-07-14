@@ -2097,13 +2097,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e451ae52f811417419e337bfc73c22c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  chatInput: {fileID: 0}
+  chatScroll: {fileID: 0}
+  chatHistory: {fileID: 0}
+  tempMenu: {fileID: 0}
   playerMapping: {fileID: 617462909}
   playerIconPrefab: {fileID: 1297430933}
   playerUIs: []
   isSelectingPlayer: 0
-  chatInput: {fileID: 0}
-  chatScroll: {fileID: 0}
-  chatHistory: {fileID: 0}
   selectCard: {fileID: 0}
   drawButton: {fileID: 0}
   sendButton: {fileID: 0}
@@ -2118,7 +2119,6 @@ MonoBehaviour:
   cardListUI: {fileID: 0}
   cardTextPrefab: {fileID: 0}
   tipTextUI: {fileID: 0}
-  tempMenu: {fileID: 0}
   timeTextUI: {fileID: 0}
   logScrollRect: {fileID: 0}
   logText: {fileID: 0}
@@ -3245,14 +3245,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e451ae52f811417419e337bfc73c22c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  chatInput: {fileID: 1162878423}
+  chatScroll: {fileID: 1427160399}
+  chatHistory: {fileID: 134047876}
+  tempMenu: {fileID: 961539879798055769, guid: 1afaf431ce7514c41854383d7fbffa59, type: 3}
   playerMapping: {fileID: 1295387070}
   playerIconPrefab: {fileID: 4289249555758416403, guid: 54797922ffc318a4dac8df25116a3c43,
     type: 3}
   playerUIs: []
   isSelectingPlayer: 0
-  chatInput: {fileID: 1162878423}
-  chatScroll: {fileID: 1427160399}
-  chatHistory: {fileID: 134047876}
   selectCard: {fileID: 0}
   drawButton: {fileID: 154946083}
   sendButton: {fileID: 1639517653}
@@ -3268,7 +3269,6 @@ MonoBehaviour:
   cardTextPrefab: {fileID: 4992001238697331696, guid: 4e98d3909605cea4daf0aea773003758,
     type: 3}
   tipTextUI: {fileID: 1910901093}
-  tempMenu: {fileID: 1326521728}
   timeTextUI: {fileID: 1407271858}
   logScrollRect: {fileID: 1359993630}
   logText: {fileID: 996881554}
@@ -3353,7 +3353,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1344978427}
   m_HandleRect: {fileID: 1344978426}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -4252,7 +4252,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 286416969}
   m_HandleRect: {fileID: 286416968}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -4452,6 +4452,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1103185287}
     m_Modifications:
+    - target: {fileID: 961539879798055769, guid: 1afaf431ce7514c41854383d7fbffa59,
+        type: 3}
+      propertyPath: contentParent
+      value: 
+      objectReference: {fileID: 1326521729}
     - target: {fileID: 2248119619729677816, guid: 1afaf431ce7514c41854383d7fbffa59,
         type: 3}
       propertyPath: m_ChildScaleWidth
@@ -4599,18 +4604,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1afaf431ce7514c41854383d7fbffa59, type: 3}
---- !u!114 &1326521728 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 961539879798055769, guid: 1afaf431ce7514c41854383d7fbffa59,
-    type: 3}
-  m_PrefabInstance: {fileID: 1326521727}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c318126f9f0e4443ab91140e6e55629, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!224 &1326521729 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2248119619729677819, guid: 1afaf431ce7514c41854383d7fbffa59,
@@ -5056,7 +5049,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2011516631}
   m_HandleRect: {fileID: 2011516630}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:

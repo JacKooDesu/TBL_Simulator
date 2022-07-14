@@ -4,29 +4,24 @@ using System.Collections.Generic;
 
 namespace TBL.UI
 {
+    // 只管理數值
     public class TempMenuBase : MonoBehaviour, IWindowable
     {
-        int defaultIndex;
-        List<Option> options = new List<Option>();
+        protected int defaultIndex;
+        protected List<Option> options = new List<Option>();
 
         public virtual void Init(List<Option> options, int defaultIndex = -1)
         {
-            this.options = options;
-            if (defaultIndex == -1)
-                this.defaultIndex = options.Count;
-            else
-                this.defaultIndex = defaultIndex;
-
-            options.Add(new Option
-            {
-                str = "取消",
-                onSelect = Close
-            });
+            this.options = new List<Option>(options);
+            this.defaultIndex = defaultIndex;
         }
 
         public virtual void Cancel()
         {
-            options[defaultIndex].onSelect.Invoke();
+            if (defaultIndex == -1)
+                Close();
+            else
+                options[defaultIndex].onSelect.Invoke();
         }
 
         public virtual void Close()

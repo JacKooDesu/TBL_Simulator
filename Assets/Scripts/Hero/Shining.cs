@@ -7,11 +7,12 @@ namespace TBL.Hero
         protected override void BindSkill()
         {
 
-            var skill1 = new HeroSkill(
-                "狙擊",
-                $"翻開此角色牌，然後燒毀 {RichTextHelper.TextWithBold("另一位玩家")} 面前的至多三張情報。",
-                false,
-                () =>
+            var skill1 = new HeroSkill
+            {
+                name = "狙擊",
+                description = $"翻開此角色牌，然後燒毀 {RichTextHelper.TextWithBold("另一位玩家")} 面前的至多三張情報。",
+                autoActivate = false,
+                action = (_) =>
                 {
                     var netCanvas = FindObjectOfType<NetCanvas.GameScene>();
 
@@ -26,7 +27,7 @@ namespace TBL.Hero
 
 
                 },
-                () =>
+                checker = () =>
                 {
                     if (playerStatus.hero.skills[0].limited)
                         return false;
@@ -42,7 +43,7 @@ namespace TBL.Hero
                     }
                     return playerStatus.hero.isHiding && haveCard;
                 }
-            );
+            };
 
             skills = new HeroSkill[] {
                 skill1

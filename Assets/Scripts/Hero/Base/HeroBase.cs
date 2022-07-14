@@ -43,6 +43,7 @@ namespace TBL.Hero
 
         protected NetworkRoomManager manager;
         protected NetworkJudgement judgement;
+        protected NetCanvas.GameScene netCanvas;
 
         public void Init(NetworkPlayer player)
         {
@@ -56,6 +57,7 @@ namespace TBL.Hero
 
             manager = ((NetworkRoomManager.singleton) as NetworkRoomManager);
             judgement = manager.Judgement;
+            netCanvas = FindObjectOfType<NetCanvas.GameScene>();
         }
 
         protected abstract void BindSkill();

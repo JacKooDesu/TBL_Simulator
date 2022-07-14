@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using TBL.Action;
+using TBL.GameAction;
 using UnityEngine;
 
 namespace TBL.Card

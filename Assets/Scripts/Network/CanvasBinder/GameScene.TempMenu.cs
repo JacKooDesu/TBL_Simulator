@@ -16,7 +16,7 @@ namespace TBL.NetCanvas
     {
         #region TEMP_MENU
         [Header("暫存選單")]
-        public UI.GameScene.Menu tempMenu;
+        [SerializeField] UI.GameScene.Menu tempMenu;
 
         public void ShowPlayerCard(int index, UnityAction<int> action, List<CardColor> requestColor = null, List<CardSendType> requestSendType = null)
         {
@@ -78,11 +78,12 @@ namespace TBL.NetCanvas
             InitMenu(options);
         }
 
-        void InitMenu(List<Option> options, int defaultIndex = -1)
+        public UI.GameScene.Menu InitMenu(List<Option> options, int defaultIndex = -1)
         {
             // Init Ui
-            var menu = Instantiate(tempMenu.gameObject).GetComponent<UI.TempMenuBase>();
+            var menu = Instantiate(tempMenu, transform);
             menu.Init(options, defaultIndex);
+            return menu;
         }
         #endregion
     }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace TBL.Action
+namespace TBL.GameAction
 {
     [System.Serializable]
     public struct CardAction
@@ -98,7 +98,8 @@ namespace TBL.Action
         public int target;
         public int skill;
         public int suffix;
-        public SkillAction(int user, int target, int skill, int suffix)
+
+        public SkillAction(int user = int.MinValue, int target = int.MinValue, int skill = int.MinValue, int suffix = int.MinValue)
         {
             this.user = user;
             this.target = target;

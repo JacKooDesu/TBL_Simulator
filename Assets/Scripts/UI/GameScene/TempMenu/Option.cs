@@ -14,5 +14,7 @@ public enum OptionType
     CARD,
     COLOR,
     PLAYER,
-    HERO
+    HERO,
+    SKILL,
+    OTHER
 }

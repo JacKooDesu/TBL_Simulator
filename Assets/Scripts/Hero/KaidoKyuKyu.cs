@@ -6,11 +6,12 @@ namespace TBL.Hero
     {
         protected override void BindSkill()
         {
-            var skill1 = new HeroSkill(
-                "陰謀",
-                "當一位玩家獲得你傳出的黑情報時，你可以抽取任意一位玩家一張手牌。",
-                false,
-                () =>
+            var skill1 = new HeroSkill
+            {
+                name = "陰謀",
+                description = "當一位玩家獲得你傳出的黑情報時，你可以抽取任意一位玩家一張手牌。",
+                autoActivate = false,
+                action = (_) =>
                 {
                     var netCanvas = FindObjectOfType<NetCanvas.GameScene>();
 
@@ -23,7 +24,7 @@ namespace TBL.Hero
 
                     netCanvas.BindSelectPlayer(playerList, (index) => DrawTargetCard(index));
                 },
-                () =>
+                checker = () =>
                 {
                     var manager = ((NetworkRoomManager.singleton) as NetworkRoomManager);
                     var judgment = ((NetworkRoomManager.singleton) as NetworkRoomManager).Judgement;
@@ -38,13 +39,14 @@ namespace TBL.Hero
 
                     return false;
                 }
-            );
+            };
 
-            var skill2 = new HeroSkill(
-                "陽謀",
-                "當你獲得傳出的黑情報時，你可以檢視一位玩家的手牌，並抽取一張手牌。",
-                false,
-                () =>
+            var skill2 = new HeroSkill
+            {
+                name = "陽謀",
+                description = "當你獲得傳出的黑情報時，你可以檢視一位玩家的手牌，並抽取一張手牌。",
+                autoActivate = false,
+                action = (_) =>
                 {
                     var netCanvas = FindObjectOfType<NetCanvas.GameScene>();
 
@@ -59,45 +61,47 @@ namespace TBL.Hero
                         playerList,
                         (index) => netCanvas.ShowPlayerHandCard(index, (c) => DrawTargetCard(index)));
                 },
-                () =>
-                {
-                    if (judgement.currentPhase != NetworkJudgement.Phase.Sending)
-                        return false;
+                checker = () =>
+                  {
+                      if (judgement.currentPhase != NetworkJudgement.Phase.Sending)
+                          return false;
 
-                    var targetPlayer = manager.players[judgement.currentSendingPlayer];
-                    if (((Card.CardSetting)judgement.currentRoundSendingCardId).CardColor == Card.CardColor.Black &&
-                        judgement.currentSendingPlayer == playerStatus.playerIndex &&
-                        playerStatus.acceptCard)
-                        return true;
+                      var targetPlayer = manager.players[judgement.currentSendingPlayer];
+                      if (((Card.CardSetting)judgement.currentRoundSendingCardId).CardColor == Card.CardColor.Black &&
+                          judgement.currentSendingPlayer == playerStatus.playerIndex &&
+                          playerStatus.acceptCard)
+                          return true;
 
-                    return false;
-                }
-            );
+                      return false;
+                  }
+            };
 
-            var skill3 = new HeroSkill(
-                "詭計",
-                "將自己面前一張非假情報收為手牌。",
-                false,
-                () =>
+
+            var skill3 = new HeroSkill
+            {
+                name = "詭計",
+                description = "將自己面前一張非假情報收為手牌。",
+                autoActivate = false,
+                action = (_) =>
                 {
                     skills[2].limited = true;
 
                     var netCanvas = FindObjectOfType<NetCanvas.GameScene>();
 
                     netCanvas.ShowPlayerCard(
-                       playerStatus.playerIndex,
-                       (card) => playerStatus.CmdCardTToH(playerStatus.playerIndex, card),
-                       new List<Card.CardColor>() { Card.CardColor.Red, Card.CardColor.Blue }
+                    playerStatus.playerIndex,
+                    (card) => playerStatus.CmdCardTToH(playerStatus.playerIndex, card),
+                    new List<Card.CardColor>() { Card.CardColor.Red, Card.CardColor.Blue }
                     );
                 },
-                () =>
+                checker = () =>
                 {
                     if (skills[2].limited)
                         return false;
 
                     return playerStatus.GetCardColorCount(Card.CardColor.Red) != 0 || playerStatus.GetCardColorCount(Card.CardColor.Blue) != 0;
                 }
-            );
+            };
 
             skills = new HeroSkill[]{
                 skill1,skill2,skill3
@@ -131,7 +135,7 @@ namespace TBL.Hero
                 actions.Add(() => player.CmdCardHToH(card, playerStatus.playerIndex));
             }
 
-            netCanvas.tempMenu.InitCustomMenu(cardList, actions);
+          //  netCanvas.tempMenu.InitCustomMenu(cardList, actions);
         }
     }
 

@@ -9,61 +9,25 @@ namespace TBL.UI.GameScene
 {
     public class Menu : TempMenuBase
     {
-        public GameObject optionPrefab;
+        public OptionObject optionPrefab;
+        public Transform contentParent;
 
-        public Menu InitCustomMenu(List<string> options, List<UnityAction> actions)
+        public override void Init(List<Option> options, int defaultIndex = -1)
         {
-            Clear();
-            
-            if (options.Count == 0)
-                return null;
-
-            for (int i = 0; i < options.Count; ++i)
-            {
-                int x = i;
-                var s = options[i];
-                OptionObject option = Instantiate(optionPrefab, transform).GetComponent<OptionObject>();
-                option.GetComponentInChildren<Text>().text = s;
-
-                JacDev.Utils.EventBinder.Bind(
-                    option.GetComponent<EventTrigger>(),
-                    EventTriggerType.PointerClick,
-                    (e) =>
-                    {
-                        actions[x].Invoke();
-                        Clear();
-                        print($"選擇 {s}");
-                        gameObject.SetActive(true);
-                    });
-            }
-
-            gameObject.SetActive(true);
-
-            return this;
-        }
-
-        public Menu AddCustomOption(string text, UnityAction action)
-        {
-            OptionObject option = Instantiate(optionPrefab, transform).GetComponent<OptionObject>();
-            option.GetComponentInChildren<Text>().text = text;
-            JacDev.Utils.EventBinder.Bind(
-                option.GetComponent<EventTrigger>(),
-                EventTriggerType.PointerClick,
-                (e) =>
+            base.Init(options, defaultIndex);
+            this.options.Add(
+                new Option
                 {
-                    action.Invoke();
-                });
+                    str = "取消",
+                    onSelect = Close
+                }
+            );
 
-            return this;
-        }
-
-        public void Clear()
-        {
-            for (int i = transform.childCount - 1; i >= 0; --i)
+            foreach (var o in this.options)
             {
-                Destroy(transform.GetChild(i).gameObject);
+                var optionObj = Instantiate(optionPrefab, contentParent);
+                optionObj.Init(o);
             }
-            gameObject.SetActive(false);
         }
     }
 }

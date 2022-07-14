@@ -56,7 +56,7 @@ namespace TBL.UI.LogSystem
             );
         }
 
-        public static LogBase UseCard(Action.CardAction ca)
+        public static LogBase UseCard(GameAction.CardAction ca)
         {
             return new LogBase(
                 ca.UsingLog(),

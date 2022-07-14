@@ -8,8 +8,8 @@ namespace TBL
 {
     using Hero;
     using Card;
-    using Action;
-    
+    using GameAction;
+
     public partial class NetworkPlayer : NetworkBehaviour
     {
         [SyncVar]
@@ -121,22 +121,29 @@ namespace TBL
             if (isLocalPlayer)
             {
                 print(hero.skills.Length);
-                List<string> options = new List<string>();
+                List<Option> options = new List<Option>();
                 List<UnityEngine.Events.UnityAction> actions = new List<UnityEngine.Events.UnityAction>();
                 for (int i = 0; i < netHeroSkillCanActivate.Count; ++i)
                 {
-                    if (netHeroSkillCanActivate[i])
+                    if (!netHeroSkillCanActivate[i]) continue;
+
+                    var skill = hero.skills[i];
+                    int x = i;
+                    if (skill.autoActivate)
+                        continue;
+                    // CmdUseSkill(x, skill.localAction);
+                    else
                     {
-                        var skill = hero.skills[i];
-                        int x = i;
-                        if (skill.autoActivate)
-                            UseSkill(x);
-                        else
+                        var option = new Option
                         {
-                            options.Add(skill.name);
-                            actions.Add(() => UseSkill(x));
-                        }
+                            str = skill.name,
+                            onSelect = async () => CmdUseSkill(x, await skill.localAction.Invoke()),
+                            type = OptionType.SKILL
+                        };
+
+                        options.Add(option);
                     }
+
                 }
 
                 if (options.Count == 0)
@@ -147,7 +154,7 @@ namespace TBL
                 }
 
                 netCanvas.heroSkillData.animator.SetTrigger("Blink");
-                netCanvas.heroSkillData.BindEvent(() => netCanvas.tempMenu.InitCustomMenu(options, actions));
+                netCanvas.heroSkillData.BindEvent(() => netCanvas.InitMenu(options));
             }
 
         }
@@ -406,29 +413,29 @@ namespace TBL
         public void TargetGetTest(bool isDraw)
         {
             string msg = $"玩家 {playerIndex} ({playerName}) ：" + (isDraw ? "抽一張牌" : "我是一個好人");
-            netCanvas.tempMenu.InitCustomMenu(
-                new List<string>(){
-                    msg
+            var option = new Option
+            {
+                str = msg,
+                onSelect = () =>
+                {
+                    if (isDraw)
+                        CmdDrawCard(1);
+                    CmdAddLog(
+                        msg,
+                        true,
+                        false,
+                        new int[] { }
+                    );
                 },
-                new List<UnityEngine.Events.UnityAction>(){
-                    ()=>{
-                        if(isDraw)
-                            CmdDrawCard(1);
-                        CmdAddLog(
-                            msg,
-                            true,
-                            false,
-                            new int[]{}
-                        );
-                    }
-                }
-            );
+                type = OptionType.OTHER
+            };
+            netCanvas.InitMenu(new List<Option> { option });
         }
 
-        public void UseSkill(int index)
+        public void CmdUseSkill(int index, SkillAction skillAction)
         {
             print($"{hero.skills[index].name} 效果發動");
-            hero.skills[index].action.Invoke();
+            hero.skills[index].action.Invoke(skillAction);
             CmdSetSkillCanActivate(index, false);
         }
         #endregion
