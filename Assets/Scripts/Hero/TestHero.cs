@@ -14,16 +14,21 @@ namespace TBL.Hero
         {
             var skill0 = new HeroSkill
             {
-                name = "",
+                name = "測試",
                 description = "",
                 autoActivate = false,
                 localAction = async () =>
                 {
-                    print("Test Hero Skill");
+                    var sa = new SkillAction();
+                    var menu = netCanvas.InitMenu(-1, new Option { str = "次選單", onSelect = () => sa.suffix = 1 });
+                    while (sa.suffix != 1)
+                        await Task.Yield();
+
                     return new SkillAction();
                 },
                 action = (_) =>
                 {
+                    print("Test Hero Skill");
                     playerStatus.CmdDrawCard(3);
                 },
                 checker = () =>

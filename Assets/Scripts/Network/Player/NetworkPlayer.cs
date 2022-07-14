@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 using System;
+using System.Threading.Tasks;
 
 namespace TBL
 {
@@ -120,7 +121,6 @@ namespace TBL
         {
             if (isLocalPlayer)
             {
-                print(hero.skills.Length);
                 List<Option> options = new List<Option>();
                 List<UnityEngine.Events.UnityAction> actions = new List<UnityEngine.Events.UnityAction>();
                 for (int i = 0; i < netHeroSkillCanActivate.Count; ++i)
@@ -137,13 +137,26 @@ namespace TBL
                         var option = new Option
                         {
                             str = skill.name,
-                            onSelect = async () => CmdUseSkill(x, await skill.localAction.Invoke()),
+                            onSelect = async () =>
+                            {
+                                var task = skill.localAction.Invoke();
+                                var tempPhase = judgement.currentPhase;
+                                while (!task.IsCompleted)
+                                {
+                                    if (judgement.currentPhase != tempPhase)
+                                        return;
+                                    if (task.IsCanceled)
+                                        return;
+                                    await Task.Yield();
+                                }
+
+                                CmdUseSkill(x, task.Result);
+                            },
                             type = OptionType.SKILL
                         };
 
                         options.Add(option);
                     }
-
                 }
 
                 if (options.Count == 0)
@@ -188,11 +201,13 @@ namespace TBL
 
         TBL.NetCanvas.GameScene netCanvas;
         NetworkRoomManager manager;
+        NetworkJudgement judgement;
 
         public override void OnStartClient()
         {
             netCanvas = FindObjectOfType<TBL.NetCanvas.GameScene>();
             manager = ((NetworkRoomManager)NetworkManager.singleton);
+            judgement = manager.Judgement;
 
             playerIndex = Int32.MaxValue;
 
