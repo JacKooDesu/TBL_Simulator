@@ -18,6 +18,8 @@ namespace TBL.NetCanvas
         [Header("暫存選單")]
         [SerializeField] UI.GameScene.Menu tempMenu;
 
+        [SerializeField] List<UI.GameScene.Menu> tempMenuList = new List<UI.GameScene.Menu>();
+
         public void ShowPlayerCard(int index, UnityAction<int> action, List<CardColor> requestColor = null, List<CardSendType> requestSendType = null)
         {
             List<int> cardIds = manager.players[index].netCards.FindAll((id) => true);
@@ -83,7 +85,21 @@ namespace TBL.NetCanvas
             // Init Ui
             var menu = Instantiate(tempMenu, transform);
             menu.Init(options, defaultIndex);
+            menu.onCloseEvent += () => tempMenuList.Remove(menu);
+            tempMenuList.Add(menu);
             return menu;
+        }
+
+        public UI.GameScene.Menu InitMenu(int defaultIndex = -1, params Option[] options)
+        {
+            return InitMenu(new List<Option>(options), defaultIndex);
+        }
+
+        public void RemoveAllTempMenu()
+        {
+            var tempList = new List<UI.GameScene.Menu>(tempMenuList);
+            foreach (var menu in tempList)
+                menu.Cancel();
         }
         #endregion
     }

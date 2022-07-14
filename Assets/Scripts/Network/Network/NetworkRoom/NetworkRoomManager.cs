@@ -89,7 +89,6 @@ namespace TBL
             var tempPlayers = new NetworkPlayer[players.Count];
             foreach (var p in players)
             {
-                print(p.playerIndex);
                 tempPlayers[p.playerIndex] = p;
             }
 

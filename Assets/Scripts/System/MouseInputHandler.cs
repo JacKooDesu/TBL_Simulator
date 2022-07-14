@@ -11,15 +11,19 @@ public class MouseInputHandler : MonoBehaviour
 
     void Start()
     {
-
+        DontDestroyOnLoad(gameObject);
+        rightClickEvent += () => print("Right Clicked");
     }
 
     // Update is called once per frame
     void Update()
     {
         rightClick = false;
-        if (Input.GetMouseButtonDown(2))
+        if (Input.GetMouseButtonDown(1))
+        {
             rightClick = true;
+        }
+
     }
 
     private void LateUpdate()

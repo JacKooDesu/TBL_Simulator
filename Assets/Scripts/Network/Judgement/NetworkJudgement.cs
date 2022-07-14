@@ -42,7 +42,7 @@ namespace TBL
 
         [Header("輪設定")]
         [SyncVar(hook = nameof(OnCurrentPhaseChange))] public Phase currentPhase;
-        [SyncVar] Phase lastPhase;
+        [SyncVar, HideInInspector] public Phase lastPhase;
         public void ChangePhase(Phase phase)
         {
             lastPhase = currentPhase;
@@ -54,6 +54,7 @@ namespace TBL
             {
                 netCanvas.ResetUI();
             }
+            netCanvas.RemoveAllTempMenu();
         }
 
         [SyncVar] public int currentRoundPlayerIndex;

@@ -9,6 +9,7 @@ namespace TBL.UI
     {
         protected int defaultIndex;
         protected List<Option> options = new List<Option>();
+        public Action onCloseEvent;
 
         public virtual void Init(List<Option> options, int defaultIndex = -1)
         {
@@ -18,6 +19,7 @@ namespace TBL.UI
 
         public virtual void Cancel()
         {
+            // print("Cancel");
             if (defaultIndex == -1)
                 Close();
             else
@@ -26,6 +28,7 @@ namespace TBL.UI
 
         public virtual void Close()
         {
+            onCloseEvent.Invoke();
             Destroy(gameObject);
         }
     }

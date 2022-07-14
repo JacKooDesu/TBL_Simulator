@@ -18,16 +18,24 @@ namespace TBL.UI.GameScene
             this.options.Add(
                 new Option
                 {
-                    str = "取消",
-                    onSelect = Close
+                    str = "取消"
+                    // onSelect = Close
                 }
             );
 
             foreach (var o in this.options)
             {
+                o.onSelect += Close;
                 var optionObj = Instantiate(optionPrefab, contentParent);
                 optionObj.Init(o);
             }
+        }
+
+        public override void Close()
+        {
+            foreach (var o in options)
+                o.onSelect -= Close;
+            base.Close();
         }
     }
 }
