@@ -6,6 +6,7 @@ using System.Threading;
 
 namespace TBL.Hero
 {
+    using Util;
     using Card;
     using GameAction;
 
@@ -23,13 +24,11 @@ namespace TBL.Hero
 
                     var sa = new SkillAction();
                     var menu = netCanvas.InitMenu(-1, new Option { str = "次選單", onSelect = () => sa.suffix = 1 });
-                    while (sa.suffix != 1)
-                    {
-                        print("waiting");
-                        if (cancel.IsCancellationRequested)
-                            return default;
-                        await Task.Yield();
-                    }
+                    await TaskExtend.WaitUntil(
+                        () => sa.suffix == 1, 
+                        () => cancel.IsCancellationRequested);
+
+                    if (cancel.IsCancellationRequested) return default;
 
                     return new SkillAction();
                 },
@@ -39,12 +38,13 @@ namespace TBL.Hero
                     judgement.ChangePhase(NetworkJudgement.Phase.HeroSkillReacting);
                     playerStatus.CmdSetWaitingData(true);
                     playerStatus.TargetReturnDataMenu("0", "1", "2", "3");
-                    while (playerStatus.isWaitingData)
-                    {
-                        if (judgement.currentPhase != NetworkJudgement.Phase.HeroSkillReacting)
-                            return;
-                        await Task.Yield();
-                    }
+
+                    await TaskExtend.WaitUntil(
+                        () => !playerStatus.isWaitingData,
+                        () => judgement.currentPhase != NetworkJudgement.Phase.HeroSkillReacting);
+
+                    if (judgement.currentPhase != NetworkJudgement.Phase.HeroSkillReacting) return;
+
                     playerStatus.CmdDrawCard(playerStatus.tempData);
                     playerStatus.CmdClearTempData();
                     judgement.ChangePhase(judgement.lastPhase);

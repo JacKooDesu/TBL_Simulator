@@ -13,8 +13,9 @@ namespace TBL.Util
                 {
                     while (true)
                     {
+                        UnityEngine.Debug.Log("Waiting");
                         foreach (var c in conditions)
-                            if (!c()) break;
+                            if (c()) return;
                         await Task.Yield();
                     }
                 }
