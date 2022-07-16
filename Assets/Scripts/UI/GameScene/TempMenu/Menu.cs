@@ -15,13 +15,13 @@ namespace TBL.UI.GameScene
         public override void Init(List<Option> options, int defaultIndex = -1)
         {
             base.Init(options, defaultIndex);
-            this.options.Add(
-                new Option
-                {
-                    str = "取消"
-                    // onSelect = Close
-                }
-            );
+            // this.options.Add(
+            //     new Option
+            //     {
+            //         str = "取消"
+            //         // onSelect = Close
+            //     }
+            // );
 
             foreach (var o in this.options)
             {

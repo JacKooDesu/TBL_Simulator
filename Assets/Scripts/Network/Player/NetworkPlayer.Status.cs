@@ -11,7 +11,7 @@ namespace TBL
     public partial class NetworkPlayer : NetworkBehaviour
     {
         [Header("狀態")]
-        [SyncVar] public bool isReady=false;
+        [SyncVar] public bool isReady = false;
         [Command] public void CmdSetReady(bool b) { isReady = b; }
         // [SyncVar] public bool isReadyLast;
 
@@ -65,6 +65,16 @@ namespace TBL
             {
                 manager.RpcLog(UI.LogSystem.LogGeneral.PlayerDead(this), this);
             }
+        }
+
+        [SyncVar] public bool isWaitingData;    // 伺服端要求回傳
+        [SyncVar(hook = nameof(OnTempDataChange))] public int tempData = int.MinValue;  // 回傳的資料放這邊
+        void OnTempDataChange(int oldData, int newData)
+        {
+            if (newData == int.MinValue) return;
+
+            if (isServer)
+                isWaitingData = false;
         }
     }
 }

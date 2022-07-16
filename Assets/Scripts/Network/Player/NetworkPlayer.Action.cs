@@ -158,6 +158,37 @@ namespace TBL
         {
             manager.DeckManager.CardToTop(id);
         }
+
+        [Command]
+        public void CmdSetWaitingData(bool value) => isWaitingData = value;
+
+        [Command]
+        public void CmdSetTempData(int data)
+        {
+            tempData = data;
+            CmdSetWaitingData(false);
+        }
+
+        [Command]
+        public void CmdClearTempData() => tempData = int.MinValue;
+
+        [TargetRpc]
+        public void TargetReturnDataMenu(params string[] optionTexts)
+        {
+            var options = new List<Option>();
+            for (int i = 0; i < optionTexts.Length; ++i)
+            {
+                int temp = i;
+                options.Add(
+                    new Option
+                    {
+                        str = optionTexts[temp],
+                        onSelect = () => CmdSetTempData(temp)
+                    }
+                );
+            }
+            netCanvas.InitMenu(options);
+        }
     }
 }
 

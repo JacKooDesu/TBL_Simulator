@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace TBL.Hero
 {
@@ -12,7 +13,7 @@ namespace TBL.Hero
         public string description;
         public bool autoActivate;
         public bool limited;
-        public System.Func<Task<SkillAction>> localAction;    // 回傳SkillAction Command Server執行
+        public System.Func<CancellationTokenSource, Task<SkillAction>> localAction;    // 回傳SkillAction Command Server執行
         public System.Action<SkillAction> action;    // server 端執行
         public System.Func<bool> checker;   // checker 目前僅在Server端運行檢查
         public System.Action timeoutAction;
@@ -20,7 +21,7 @@ namespace TBL.Hero
         public HeroSkill() { }
         public HeroSkill(
             string name, string description, bool autoActivate,
-            Func<Task<SkillAction>> localAction = null,
+            Func<CancellationTokenSource,Task<SkillAction>> localAction = null,
             Action<SkillAction> action = null,
             Func<bool> checker = null,
             Action timeoutAction = null)

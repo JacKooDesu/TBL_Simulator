@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace TBL.Hero
 {
@@ -17,19 +18,36 @@ namespace TBL.Hero
                 name = "測試",
                 description = "",
                 autoActivate = false,
-                localAction = async () =>
+                localAction = async (cancel) =>
                 {
+
                     var sa = new SkillAction();
                     var menu = netCanvas.InitMenu(-1, new Option { str = "次選單", onSelect = () => sa.suffix = 1 });
                     while (sa.suffix != 1)
+                    {
+                        print("waiting");
+                        if (cancel.IsCancellationRequested)
+                            return default;
                         await Task.Yield();
+                    }
 
                     return new SkillAction();
                 },
-                action = (_) =>
+                action = async (_) =>
                 {
                     print("Test Hero Skill");
-                    playerStatus.CmdDrawCard(3);
+                    judgement.ChangePhase(NetworkJudgement.Phase.HeroSkillReacting);
+                    playerStatus.CmdSetWaitingData(true);
+                    playerStatus.TargetReturnDataMenu("0", "1", "2", "3");
+                    while (playerStatus.isWaitingData)
+                    {
+                        if (judgement.currentPhase != NetworkJudgement.Phase.HeroSkillReacting)
+                            return;
+                        await Task.Yield();
+                    }
+                    playerStatus.CmdDrawCard(playerStatus.tempData);
+                    playerStatus.CmdClearTempData();
+                    judgement.ChangePhase(judgement.lastPhase);
                 },
                 checker = () =>
                 {

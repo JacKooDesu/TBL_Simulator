@@ -106,6 +106,9 @@ namespace TBL
                 if (currentPhase == Phase.Reacting)
                     yield return StartCoroutine(CardEventUpdate());
 
+                if (currentPhase == Phase.HeroSkillReacting)
+                    yield return StartCoroutine(HeroSkillReactingUpdate());
+
                 yield return null;
             }
 
@@ -297,6 +300,22 @@ namespace TBL
             ChangePhase(lastPhase);
 
             manager.CheckAllHeroSkill();
+        }
+
+        IEnumerator HeroSkillReactingUpdate()
+        {
+            float time = roundSetting.reactionTime;
+            while (time >= 0)
+            {
+                if (currentPhase != Phase.HeroSkillReacting)
+                    yield break;
+                
+                time -= Time.deltaTime;
+                timer = ((int)time);
+
+                yield return null;
+            }
+            ChangePhase(lastPhase);
         }
 
         public void PlayerWin(NetworkPlayer p)
