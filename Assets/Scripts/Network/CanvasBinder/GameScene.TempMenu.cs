@@ -97,6 +97,7 @@ namespace TBL.NetCanvas
 
         public void RemoveAllTempMenu()
         {
+            print("Remove all because phase changed!");
             var tempList = new List<UI.GameScene.Menu>(tempMenuList);
             foreach (var menu in tempList)
                 menu.Cancel();

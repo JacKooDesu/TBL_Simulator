@@ -7,47 +7,47 @@ namespace TBL.Hero
         protected override void BindSkill()
         {
 
-            var skill1 = new HeroSkill
-            {
-                name = "狙擊",
-                description = $"翻開此角色牌，然後燒毀 {RichTextHelper.TextWithBold("另一位玩家")} 面前的至多三張情報。",
-                autoActivate = false,
-                action = (_) =>
-                {
-                    var netCanvas = FindObjectOfType<NetCanvas.GameScene>();
+            // var skill1 = new HeroSkill
+            // {
+            //     name = "狙擊",
+            //     description = $"翻開此角色牌，然後燒毀 {RichTextHelper.TextWithBold("另一位玩家")} 面前的至多三張情報。",
+            //     autoActivate = false,
+            //     action = (_) =>
+            //     {
+            //         var netCanvas = FindObjectOfType<NetCanvas.GameScene>();
 
-                    int targetId = 0;
+            //         int targetId = 0;
 
-                    netCanvas.BindSelectPlayer(manager.GetOtherPlayers(), (i) =>
-                    {
-                        targetId = i;
-                        var target = manager.players[targetId];
-                        Snipe(target);
-                    });
+            //         netCanvas.BindSelectPlayer(manager.GetOtherPlayers(), (i) =>
+            //         {
+            //             targetId = i;
+            //             var target = manager.players[targetId];
+            //             Snipe(target);
+            //         });
 
 
-                },
-                checker = () =>
-                {
-                    if (playerStatus.hero.skills[0].limited)
-                        return false;
+            //     },
+            //     checker = () =>
+            //     {
+            //         if (playerStatus.hero.skills[0].limited)
+            //             return false;
 
-                    bool haveCard = false;
-                    foreach (var p in manager.players)
-                    {
-                        if (p.netCards.Count != 0)
-                        {
-                            haveCard = true;
-                            break;
-                        }
-                    }
-                    return playerStatus.hero.isHiding && haveCard;
-                }
-            };
+            //         bool haveCard = false;
+            //         foreach (var p in manager.players)
+            //         {
+            //             if (p.netCards.Count != 0)
+            //             {
+            //                 haveCard = true;
+            //                 break;
+            //             }
+            //         }
+            //         return playerStatus.hero.isHiding && haveCard;
+            //     }
+            // };
 
-            skills = new HeroSkill[] {
-                skill1
-            };
+            // skills = new HeroSkill[] {
+            //     skill1
+            // };
         }
 
         protected override void BindSpecialMission()

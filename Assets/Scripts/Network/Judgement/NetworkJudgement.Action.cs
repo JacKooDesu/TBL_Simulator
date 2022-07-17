@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 using UnityEngine.UI;
+using System.Threading.Tasks;
 
 namespace TBL
 {
@@ -11,8 +12,7 @@ namespace TBL
     using UI.LogSystem;
     public partial class NetworkJudgement : NetworkBehaviour
     {
-        [Command]
-        public async void CmdUseSkill(SkillAction action)
+        public async void UseSkill(SkillAction action)
         {
             var player = manager.players[action.user];
             var hero = player.hero;
@@ -25,7 +25,7 @@ namespace TBL
                 true,
                 false
             ));
-            
+
             ChangePhase(lastPhase);
         }
     }

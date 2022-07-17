@@ -56,7 +56,7 @@ namespace TBL
             {
                 netCanvas.ResetUI();
             }
-            netCanvas.RemoveAllTempMenu();
+            // netCanvas.RemoveAllTempMenu();
         }
 
         [SyncVar] public int currentRoundPlayerIndex;

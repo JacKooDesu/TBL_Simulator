@@ -10,6 +10,7 @@ using System.Threading;
 
 namespace TBL
 {
+    using Util;
     using Hero;
     public partial class NetworkPlayer : NetworkBehaviour
     {
@@ -59,21 +60,21 @@ namespace TBL
                             onSelect = async () =>
                             {
                                 var canceltoken = new CancellationTokenSource();
-                                var task = skill.localAction.Invoke(canceltoken);
+                                var task = skill.localAction(canceltoken);
 
                                 var tempPhase = judgement.currentPhase;
-                                while (!task.IsCompleted)
-                                {
-                                    if (judgement.currentPhase != tempPhase)
-                                    {
-                                        canceltoken.Cancel();
-                                        return;
-                                    }
-                                    
-                                    await Task.Yield();
-                                }
 
-                                CmdUseSkill(x, task.Result);
+                                await TaskExtend.WaitUntil(
+                                    () => task.IsCompleted,
+                                    () => judgement.currentPhase != tempPhase);
+                                if (judgement.currentPhase != tempPhase)
+                                {
+                                    canceltoken.Cancel();
+                                    return;
+                                }
+                                print("Client Skill Action Activate!");
+
+                                CmdUseSkill(task.Result);
                             },
                             type = OptionType.SKILL
                         };

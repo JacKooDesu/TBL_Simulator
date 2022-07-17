@@ -47,7 +47,7 @@ MonoBehaviour:
   sceneId: 0
   serverOnly: 0
   visible: 0
-  m_AssetId: 
+  m_AssetId: bdfca9f78a7b8834facbd2fe7fb8efca
   hasSpawned: 0
 --- !u!114 &4211675261950399464
 MonoBehaviour:
@@ -62,7 +62,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   syncMode: 0
-  syncInterval: 0.1
+  syncInterval: 0
+  heroIndex: -1
+  hero: {fileID: 0}
+  isReady: 0
+  isLocked: 0
+  isSkipped: 0
+  hasDraw: 0
+  acceptCard: 0
+  rejectCard: 0
+  isWin: 0
+  isDead: 0
+  isWaitingData: 0
+  tempData: -2147483648
+  playerIndex: 0
   playerName: 
-  handCards: []
-  cards: []
+  teamIndex: 0

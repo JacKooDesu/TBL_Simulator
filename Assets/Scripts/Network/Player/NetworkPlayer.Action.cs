@@ -38,7 +38,7 @@ namespace TBL
         [Server]
         public void DrawHero(int testIndex = -1)
         {
-            if (isLocalPlayer)
+            if (testIndex != -1)
             {
                 heroIndex = testIndex;
                 return;
@@ -175,6 +175,7 @@ namespace TBL
         [TargetRpc]
         public void TargetReturnDataMenu(params string[] optionTexts)
         {
+            print("Target data return menu init");
             var options = new List<Option>();
             for (int i = 0; i < optionTexts.Length; ++i)
             {

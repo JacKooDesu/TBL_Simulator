@@ -22,32 +22,37 @@ namespace TBL.Hero
                 localAction = async (cancel) =>
                 {
 
-                    var sa = new SkillAction();
+                    var sa = new SkillAction
+                    {
+                        skill = 0,
+                        user = playerStatus.playerIndex
+                    };
                     var menu = netCanvas.InitMenu(-1, new Option { str = "次選單", onSelect = () => sa.suffix = 1 });
                     await TaskExtend.WaitUntil(
-                        () => sa.suffix == 1, 
+                        () => sa.suffix == 1,
                         () => cancel.IsCancellationRequested);
 
                     if (cancel.IsCancellationRequested) return default;
 
-                    return new SkillAction();
+                    return sa;
                 },
                 action = async (_) =>
                 {
                     print("Test Hero Skill");
-                    judgement.ChangePhase(NetworkJudgement.Phase.HeroSkillReacting);
-                    playerStatus.CmdSetWaitingData(true);
+                    playerStatus.isWaitingData = true;
                     playerStatus.TargetReturnDataMenu("0", "1", "2", "3");
-
                     await TaskExtend.WaitUntil(
                         () => !playerStatus.isWaitingData,
                         () => judgement.currentPhase != NetworkJudgement.Phase.HeroSkillReacting);
 
-                    if (judgement.currentPhase != NetworkJudgement.Phase.HeroSkillReacting) return;
-
-                    playerStatus.CmdDrawCard(playerStatus.tempData);
+                    if (judgement.currentPhase != NetworkJudgement.Phase.HeroSkillReacting)
+                    {
+                        playerStatus.isWaitingData = false;
+                        return;
+                    }
+                    print(playerStatus.tempData);
+                    playerStatus.DrawCard(playerStatus.tempData);
                     playerStatus.CmdClearTempData();
-                    judgement.ChangePhase(judgement.lastPhase);
                 },
                 checker = () =>
                 {
