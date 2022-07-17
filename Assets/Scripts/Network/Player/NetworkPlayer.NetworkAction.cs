@@ -6,33 +6,34 @@ using TBL.Card;
 using TBL.GameAction;
 using System;
 
-// Action means only run on server (not use for client command)
 namespace TBL
 {
     public partial class NetworkPlayer : NetworkBehaviour
     {
-        [Server]
-        public void DrawTeam()
+        [Command]
+        public void CmdDrawTeam()
         {
             teamIndex = ((NetworkRoomManager)NetworkManager.singleton).teamList[0];
             ((NetworkRoomManager)NetworkManager.singleton).teamList.RemoveAt(0);
         }
 
-        [Server]
-        public void AddCard(int id)
+        [Command]
+        public void CmdAddCard(int id)
         {
             print($"檯面新增 {id}");
             netCards.Add((int)id);
         }
 
-        [Server]
-        public void DrawHero(int testIndex = -1)
+        [Command]
+        public void CmdDrawHero()
         {
-            if (testIndex != -1)
+            // -- 用於測試固定英雄 --
+            if (isLocalPlayer)
             {
-                heroIndex = testIndex;
+                heroIndex = 8;
                 return;
             }
+            // --
 
             int rand;
             do
@@ -44,89 +45,100 @@ namespace TBL
             heroIndex = rand;
         }
 
-        [Server]
-        public void DrawCard(int amount)
+        [Command]
+        public void CmdDrawCard(int amount)
         {
             for (int i = 0; i < amount; ++i)
             {
                 netHandCards.Add(manager.DeckManager.DrawCardFromTop().ID);
             }
-
-            if (manager.Judgement.currentPlayerIndex == playerIndex)
-                CmdSetDraw(true);
         }
 
-        [Server]
-        public void SetName()
+        [Command]
+        public void CmdSetName()
         {
             playerName = GameUtils.PlayerName;
         }
 
-        [Server]
-        public void AddHandCard(int id)
+        [Command]
+        public void CmdAddHandCard(int id)
         {
             print($"手牌新增 {id}");
             netHandCards.Add((int)id);
         }
 
-        // H = Hand
-        // T = Table
-        // G = Graveyard
-        // D = Deck
-        
-        [Server]
-        public void CardHToH(int id, int target)
+        [Command]
+        public void CmdCardHToH(int id, int target)     // Hand To Hand
         {
             print($"玩家 {playerIndex} 給予 玩家 {target} - {Card.CardSetting.IdToCard(id).name}");
             netHandCards.Remove((int)id);
             manager.players[target].AddHandCard(id);
         }
 
-        [Server]
-        public void CardHToT(int id, int target)     // Hand to Table
+        [Command]
+        public void CmdCardHToT(int id, int target)     // Hand to Table
         {
             print($"玩家 {playerIndex} 給予 玩家 {target} - {Card.CardSetting.IdToCard(id).name}");
             netHandCards.Remove((int)id);
             manager.players[target].AddCard(id);
         }
 
-        [Server]
-        public void CardHToG(int id) // Hand To Graveyard
+        [Command]
+        public void CmdCardHToG(int id) // Hand To Graveyard
         {
             netHandCards.Remove((int)id);
         }
 
-        [Server]
-        public void CardTToG(int player, int id) // Table ToGraveyard
+        [Command]
+        public void CmdCardTToG(int player, int id) // Table ToGraveyard
         {
             manager.players[player].netCards.Remove(id);
         }
 
-        [Server]
-        public void CardTToH(int player, int id)  // Table to Hand
+        [Command]
+        public void CmdCardTToH(int player, int id)  // Table to Hand
         {
             manager.players[player].netCards.Remove(id);
             manager.players[player].netHandCards.Add(id);
         }
 
-        [Server]
-        public void CardHToD(int id)     // Hand to Deck
+        [Command]
+        public void CmdCardHToD(int id)     // Hand to Deck
         {
             manager.DeckManager.CardToTop(id);
         }
 
-        [Server]
-        public void SetWaitingData(bool value) => isWaitingData = value;
+        [Command]
+        public void CmdSetWaitingData(bool value) => isWaitingData = value;
 
-        [Server]
-        public void SetTempData(int data)
+        [Command]
+        public void CmdSetTempData(int data)
         {
             tempData = data;
             CmdSetWaitingData(false);
         }
 
-        [Server]
-        public void ClearTempData() => tempData = int.MinValue;
+        [Command]
+        public void CmdClearTempData() => tempData = int.MinValue;
+
+        [TargetRpc]
+        public void TargetReturnDataMenu(params string[] optionTexts)
+        {
+            print("Target data return menu init");
+            var options = new List<Option>();
+            for (int i = 0; i < optionTexts.Length; ++i)
+            {
+                int temp = i;
+                options.Add(
+                    new Option
+                    {
+                        str = optionTexts[temp],
+                        onSelect = () => CmdSetTempData(temp)
+                    }
+                );
+            }
+            netCanvas.InitMenu(options);
+        }
     }
 }
 
