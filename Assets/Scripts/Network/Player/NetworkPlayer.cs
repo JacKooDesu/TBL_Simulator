@@ -368,10 +368,10 @@ namespace TBL
             netCanvas.InitMenu(new List<Option> { option });
         }
 
-        public void CmdUseSkill(int index, SkillAction skillAction)
+        public async void CmdUseSkill(int index, SkillAction skillAction)
         {
             print($"{hero.skills[index].name} 效果發動");
-            hero.skills[index].action.Invoke(skillAction);
+            await hero.skills[index].action(skillAction);
             CmdSetSkillCanActivate(index, false);
         }
         #endregion
