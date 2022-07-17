@@ -14,17 +14,17 @@ namespace TBL.Hero
         public bool autoActivate;
         public bool limited;
         public System.Func<CancellationTokenSource, Task<SkillAction>> localAction;    // 回傳SkillAction Command Server執行
-        public System.Action<SkillAction> action;    // server 端執行
+        public System.Func<SkillAction, Task> action;    // server 端執行
         public System.Func<bool> checker;   // checker 目前僅在Server端運行檢查
-        public System.Action timeoutAction;
+        public System.Func<Task> timeoutAction;
 
         public HeroSkill() { }
         public HeroSkill(
             string name, string description, bool autoActivate,
-            Func<CancellationTokenSource,Task<SkillAction>> localAction = null,
-            Action<SkillAction> action = null,
+            Func<CancellationTokenSource, Task<SkillAction>> localAction = null,
+            Func<SkillAction, Task> action = null,
             Func<bool> checker = null,
-            Action timeoutAction = null)
+            Func<Task> timeoutAction = null)
         {
             limited = false;
             this.name = name;

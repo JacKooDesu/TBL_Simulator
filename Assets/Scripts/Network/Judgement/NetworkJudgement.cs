@@ -37,6 +37,7 @@ namespace TBL
             Sending,
             Reacting,
             HeroSkillReacting,
+            HeroSkillConfirm,
             CardEventing,
             Result
         }

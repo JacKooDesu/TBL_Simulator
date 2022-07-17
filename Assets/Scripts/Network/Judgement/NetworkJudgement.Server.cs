@@ -104,10 +104,15 @@ namespace TBL
                 timer = (int)time;
 
                 if (currentPhase == Phase.Reacting)
+                {
                     yield return StartCoroutine(CardEventUpdate());
+                }
 
                 if (currentPhase == Phase.HeroSkillReacting)
+                {
                     yield return StartCoroutine(HeroSkillReactingUpdate());
+                    time = roundSetting.roundTime;  // reset time after hero skill activate
+                }
 
                 yield return null;
             }
@@ -309,7 +314,7 @@ namespace TBL
             {
                 if (currentPhase != Phase.HeroSkillReacting)
                     yield break;
-                
+
                 time -= Time.deltaTime;
                 timer = ((int)time);
 
