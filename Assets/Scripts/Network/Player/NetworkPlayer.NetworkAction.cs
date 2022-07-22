@@ -138,6 +138,7 @@ namespace TBL
                 );
             }
             netCanvas.InitMenu(options);
+            CmdSetWaitingData(true);
         }
     }
 }

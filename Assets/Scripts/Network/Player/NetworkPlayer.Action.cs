@@ -4,11 +4,12 @@ using UnityEngine;
 using Mirror;
 using TBL.Card;
 using TBL.GameAction;
-using System;
+using System.Threading.Tasks;
 
 // Action means only run on server (not use for client command)
 namespace TBL
 {
+    using Util;
     public partial class NetworkPlayer : NetworkBehaviour
     {
         [Server]
@@ -73,7 +74,7 @@ namespace TBL
         // T = Table
         // G = Graveyard
         // D = Deck
-        
+
         [Server]
         public void CardHToH(int id, int target)
         {
@@ -127,6 +128,14 @@ namespace TBL
 
         [Server]
         public void ClearTempData() => tempData = int.MinValue;
+
+        [Server]
+        public async Task InitReturnDataMenu(params string[] optionTexts)
+        {
+            this.TargetReturnDataMenu(optionTexts);
+            await TaskExtend.WaitUntil(() => isWaitingData);
+            return;
+        }
     }
 }
 

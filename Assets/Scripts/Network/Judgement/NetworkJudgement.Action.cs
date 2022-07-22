@@ -10,6 +10,7 @@ namespace TBL
     using Hero;
     using GameAction;
     using UI.LogSystem;
+    using Util;
     public partial class NetworkJudgement : NetworkBehaviour
     {
         public async void UseSkill(SkillAction action)
@@ -19,6 +20,9 @@ namespace TBL
             var skill = hero.skills[action.skill];
 
             ChangePhase(Phase.HeroSkillReacting);
+            await TaskExtend.WaitUntil(
+                () => manager.players.Find(p => p.phase == lastPhase) == null
+            );
             await skill.action(action);
             manager.TargetLogAll(new LogBase(
                 $"{player.playerName} ({hero.HeroName}) 使用 {skill.name}",
