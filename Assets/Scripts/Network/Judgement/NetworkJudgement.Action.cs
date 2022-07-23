@@ -23,13 +23,17 @@ namespace TBL
             await TaskExtend.WaitUntil(
                 () => manager.players.Find(p => p.phase == lastPhase) == null
             );
-            await skill.action(action);
+            var result = await skill.action(action);
+
+            // return if action failed (maybe timeout)
+            if (!result)
+                return;
+
             manager.TargetLogAll(new LogBase(
                 $"{player.playerName} ({hero.HeroName}) 使用 {skill.name}",
                 true,
                 false
             ));
-
             ChangePhase(lastPhase);
         }
     }

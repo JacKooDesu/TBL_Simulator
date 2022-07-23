@@ -47,11 +47,13 @@ namespace TBL.Hero
                     if (judgement.currentPhase != NetworkJudgement.Phase.HeroSkillReacting)
                     {
                         playerStatus.isWaitingData = false;
-                        return;
+                        return false;
                     }
-                    print(playerStatus.tempData);
+
                     playerStatus.DrawCard(playerStatus.tempData);
                     playerStatus.CmdClearTempData();
+
+                    return true;
                 },
                 checker = () =>
                 {

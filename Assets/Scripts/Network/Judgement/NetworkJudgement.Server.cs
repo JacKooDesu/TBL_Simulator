@@ -310,6 +310,7 @@ namespace TBL
         IEnumerator HeroSkillReactingUpdate()
         {
             float time = roundSetting.reactionTime;
+
             while (time >= 0)
             {
                 if (currentPhase != Phase.HeroSkillReacting)
