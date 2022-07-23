@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using System.Threading;
 using System;
-
+using UnityEngine;
 namespace TBL.Util
 {
     public static class TaskExtend
@@ -11,9 +11,9 @@ namespace TBL.Util
             await Task.Run(
                 async () =>
                 {
+                    Debug.LogWarning("Waiting!");
                     while (true)
                     {
-                        UnityEngine.Debug.Log("Waiting");
                         foreach (var c in conditions)
                             if (c()) return;
                         await Task.Yield();

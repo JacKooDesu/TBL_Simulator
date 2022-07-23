@@ -39,8 +39,7 @@ namespace TBL.Hero
                 action = async (_) =>
                 {
                     print("Test Hero Skill");
-                    playerStatus.isWaitingData = true;
-                    playerStatus.TargetReturnDataMenu("0", "1", "2", "3");
+                    await playerStatus.InitReturnDataMenu("0", "1", "2", "3");
                     await TaskExtend.WaitUntil(
                         () => !playerStatus.isWaitingData,
                         () => judgement.currentPhase != NetworkJudgement.Phase.HeroSkillReacting);
@@ -48,11 +47,13 @@ namespace TBL.Hero
                     if (judgement.currentPhase != NetworkJudgement.Phase.HeroSkillReacting)
                     {
                         playerStatus.isWaitingData = false;
-                        return;
+                        return false;
                     }
-                    print(playerStatus.tempData);
+
                     playerStatus.DrawCard(playerStatus.tempData);
                     playerStatus.CmdClearTempData();
+
+                    return true;
                 },
                 checker = () =>
                 {

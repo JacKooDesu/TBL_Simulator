@@ -19,6 +19,8 @@ namespace TBL
         void OnLockStatusChange(bool oldStatus, bool newStatus) { netCanvas.playerUIs[playerIndex].UpdateStatus(); }
         [Command] public void CmdSetLocked(bool b) { isLocked = b; }
         // [SyncVar] public bool isLockedLast;
+        [SyncVar] public NetworkJudgement.Phase phase;  // only changed by cmd
+        [Command] public void CmdSetPhase(NetworkJudgement.Phase phase) => this.phase = phase;
         [SyncVar(hook = nameof(OnSkipStatusChange))] public bool isSkipped;
         void OnSkipStatusChange(bool oldStatus, bool newStatus) { netCanvas.playerUIs[playerIndex].UpdateStatus(); }
         [Command] public void CmdSetSkipped(bool b) { isSkipped = b; }
