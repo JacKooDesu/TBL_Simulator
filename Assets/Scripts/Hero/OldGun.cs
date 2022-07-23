@@ -166,7 +166,7 @@ namespace TBL.Hero
                 $"獲得三張或以上 {RichTextGeneral.red} 情報",
                 () =>
                 {
-                    return playerStatus.GetCardColorCount(Card.CardColor.Red) >= 3;
+                    return playerStatus.GetCardCount(Card.CardColor.Red) >= 3;
                 }
             );
         }
