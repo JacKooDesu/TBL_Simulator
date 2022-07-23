@@ -103,8 +103,8 @@ namespace TBL.Hero
                 $"手牌湊齊三張 {RichTextGeneral.red} 卡牌與三張 {RichTextGeneral.blue} 卡牌。",
                 () =>
                 {
-                    return playerStatus.GetHandCardColorCount(Card.CardColor.Red) >= 3 &&
-                            playerStatus.GetHandCardColorCount(Card.CardColor.Blue) >= 3;
+                    return playerStatus.GetHandCardCount(Card.CardColor.Red) >= 3 &&
+                            playerStatus.GetHandCardCount(Card.CardColor.Blue) >= 3;
                 }
             );
         }
