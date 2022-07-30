@@ -18,7 +18,7 @@ namespace TBL
             netCanvas.timeTextUI.text = newTime.ToString();
         }
 
-        [SerializeField, SyncVar(hook = nameof(OnCurrentPlayerChange))] public int currentPlayerIndex;
+        [SerializeField, SyncVar(hook = nameof(OnCurrentPlayerChange))] public int currentRoundPlayerIndex;
         void OnCurrentPlayerChange(int oldPlayer, int newPlayer)
         {
 
@@ -56,12 +56,11 @@ namespace TBL
             {
                 netCanvas.ResetUI();
             }
-            print(newPhase);
+            print($"System - 階段更新: {newPhase}");
             manager.LocalPlayer.CmdSetPhase(newPhase);
             netCanvas.RemoveAllTempMenu();
         }
 
-        [SyncVar] public int currentRoundPlayerIndex;
         [SyncVar] public bool currentRoundHasSendCard;
         [SyncVar] public int currentRoundSendingCardId;
         [SyncVar] public int currentSendingPlayer;

@@ -53,7 +53,7 @@ namespace TBL.NetCanvas
 
         public void CheckCanSend(int localIndex)
         {
-            print($"Player {localIndex} Checking");
+            // print($"Player {localIndex} Checking");
 
             SetButtonInteractable(send: 0);
             // sendButton.gameObject.SetActive(false);
@@ -105,7 +105,7 @@ namespace TBL.NetCanvas
         {
             foreach (UI.GameScene.PlayerData pUI in playerUIs)
             {
-                if (pUI.player.playerIndex == manager.Judgement.currentPlayerIndex)
+                if (pUI.player.playerIndex == manager.Judgement.currentRoundPlayerIndex)
                     pUI.gameObject.GetComponent<Animator>().SetTrigger("Host");
                 else
                     pUI.gameObject.GetComponent<Animator>().SetTrigger("Return");
@@ -282,7 +282,7 @@ namespace TBL.NetCanvas
                 switch (manager.Judgement.currentPhase)
                 {
                     case NetworkJudgement.Phase.ChooseToSend:
-                        if (!manager.Judgement.currentRoundHasSendCard && manager.Judgement.currentPlayerIndex == manager.LocalPlayer.playerIndex)
+                        if (!manager.Judgement.currentRoundHasSendCard && manager.Judgement.currentRoundPlayerIndex == manager.LocalPlayer.playerIndex)
                         {
                             SetButtonInteractable(send: 1);
                         }
@@ -311,7 +311,7 @@ namespace TBL.NetCanvas
 
                     if (setting.roundHost)
                     {
-                        if (manager.Judgement.currentPlayerIndex != manager.LocalPlayer.playerIndex)
+                        if (manager.Judgement.currentRoundPlayerIndex != manager.LocalPlayer.playerIndex)
                             SetButtonInteractable(use: 0);
                         else
                             SetButtonInteractable(use: 1);
