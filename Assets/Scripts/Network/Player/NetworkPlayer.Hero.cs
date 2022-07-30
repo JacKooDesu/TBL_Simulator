@@ -50,8 +50,9 @@ namespace TBL
                     var skill = hero.skills[i];
                     int x = i;
                     if (skill.autoActivate)
-                        continue;
-                    // CmdUseSkill(x, skill.localAction);
+                    {
+                        CmdUseSkill(new SkillAction(user: playerIndex, skill: x));
+                    }
                     else
                     {
                         var option = new Option

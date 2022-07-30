@@ -30,7 +30,7 @@ namespace TBL
             foreach (NetworkPlayer p in manager.players)
             {
                 p.DrawTeam();
-                p.DrawHero(0);
+                p.DrawHero(7);
                 p.DrawCard(3);
             }
         }
@@ -38,7 +38,7 @@ namespace TBL
         void StartNewRound(int index)
         {
             ResetRoundTrigger(0, 0);
-            currentPlayerIndex = index;
+            currentRoundPlayerIndex = index;
             currentRoundSendingCardId = 0;
             currentSendingPlayer = -1;
             playerIntercept = -1;
@@ -56,7 +56,7 @@ namespace TBL
             if (currentPhase == Phase.Result)
                 return;
 
-            var player = manager.players[currentPlayerIndex];
+            var player = manager.players[currentRoundPlayerIndex];
             manager.RpcLog(LogGeneral.RoundStart(player), player);
 
             StartCoroutine(RoundUpdate());
@@ -68,9 +68,9 @@ namespace TBL
 
             // manager.CheckAllHeroSkill();
 
-            manager.players[currentPlayerIndex].hasDraw = false;
+            manager.players[currentRoundPlayerIndex].hasDraw = false;
             float time = roundSetting.drawTime;
-            while (!manager.players[currentPlayerIndex].hasDraw && time >= 0)
+            while (!manager.players[currentRoundPlayerIndex].hasDraw && time >= 0)
             {
                 time -= Time.deltaTime;
                 timer = (int)time;
@@ -81,12 +81,12 @@ namespace TBL
                 yield return null;
             }
 
-            manager.players[currentPlayerIndex].DrawCard(amount);
+            manager.players[currentRoundPlayerIndex].DrawCard(amount);
         }
 
         IEnumerator RoundUpdate()
         {
-            var player = manager.players[currentPlayerIndex];
+            var player = manager.players[currentRoundPlayerIndex];
             player.RpcUpdateRoundHost();
 
             player.TargetDrawStart();
@@ -124,14 +124,21 @@ namespace TBL
                 player.TargetEndRound();
                 manager.RpcLog(UI.LogSystem.LogGeneral.RoundTimeOver(player), player);
                 StartNewRound(
-                (currentPlayerIndex + 1 == manager.players.Count) ?
-                0 : currentPlayerIndex + 1
+                    (currentRoundPlayerIndex + 1 == manager.players.Count) ?
+                    0 : currentRoundPlayerIndex + 1
                 );
             }
             else
             {
                 player.TargetEndRound();
-                StartCoroutine(SendingCardUpdate());
+                yield return StartCoroutine(SendingCardUpdate());
+                if (currentPhase == Phase.HeroSkillReacting)
+                    yield return StartCoroutine(HeroSkillReactingUpdate());
+
+                StartNewRound(
+                    (currentRoundPlayerIndex + 1 == manager.players.Count) ?
+                    0 : currentRoundPlayerIndex + 1
+                );
             }
         }
 
@@ -139,7 +146,7 @@ namespace TBL
         {
             ChangePhase(Phase.Sending);
 
-            var player = manager.players[currentPlayerIndex];
+            var player = manager.players[currentRoundPlayerIndex];
 
             print("卡片傳送中");
             manager.RpcLog(UI.LogSystem.LogGeneral.SendCard(player, (Card.CardSetting)currentRoundSendingCardId), player);
@@ -155,7 +162,7 @@ namespace TBL
                 NetworkPlayer p = cardSendQueue[i];
                 currentSendingPlayer = p.playerIndex;
 
-                if (currentSendingPlayer == currentPlayerIndex)
+                if (currentSendingPlayer == currentRoundPlayerIndex)
                 {
                     manager.RpcLog(UI.LogSystem.LogGeneral.AcceptCard(p, (Card.CardSetting)currentRoundSendingCardId), p);
                     p.AddCard(currentRoundSendingCardId);
@@ -216,11 +223,6 @@ namespace TBL
 
             manager.CheckAllWin();
             manager.CheckAllHeroSkill();
-
-            StartNewRound(
-                (currentPlayerIndex + 1 == manager.players.Count) ?
-                        0 : currentPlayerIndex + 1
-                        );
         }
 
         public void AddCardAction(GameAction.CardAction ca)

@@ -22,7 +22,7 @@ namespace TBL
         [Server]
         public void AddCard(int id)
         {
-            print($"檯面新增 {id}");
+            print($"System - 檯面新增 {id}");
             netCards.Add((int)id);
         }
 
@@ -53,7 +53,7 @@ namespace TBL
                 netHandCards.Add(manager.DeckManager.DrawCardFromTop().ID);
             }
 
-            if (manager.Judgement.currentPlayerIndex == playerIndex)
+            if (manager.Judgement.currentRoundPlayerIndex == playerIndex)
                 CmdSetDraw(true);
         }
 

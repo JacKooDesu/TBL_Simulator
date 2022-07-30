@@ -33,6 +33,7 @@ namespace TBL.Networking
         public override void OnStopServer()
         {
             NetworkClient.UnregisterHandler<AuthRequestMessage>();
+            playerNames.Clear();
         }
 
         public void OnAuthRequestMessage(NetworkConnectionToClient conn, AuthRequestMessage msg)
