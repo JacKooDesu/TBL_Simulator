@@ -27,7 +27,7 @@ namespace TBL.NetCanvas
 
         public void UpdatePlayerList()
         {
-            print($"更新玩家列表 | 目前玩家數 {manager.roomSlots.Count}");
+            print($"System - 更新玩家列表 | 目前玩家數 {manager.roomSlots.Count}");
             start.interactable = false;
 
             // Clear Prefabs

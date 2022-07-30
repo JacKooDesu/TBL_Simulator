@@ -82,6 +82,7 @@ namespace TBL
         // net hand card callback
         public void OnUpdateCard(SyncList<int>.Operation op, int index, int oldItem, int newItem)
         {
+            print("Render - 更新檯面卡片");
             netCanvas.playerUIs[playerIndex].UpdateStatus();
 
             if (isServer)
@@ -132,14 +133,14 @@ namespace TBL
 
             playerIndex = Int32.MaxValue;
 
+            netHandCards.Callback += OnUpdateHandCard;
+            netCards.Callback += OnUpdateCard;
+
             manager.players.Add(this);
         }
 
         public override void OnStartLocalPlayer()
         {
-            netHandCards.Callback += OnUpdateHandCard;
-            netCards.Callback += OnUpdateCard;
-
             StartCoroutine(WaitServerInit());
         }
 
@@ -207,7 +208,7 @@ namespace TBL
             {
                 netCanvas.CheckCanSend(playerIndex);
 
-                print("Check can send");
+                // print("Check can send");
             });
             StartCoroutine(RoundUpdate());
         }
