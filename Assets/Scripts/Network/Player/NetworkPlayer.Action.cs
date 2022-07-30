@@ -136,6 +136,14 @@ namespace TBL
             await TaskExtend.WaitUntil(() => isWaitingData);
             return;
         }
+
+        [Server]
+        public async Task InitReturnHandCardMenu(params CardColor[] colors)
+        {
+            this.TargetReturnHandCardMenu(colors);
+            await TaskExtend.WaitUntil(() => isWaitingData);
+            return;
+        }
     }
 }
 
