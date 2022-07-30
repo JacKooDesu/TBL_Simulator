@@ -5,6 +5,7 @@ using Mirror;
 using TBL.Card;
 using TBL.GameAction;
 using System;
+using System.Linq;
 
 namespace TBL
 {
@@ -134,6 +135,85 @@ namespace TBL
                     {
                         str = optionTexts[temp],
                         onSelect = () => CmdSetTempData(temp)
+                    }
+                );
+            }
+            netCanvas.InitMenu(options);
+            CmdSetWaitingData(true);
+        }
+
+        [TargetRpc]
+        public void TargetReturnHandCardMenu(params CardColor[] colors)
+        {
+            // print("Target data return menu init");
+            var colorList = new List<CardColor>(colors);
+            if (colorList.Count == 0)
+                colorList = Enum.GetValues(typeof(CardColor)).Cast<CardColor>().ToList();
+
+            var options = new List<Option>();
+            for (int i = 0; i < netHandCards.Count; ++i)
+            {
+                var card = netHandCards[i];
+                if (!colorList.Contains(((CardSetting)card).CardColor))
+                    continue;
+
+                options.Add(
+                    new Option
+                    {
+                        str = ((CardSetting)card).CardName,
+                        onSelect = () => CmdSetTempData(card)
+                    }
+                );
+            }
+            netCanvas.InitMenu(options);
+            CmdSetWaitingData(true);
+        }
+
+        [TargetRpc]
+        public void TargetReturnHandCardMenu(params CardSendType[] sendTypes)
+        {
+            var sendtypeList = new List<CardSendType>(sendTypes);
+            if (sendtypeList.Count == 0)
+                sendtypeList = Enum.GetValues(typeof(CardSendType)).Cast<CardSendType>().ToList();
+
+            var options = new List<Option>();
+            for (int i = 0; i < netHandCards.Count; ++i)
+            {
+                var card = netHandCards[i];
+                if (!sendtypeList.Contains(((CardSetting)card).SendType))
+                    continue;
+
+                options.Add(
+                    new Option
+                    {
+                        str = ((CardSetting)card).CardName,
+                        onSelect = () => CmdSetTempData(card)
+                    }
+                );
+            }
+            netCanvas.InitMenu(options);
+            CmdSetWaitingData(true);
+        }
+
+        [TargetRpc]
+        public void TargetReturnHandCardMenu(params CardType[] cardTypes)
+        {
+            var sendtypeList = new List<CardType>(cardTypes);
+            if (sendtypeList.Count == 0)
+                sendtypeList = Enum.GetValues(typeof(CardType)).Cast<CardType>().ToList();
+
+            var options = new List<Option>();
+            for (int i = 0; i < netHandCards.Count; ++i)
+            {
+                var card = netHandCards[i];
+                if (!sendtypeList.Contains(((CardSetting)card).CardType))
+                    continue;
+
+                options.Add(
+                    new Option
+                    {
+                        str = ((CardSetting)card).CardName,
+                        onSelect = () => CmdSetTempData(card)
                     }
                 );
             }
