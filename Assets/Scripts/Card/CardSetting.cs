@@ -51,41 +51,40 @@ namespace TBL.Card
                 // Color
                 // if(Compare(value, Black))
                 //     cardColor=CardColor.Black;
-                if ((value & (int)CardColor.Black) == (int)CardColor.Black)
+                if (Compare(value, Black))
                     cardColor = CardColor.Black;
-                if ((value & (int)CardColor.Red) == (int)CardColor.Red)
+                if (Compare(value, Red))
                     cardColor = CardColor.Red;
-                if ((value & (int)CardColor.Blue) == (int)CardColor.Blue)
+                if (Compare(value, Blue))
                     cardColor = CardColor.Blue;
 
                 // SendType
-                if ((value & (int)CardSendType.Direct) == (int)CardSendType.Direct)
+                if (Compare(value, Direct))
                     sendType = CardSendType.Direct;
-                if ((value & (int)CardSendType.Secret) == (int)CardSendType.Secret)
+                if (Compare(value, Secret))
                     sendType = CardSendType.Secret;
-                if ((value & (int)CardSendType.Public) == (int)CardSendType.Public)
+                if (Compare(value, Public))
                     sendType = CardSendType.Public;
 
                 // CardType
-                if ((value & (int)CardType.Burn) == (int)CardType.Burn)
+                if (Compare(value, CardAttributeHelper.Burn))
                     cardType = CardType.Burn;
-                if ((value & (int)CardType.Gameble) == (int)CardType.Gameble)
+                if (Compare(value, CardAttributeHelper.Gameble))
                     cardType = CardType.Gameble;
-                if ((value & (int)CardType.Guess) == (int)CardType.Guess)
+                if (Compare(value, CardAttributeHelper.Guess))
                     cardType = CardType.Guess;
-                if ((value & (int)CardType.Intercept) == (int)CardType.Intercept)
+                if (Compare(value, CardAttributeHelper.Intercept))
                     cardType = CardType.Intercept;
-                if ((value & (int)CardType.Invalidate) == (int)CardType.Invalidate)
+                if (Compare(value, CardAttributeHelper.Invalidate))
                     cardType = CardType.Invalidate;
-                if ((value & (int)CardType.Lock) == (int)CardType.Lock)
+                if (Compare(value, CardAttributeHelper.Lock))
                     cardType = CardType.Lock;
-                if ((value & (int)CardType.Return) == (int)CardType.Return)
+                if (Compare(value, CardAttributeHelper.Return))
                     cardType = CardType.Return;
-                if ((value & (int)CardType.Skip) == (int)CardType.Skip)
+                if (Compare(value, CardAttributeHelper.Skip))
                     cardType = CardType.Skip;
-                if ((value & (int)CardType.Test) == (int)CardType.Test)
+                if (Compare(value, CardAttributeHelper.Test))
                     cardType = CardType.Test;
-
             }
         }
 
