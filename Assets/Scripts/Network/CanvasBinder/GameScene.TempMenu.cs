@@ -20,19 +20,19 @@ namespace TBL.NetCanvas
 
         [SerializeField] List<UI.GameScene.Menu> tempMenuList = new List<UI.GameScene.Menu>();
 
-        public void ShowPlayerCard(int index, UnityAction<int> action, List<CardColor> requestColor = null, List<CardSendType> requestSendType = null)
+        public void ShowPlayerCard(int index, UnityAction<int> action, List<CardColor> requestColor = null, List<CardSendType> requestSendType = null, List<CardType> requestType = null)
         {
             List<int> cardIds = manager.players[index].netCards.FindAll((id) => true);
             ShowCardMenu(cardIds, action, requestColor, requestSendType);
         }
 
-        public void ShowPlayerHandCard(int index, UnityAction<int> action, List<CardColor> requestColor = null, List<CardSendType> requestSendType = null)
+        public void ShowPlayerHandCard(int index, UnityAction<int> action, List<CardColor> requestColor = null, List<CardSendType> requestSendType = null, List<CardType> requestType = null)
         {
             List<int> cardIds = manager.players[index].netHandCards.FindAll((id) => true);
             ShowCardMenu(cardIds, action, requestColor, requestSendType);
         }
 
-        public void ShowCardMenu(List<int> cardIds, UnityAction<int> action, List<CardColor> requestColor = null, List<CardSendType> requestSendType = null)
+        public void ShowCardMenu(List<int> cardIds, UnityAction<int> action, List<CardColor> requestColor = null, List<CardSendType> requestSendType = null, List<CardType> requestType = null)
         {
             // Init varieables
             if (requestColor == null)
