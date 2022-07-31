@@ -2,99 +2,138 @@
 
 namespace TBL.Hero
 {
+    using Util;
+    using GameAction;
+
     public class Killer : HeroBase
     {
         protected override void BindSkill()
         {
-            // var skill1 = new HeroSkill
-            // {
-            //     name = "連擊",
-            //     description = "當一位玩家獲得你傳出的黑情報時，抽兩張牌，並可以在他面前再放置一張黑情報。",
-            //     autoActivate = true,
-            //     action = (_) =>
-            //        {
-            //            playerStatus.CmdDrawCard(2);
+            var skill1 = new HeroSkill
+            {
+                name = "連擊",
+                description = "當一位玩家獲得你傳出的黑情報時，抽兩張牌，並可以在他面前再放置一張黑情報。",
+                autoActivate = true,
+                action = async (_) =>
+                {
+                    playerStatus.DrawCard(2);
+                    await playerStatus.InitReturnDataMenu("放置一張黑情報", "取消");
+                    await TaskExtend.WaitUntil(
+                        () => !playerStatus.isWaitingData,
+                        () => judgement.currentPhase != NetworkJudgement.Phase.HeroSkillReacting
+                    );
 
-            //            if (playerStatus.GetHandCardColorCount(Card.CardColor.Black) > 0)
-            //            {
-            //                var netCanvas = FindObjectOfType<NetCanvas.GameScene>();
+                    if (judgement.currentPhase != NetworkJudgement.Phase.HeroSkillReacting)
+                        return true;
 
-            //                List<string> options = new List<string>();
-            //                List<UnityEngine.Events.UnityAction> actions = new List<UnityEngine.Events.UnityAction>();
-            //                options.Add("放置一張黑情報");
-            //                actions.Add(() =>
-            //                    netCanvas.ShowPlayerHandCard(playerStatus.playerIndex, (handCardIndex) =>
-            //                    {
-            //                        playerStatus.CmdCardHToT(handCardIndex, manager.Judgement.currentSendingPlayer);
-            //                    }, new List<Card.CardColor>() { Card.CardColor.Black })
-            //                );
+                    // 不放置黑情報，或是未選擇
+                    if (playerStatus.tempData != 0)
+                        return true;
 
-            //                options.Add("取消");
-            //                actions.Add(() =>
-            //                {
-            //                    return;
-            //                });
+                    // 沒有黑情報可選
+                    if (playerStatus.GetCardCount(Card.CardColor.Black) <= 0)
+                        return true;
 
-            //                //netCanvas.tempMenu.InitCustomMenu(options, actions);
-            //            }
-            //        },
-            //     checker = () =>
-            //         {
-            //             if (judgement.currentPhase != NetworkJudgement.Phase.Sending)
-            //                 return false;
+                    var targetPlayer = manager.players[judgement.currentSendingPlayer];
 
-            //             var targetPlayer = manager.players[judgement.currentSendingPlayer];
-            //             if (((Card.CardSetting)judgement.currentRoundSendingCardId).CardColor == Card.CardColor.Black &&
-            //                 judgement.currentRoundPlayerIndex == playerStatus.playerIndex)
-            //                 return true;
+                    playerStatus.ClearTempData();
+                    await playerStatus.InitReturnHandCardMenu(Card.CardColor.Black);
+                    await TaskExtend.WaitUntil(
+                        () => !playerStatus.isWaitingData
+                    );
 
-            //             return false;
-            //         }
-            // };
+                    targetPlayer.AddCard(playerStatus.tempData);
 
-            // var skill2 = new HeroSkill
-            // {
-            //     name = "預謀",
-            //     description = $"你的 {RichTextHelper.TextWithBold("密電")} 可以當作 {RichTextHelper.TextWithBold("鎖定")} 使用。",
-            //     autoActivate = false,
-            //     action = (_) =>
-            //     {
-            //         var netCanvas = FindObjectOfType<NetCanvas.GameScene>();
+                    return true;
+                },
+                checker = () =>
+                {
+                    if (judgement.currentPhase != NetworkJudgement.Phase.Sending)
+                        return false;
 
-            //         netCanvas.ShowPlayerHandCard(
-            //             playerStatus.playerIndex,
-            //             (card) =>
-            //             {
-            //                 playerStatus.CmdCardHToG(card);
-            //                 netCanvas.BindSelectPlayer(
-            //                     manager.GetOtherPlayers(),
-            //                     (index) =>
-            //                     {
-            //                         playerStatus.CmdTestCardAction(new GameAction.CardAction(
-            //                             playerStatus.playerIndex,
-            //                             index,
-            //                             (int)Card.CardType.Lock,
-            //                             0,
-            //                             -1
-            //                         ));
-            //                     }
-            //                 );
-            //             },
-            //             null,
-            //             new List<Card.CardSendType>() { Card.CardSendType.Secret }
-            //         );
-            //     },
-            //     checker = () =>
-            //     {
-            //         var judgment = ((NetworkRoomManager.singleton) as NetworkRoomManager).Judgement;
+                    if (judgement.currentRoundPlayerIndex != playerStatus.playerIndex)
+                        return false;
 
-            //         if (playerStatus.GetHandCardSendTypeCount(Card.CardSendType.Secret) == 0)
-            //             return false;
+                    var targetPlayer = manager.players[judgement.currentSendingPlayer];
+                    if (((Card.CardSetting)judgement.currentRoundSendingCardId).CardColor == Card.CardColor.Black)
+                        return true;
 
-            //         return (judgment.currentRoundPlayerIndex == playerStatus.playerIndex &&
-            //                 judgment.currentPhase == NetworkJudgement.Phase.ChooseToSend);
-            //     }
-            // };
+                    return false;
+                }
+            };
+
+            // WIP
+            var skill2 = new HeroSkill
+            {
+                name = "預謀",
+                description = $"你的 {RichTextHelper.TextWithBold("密電")} 可以當作 {RichTextHelper.TextWithBold("鎖定")} 使用。",
+                autoActivate = false,
+                localAction = async (cancel) =>
+                {
+                    var sa = new SkillAction
+                    {
+                        skill = 1,
+                        user = playerStatus.playerIndex
+                    };
+
+                    netCanvas.ShowPlayerHandCard(
+                        index: playerStatus.playerIndex,
+                        action: (id) =>
+                        {
+                            manager.DeckManager.Deck.GetCardPrototype((int)Card.CardType.Lock).OnUse(playerStatus, id);
+                        }
+                    );
+                    await TaskExtend.WaitUntil(
+                        () => sa.suffix != int.MinValue,
+                        () => cancel.IsCancellationRequested);
+
+                    return sa;
+                },
+                action = async (_) =>
+                {
+                    var netCanvas = FindObjectOfType<NetCanvas.GameScene>();
+
+                    netCanvas.ShowPlayerHandCard(
+                        playerStatus.playerIndex,
+                        (card) =>
+                        {
+                            playerStatus.CmdCardHToG(card);
+                            netCanvas.BindSelectPlayer(
+                                manager.GetOtherPlayers(),
+                                (index) =>
+                                {
+                                    playerStatus.CmdTestCardAction(new GameAction.CardAction(
+                                        playerStatus.playerIndex,
+                                        index,
+                                        (int)Card.CardType.Lock,
+                                        0,
+                                        -1
+                                    ));
+                                }
+                            );
+                        },
+                        null,
+                        new List<Card.CardSendType>() { Card.CardSendType.Secret }
+                    );
+
+                    return true;
+                },
+                checker = () =>
+                {
+                    var judgment = ((NetworkRoomManager.singleton) as NetworkRoomManager).Judgement;
+
+                    if (playerStatus.GetHandCardCount(Card.CardSendType.Secret) == 0)
+                        return false;
+
+                    if (judgment.currentRoundPlayerIndex != playerStatus.playerIndex)
+                        return false;
+
+                    if (judgment.currentPhase == NetworkJudgement.Phase.ChooseToSend)
+                        return false;
+
+                    return true;
+                }
+            };
 
             // var skill3 = new HeroSkill
             // {
@@ -123,9 +162,9 @@ namespace TBL.Hero
             //       }
             // };
 
-            // skills = new HeroSkill[]{
-            //     skill1,skill2,skill3
-            // };
+            skills = new HeroSkill[]{
+                skill1
+};
         }
 
         protected override void BindSpecialMission()
