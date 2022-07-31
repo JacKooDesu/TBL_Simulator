@@ -5,6 +5,7 @@ using TBL.GameAction;
 
 namespace TBL.Card
 {
+    using static CardAttributeHelper;
     [System.Serializable]
     public class CardSetting : MonoBehaviour
     {
@@ -48,6 +49,8 @@ namespace TBL.Card
             {
                 id = value;
                 // Color
+                // if(Compare(value, Black))
+                //     cardColor=CardColor.Black;
                 if ((value & (int)CardColor.Black) == (int)CardColor.Black)
                     cardColor = CardColor.Black;
                 if ((value & (int)CardColor.Red) == (int)CardColor.Red)
