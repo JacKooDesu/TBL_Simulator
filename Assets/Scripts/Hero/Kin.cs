@@ -109,38 +109,38 @@ namespace TBL.Hero
             );
         }
 
-        async void ChooseCardToDeck(List<int> cardList)
-        {
-            var netCanvas = FindObjectOfType<NetCanvas.GameScene>();
+        // async void ChooseCardToDeck(List<int> cardList)
+        // {
+        //     var netCanvas = FindObjectOfType<NetCanvas.GameScene>();
 
-            int cardCount = 0;
+        //     int cardCount = 0;
 
-            bool hasSelect = false;
+        //     bool hasSelect = false;
 
-            System.Action selectCard = () => netCanvas.ShowCardMenu(
-                cardList,
-                (id) =>
-                {
-                    playerStatus.CmdCardHToD(id);
-                    cardList.Remove(id);
-                }
-            );
+        //     System.Action selectCard = () => netCanvas.ShowCardMenu(
+        //         cardList,
+        //         (id) =>
+        //         {
+        //             playerStatus.CmdCardHToD(id);
+        //             cardList.Remove(id);
+        //         }
+        //     );
 
-            selectCard.Invoke();
+        //     selectCard.Invoke();
 
-            while (cardCount < 2)
-            {
-                if (hasSelect)
-                {
-                    hasSelect = false;
-                    selectCard.Invoke();
-                }
+        //     while (cardCount < 2)
+        //     {
+        //         if (hasSelect)
+        //         {
+        //             hasSelect = false;
+        //             selectCard.Invoke();
+        //         }
 
-                await Task.Yield();
-            }
+        //         await Task.Yield();
+        //     }
 
-            playerStatus.CmdSetSkillCanActivate(0, false);
-        }
+        //     playerStatus.CmdSetSkillCanActivate(0, false);
+        // }
     }
 }
 

@@ -20,33 +20,25 @@ namespace TBL.NetCanvas
 
         [SerializeField] List<UI.GameScene.Menu> tempMenuList = new List<UI.GameScene.Menu>();
 
-        public void ShowPlayerCard(int index, UnityAction<int> action, List<CardColor> requestColor = null, List<CardSendType> requestSendType = null, List<CardType> requestType = null)
+        public void ShowPlayerCard(int index, UnityAction<int> action, params int[] requests)
         {
-            List<int> cardIds = manager.players[index].netCards.FindAll((id) => true);
-            ShowCardMenu(cardIds, action, requestColor, requestSendType);
+            List<int> cardIds = new List<int>(manager.players[index].netCards);
+            ShowCardMenu(cardIds, action, requests);
         }
 
-        public void ShowPlayerHandCard(int index, UnityAction<int> action, List<CardColor> requestColor = null, List<CardSendType> requestSendType = null, List<CardType> requestType = null)
+        public void ShowPlayerHandCard(int index, UnityAction<int> action, params int[] requests)
         {
-            List<int> cardIds = manager.players[index].netHandCards.FindAll((id) => true);
-            ShowCardMenu(cardIds, action, requestColor, requestSendType);
+            List<int> cardIds = new List<int>(manager.players[index].netHandCards);
+            ShowCardMenu(cardIds, action, requests);
         }
 
-        public void ShowCardMenu(List<int> cardIds, UnityAction<int> action, List<CardColor> requestColor = null, List<CardSendType> requestSendType = null, List<CardType> requestType = null)
+        public void ShowCardMenu(List<int> cardIds, UnityAction<int> action, params int[] requests)
         {
-            // Init varieables
-            if (requestColor == null)
-                requestColor = new List<CardColor> { CardColor.Black, CardColor.Red, CardColor.Blue };
-            if (requestSendType == null)
-                requestSendType = new List<CardSendType> { CardSendType.Direct, CardSendType.Secret, CardSendType.Public };
-
-            var cardIdList = cardIds.FindAll(
-                id =>
-                {
-                    var card = CardSetting.IdToCard(id);
-                    return requestColor.Contains(card.CardColor) && requestSendType.Contains(card.SendType);
-                }
-            );
+            var cardIdList = new List<int>();
+            if (requests.Length != 0)
+                cardIdList = cardIds.FindAll(id => CardAttributeHelper.Compare(id, requests));
+            else
+                cardIdList = cardIds;
 
             var options = new List<Option>();
 

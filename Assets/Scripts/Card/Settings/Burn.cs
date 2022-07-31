@@ -35,7 +35,7 @@ namespace TBL.Card
                 netCanvas.ShowPlayerCard(
                     i,
                     (j) => user.CmdTestCardAction(new CardAction(user.playerIndex, i, ID, originID, j)),
-                    new List<CardColor> { CardColor.Black }
+                    CardAttributeHelper.Black
                 );
             });
         }
