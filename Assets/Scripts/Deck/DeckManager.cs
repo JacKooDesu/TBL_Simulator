@@ -32,7 +32,7 @@ namespace TBL
                         // Debug.Log((temp.ID & (int)CardSendType.Direct) == (int)CardSendType.Direct);
                         GameObject g = new GameObject();
                         CardSetting card = g.AddComponent<CardSetting>();
-                        card.ID = (temp.ID + (int)(deck.CardConfigs[i].ColorConfigs[j].Color)) + (1 << (DeckSetting.cardUniqueId + k));
+                        card.ID = (temp.ID | (int)(deck.CardConfigs[i].ColorConfigs[j].Color)) | (1 << (DeckSetting.cardUniqueId + k));
                         g.name = card.GetCardNameFully();
                         g.transform.SetParent(transform);
 
