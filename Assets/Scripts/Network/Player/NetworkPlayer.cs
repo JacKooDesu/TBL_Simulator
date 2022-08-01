@@ -317,10 +317,7 @@ namespace TBL
         [Command]
         public void CmdTestCardAction(CardAction ca)
         {
-            // .OnEffect(manager, ca);
-            netHandCards.Remove(ca.originCardId);
-            manager.Judgement.AddCardAction(ca);
-            print($"玩家({ca.user}) 對 玩家({ca.target}) 使用 {CardSetting.IdToCard(ca.cardId).GetCardNameFully()}");
+            judgement.CardAction(ca);
         }
 
         public void CheckWin()

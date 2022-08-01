@@ -44,13 +44,14 @@ namespace TBL.NetCanvas
 
             foreach (var id in cardIdList)
             {
-                var card = CardSetting.IdToCard(id);
+                var card = (CardSetting) id;
                 var option = new Option
                 {
                     str = card.CardName,
                     onSelect = () => action.Invoke(id),
                     type = OptionType.CARD
                 };
+                options.Add(option);
             }
 
             InitMenu(options);
