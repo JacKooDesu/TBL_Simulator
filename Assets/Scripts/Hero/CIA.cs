@@ -62,12 +62,12 @@ namespace TBL.Hero
 
         protected override void BindSpecialMission()
         {
-            this.mission = new HeroMission(
-                $"獲得三張或以上的 {RichTextHelper.TextWithStyles("紅色情報", new RichTextHelper.SettingBase(RichTextHelper.Style.Bold), new RichTextHelper.Setting<Color>(RichTextHelper.Style.Color, Color.red))} 。",
-                () =>
-                {
-                    return playerStatus.GetCardCount(Card.CardColor.Red) >= 3;
-                });
+            // this.mission = new HeroMission(
+            //     $"獲得三張或以上的 {RichTextHelper.TextWithStyles("紅色情報", new RichTextHelper.SettingBase(RichTextHelper.Style.Bold), new RichTextHelper.Setting<Color>(RichTextHelper.Style.Color, Color.red))} 。",
+            //     () =>
+            //     {
+            //         return playerStatus.GetCardCount(Card.CardColor.Red) >= 3;
+            //     });
         }
     }
 }

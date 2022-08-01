@@ -162,13 +162,13 @@ namespace TBL.Hero
 
         protected override void BindSpecialMission()
         {
-            mission = new HeroMission(
-                $"獲得三張或以上 {RichTextGeneral.red} 情報",
-                () =>
-                {
-                    return playerStatus.GetCardCount(Card.CardColor.Red) >= 3;
-                }
-            );
+            // mission = new HeroMission(
+            //     $"獲得三張或以上 {RichTextGeneral.red} 情報",
+            //     () =>
+            //     {
+            //         return playerStatus.GetCardCount(Card.CardColor.Red) >= 3;
+            //     }
+            // );
         }
     }
 }

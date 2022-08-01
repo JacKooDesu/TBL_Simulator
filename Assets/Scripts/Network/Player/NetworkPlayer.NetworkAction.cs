@@ -143,18 +143,13 @@ namespace TBL
         }
 
         [TargetRpc]
-        public void TargetReturnHandCardMenu(params CardColor[] colors)
+        public void TargetReturnHandCardMenu(params int[] requests)
         {
-            // print("Target data return menu init");
-            var colorList = new List<CardColor>(colors);
-            if (colorList.Count == 0)
-                colorList = Enum.GetValues(typeof(CardColor)).Cast<CardColor>().ToList();
-
             var options = new List<Option>();
             for (int i = 0; i < netHandCards.Count; ++i)
             {
                 var card = netHandCards[i];
-                if (!colorList.Contains(((CardSetting)card).CardColor))
+                if (!CardAttributeHelper.Compare(card, requests))
                     continue;
 
                 options.Add(
@@ -170,43 +165,13 @@ namespace TBL
         }
 
         [TargetRpc]
-        public void TargetReturnHandCardMenu(params CardSendType[] sendTypes)
+        public void TargetReturnCardMenu(params int[] requests)
         {
-            var sendtypeList = new List<CardSendType>(sendTypes);
-            if (sendtypeList.Count == 0)
-                sendtypeList = Enum.GetValues(typeof(CardSendType)).Cast<CardSendType>().ToList();
-
             var options = new List<Option>();
-            for (int i = 0; i < netHandCards.Count; ++i)
+            for (int i = 0; i < netCards.Count; ++i)
             {
                 var card = netHandCards[i];
-                if (!sendtypeList.Contains(((CardSetting)card).SendType))
-                    continue;
-
-                options.Add(
-                    new Option
-                    {
-                        str = ((CardSetting)card).CardName,
-                        onSelect = () => CmdSetTempData(card)
-                    }
-                );
-            }
-            netCanvas.InitMenu(options);
-            CmdSetWaitingData(true);
-        }
-
-        [TargetRpc]
-        public void TargetReturnHandCardMenu(params CardType[] cardTypes)
-        {
-            var sendtypeList = new List<CardType>(cardTypes);
-            if (sendtypeList.Count == 0)
-                sendtypeList = Enum.GetValues(typeof(CardType)).Cast<CardType>().ToList();
-
-            var options = new List<Option>();
-            for (int i = 0; i < netHandCards.Count; ++i)
-            {
-                var card = netHandCards[i];
-                if (!sendtypeList.Contains(((CardSetting)card).CardType))
+                if (!CardAttributeHelper.Compare(card, requests))
                     continue;
 
                 options.Add(

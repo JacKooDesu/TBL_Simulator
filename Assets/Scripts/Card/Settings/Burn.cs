@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace TBL.Card
 {
+    using static CardAttributeHelper;
     public class Burn : CardSetting
     {
         public override void OnUse(NetworkPlayer user, int originID)
@@ -16,17 +17,7 @@ namespace TBL.Card
             List<int> playerList = new List<int>();
             foreach (NetworkPlayer p in manager.players)
             {
-                bool hasBlack = false;
-                foreach (int i in p.netCards)
-                {
-                    if (CardSetting.IdToCard(i).CardColor == CardColor.Black)
-                    {
-                        hasBlack = true;
-                        break;
-                    }
-                }
-
-                if (hasBlack)
+                if (p.GetCardCount(Black) != 0)
                     playerList.Add(p.playerIndex);
             }
 
@@ -35,7 +26,7 @@ namespace TBL.Card
                 netCanvas.ShowPlayerCard(
                     i,
                     (j) => user.CmdTestCardAction(new CardAction(user.playerIndex, i, ID, originID, j)),
-                    new List<CardColor> { CardColor.Black }
+                    CardAttributeHelper.Black
                 );
             });
         }
