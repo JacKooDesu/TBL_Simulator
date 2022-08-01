@@ -42,7 +42,7 @@ namespace TBL.Card
             get
             {
                 return id == 0 ?
-                    System.Convert.ToUInt16((int)cardType + (int)cardColor + (int)sendType) :
+                    System.Convert.ToInt32((int)cardType | (int)cardColor | (int)sendType) :
                     id;
             }
             set
