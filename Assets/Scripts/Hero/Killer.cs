@@ -4,6 +4,7 @@ namespace TBL.Hero
 {
     using Util;
     using GameAction;
+    using static Card.CardAttributeHelper;
 
     public class Killer : HeroBase
     {
@@ -31,13 +32,14 @@ namespace TBL.Hero
                         return true;
 
                     // 沒有黑情報可選
-                    if (playerStatus.GetCardCount(Card.CardColor.Black) <= 0)
+                    if (playerStatus.GetHandCardCount(Black) <= 0)
                         return true;
 
+                    print(judgement.currentSendingPlayer);
                     var targetPlayer = manager.players[judgement.currentSendingPlayer];
 
                     playerStatus.ClearTempData();
-                    await playerStatus.InitReturnHandCardMenu(Card.CardColor.Black);
+                    await playerStatus.InitReturnHandCardMenu(Black);
                     await TaskExtend.WaitUntil(
                         () => !playerStatus.isWaitingData
                     );
@@ -112,8 +114,7 @@ namespace TBL.Hero
                                 }
                             );
                         },
-                        null,
-                        new List<Card.CardSendType>() { Card.CardSendType.Secret }
+                        Secret
                     );
 
                     return true;
@@ -122,7 +123,7 @@ namespace TBL.Hero
                 {
                     var judgment = ((NetworkRoomManager.singleton) as NetworkRoomManager).Judgement;
 
-                    if (playerStatus.GetHandCardCount(Card.CardSendType.Secret) == 0)
+                    if (playerStatus.GetHandCardCount(Secret) == 0)
                         return false;
 
                     if (judgment.currentRoundPlayerIndex != playerStatus.playerIndex)

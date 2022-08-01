@@ -3,6 +3,7 @@ using TBL.Card;
 
 namespace TBL.Hero
 {
+    using GameAction;
     public abstract class HeroBase : MonoBehaviour
     {
         [SerializeField, Header("角色名")]
@@ -82,8 +83,13 @@ namespace TBL.Hero
                 if (s.checker == null)
                     continue;
 
-                playerStatus.netHeroSkillCanActivate[i] = s.checker.Invoke();
-
+                if (s.checker())
+                {
+                    if (s.autoActivate)
+                        judgement.UseSkill(new SkillAction(user: playerStatus.playerIndex, skill: i));
+                    else
+                        playerStatus.netHeroSkillCanActivate[i] = true;
+                }
             }
         }
     }
