@@ -18,6 +18,10 @@ namespace TBL.Hero
                 action = async (_) =>
                 {
                     playerStatus.DrawCard(2);
+                    // 沒有黑情報可選
+                    if (playerStatus.GetHandCardCount(Black) <= 0)
+                        return true;
+
                     await playerStatus.InitReturnDataMenu("放置一張黑情報", "取消");
                     await TaskExtend.WaitUntil(
                         () => !playerStatus.isWaitingData,
@@ -31,20 +35,13 @@ namespace TBL.Hero
                     if (playerStatus.tempData != 0)
                         return true;
 
-                    // 沒有黑情報可選
-                    if (playerStatus.GetHandCardCount(Black) <= 0)
-                        return true;
-
-                    print(judgement.currentSendingPlayer);
-                    var targetPlayer = manager.players[judgement.currentSendingPlayer];
-
                     playerStatus.ClearTempData();
                     await playerStatus.InitReturnHandCardMenu(Black);
                     await TaskExtend.WaitUntil(
                         () => !playerStatus.isWaitingData
                     );
 
-                    targetPlayer.AddCard(playerStatus.tempData);
+                    playerStatus.CardHToT(playerStatus.tempData, judgement.currentSendingPlayer);
 
                     return true;
                 },
@@ -73,63 +70,54 @@ namespace TBL.Hero
                 localAction = async (cancel) =>
                 {
                     var sa = new SkillAction
-                    {
-                        skill = 1,
-                        user = playerStatus.playerIndex
-                    };
+                    (
+                        skill: 1,
+                        user: playerStatus.playerIndex
+                    );
 
                     netCanvas.ShowPlayerHandCard(
                         index: playerStatus.playerIndex,
                         action: (id) =>
                         {
-                            manager.DeckManager.Deck.GetCardPrototype((int)Card.CardType.Lock).OnUse(playerStatus, id);
-                        }
+                            sa.suffix = id;
+                        },
+                        Secret
                     );
                     await TaskExtend.WaitUntil(
                         () => sa.suffix != int.MinValue,
+                        () => cancel.IsCancellationRequested);
+
+                    netCanvas.BindSelectPlayer(
+                        manager.GetOtherPlayers(),
+                        (index) => sa.target = index
+                    );
+                    await TaskExtend.WaitUntil(
+                        () => sa.target != int.MinValue,
                         () => cancel.IsCancellationRequested);
 
                     return sa;
                 },
                 action = async (_) =>
                 {
-                    var netCanvas = FindObjectOfType<NetCanvas.GameScene>();
-
-                    netCanvas.ShowPlayerHandCard(
-                        playerStatus.playerIndex,
-                        (card) =>
+                    judgement.AddCardAction(
+                        new CardAction
                         {
-                            playerStatus.CmdCardHToG(card);
-                            netCanvas.BindSelectPlayer(
-                                manager.GetOtherPlayers(),
-                                (index) =>
-                                {
-                                    playerStatus.CmdTestCardAction(new GameAction.CardAction(
-                                        playerStatus.playerIndex,
-                                        index,
-                                        (int)Card.CardType.Lock,
-                                        0,
-                                        -1
-                                    ));
-                                }
-                            );
-                        },
-                        Secret
-                    );
+                            cardId = Lock,
+                            target = _.target,
+                            user = playerStatus.playerIndex
+                        });
 
                     return true;
                 },
                 checker = () =>
                 {
-                    var judgment = ((NetworkRoomManager.singleton) as NetworkRoomManager).Judgement;
-
                     if (playerStatus.GetHandCardCount(Secret) == 0)
                         return false;
 
-                    if (judgment.currentRoundPlayerIndex != playerStatus.playerIndex)
+                    if (judgement.currentRoundPlayerIndex != playerStatus.playerIndex)
                         return false;
 
-                    if (judgment.currentPhase == NetworkJudgement.Phase.ChooseToSend)
+                    if (judgement.currentPhase != NetworkJudgement.Phase.ChooseToSend)
                         return false;
 
                     return true;
@@ -163,9 +151,7 @@ namespace TBL.Hero
             //       }
             // };
 
-            skills = new HeroSkill[]{
-                skill1
-};
+            skills = new HeroSkill[] { skill1, skill2 };
         }
 
         protected override void BindSpecialMission()
