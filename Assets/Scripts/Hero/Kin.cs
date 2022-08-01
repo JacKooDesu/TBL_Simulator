@@ -99,14 +99,14 @@ namespace TBL.Hero
 
         protected override void BindSpecialMission()
         {
-            mission = new HeroMission(
-                $"手牌湊齊三張 {RichTextGeneral.red} 卡牌與三張 {RichTextGeneral.blue} 卡牌。",
-                () =>
-                {
-                    return playerStatus.GetHandCardCount(Card.CardColor.Red) >= 3 &&
-                            playerStatus.GetHandCardCount(Card.CardColor.Blue) >= 3;
-                }
-            );
+            // mission = new HeroMission(
+            //     $"手牌湊齊三張 {RichTextGeneral.red} 卡牌與三張 {RichTextGeneral.blue} 卡牌。",
+            //     () =>
+            //     {
+            //         return playerStatus.GetHandCardCount(Card.CardColor.Red) >= 3 &&
+            //                 playerStatus.GetHandCardCount(Card.CardColor.Blue) >= 3;
+            //     }
+            // );
         }
 
         // async void ChooseCardToDeck(List<int> cardList)
