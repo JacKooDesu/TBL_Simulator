@@ -22,7 +22,7 @@ namespace TBL.Card
         public static int Red => ((int)CardColor.Red);
         public static int Blue => ((int)CardColor.Blue);
 
-        public static bool Compare(CardSetting target, params int[] requests)
+        public static bool Compare(this CardSetting target, params int[] requests)
         {
             return (Compare(target.ID));
         }

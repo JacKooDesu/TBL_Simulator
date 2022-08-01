@@ -7,6 +7,7 @@ using TBL.Card;
 
 namespace TBL.UI.GameScene
 {
+    using static CardAttributeHelper;
     public class PlayerData : MonoBehaviour
     {
         #region VARIABLES
@@ -56,29 +57,18 @@ namespace TBL.UI.GameScene
         {
             if (player == null)
                 return;
-                
+
             int blue = 0, red = 0, black = 0;
             foreach (int id in player.netCards)
             {
-                CardSetting card = CardSetting.IdToCard((ushort)id);
+                if (Compare(id, Black))
+                    black++;
 
-                switch (card.CardColor)
-                {
-                    case CardColor.Black:
-                        black++;
-                        break;
+                if (Compare(id, Blue))
+                    blue++;
 
-                    case CardColor.Blue:
-                        blue++;
-                        break;
-
-                    case CardColor.Red:
-                        red++;
-                        break;
-
-                    default:
-                        break;
-                }
+                if (Compare(id, Red))
+                    red++;
             }
 
             blueCount.text = blue.ToString();

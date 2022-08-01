@@ -10,6 +10,7 @@ namespace TBL
     using Hero;
     using Card;
     using GameAction;
+    using static Card.CardAttributeHelper;
 
     public partial class NetworkPlayer : NetworkBehaviour
     {
@@ -87,7 +88,7 @@ namespace TBL
 
             if (isServer)
             {
-                if (GetCardCount(CardColor.Black) >= 3)
+                if (GetCardCount(Black) >= 3)
                     isDead = true;
 
                 CheckWin();
@@ -330,12 +331,12 @@ namespace TBL
             switch (Team.team)
             {
                 case Settings.TeamSetting.TeamEnum.Blue:
-                    if (GetCardCount(CardColor.Blue) >= 3 || manager.GetTeamPlayerCount(Settings.TeamSetting.TeamEnum.Red) == 0)
+                    if (GetCardCount(Blue) >= 3 || manager.GetTeamPlayerCount(Settings.TeamSetting.TeamEnum.Red) == 0)
                         this.isWin = true;
                     break;
 
                 case Settings.TeamSetting.TeamEnum.Red:
-                    if (GetCardCount(CardColor.Red) >= 3 || manager.GetTeamPlayerCount(Settings.TeamSetting.TeamEnum.Blue) == 0)
+                    if (GetCardCount(Red) >= 3 || manager.GetTeamPlayerCount(Settings.TeamSetting.TeamEnum.Blue) == 0)
                         this.isWin = true;
                     break;
 
