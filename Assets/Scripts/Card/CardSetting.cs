@@ -155,7 +155,8 @@ namespace TBL.Card
                     case CardType.Invalidate:
                         return "識破";
                 }
-                return "MISSING CARD TYPE";
+                Debug.LogWarning($"MISSING CARD TYPE | ID: {ID}");
+                return $"MISSING CARD TYPE";
             }
         }
 
