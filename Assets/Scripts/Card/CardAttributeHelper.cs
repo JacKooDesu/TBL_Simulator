@@ -3,7 +3,7 @@ namespace TBL.Card
     public static class CardAttributeHelper
     {
         // Types
-        public static int Lock => ((int)CardType.Burn);
+        public static int Lock => ((int)CardType.Lock);
         public static int Skip => ((int)CardType.Skip);
         public static int Return => ((int)CardType.Return);
         public static int Intercept => ((int)CardType.Intercept);
