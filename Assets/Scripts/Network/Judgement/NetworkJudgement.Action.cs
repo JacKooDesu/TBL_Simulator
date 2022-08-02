@@ -43,7 +43,6 @@ namespace TBL
                 true,
                 false
             ));
-            ChangePhase(lastPhase);
         }
     }
 
