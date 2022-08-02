@@ -30,7 +30,7 @@ namespace TBL
             foreach (NetworkPlayer p in manager.players)
             {
                 p.DrawTeam();
-                p.DrawHero(7);
+                p.DrawHero(1);
                 p.DrawCard(3);
             }
         }

@@ -99,6 +99,7 @@ namespace TBL.Hero
                 },
                 action = async (_) =>
                 {
+                    judgement.ChangePhase(judgement.lastPhase);
                     judgement.AddCardAction(
                         new CardAction
                         {
@@ -106,6 +107,7 @@ namespace TBL.Hero
                             target = _.target,
                             user = playerStatus.playerIndex
                         });
+                    playerStatus.CardHToG(_.suffix);
 
                     return true;
                 },
@@ -124,34 +126,63 @@ namespace TBL.Hero
                 }
             };
 
-            // var skill3 = new HeroSkill
-            // {
-            //     name = "冷血",
-            //     description = $"可將任意手牌當作 {RichTextHelper.TextWithBold("鎖定")} 使用，且無法被識破。",
-            //     autoActivate = false,
-            //     action = (_) =>
-            //       {
-            //           var netCanvas = FindObjectOfType<NetCanvas.GameScene>();
+            var skill3 = new HeroSkill
+            {
+                name = "冷血",
+                description = $"可將任意手牌當作 {RichTextHelper.TextWithBold("鎖定")} 使用，且無法被識破。",
+                autoActivate = false,
+                localAction = async (cancel) =>
+                {
+                    var sa = new SkillAction
+                    (
+                        skill: 1,
+                        user: playerStatus.playerIndex
+                    );
 
-            //           netCanvas.ShowPlayerHandCard(
-            //               playerStatus.playerIndex,
-            //               (card) =>
-            //               {
-            //                   playerStatus.CmdCardHToG(card);
-            //                   netCanvas.BindSelectPlayer(
-            //                       manager.GetOtherPlayers(),
-            //                       (index) => manager.players[index].isLocked = true
-            //                   );
-            //               });
-            //       },
-            //     checker = () =>
-            //       {
-            //           return judgement.currentRoundPlayerIndex == playerStatus.playerIndex &&
-            //                   judgement.currentPhase == NetworkJudgement.Phase.ChooseToSend;
-            //       }
-            // };
+                    netCanvas.ShowPlayerHandCard(
+                        index: playerStatus.playerIndex,
+                        action: (id) =>
+                        {
+                            sa.suffix = id;
+                        }
+                    );
+                    await TaskExtend.WaitUntil(
+                        () => sa.suffix != int.MinValue,
+                        () => cancel.IsCancellationRequested);
 
-            skills = new HeroSkill[] { skill1, skill2 };
+                    netCanvas.BindSelectPlayer(
+                        manager.GetOtherPlayers(),
+                        (index) => sa.target = index
+                    );
+                    await TaskExtend.WaitUntil(
+                        () => sa.target != int.MinValue,
+                        () => cancel.IsCancellationRequested);
+
+                    return sa;
+                },
+                action = async (_) =>
+                {
+                    manager.players[_.target].isLocked = true;
+                    playerStatus.CardHToG(_.suffix);
+
+                    return true;
+                },
+                checker = () =>
+                {
+                    if (playerStatus.GetHandCardCount(Secret) == 0)
+                        return false;
+
+                    if (judgement.currentRoundPlayerIndex != playerStatus.playerIndex)
+                        return false;
+
+                    if (judgement.currentPhase != NetworkJudgement.Phase.ChooseToSend)
+                        return false;
+
+                    return true;
+                }
+            };
+
+            skills = new HeroSkill[] { skill1, skill2, skill3 };
         }
 
         protected override void BindSpecialMission()

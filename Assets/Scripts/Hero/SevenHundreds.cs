@@ -2,55 +2,70 @@
 
 namespace TBL.Hero
 {
+    using Util;
     using GameAction;
+    using static Card.CardAttributeHelper;
     public class SevenHundreds : HeroBase
     {
         protected override void BindSkill()
         {
             // // 敏捷
-            // // 可以在他人回合使用鎖定
-            // var skill1 = new HeroSkill
-            // {
-            //     name = "敏捷",
-            //     description = "你可以在他人回合使用鎖定。",
-            //     autoActivate = false,
-            //     localAction = async () =>
-            //     {
-            //         var skillAction = new SkillAction(user: playerStatus.playerIndex, skill: 0);
-            //         netCanvas.ShowPlayerHandCard(
-            //             playerStatus.playerIndex,
-            //             (hCard) => skillAction.suffix = hCard);
-            //         while (skillAction.suffix == int.MinValue)
-            //             await Task.Yield();
+            // 可以在他人回合使用鎖定
+            var skill1 = new HeroSkill
+            {
+                name = "敏捷",
+                description = "你可以在他人回合使用鎖定。",
+                autoActivate = false,
+                localAction = async (cancel) =>
+                {
+                    var sa = new SkillAction(user: playerStatus.playerIndex, skill: 0);
+                    netCanvas.ShowPlayerHandCard(
+                        playerStatus.playerIndex,
+                        card => sa.suffix = card,
+                        Lock
+                    );
 
-            //         netCanvas.BindSelectPlayer(
-            //             manager.GetOtherPlayers(),
-            //             (index) => skillAction.target = index
-            //         );
-            //         while (skillAction.target == int.MinValue)
-            //             await Task.Yield();
+                    await TaskExtend.WaitUntil(
+                        () => sa.suffix != int.MinValue,
+                        () => cancel.IsCancellationRequested);
 
-            //         return skillAction;
-            //     },
-            //     action = (_) =>
-            //     {
-            //         playerStatus.CmdTestCardAction(
-            //             new CardAction(
-            //                 _.user,
-            //                 _.target,
-            //                 _.suffix,
-            //                 (int)Card.CardType.Lock,
-            //                 0
-            //             )
-            //         );
-            //     },
-            //     checker = () =>
-            //     {
-            //         if (judgement.currentPhase != NetworkJudgement.Phase.ChooseToSend)
-            //             return false;
-            //         return judgement.currentPlayerIndex != playerStatus.playerIndex;
-            //     }
-            // };
+                    netCanvas.BindSelectPlayer(
+                        manager.GetOtherPlayers(),
+                        (index) => sa.target = index
+                    );
+                    await TaskExtend.WaitUntil(
+                        () => sa.target != int.MinValue,
+                        () => cancel.IsCancellationRequested);
+
+                    return sa;
+                },
+                action = async (_) =>
+                {
+                    judgement.ChangePhase(judgement.lastPhase);
+                    judgement.AddCardAction(
+                        new CardAction
+                        {
+                            cardId = Lock,
+                            target = _.target,
+                            user = playerStatus.playerIndex
+                        });
+                    playerStatus.CardHToG(_.suffix);
+                    return true;
+                },
+                checker = () =>
+                {
+                    if (playerStatus.GetHandCardCount(Lock) == 0)
+                        return false;
+
+                    if (judgement.currentPhase != NetworkJudgement.Phase.ChooseToSend)
+                        return false;
+
+                    if (judgement.currentRoundPlayerIndex == playerStatus.playerIndex)
+                        return false;
+
+                    return true;
+                }
+            };
 
             // // 聯動 (WIP)
             // // 當你使用鎖定時，抽三張牌，並分一張手牌給另一位玩家
@@ -85,10 +100,7 @@ namespace TBL.Hero
             //     }
             // };
 
-            // skills = new HeroSkill[] {
-            //     skill1,
-            //     skill2
-            // };
+            skills = new HeroSkill[] { skill1 };
         }
 
         protected override void BindSpecialMission()
