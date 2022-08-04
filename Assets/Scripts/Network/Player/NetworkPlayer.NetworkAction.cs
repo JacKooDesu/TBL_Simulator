@@ -143,12 +143,13 @@ namespace TBL
         }
 
         [TargetRpc]
-        public void TargetReturnHandCardMenu(params int[] requests)
+        public void TargetReturnHandCardMenu(int playerIndex, params int[] requests)
         {
+            var targetHandCards = manager.players[playerIndex].netHandCards;
             var options = new List<Option>();
-            for (int i = 0; i < netHandCards.Count; ++i)
+            for (int i = 0; i < targetHandCards.Count; ++i)
             {
-                var card = netHandCards[i];
+                var card = targetHandCards[i];
                 if (!CardAttributeHelper.Compare(card, requests))
                     continue;
 
@@ -165,12 +166,13 @@ namespace TBL
         }
 
         [TargetRpc]
-        public void TargetReturnCardMenu(params int[] requests)
+        public void TargetReturnCardMenu(int playerIndex, params int[] requests)
         {
+            var targetCards = manager.players[playerIndex].netCards;
             var options = new List<Option>();
-            for (int i = 0; i < netCards.Count; ++i)
+            for (int i = 0; i < targetCards.Count; ++i)
             {
-                var card = netHandCards[i];
+                var card = targetCards[i];
                 if (!CardAttributeHelper.Compare(card, requests))
                     continue;
 

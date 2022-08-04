@@ -36,10 +36,14 @@ namespace TBL.Hero
                         return true;
 
                     playerStatus.ClearTempData();
-                    await playerStatus.InitReturnHandCardMenu(Black);
+                    await playerStatus.InitReturnHandCardMenu(playerStatus.playerIndex, Black);
                     await TaskExtend.WaitUntil(
-                        () => !playerStatus.isWaitingData
+                        () => !playerStatus.isWaitingData,
+                        () => judgement.currentPhase != NetworkJudgement.Phase.HeroSkillReacting
                     );
+
+                    if (judgement.currentPhase != NetworkJudgement.Phase.HeroSkillReacting)
+                        return true;
 
                     playerStatus.CardHToT(playerStatus.tempData, judgement.currentSendingPlayer);
 

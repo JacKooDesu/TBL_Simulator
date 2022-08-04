@@ -172,12 +172,6 @@ namespace TBL
             playerIndex = i;
         }
 
-        [ClientRpc]
-        public void RpcUpdateHeroUI()
-        {
-            netCanvas.playerUIs[playerIndex].UpdateHero();
-        }
-
         #region ROUND_ACTION
         [ClientRpc]
         public void RpcUpdateRoundHost()

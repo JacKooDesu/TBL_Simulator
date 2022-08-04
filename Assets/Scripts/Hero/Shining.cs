@@ -1,53 +1,97 @@
 ﻿using System.Threading.Tasks;
-
+using System.Collections.Generic;
 namespace TBL.Hero
 {
+    using GameAction;
+    using Util;
     public class Shining : HeroBase
     {
         protected override void BindSkill()
         {
+            var skill0 = new HeroSkill
+            {
+                name = "狙擊",
+                description = $"翻開此角色牌，然後燒毀 {RichTextHelper.TextWithBold("另一位玩家")} 面前的至多三張情報。",
+                autoActivate = false,
+                localAction = async (cancel) =>
+                {
+                    var sa = new SkillAction(user: playerStatus.playerIndex, skill: 0);
+                    var playerList = new List<int>();
+                    foreach (var p in manager.players)
+                    {
+                        if (p.netCards.Count != 0)
+                            playerList.Add(p.playerIndex);
+                    }
+                    netCanvas.BindSelectPlayer(playerList, index => sa.target = index);
+                    await TaskExtend.WaitUntil(
+                        () => sa.target != int.MinValue,
+                        () => cancel.IsCancellationRequested);
 
-            // var skill1 = new HeroSkill
-            // {
-            //     name = "狙擊",
-            //     description = $"翻開此角色牌，然後燒毀 {RichTextHelper.TextWithBold("另一位玩家")} 面前的至多三張情報。",
-            //     autoActivate = false,
-            //     action = (_) =>
-            //     {
-            //         var netCanvas = FindObjectOfType<NetCanvas.GameScene>();
+                    if (cancel.IsCancellationRequested) return default;
 
-            //         int targetId = 0;
+                    return sa;
+                },
+                action = async (_) =>
+                {
+                    if (_.target == int.MinValue)
+                        return false;
+                    var targetPlayer = manager.players[_.target];
 
-            //         netCanvas.BindSelectPlayer(manager.GetOtherPlayers(), (i) =>
-            //         {
-            //             targetId = i;
-            //             var target = manager.players[targetId];
-            //             Snipe(target);
-            //         });
+                    playerStatus.SetHeroState(false);
+                    playerStatus.SetSkillLimited(0, true);
 
+                    for (int i = 0; i < 3; ++i)
+                    {
+                        if (i != 0 && targetPlayer.netCards.Count != 0)
+                        {
+                            await playerStatus.InitReturnDataMenu("燒毀情報", "取消");
+                            await TaskExtend.WaitUntil(
+                                () => !playerStatus.isWaitingData,
+                                () => judgement.currentPhase != NetworkJudgement.Phase.HeroSkillReacting);
 
-            //     },
-            //     checker = () =>
-            //     {
-            //         if (playerStatus.hero.skills[0].limited)
-            //             return false;
+                            if (judgement.currentPhase != NetworkJudgement.Phase.HeroSkillReacting ||
+                                playerStatus.tempData == 1 ||
+                                playerStatus.tempData == int.MinValue)
+                                return true;
+                        }
 
-            //         bool haveCard = false;
-            //         foreach (var p in manager.players)
-            //         {
-            //             if (p.netCards.Count != 0)
-            //             {
-            //                 haveCard = true;
-            //                 break;
-            //             }
-            //         }
-            //         return playerStatus.hero.isHiding && haveCard;
-            //     }
-            // };
+                        playerStatus.ClearTempData();
 
-            // skills = new HeroSkill[] {
-            //     skill1
-            // };
+                        await playerStatus.InitReturnCardMenu(_.target);
+                        await TaskExtend.WaitUntil(
+                            () => !playerStatus.isWaitingData,
+                            () => judgement.currentPhase != NetworkJudgement.Phase.HeroSkillReacting);
+
+                        if (judgement.currentPhase != NetworkJudgement.Phase.HeroSkillReacting)
+                            return i != 0;
+
+                        targetPlayer.CardTToG(_.target, playerStatus.tempData);
+                    }
+                    return true;
+                },
+                checker = () =>
+                {
+                    if (!isHiding)
+                        return false;
+
+                    if (playerStatus.hero.skills[0].limited)
+                        return false;
+
+                    foreach (var p in manager.players)
+                    {
+                        if (p == playerStatus)
+                            continue;
+                        if (p.netCards.Count != 0)
+                            return true;
+                    }
+
+                    return false;
+                }
+            };
+
+            skills = new HeroSkill[] {
+                skill0
+            };
         }
 
         protected override void BindSpecialMission()
@@ -67,44 +111,6 @@ namespace TBL.Hero
                     return false;
                 }
             );
-        }
-
-        async void Snipe(NetworkPlayer target)
-        {
-            var netCanvas = FindObjectOfType<NetCanvas.GameScene>();
-
-            int cardCount = 0;
-            int burnCount = target.netCards.Count >= 3 ? 3 : target.netCards.Count;
-
-            bool hasSelect = false;
-
-            System.Action selectCard = () => netCanvas.ShowPlayerCard(target.playerIndex, (card) =>
-            {
-                playerStatus.CmdCardTToG(target.playerIndex, card);
-
-                hasSelect = true;
-                cardCount++;
-
-                print(target.hero.HeroName);
-            });
-
-            selectCard.Invoke();
-
-            while (cardCount < burnCount)
-            {
-                if (hasSelect)
-                {
-                    hasSelect = false;
-                    selectCard.Invoke();
-                }
-
-                await Task.Yield();
-            }
-
-            playerStatus.CmdChangeHeroState(false);
-
-            playerStatus.CmdSetSkillCanActivate(0, false);
-            playerStatus.CmdSetSkillLimited(0, true);
         }
     }
 }

@@ -96,14 +96,13 @@ namespace TBL
         [Command]
         public void CmdChangeHeroState(bool hiding)
         {
-            hero.isHiding = hiding;
-            RpcChangeHeroState(hiding);
+            SetHeroState(hiding);
         }
         [ClientRpc]
         public void RpcChangeHeroState(bool hiding)
         {
             hero.isHiding = hiding;
-            RpcUpdateHeroUI();
+            netCanvas.playerUIs[playerIndex].UpdateHero();
         }
 
         [Command]
@@ -115,7 +114,7 @@ namespace TBL
         [Command]
         public void CmdSetSkillLimited(int index, bool b)
         {
-            hero.skills[index].limited = b;
+            SetSkillLimited(index, b);
         }
     }
 }

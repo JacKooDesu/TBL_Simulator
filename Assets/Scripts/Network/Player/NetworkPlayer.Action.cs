@@ -70,6 +70,19 @@ namespace TBL
             netHandCards.Add((int)id);
         }
 
+        [Server]
+        public void SetHeroState(bool hiding)
+        {
+            hero.isHiding = hiding;
+            RpcChangeHeroState(hiding);
+        }
+
+        [Server]
+        public void SetSkillLimited(int index, bool b)
+        {
+            hero.skills[index].limited = b;
+        }
+
         // H = Hand
         // T = Table
         // G = Graveyard
@@ -138,17 +151,17 @@ namespace TBL
         }
 
         [Server]
-        public async Task InitReturnHandCardMenu(params int[] requests)
+        public async Task InitReturnHandCardMenu(int playerIndex, params int[] requests)
         {
-            this.TargetReturnHandCardMenu(requests);
+            this.TargetReturnHandCardMenu(playerIndex, requests);
             await TaskExtend.WaitUntil(() => isWaitingData);
             return;
         }
 
         [Server]
-        public async Task InitReturnCardMenu(params int[] requests)
+        public async Task InitReturnCardMenu(int playerIndex, params int[] requests)
         {
-            this.TargetReturnHandCardMenu(requests);
+            this.TargetReturnCardMenu(playerIndex, requests);
             await TaskExtend.WaitUntil(() => isWaitingData);
             return;
         }

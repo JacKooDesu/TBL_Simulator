@@ -24,7 +24,7 @@
                 "name = \"${name}\",",
                 "description = \"${description}\",",
                 "autoActivate = ${false},",
-                "localAction = async () =>",
+                "localAction = async (cancel) =>",
                 "{",
 					"var sa = new SkillAction();",
                     "return new SkillAction();",
