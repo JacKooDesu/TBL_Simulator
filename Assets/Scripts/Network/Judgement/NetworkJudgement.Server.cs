@@ -300,6 +300,9 @@ namespace TBL
                     time -= Time.deltaTime;
                     timer = (int)time;
 
+                    if (currentPhase == Phase.HeroSkillReacting)
+                        yield return StartCoroutine(HeroSkillReactingUpdate());
+
                     yield return null;
                 }
             }

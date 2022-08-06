@@ -8,6 +8,7 @@ namespace TBL.Command
     {
         public static Command<int, int> DRAW_CARD;
         public static Command<int, int> ADD_CARD;
+        public static Command<int, int> SET_HIDE;
         public static List<object> commandList;
 
         void Awake()
@@ -22,11 +23,15 @@ namespace TBL.Command
                 (NetworkRoomManager.singleton as NetworkRoomManager).players[v1].AddCard(v2);
             });
 
-
+            SET_HIDE = new Command<int, int>("setHide", (v1, v2) =>
+            {
+                (NetworkRoomManager.singleton as NetworkRoomManager).players[v1].SetHeroState(v2 != 0);
+            });
 
             commandList = new List<object>{
                 DRAW_CARD,
-                ADD_CARD
+                ADD_CARD,
+                SET_HIDE
             };
         }
 

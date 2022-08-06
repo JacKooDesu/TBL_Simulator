@@ -27,7 +27,7 @@ namespace TBL
         }
 
         [Server]
-        public void DrawHero(int testIndex = -1)
+        public void DrawHero(int testIndex = -1, bool serverOnly = false)
         {
             if (testIndex != -1)
             {
@@ -113,7 +113,7 @@ namespace TBL
         [Server]
         public void CardTToG(int player, int id) // Table ToGraveyard
         {
-            manager.players[player].netCards.Remove(id);
+           netCards.Remove(id);
         }
 
         [Server]

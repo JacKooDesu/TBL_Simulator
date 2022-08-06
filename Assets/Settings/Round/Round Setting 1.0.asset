@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd2518f164006374a82438269754b948, type: 3}
   m_Name: Round Setting 1.0
   m_EditorClassIdentifier: 
-  roundTime: 5
+  roundTime: 10
   reactionTime: 10
   heroReactionTime: 0
   drawTime: 5

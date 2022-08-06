@@ -55,8 +55,6 @@ namespace TBL.Hero
                                 return true;
                         }
 
-                        playerStatus.ClearTempData();
-
                         await playerStatus.InitReturnCardMenu(_.target);
                         await TaskExtend.WaitUntil(
                             () => !playerStatus.isWaitingData,
@@ -66,6 +64,7 @@ namespace TBL.Hero
                             return i != 0;
 
                         targetPlayer.CardTToG(_.target, playerStatus.tempData);
+                        print( playerStatus.tempData);
                     }
                     return true;
                 },

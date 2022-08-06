@@ -110,13 +110,17 @@ namespace TBL
         }
 
         [Command]
-        public void CmdSetWaitingData(bool value) => isWaitingData = value;
+        public void CmdSetWaitingData(bool value)
+        {
+            isWaitingData = value;
+            ClearTempData();
+        }
 
         [Command]
         public void CmdSetTempData(int data)
         {
             tempData = data;
-            CmdSetWaitingData(false);
+            SetWaitingData(false);
         }
 
         [Command]

@@ -29,6 +29,8 @@ namespace TBL.Hero
                         () => sa.suffix != int.MinValue,
                         () => cancel.IsCancellationRequested);
 
+                    if (cancel.IsCancellationRequested) return new SkillAction();
+
                     netCanvas.BindSelectPlayer(
                         manager.GetOtherPlayers(),
                         (index) => sa.target = index
@@ -36,6 +38,8 @@ namespace TBL.Hero
                     await TaskExtend.WaitUntil(
                         () => sa.target != int.MinValue,
                         () => cancel.IsCancellationRequested);
+
+                    if (cancel.IsCancellationRequested) return new SkillAction();
 
                     return sa;
                 },
@@ -67,38 +71,46 @@ namespace TBL.Hero
                 }
             };
 
-            // // 聯動 (WIP)
-            // // 當你使用鎖定時，抽三張牌，並分一張手牌給另一位玩家
-            // var skill2 = new HeroSkill
-            // {
-            //     name = "聯動",
-            //     description = "當你使用鎖定時，抽三張牌，並分一張手牌給另一位玩家。",
-            //     autoActivate = true,
-            //     action = (_) =>
-            //     {
-            //         var netCanvas = FindObjectOfType<NetCanvas.GameScene>();
-            //         playerStatus.CmdDrawCard(3);
-            //         netCanvas.BindSelectPlayer(manager.GetOtherPlayers(), (target) =>
-            //         {
-            //             netCanvas.ShowPlayerHandCard(
-            //                 playerStatus.playerIndex,
-            //                 (id) =>
-            //                 {
-            //                     playerStatus.CmdCardHToH(id, target);
-            //                 });
-            //         });
-            //     },
-            //     checker = () =>
-            //     {
-            //         if (manager.Judgement.currentPhase != NetworkJudgement.Phase.Reacting)
-            //             return false;
+            // 聯動 (WIP)
+            // 當你使用鎖定時，抽三張牌，並分一張手牌給另一位玩家
+            var skill2 = new HeroSkill
+            {
+                name = "聯動",
+                description = "當你使用鎖定時，抽三張牌，並分一張手牌給另一位玩家。",
+                autoActivate = true,
+                action = async (_) =>
+                {
+                    var netCanvas = FindObjectOfType<NetCanvas.GameScene>();
+                    playerStatus.CmdDrawCard(3);
 
-            //         var cardAction = manager.Judgement.currentCardAction;
-            //         return
-            //             cardAction.user == playerStatus.playerIndex &&
-            //             manager.DeckManager.Deck.GetCardPrototype(cardAction.originCardId).CardType == Card.CardType.Lock;
-            //     }
-            // };
+                    await playerStatus.InitReturnHandCardMenu(playerStatus.playerIndex);
+                    await TaskExtend.WaitUntil(
+                        () => playerStatus.isWaitingData,
+                        () => judgement.currentPhase != NetworkJudgement.Phase.HeroSkillReacting
+                    );
+                    if (judgement.currentPhase != NetworkJudgement.Phase.HeroSkillReacting)
+                        return true;
+
+                    // await playerStatus.InitReturnDataMenu(playerStatus.playerIndex);
+                    await TaskExtend.WaitUntil(
+                        () => playerStatus.isWaitingData,
+                        () => judgement.currentPhase != NetworkJudgement.Phase.HeroSkillReacting
+                    );
+                    if (judgement.currentPhase != NetworkJudgement.Phase.HeroSkillReacting)
+                        return true;
+                    return true;
+                },
+                checker = () =>
+                {
+                    if (manager.Judgement.currentPhase != NetworkJudgement.Phase.Reacting)
+                        return false;
+
+                    var cardAction = manager.Judgement.currentCardAction;
+                    return
+                        cardAction.user == playerStatus.playerIndex &&
+                        manager.DeckManager.Deck.GetCardPrototype(cardAction.originCardId).CardType == Card.CardType.Lock;
+                }
+            };
 
             skills = new HeroSkill[] { skill1 };
         }

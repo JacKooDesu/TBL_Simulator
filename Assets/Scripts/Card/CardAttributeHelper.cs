@@ -29,6 +29,9 @@ namespace TBL.Card
 
         public static bool Compare(int id, params int[] requests)
         {
+            if (requests.Length == 0)
+                return true;
+            
             foreach (var r in requests)
             {
                 if ((id & r) != r)
