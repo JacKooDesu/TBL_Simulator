@@ -78,6 +78,12 @@ namespace TBL
         }
 
         [Server]
+        public void SetSkillCanActivate(int index, bool b)
+        {
+            netHeroSkillCanActivate[index] = b;
+        }
+
+        [Server]
         public void SetSkillLimited(int index, bool b)
         {
             hero.skills[index].limited = b;
@@ -113,7 +119,7 @@ namespace TBL
         [Server]
         public void CardTToG(int player, int id) // Table ToGraveyard
         {
-           netCards.Remove(id);
+            netCards.Remove(id);
         }
 
         [Server]
@@ -164,6 +170,39 @@ namespace TBL
             this.TargetReturnCardMenu(playerIndex, requests);
             await TaskExtend.WaitUntil(() => isWaitingData);
             return;
+        }
+
+        [Server]
+        public async void GetTest(bool isDraw)
+        {
+            string msg = $"玩家 {playerIndex} ({playerName}) ：";
+            string actionStr = (isDraw ? "抽一張牌" : "我是一個好人");
+
+            await InitReturnDataMenu(actionStr);
+            await TaskExtend.WaitUntil(
+                () => !isWaitingData,
+                () => judgement.currentPhase != NetworkJudgement.Phase.Reacting
+            );
+
+            if (judgement.currentPhase != NetworkJudgement.Phase.Reacting || tempData == int.MinValue || tempData == 0)
+            {
+                if (isDraw)
+                    DrawCard(1);
+            }
+            else
+            {
+                if (!isDraw)
+                {
+                    DrawCard(1);
+                    actionStr = (!isDraw ? "抽一張牌" : "我是一個好人");
+                }
+            }
+            RpcAddLog(
+                msg + actionStr,
+                true,
+                false,
+                new int[] { }
+            );
         }
     }
 }

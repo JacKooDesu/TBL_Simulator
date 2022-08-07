@@ -42,8 +42,11 @@ namespace TBL.Hero
 
                     for (int i = 0; i < 3; ++i)
                     {
-                        if (i != 0 && targetPlayer.netCards.Count != 0)
+                        if (i != 0)
                         {
+                            if (targetPlayer.netCards.Count == 0)
+                                return true;
+                            
                             await playerStatus.InitReturnDataMenu("燒毀情報", "取消");
                             await TaskExtend.WaitUntil(
                                 () => !playerStatus.isWaitingData,
@@ -64,7 +67,7 @@ namespace TBL.Hero
                             return i != 0;
 
                         targetPlayer.CardTToG(_.target, playerStatus.tempData);
-                        print( playerStatus.tempData);
+                        print(playerStatus.tempData);
                     }
                     return true;
                 },

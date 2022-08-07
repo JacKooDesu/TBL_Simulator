@@ -11,6 +11,7 @@ namespace TBL
     using Card;
     using GameAction;
     using static Card.CardAttributeHelper;
+    using Util;
 
     public partial class NetworkPlayer : NetworkBehaviour
     {
@@ -336,29 +337,6 @@ namespace TBL
                         this.isWin = hero.mission.checker.Invoke();
                     break;
             }
-        }
-
-        [TargetRpc]
-        public void TargetGetTest(bool isDraw)
-        {
-            string msg = $"玩家 {playerIndex} ({playerName}) ：" + (isDraw ? "抽一張牌" : "我是一個好人");
-            var option = new Option
-            {
-                str = msg,
-                onSelect = () =>
-                {
-                    if (isDraw)
-                        CmdDrawCard(1);
-                    CmdAddLog(
-                        msg,
-                        true,
-                        false,
-                        new int[] { }
-                    );
-                },
-                type = OptionType.OTHER
-            };
-            netCanvas.InitMenu(new List<Option> { option });
         }
 
         [Command]

@@ -90,12 +90,12 @@ namespace TBL.Card
                 {
                     case ActionType.Draw:
                         print("抽牌");
-                        target.TargetGetTest(true);
+                        target.GetTest(true);
                         break;
 
                     case ActionType.IMGood:
                         print("我是一個好人");
-                        target.TargetGetTest(false);
+                        target.GetTest(false);
                         break;
                 }
             }
@@ -105,12 +105,12 @@ namespace TBL.Card
                 {
                     case ActionType.Draw:
                         print("我是一個好人");
-                        target.TargetGetTest(false);
+                        target.GetTest(false);
                         break;
 
                     case ActionType.IMGood:
                         print("抽牌");
-                        target.TargetGetTest(true);
+                        target.GetTest(true);
                         break;
                 }
             }

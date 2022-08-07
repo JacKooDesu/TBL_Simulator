@@ -50,7 +50,7 @@ namespace TBL
                 p.ResetStatus(0, 0, 0, 0, 0);
 
                 for (int i = 0; i < p.netHeroSkillCanActivate.Count; ++i)
-                    p.CmdSetSkillCanActivate(i, false);
+                    p.SetSkillCanActivate(i, false);
             }
 
             if (currentPhase == Phase.Result)
@@ -314,6 +314,11 @@ namespace TBL
 
         IEnumerator HeroSkillReactingUpdate()
         {
+            foreach (var p in manager.players)
+            {
+                for (int i = 0; i < p.hero.skills.Length; ++i)
+                    p.SetSkillCanActivate(i, false);
+            }
             float time = roundSetting.reactionTime;
 
             while (time >= 0)
@@ -326,7 +331,9 @@ namespace TBL
 
                 yield return null;
             }
-            ChangePhase(lastPhase);
+
+            if (currentPhase == Phase.HeroSkillReacting)
+                ChangePhase(lastPhase);
         }
 
         public void PlayerWin(NetworkPlayer p)

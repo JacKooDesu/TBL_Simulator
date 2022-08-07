@@ -108,7 +108,7 @@ namespace TBL
         [Command]
         public void CmdSetSkillCanActivate(int index, bool b)
         {
-            netHeroSkillCanActivate[index] = b;
+            SetSkillCanActivate(index, b);
         }
 
         [Command]

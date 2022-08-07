@@ -90,6 +90,10 @@ namespace TBL.Hero
                     else
                         playerStatus.netHeroSkillCanActivate[i] = true;
                 }
+                else
+                {
+                    playerStatus.netHeroSkillCanActivate[i] = false;
+                }
             }
         }
     }
