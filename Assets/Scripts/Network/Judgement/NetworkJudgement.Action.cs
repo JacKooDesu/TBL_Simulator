@@ -43,7 +43,9 @@ namespace TBL
                 true,
                 false
             ));
-            ChangePhase(lastPhase);
+            // will remove in future
+            if (currentPhase == Phase.HeroSkillReacting)
+                ChangePhase(lastPhase);
         }
     }
 

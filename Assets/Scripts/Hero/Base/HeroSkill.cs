@@ -87,7 +87,6 @@ namespace TBL.Hero
                     a.checker(_) == SkillAction<ClassifyStruct<SkillActionData>>.CheckerState.Break)
                     return false;
             }
-
             return true;
         }
     }

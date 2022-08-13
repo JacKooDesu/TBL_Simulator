@@ -212,7 +212,6 @@ namespace TBL.Hero
                     }
                 }
             };
-
             skill2.serverActions = new SkillAction<ClassifyStruct<SkillActionData>>[]{
                 // 新增鎖定動作
                 new SkillAction<ClassifyStruct<SkillActionData>>(){
