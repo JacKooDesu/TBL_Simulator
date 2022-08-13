@@ -106,10 +106,28 @@ namespace TBL.GameActionData
             this.skill = skill;
             this.suffix = suffix;
         }
+
+        public SkillActionData Default()
+        {
+            this.user = int.MinValue;
+            this.target = int.MinValue;
+            this.skill = int.MinValue;
+            this.suffix = int.MinValue;
+
+            return this;
+        }
     }
 
     public class ClassifyStruct<T> where T : struct
     {
+        public ClassifyStruct()
+        {
+            data = default(T);
+        }
+        public ClassifyStruct(T data)
+        {
+            this.data = data;
+        }
         public T data;
     }
 }

@@ -57,7 +57,9 @@ namespace TBL
                             onSelect = async () =>
                             {
                                 var canceltoken = new CancellationTokenSource();
-                                var task = skill.localAction(canceltoken);
+                                var presetData = new SkillActionData(
+                                    user: playerIndex, skill: x);
+                                var task = skill.LocalUse(presetData, canceltoken);
 
                                 var tempPhase = judgement.currentPhase;
 

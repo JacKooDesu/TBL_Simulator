@@ -70,7 +70,7 @@ namespace TBL.Hero
                 new SkillAction<ClassifyStruct<SkillActionData>>(){
                     action = async (_)=> {
                         playerStatus.DrawCard(2);
-                        if (playerStatus.GetHandCardCount(Black) <= 0)
+                        if (playerStatus.GetHandCardCount(Black) > 0)
                             await playerStatus.InitReturnDataMenu("放置一張黑情報", "取消");
                     },
                     checker = (_)=> {
@@ -80,10 +80,10 @@ namespace TBL.Hero
                         if(playerStatus.isWaitingData)
                             return SkillAction.CheckerState.None;
 
-                        if(playerStatus.tempData != 0)
+                        if(playerStatus.tempData == 0)
                             return SkillAction.CheckerState.Continue;
-
-                        return SkillAction.CheckerState.None;
+                        else
+                            return SkillAction.CheckerState.Break;
                     }
                 },
                 // 選擇放置黑情報
@@ -95,7 +95,7 @@ namespace TBL.Hero
                         if(playerStatus.isWaitingData)
                             return SkillAction<ClassifyStruct<SkillActionData>>.CheckerState.None;
 
-                        return SkillAction<ClassifyStruct<SkillActionData>>.CheckerState.None;
+                        return SkillAction<ClassifyStruct<SkillActionData>>.CheckerState.Continue;
                     }
                 },
                 // 放置黑情報

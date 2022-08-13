@@ -39,13 +39,16 @@ namespace TBL.Hero
         }
 
         public SkillAction<ClassifyStruct<SkillActionData>>[] localActions;
-        public Func<bool> commonLocalBreaker = default;
+        public Func<bool> commonLocalBreaker = () => false;
         public SkillAction<ClassifyStruct<SkillActionData>>[] serverActions;
-        public Func<bool> commonServerBreaker = default;
+        public Func<bool> commonServerBreaker = () => false;
 
-        public async Task<SkillActionData> LocalUse(CancellationTokenSource cancellationToken)
+        public async Task<SkillActionData> LocalUse(
+            SkillActionData presetData,
+            CancellationTokenSource cancellationToken)
         {
-            var sa = new ClassifyStruct<SkillActionData>();
+            var sa = new ClassifyStruct<SkillActionData>(presetData);
+            UnityEngine.Debug.Log(sa.data.suffix);
             foreach (var a in localActions)
             {
                 await a.action(sa);
@@ -78,7 +81,7 @@ namespace TBL.Hero
 
                 await TaskExtend.WaitUntil(
                     () => a.checker(_) != SkillAction<ClassifyStruct<SkillActionData>>.CheckerState.None,
-                    () => commonLocalBreaker());
+                    () => commonServerBreaker());
 
                 if (commonServerBreaker() ||
                     a.checker(_) == SkillAction<ClassifyStruct<SkillActionData>>.CheckerState.Break)

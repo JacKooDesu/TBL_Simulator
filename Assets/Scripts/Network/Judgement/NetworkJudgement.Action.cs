@@ -32,7 +32,7 @@ namespace TBL
             await TaskExtend.WaitUntil(
                 () => manager.players.Find(p => p.phase == lastPhase) == null
             );
-            var result = await skill.action(action);
+            var result = await skill.ServerUse(new ClassifyStruct<SkillActionData>(action));
 
             // return if action failed (maybe timeout)
             if (!result)
