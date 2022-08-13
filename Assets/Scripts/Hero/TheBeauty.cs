@@ -1,6 +1,6 @@
 namespace TBL.Hero
 {
-    using GameAction;
+    using GameActionData;
     using Util;
     public class TheBeauty : HeroBase
     {
@@ -13,8 +13,8 @@ namespace TBL.Hero
                 autoActivate = true,
                 localAction = async (cancel) =>
                 {
-                    var sa = new SkillAction();
-                    return new SkillAction();
+                    var sa = new SkillActionData();
+                    return new SkillActionData();
                 },
                 action = async (_) =>
                 {

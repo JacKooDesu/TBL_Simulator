@@ -4,7 +4,7 @@ using TBL.UI.LogSystem;
 namespace TBL.Hero
 {
     using Util;
-    using GameAction;
+    using GameActionData;
     using static Card.CardAttributeHelper;
     public class OldGun : HeroBase
     {
@@ -20,7 +20,7 @@ namespace TBL.Hero
                 localAction = async (cancel) =>
                 {
                     await Task.CompletedTask;
-                    return new SkillAction(skill: 0);
+                    return new SkillActionData(skill: 0);
                 },
                 action = async (_) =>
                 {
@@ -50,7 +50,7 @@ namespace TBL.Hero
                 autoActivate = false,
                 localAction = async (cancel) =>
                 {
-                    var skillAction = new SkillAction(user: playerStatus.playerIndex, skill: 1);
+                    var skillAction = new SkillActionData(user: playerStatus.playerIndex, skill: 1);
                     netCanvas.BindSelectPlayer(
                         manager.GetOtherPlayers(),
                         (targetIndex) => skillAction.target = targetIndex
@@ -62,7 +62,7 @@ namespace TBL.Hero
                     );
 
                     if (cancel.IsCancellationRequested)
-                        return new SkillAction();
+                        return new SkillActionData();
 
                     return skillAction;
                 },
@@ -144,7 +144,7 @@ namespace TBL.Hero
                 autoActivate = false,
                 localAction = async (cancel) =>
                 {
-                    var skillAction = new SkillAction(user: playerStatus.playerIndex, skill: 2);
+                    var skillAction = new SkillActionData(user: playerStatus.playerIndex, skill: 2);
 
                     netCanvas.BindSelectPlayer(manager.GetOtherPlayers(), (index) => skillAction.target = index);
 
@@ -156,7 +156,7 @@ namespace TBL.Hero
                     //     await Task.Yield();
 
                     if (cancel.IsCancellationRequested)
-                        return new SkillAction();
+                        return new SkillActionData();
 
                     return skillAction;
                 },

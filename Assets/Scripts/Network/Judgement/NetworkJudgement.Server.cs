@@ -12,8 +12,8 @@ namespace TBL
         public List<NetworkPlayer> cardSendQueue = new List<NetworkPlayer>();
         public SyncList<int> cardSendQueueID = new SyncList<int>(); // 測試是否可用SyncList
 
-        public List<GameAction.CardAction> cardActionQueue = new List<GameAction.CardAction>();
-        [SyncVar] public GameAction.CardAction currentCardAction;   // 用於檢查技能發動
+        public List<GameActionData.CardActionData> cardActionQueue = new List<GameActionData.CardActionData>();
+        [SyncVar] public GameActionData.CardActionData currentCardAction;   // 用於檢查技能發動
 
         IEnumerator WaitAllPlayerInit()
         {
@@ -43,7 +43,7 @@ namespace TBL
             currentSendingPlayer = -1;
             playerIntercept = -1;
 
-            currentCardAction = new GameAction.CardAction(-1, -1, 0, 0, 0);
+            currentCardAction = new GameActionData.CardActionData(-1, -1, 0, 0, 0);
 
             foreach (NetworkPlayer p in manager.players)
             {
@@ -225,12 +225,12 @@ namespace TBL
             manager.CheckAllHeroSkill();
         }
 
-        public void AddCardAction(GameAction.CardAction ca)
+        public void AddCardAction(GameActionData.CardActionData ca)
         {
             if (currentPhase != Phase.Reacting)
             {
                 ChangePhase(Phase.Reacting);
-                cardActionQueue = new List<GameAction.CardAction>();
+                cardActionQueue = new List<GameActionData.CardActionData>();
             }
             cardActionQueue.Add(ca);
 

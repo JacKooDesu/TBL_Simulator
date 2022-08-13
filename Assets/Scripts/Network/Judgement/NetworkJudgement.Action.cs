@@ -8,21 +8,21 @@ using System.Threading.Tasks;
 namespace TBL
 {
     using Hero;
-    using GameAction;
+    using GameActionData;
     using UI.LogSystem;
     using Util;
     using Card;
     public partial class NetworkJudgement : NetworkBehaviour
     {
         [Server]
-        public void CardAction(CardAction ca)
+        public void CardAction(CardActionData ca)
         {
             manager.players[ca.user].netHandCards.Remove(ca.originCardId);
             AddCardAction(ca);
             print($"玩家({ca.user}) 對 玩家({ca.target}) 使用 {CardSetting.IdToCard(ca.cardId).GetCardNameFully()}");
         }
 
-        public async void UseSkill(SkillAction action)
+        public async void UseSkill(SkillActionData action)
         {
             var player = manager.players[action.user];
             var hero = player.hero;

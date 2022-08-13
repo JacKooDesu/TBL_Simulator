@@ -2,7 +2,7 @@
 
 namespace TBL.Hero
 {
-    using GameAction;
+    using GameActionData;
     public class AgentK : HeroBase
     {
         protected override void BindSkill()

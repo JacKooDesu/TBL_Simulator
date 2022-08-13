@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace TBL.GameAction
+namespace TBL.GameActionData
 {
     [System.Serializable]
-    public struct CardAction
+    public struct CardActionData
     {
         public int user;
         public int target;
@@ -13,7 +13,7 @@ namespace TBL.GameAction
         public int originCardId;
         public int suffix;
 
-        public CardAction(int user, int target, int cardId, int originCardId, int suffix)
+        public CardActionData(int user, int target, int cardId, int originCardId, int suffix)
         {
             this.user = user;
             this.target = target;
@@ -92,19 +92,24 @@ namespace TBL.GameAction
         }
     }
 
-    public struct SkillAction
+    public struct SkillActionData
     {
         public int user;
         public int target;
         public int skill;
         public int suffix;
 
-        public SkillAction(int user = int.MinValue, int target = int.MinValue, int skill = int.MinValue, int suffix = int.MinValue)
+        public SkillActionData(int user = int.MinValue, int target = int.MinValue, int skill = int.MinValue, int suffix = int.MinValue)
         {
             this.user = user;
             this.target = target;
             this.skill = skill;
             this.suffix = suffix;
         }
+    }
+
+    public class ClassifyStruct<T> where T : struct
+    {
+        public T data;
     }
 }

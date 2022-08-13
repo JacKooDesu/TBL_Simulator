@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 namespace TBL.Hero
 {
-    using GameAction;
+    using GameActionData;
     using Util;
     public class Shining : HeroBase
     {
@@ -15,7 +15,7 @@ namespace TBL.Hero
                 autoActivate = false,
                 localAction = async (cancel) =>
                 {
-                    var sa = new SkillAction(user: playerStatus.playerIndex, skill: 0);
+                    var sa = new SkillActionData(user: playerStatus.playerIndex, skill: 0);
                     var playerList = new List<int>();
                     foreach (var p in manager.players)
                     {

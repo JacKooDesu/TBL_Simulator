@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-
+using System.Collections.Generic;
+using System.Threading.Tasks;
 namespace TBL.Hero
 {
     using Util;
-    using GameAction;
+    using GameActionData;
     using static Card.CardAttributeHelper;
 
     public class Killer : HeroBase
@@ -65,6 +65,51 @@ namespace TBL.Hero
                 }
             };
 
+            skill1.serverActions = new SkillAction<ClassifyStruct<SkillActionData>>[]{
+                // 抽二，詢問是否放置黑情報
+                new SkillAction<ClassifyStruct<SkillActionData>>(){
+                    action = async (_)=> {
+                        playerStatus.DrawCard(2);
+                        if (playerStatus.GetHandCardCount(Black) <= 0)
+                            await playerStatus.InitReturnDataMenu("放置一張黑情報", "取消");
+                    },
+                    checker = (_)=> {
+                        if (playerStatus.GetHandCardCount(Black) <= 0)
+                            return SkillAction.CheckerState.Break;
+
+                        if(playerStatus.isWaitingData)
+                            return SkillAction.CheckerState.None;
+
+                        if(playerStatus.tempData != 0)
+                            return SkillAction.CheckerState.Continue;
+
+                        return SkillAction.CheckerState.None;
+                    }
+                },
+                // 選擇放置黑情報
+                new SkillAction<ClassifyStruct<SkillActionData>>(){
+                    action = async (_)=>{
+                        await playerStatus.InitReturnHandCardMenu(playerStatus.playerIndex, Black);
+                    },
+                    checker = (_)=>{
+                        if(playerStatus.isWaitingData)
+                            return SkillAction<ClassifyStruct<SkillActionData>>.CheckerState.None;
+
+                        return SkillAction<ClassifyStruct<SkillActionData>>.CheckerState.None;
+                    }
+                },
+                // 放置黑情報
+                new SkillAction<ClassifyStruct<SkillActionData>>{
+                    action = (_)=>{
+                        playerStatus.CardHToT(playerStatus.tempData, judgement.currentSendingPlayer);
+                        return Task.CompletedTask;
+                    },
+                    checker = (_)=> SkillAction.CheckerState.Continue
+                }
+            };
+            skill1.commonServerBreaker = () =>
+                judgement.currentPhase != NetworkJudgement.Phase.HeroSkillReacting;
+
             // WIP
             var skill2 = new HeroSkill
             {
@@ -73,7 +118,7 @@ namespace TBL.Hero
                 autoActivate = false,
                 localAction = async (cancel) =>
                 {
-                    var sa = new SkillAction
+                    var sa = new SkillActionData
                     (
                         skill: 1,
                         user: playerStatus.playerIndex
@@ -105,7 +150,7 @@ namespace TBL.Hero
                 {
                     judgement.ChangePhase(judgement.lastPhase);
                     judgement.AddCardAction(
-                        new CardAction
+                        new CardActionData
                         {
                             cardId = Lock,
                             target = _.target,
@@ -129,6 +174,62 @@ namespace TBL.Hero
                     return true;
                 }
             };
+            skill2.localActions = new SkillAction<ClassifyStruct<SkillActionData>>[]{
+                // 選擇密電當作鎖定
+                new SkillAction<ClassifyStruct<SkillActionData>>(){
+                    action = (_)=>{
+                        netCanvas.ShowPlayerHandCard(
+                            index: playerStatus.playerIndex,
+                            action: (id) =>
+                            {
+                                _.data.suffix = id;
+                            },
+                            Secret
+                        );
+                        return Task.CompletedTask;
+                    },
+                    checker = (_)=>{
+                        if(_.data.suffix == int.MinValue)
+                            return SkillAction.CheckerState.None;
+
+                        return SkillAction.CheckerState.Continue;
+                    }
+                },
+                // 選擇鎖定玩家
+                new SkillAction<ClassifyStruct<SkillActionData>>(){
+                    action =(_)=>{
+                        netCanvas.BindSelectPlayer(
+                            manager.GetOtherPlayers(),
+                            (index) => _.data.target = index
+                        );
+                        return Task.CompletedTask;
+                    },
+                    checker=(_)=>{
+                        if(_.data.target == int.MinValue)
+                            return SkillAction.CheckerState.None;
+
+                        return SkillAction.CheckerState.Continue;
+                    }
+                }
+            };
+
+            skill2.serverActions = new SkillAction<ClassifyStruct<SkillActionData>>[]{
+                // 新增鎖定動作
+                new SkillAction<ClassifyStruct<SkillActionData>>(){
+                    action = (_)=>{
+                        judgement.ChangePhase(judgement.lastPhase);
+                        judgement.AddCardAction(
+                            new CardActionData
+                            {
+                                cardId = Lock,
+                                target = _.data.target,
+                                user = playerStatus.playerIndex
+                            });
+                        playerStatus.CardHToG(_.data.suffix);
+                        return Task.CompletedTask;
+                    }
+                }
+            };
 
             var skill3 = new HeroSkill
             {
@@ -137,7 +238,7 @@ namespace TBL.Hero
                 autoActivate = false,
                 localAction = async (cancel) =>
                 {
-                    var sa = new SkillAction
+                    var sa = new SkillActionData
                     (
                         skill: 1,
                         user: playerStatus.playerIndex

@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TBL.GameAction;
+using TBL.GameActionData;
 
 namespace TBL.Card
 {
@@ -45,7 +45,7 @@ namespace TBL.Card
 
             netCanvas.BindSelectPlayer(manager.GetOtherPlayers(), (i) =>
             {
-                user.CmdTestCardAction(new CardAction(user.playerIndex, i, ID, originID, GetUniqueID()));
+                user.CmdTestCardAction(new CardActionData(user.playerIndex, i, ID, originID, GetUniqueID()));
             });
         }
 
@@ -77,7 +77,7 @@ namespace TBL.Card
             new Setting(TBL.Settings.TeamSetting.TeamEnum.Green,ActionType.IMGood),
         };
 
-        public override void OnEffect(NetworkRoomManager manager, CardAction ca)
+        public override void OnEffect(NetworkRoomManager manager, CardActionData ca)
         {
             base.OnEffect(manager, ca);
 

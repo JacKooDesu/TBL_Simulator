@@ -9,7 +9,7 @@ namespace TBL
 {
     using Hero;
     using Card;
-    using GameAction;
+    using GameActionData;
     using static Card.CardAttributeHelper;
     using Util;
 
@@ -310,7 +310,7 @@ namespace TBL
         }
 
         [Command]
-        public void CmdTestCardAction(CardAction ca)
+        public void CmdTestCardAction(CardActionData ca)
         {
             judgement.CardAction(ca);
         }
@@ -340,7 +340,7 @@ namespace TBL
         }
 
         [Command]
-        public void CmdUseSkill(SkillAction skillAction)
+        public void CmdUseSkill(SkillActionData skillAction)
         {
             judgement.UseSkill(skillAction);
         }

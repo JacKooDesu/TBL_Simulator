@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TBL.GameAction;
+using TBL.GameActionData;
 
 namespace TBL.Card
 {
@@ -238,7 +238,7 @@ namespace TBL.Card
         }
 
         // only run on server
-        public virtual void OnEffect(NetworkRoomManager manager, CardAction ca)
+        public virtual void OnEffect(NetworkRoomManager manager, CardActionData ca)
         {
 
         }

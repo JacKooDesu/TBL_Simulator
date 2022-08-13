@@ -43,6 +43,7 @@ namespace TBL
         }
 
         [Header("輪設定")]
+        public Stack<Phase> phases = new Stack<Phase>();
         [SyncVar(hook = nameof(OnCurrentPhaseChange))] public Phase currentPhase;
         [SyncVar, HideInInspector] public Phase lastPhase;
         public void ChangePhase(Phase phase)

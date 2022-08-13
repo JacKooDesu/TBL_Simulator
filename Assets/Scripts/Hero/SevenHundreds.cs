@@ -3,7 +3,7 @@
 namespace TBL.Hero
 {
     using Util;
-    using GameAction;
+    using GameActionData;
     using static Card.CardAttributeHelper;
     public class SevenHundreds : HeroBase
     {
@@ -18,7 +18,7 @@ namespace TBL.Hero
                 autoActivate = false,
                 localAction = async (cancel) =>
                 {
-                    var sa = new SkillAction(user: playerStatus.playerIndex, skill: 0);
+                    var sa = new SkillActionData(user: playerStatus.playerIndex, skill: 0);
                     netCanvas.ShowPlayerHandCard(
                         playerStatus.playerIndex,
                         card => sa.suffix = card,
@@ -29,7 +29,7 @@ namespace TBL.Hero
                         () => sa.suffix != int.MinValue,
                         () => cancel.IsCancellationRequested);
 
-                    if (cancel.IsCancellationRequested) return new SkillAction();
+                    if (cancel.IsCancellationRequested) return new SkillActionData();
 
                     netCanvas.BindSelectPlayer(
                         manager.GetOtherPlayers(),
@@ -39,7 +39,7 @@ namespace TBL.Hero
                         () => sa.target != int.MinValue,
                         () => cancel.IsCancellationRequested);
 
-                    if (cancel.IsCancellationRequested) return new SkillAction();
+                    if (cancel.IsCancellationRequested) return new SkillActionData();
 
                     return sa;
                 },
@@ -47,7 +47,7 @@ namespace TBL.Hero
                 {
                     judgement.ChangePhase(judgement.lastPhase);
                     judgement.AddCardAction(
-                        new CardAction
+                        new CardActionData
                         {
                             cardId = Lock,
                             target = _.target,

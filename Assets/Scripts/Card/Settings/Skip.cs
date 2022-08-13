@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TBL.GameAction;
+using TBL.GameActionData;
 
 namespace TBL.Card
 {
@@ -15,12 +15,12 @@ namespace TBL.Card
 
             netCanvas.BindSelectPlayer(manager.GetAllPlayers(), (i) =>
             {
-                user.CmdTestCardAction(new CardAction(user.playerIndex, i, ID, originID, 0));
+                user.CmdTestCardAction(new CardActionData(user.playerIndex, i, ID, originID, 0));
             });
         }
 
         // only run on server
-        public override void OnEffect(NetworkRoomManager manager, CardAction ca)
+        public override void OnEffect(NetworkRoomManager manager, CardActionData ca)
         {
             base.OnEffect(manager, ca);
             manager.players[ca.target].isSkipped = true;

@@ -8,7 +8,7 @@ namespace TBL.Hero
 {
     using Util;
     using Card;
-    using GameAction;
+    using GameActionData;
 
     public class TestHero : HeroBase
     {
@@ -22,7 +22,7 @@ namespace TBL.Hero
                 localAction = async (cancel) =>
                 {
 
-                    var sa = new SkillAction
+                    var sa = new SkillActionData
                     {
                         skill = 0,
                         user = playerStatus.playerIndex

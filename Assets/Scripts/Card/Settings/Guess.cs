@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using TBL.GameAction;
+using TBL.GameActionData;
 using UnityEngine;
 
 namespace TBL.Card
@@ -14,12 +14,12 @@ namespace TBL.Card
             NetCanvas.GameScene netCanvas = FindObjectOfType<NetCanvas.GameScene>();
 
             netCanvas.ShowColorMenu(
-                (j) => user.CmdTestCardAction(new CardAction(user.playerIndex, user.playerIndex, ID, originID, j)),
+                (j) => user.CmdTestCardAction(new CardActionData(user.playerIndex, user.playerIndex, ID, originID, j)),
                 new List<CardColor> { CardColor.Red, CardColor.Blue, CardColor.Black }
             );
         }
 
-        public override void OnEffect(NetworkRoomManager manager, CardAction ca)
+        public override void OnEffect(NetworkRoomManager manager, CardActionData ca)
         {
             base.OnEffect(manager, ca);
 

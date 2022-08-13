@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 using TBL.Card;
-using TBL.GameAction;
+using TBL.GameActionData;
 using System.Threading.Tasks;
 
 // Action means only run on server (not use for client command)

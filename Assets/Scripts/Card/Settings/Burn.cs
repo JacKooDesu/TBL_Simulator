@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using TBL.GameAction;
+using TBL.GameActionData;
 using UnityEngine;
 
 namespace TBL.Card
@@ -25,13 +25,13 @@ namespace TBL.Card
             {
                 netCanvas.ShowPlayerCard(
                     i,
-                    (j) => user.CmdTestCardAction(new CardAction(user.playerIndex, i, ID, originID, j)),
+                    (j) => user.CmdTestCardAction(new CardActionData(user.playerIndex, i, ID, originID, j)),
                     CardAttributeHelper.Black
                 );
             });
         }
 
-        public override void OnEffect(NetworkRoomManager manager, CardAction ca)
+        public override void OnEffect(NetworkRoomManager manager, CardActionData ca)
         {
             base.OnEffect(manager, ca);
 
