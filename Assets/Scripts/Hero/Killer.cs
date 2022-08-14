@@ -15,40 +15,6 @@ namespace TBL.Hero
                 name = "連擊",
                 description = "當一位玩家獲得你傳出的黑情報時，抽兩張牌，並可以在他面前再放置一張黑情報。",
                 autoActivate = true,
-                action = async (_) =>
-                {
-                    playerStatus.DrawCard(2);
-                    // 沒有黑情報可選
-                    if (playerStatus.GetHandCardCount(Black) <= 0)
-                        return true;
-
-                    await playerStatus.InitReturnDataMenu("放置一張黑情報", "取消");
-                    await TaskExtend.WaitUntil(
-                        () => !playerStatus.isWaitingData,
-                        () => judgement.currentPhase != NetworkJudgement.Phase.HeroSkillReacting
-                    );
-
-                    if (judgement.currentPhase != NetworkJudgement.Phase.HeroSkillReacting)
-                        return true;
-
-                    // 不放置黑情報，或是未選擇
-                    if (playerStatus.tempData != 0)
-                        return true;
-
-                    playerStatus.ClearTempData();
-                    await playerStatus.InitReturnHandCardMenu(playerStatus.playerIndex, Black);
-                    await TaskExtend.WaitUntil(
-                        () => !playerStatus.isWaitingData,
-                        () => judgement.currentPhase != NetworkJudgement.Phase.HeroSkillReacting
-                    );
-
-                    if (judgement.currentPhase != NetworkJudgement.Phase.HeroSkillReacting)
-                        return true;
-
-                    playerStatus.CardHToT(playerStatus.tempData, judgement.currentSendingPlayer);
-
-                    return true;
-                },
                 checker = () =>
                 {
                     if (judgement.currentPhase != NetworkJudgement.Phase.Sending)
@@ -64,7 +30,6 @@ namespace TBL.Hero
                     return false;
                 }
             };
-
             skill1.serverActions = new SkillAction<ClassifyStruct<SkillActionData>>[]{
                 // 抽二，詢問是否放置黑情報
                 new SkillAction<ClassifyStruct<SkillActionData>>(){
@@ -116,50 +81,6 @@ namespace TBL.Hero
                 name = "預謀",
                 description = $"你的 {RichTextHelper.TextWithBold("密電")} 可以當作 {RichTextHelper.TextWithBold("鎖定")} 使用。",
                 autoActivate = false,
-                localAction = async (cancel) =>
-                {
-                    var sa = new SkillActionData
-                    (
-                        skill: 1,
-                        user: playerStatus.playerIndex
-                    );
-
-                    netCanvas.ShowPlayerHandCard(
-                        index: playerStatus.playerIndex,
-                        action: (id) =>
-                        {
-                            sa.suffix = id;
-                        },
-                        Secret
-                    );
-                    await TaskExtend.WaitUntil(
-                        () => sa.suffix != int.MinValue,
-                        () => cancel.IsCancellationRequested);
-
-                    netCanvas.BindSelectPlayer(
-                        manager.GetOtherPlayers(),
-                        (index) => sa.target = index
-                    );
-                    await TaskExtend.WaitUntil(
-                        () => sa.target != int.MinValue,
-                        () => cancel.IsCancellationRequested);
-
-                    return sa;
-                },
-                action = async (_) =>
-                {
-                    judgement.ChangePhase(judgement.lastPhase);
-                    judgement.AddCardAction(
-                        new CardActionData
-                        {
-                            cardId = Lock,
-                            target = _.target,
-                            user = playerStatus.playerIndex
-                        });
-                    playerStatus.CardHToG(_.suffix);
-
-                    return true;
-                },
                 checker = () =>
                 {
                     if (playerStatus.GetHandCardCount(Secret) == 0)
@@ -235,42 +156,6 @@ namespace TBL.Hero
                 name = "冷血",
                 description = $"可將任意手牌當作 {RichTextHelper.TextWithBold("鎖定")} 使用，且無法被識破。",
                 autoActivate = false,
-                localAction = async (cancel) =>
-                {
-                    var sa = new SkillActionData
-                    (
-                        skill: 1,
-                        user: playerStatus.playerIndex
-                    );
-
-                    netCanvas.ShowPlayerHandCard(
-                        index: playerStatus.playerIndex,
-                        action: (id) =>
-                        {
-                            sa.suffix = id;
-                        }
-                    );
-                    await TaskExtend.WaitUntil(
-                        () => sa.suffix != int.MinValue,
-                        () => cancel.IsCancellationRequested);
-
-                    netCanvas.BindSelectPlayer(
-                        manager.GetOtherPlayers(),
-                        (index) => sa.target = index
-                    );
-                    await TaskExtend.WaitUntil(
-                        () => sa.target != int.MinValue,
-                        () => cancel.IsCancellationRequested);
-
-                    return sa;
-                },
-                action = async (_) =>
-                {
-                    manager.players[_.target].isLocked = true;
-                    playerStatus.CardHToG(_.suffix);
-
-                    return true;
-                },
                 checker = () =>
                 {
                     if (playerStatus.GetHandCardCount(Secret) == 0)
@@ -283,6 +168,50 @@ namespace TBL.Hero
                         return false;
 
                     return true;
+                }
+            };
+            skill3.localActions = new SkillAction<ClassifyStruct<SkillActionData>>[]{
+                // 選擇手牌
+                new SkillAction<ClassifyStruct<SkillActionData>>(){
+                    action = (_)=>{
+                        netCanvas.ShowPlayerHandCard(
+                            playerStatus.playerIndex,
+                            (id) => _.data.suffix = id
+                        );
+                        return Task.CompletedTask;
+                    },
+                    checker = (_)=>{
+                        if(_.data.suffix == int.MinValue)
+                            return SkillAction.CheckerState.None;
+
+                        return SkillAction.CheckerState.Continue;
+                    }
+                },
+                // 選擇對象
+                new SkillAction<ClassifyStruct<SkillActionData>>{
+                    action = (_) => {
+                        netCanvas.BindSelectPlayer(
+                            manager.GetOtherPlayers(),
+                            (index) => _.data.target=index
+                        );
+                        return Task.CompletedTask;
+                    },
+                    checker = (_) => {
+                        if(_.data.target == int.MinValue)
+                            return SkillAction.CheckerState.None;
+
+                        return SkillAction.CheckerState.Continue;
+                    }
+                }
+            };
+            skill3.serverActions = new SkillAction<ClassifyStruct<SkillActionData>>[]{
+                // 直接鎖定，無法識破
+                new SkillAction<ClassifyStruct<SkillActionData>>(){
+                    action = (_) => {
+                        manager.players[_.data.target].isLocked = true;
+                        playerStatus.CardHToG(_.data.suffix);
+                        return Task.CompletedTask;
+                    }
                 }
             };
 

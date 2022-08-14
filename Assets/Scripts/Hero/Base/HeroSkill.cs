@@ -48,21 +48,29 @@ namespace TBL.Hero
             CancellationTokenSource cancellationToken)
         {
             var sa = new ClassifyStruct<SkillActionData>(presetData);
-            UnityEngine.Debug.Log(sa.data.suffix);
-            foreach (var a in localActions)
+            for (int i = 0; i < localActions.Length; ++i)
             {
+                var a = localActions[i];
+                var checkerResult = SkillAction.CheckerState.None;
+
                 await a.action(sa);
 
                 if (a.checker == null)
                     continue;
 
                 await TaskExtend.WaitUntil(
-                    () => a.checker(sa) != SkillAction<ClassifyStruct<SkillActionData>>.CheckerState.None,
+                    () => (checkerResult = a.checker(sa)) != SkillAction.CheckerState.None,
                     () => commonLocalBreaker(),
                     () => cancellationToken.IsCancellationRequested);
 
+                if (checkerResult == SkillAction.CheckerState.Redo)
+                    --i;
+                    
+                if (checkerResult == SkillAction.CheckerState.Restart)
+                    i = -1;
+
                 if (commonLocalBreaker() ||
-                    a.checker(sa) == SkillAction<ClassifyStruct<SkillActionData>>.CheckerState.Break ||
+                    checkerResult == SkillAction.CheckerState.Break ||
                     cancellationToken.IsCancellationRequested)
                     return default(SkillActionData);
             }
@@ -72,19 +80,28 @@ namespace TBL.Hero
 
         public async Task<bool> ServerUse(ClassifyStruct<SkillActionData> _)
         {
-            foreach (var a in serverActions)
+            for (int i = 0; i < serverActions.Length; ++i)
             {
+                var a = serverActions[i];
+                var checkerResult = SkillAction.CheckerState.None;
+
                 await a.action(_);
 
                 if (a.checker == null)
                     continue;
 
                 await TaskExtend.WaitUntil(
-                    () => a.checker(_) != SkillAction<ClassifyStruct<SkillActionData>>.CheckerState.None,
+                    () => (checkerResult = a.checker(_)) != SkillAction.CheckerState.None,
                     () => commonServerBreaker());
 
+                if (checkerResult == SkillAction.CheckerState.Redo)
+                    --i;
+
+                if (checkerResult == SkillAction.CheckerState.Restart)
+                    i = -1;
+
                 if (commonServerBreaker() ||
-                    a.checker(_) == SkillAction<ClassifyStruct<SkillActionData>>.CheckerState.Break)
+                    checkerResult == SkillAction.CheckerState.Break)
                     return false;
             }
             return true;
@@ -99,7 +116,9 @@ namespace TBL.Hero
         {
             None,
             Continue,
-            Break
+            Break,
+            Redo,
+            Restart
         }
     }
 
