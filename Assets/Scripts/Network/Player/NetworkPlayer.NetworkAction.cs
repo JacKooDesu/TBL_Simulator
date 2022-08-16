@@ -191,6 +191,15 @@ namespace TBL
             netCanvas.InitMenu(options);
             CmdSetWaitingData(true);
         }
+
+        [TargetRpc]
+        public void TargetReturnPlayer(List<int> targets)
+        {
+            netCanvas.BindSelectPlayer(
+                targets,
+                (index) => CmdSetTempData(index));
+            CmdSetWaitingData(true);
+        }
     }
 }
 

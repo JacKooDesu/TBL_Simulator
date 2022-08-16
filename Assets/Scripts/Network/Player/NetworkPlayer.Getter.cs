@@ -37,6 +37,11 @@ namespace TBL
 
             return cards;
         }
+
+        public List<int> GetOtherPlayers(Func<NetworkPlayer, bool> checker)
+        {
+            return manager.GetPlayers((p) => p != this && checker(p));
+        }
     }
 }
 

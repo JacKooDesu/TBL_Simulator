@@ -50,9 +50,9 @@ namespace TBL
 
         public void CheckAllHeroSkill()
         {
-            for (int i = currentRoundPlayerIndex; i < manager.players.Count; ++i)
+            for (int i = 0; i < manager.players.Count; ++i)
             {
-                var p = manager.players[i % manager.players.Count];
+                var p = manager.players[(currentRoundPlayerIndex + i) % manager.players.Count];
                 p.hero.CheckSkill();
             }
         }

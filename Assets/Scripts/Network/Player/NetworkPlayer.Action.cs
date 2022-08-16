@@ -179,6 +179,14 @@ namespace TBL
         }
 
         [Server]
+        public async Task ReturnPlayer(List<int> targets)
+        {
+            this.TargetReturnPlayer(targets);
+            await TaskExtend.WaitUntil(() => isWaitingData);
+            return;
+        }
+
+        [Server]
         public async void GetTest(bool isDraw)
         {
             string msg = $"玩家 {playerIndex} ({playerName}) ：";

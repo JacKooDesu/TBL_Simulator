@@ -82,6 +82,9 @@ namespace TBL.Hero
                 if (s.limited)
                     continue;
 
+                if (s.roundLimited)
+                    continue;
+
                 if (s.checker == null)
                     continue;
 

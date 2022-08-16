@@ -148,6 +148,17 @@ namespace TBL
             return list;
         }
 
+        public List<int> GetPlayers(System.Func<NetworkPlayer, bool> checker)
+        {
+            List<int> list = new List<int>();
+            foreach (NetworkPlayer p in players)
+            {
+                if (checker(p))
+                    list.Add(p.playerIndex);
+            }
+            return list;
+        }
+
         public List<int> GetAllPlayers()
         {
             List<int> list = new List<int>();

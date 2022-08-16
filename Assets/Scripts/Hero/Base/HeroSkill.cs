@@ -13,7 +13,8 @@ namespace TBL.Hero
         public string name;
         public string description;
         public bool autoActivate;
-        public bool limited;
+        public bool limited = false;
+        public bool roundLimited = false;   // 同一輪不能重複使用
 
         public System.Func<CancellationTokenSource, Task<SkillActionData>> localAction;    // 回傳SkillAction Command Server執行
         public System.Func<SkillActionData, Task<bool>> action;    // server 端執行
@@ -65,9 +66,12 @@ namespace TBL.Hero
 
                 if (checkerResult == SkillAction.CheckerState.Redo)
                     --i;
-                    
+
                 if (checkerResult == SkillAction.CheckerState.Restart)
                     i = -1;
+
+                if (checkerResult == SkillAction.CheckerState.Finish)
+                    break;
 
                 if (commonLocalBreaker() ||
                     checkerResult == SkillAction.CheckerState.Break ||
@@ -80,6 +84,7 @@ namespace TBL.Hero
 
         public async Task<bool> ServerUse(ClassifyStruct<SkillActionData> _)
         {
+            roundLimited = true;
             for (int i = 0; i < serverActions.Length; ++i)
             {
                 var a = serverActions[i];
@@ -100,6 +105,9 @@ namespace TBL.Hero
                 if (checkerResult == SkillAction.CheckerState.Restart)
                     i = -1;
 
+                if (checkerResult == SkillAction.CheckerState.Finish)
+                    break;
+
                 if (commonServerBreaker() ||
                     checkerResult == SkillAction.CheckerState.Break)
                     return false;
@@ -118,7 +126,8 @@ namespace TBL.Hero
             Continue,
             Break,
             Redo,
-            Restart
+            Restart,
+            Finish
         }
     }
 
