@@ -89,6 +89,12 @@ namespace TBL
             hero.skills[index].limited = b;
         }
 
+        [Server]
+        public void SetSkillRoundLimited(int index, bool b)
+        {
+            hero.skills[index].roundLimited = b;
+        }
+
         // H = Hand
         // T = Table
         // G = Graveyard

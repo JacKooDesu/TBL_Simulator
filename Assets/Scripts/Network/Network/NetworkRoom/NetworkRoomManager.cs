@@ -190,12 +190,6 @@ namespace TBL
             GameUtils.Shuffle<int>(ref teamList);
         }
 
-        public void CheckAllHeroSkill()
-        {
-            foreach (var p in players)
-                p.hero.CheckSkill();
-        }
-
         public void TargetLog(UI.LogSystem.LogBase log)
         {
             List<int> targetList = new List<int>(); ;

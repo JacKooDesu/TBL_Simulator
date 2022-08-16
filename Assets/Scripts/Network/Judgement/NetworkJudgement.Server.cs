@@ -30,7 +30,7 @@ namespace TBL
             foreach (NetworkPlayer p in manager.players)
             {
                 p.DrawTeam();
-                p.DrawHero(7);
+                p.DrawHero(3);
                 p.DrawCard(3);
             }
         }
@@ -50,7 +50,10 @@ namespace TBL
                 p.ResetStatus(0, 0, 0, 0, 0);
 
                 for (int i = 0; i < p.netHeroSkillCanActivate.Count; ++i)
+                {
                     p.SetSkillCanActivate(i, false);
+                    p.SetSkillRoundLimited(i, false);
+                }
             }
 
             if (currentPhase == Phase.Result)
@@ -94,7 +97,7 @@ namespace TBL
 
             ChangePhase(Phase.ChooseToSend);
 
-            manager.CheckAllHeroSkill();
+            CheckAllHeroSkill();
 
             player.TargetRoundStart();
             float time = roundSetting.roundTime;
@@ -132,8 +135,11 @@ namespace TBL
             {
                 player.TargetEndRound();
                 yield return StartCoroutine(SendingCardUpdate());
-                if (currentPhase == Phase.HeroSkillReacting)
+                while (currentPhase == Phase.HeroSkillReacting)
+                {
                     yield return StartCoroutine(HeroSkillReactingUpdate());
+                    CheckAllHeroSkill();
+                }
 
                 StartNewRound(
                     (currentRoundPlayerIndex + 1 == manager.players.Count) ?
@@ -199,7 +205,7 @@ namespace TBL
                     if (currentPhase == Phase.Reacting)
                     {
                         yield return StartCoroutine(CardEventUpdate());
-                        manager.CheckAllHeroSkill();
+                        CheckAllHeroSkill();
                     }
 
                     yield return null;
@@ -222,7 +228,7 @@ namespace TBL
             }
 
             manager.CheckAllWin();
-            manager.CheckAllHeroSkill();
+            CheckAllHeroSkill();
         }
 
         public void AddCardAction(GameActionData.CardActionData ca)
@@ -234,7 +240,7 @@ namespace TBL
             }
             cardActionQueue.Add(ca);
 
-            manager.CheckAllHeroSkill();
+            CheckAllHeroSkill();
 
             manager.TargetLogAll(UI.LogSystem.LogGeneral.UseCard(ca));
         }
@@ -267,7 +273,7 @@ namespace TBL
                 yield return null;
             }
 
-            manager.CheckAllHeroSkill();
+            CheckAllHeroSkill();
 
             cardActionQueue.Reverse();
             // 處理卡片效果
@@ -292,7 +298,7 @@ namespace TBL
                     print($"{tempCard.CardName} 效果發動");
                 }
 
-                manager.CheckAllHeroSkill();
+                CheckAllHeroSkill();
 
                 time = roundSetting.reactionTime;
                 while (time >= 0)
@@ -309,7 +315,7 @@ namespace TBL
 
             ChangePhase(lastPhase);
 
-            manager.CheckAllHeroSkill();
+            CheckAllHeroSkill();
         }
 
         IEnumerator HeroSkillReactingUpdate()

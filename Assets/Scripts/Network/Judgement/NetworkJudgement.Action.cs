@@ -47,6 +47,15 @@ namespace TBL
             if (currentPhase == Phase.HeroSkillReacting)
                 ChangePhase(lastPhase);
         }
+
+        public void CheckAllHeroSkill()
+        {
+            for (int i = currentRoundPlayerIndex; i < manager.players.Count; ++i)
+            {
+                var p = manager.players[i % manager.players.Count];
+                p.hero.CheckSkill();
+            }
+        }
     }
 
 }
