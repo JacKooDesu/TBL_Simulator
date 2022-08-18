@@ -193,6 +193,28 @@ namespace TBL
         }
 
         [TargetRpc]
+        public void TargetReturnCustomCardMenu(int[] targetCards, params int[] requests)
+        {
+            var options = new List<Option>();
+            for (int i = 0; i < targetCards.Length; ++i)
+            {
+                var card = targetCards[i];
+                if (!CardAttributeHelper.Compare(card, requests))
+                    continue;
+
+                options.Add(
+                    new Option
+                    {
+                        str = ((CardSetting)card).CardName,
+                        onSelect = () => CmdSetTempData(card)
+                    }
+                );
+            }
+            netCanvas.InitMenu(options);
+            CmdSetWaitingData(true);
+        }
+
+        [TargetRpc]
         public void TargetReturnPlayer(List<int> targets)
         {
             netCanvas.BindSelectPlayer(

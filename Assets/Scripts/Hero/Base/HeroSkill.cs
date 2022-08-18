@@ -116,7 +116,7 @@ namespace TBL.Hero
         }
     }
 
-    public class SkillAction
+    public abstract class SkillAction
     {
         public Func<Task> action;
         public Func<CheckerState> checker;

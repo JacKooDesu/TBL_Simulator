@@ -129,5 +129,7 @@ namespace TBL.GameActionData
             this.data = data;
         }
         public T data;
+
+        public List<object> tempObjects = new List<object>();
     }
 }

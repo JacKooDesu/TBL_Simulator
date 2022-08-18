@@ -40,6 +40,24 @@ namespace TBL.Hero
                             currentAction.target == playerStatus.playerIndex;
                 }
             };
+            skill1.localActions = new SkillAction<ClassifyStruct<SkillActionData>>[]{
+                // 被鎖定時發動直接回傳 ActionData
+                new SkillAction<ClassifyStruct<SkillActionData>>(){
+                    action = (_) => {
+                        return Task.CompletedTask;
+                    }
+                }
+            };
+            skill1.serverActions = new SkillAction<ClassifyStruct<SkillActionData>>[]{
+                // 抽二，翻開角色
+                new SkillAction<ClassifyStruct<SkillActionData>>(){
+                    action = (_) => {
+                        playerStatus.DrawCard(2);
+                        playerStatus.SetHeroState(hiding:false);
+                        return Task.CompletedTask;
+                    }
+                }
+            };
 
             // 合謀
             // 蓋伏你的角色牌並和另一位角色互看身分牌，如果對方是未蓋伏的潛伏角色，你可以選擇蓋伏對方的角色牌並放置一張黑情報在面前
@@ -136,7 +154,106 @@ namespace TBL.Hero
                     return true;
                 }
             };
+            skill2.localActions = new SkillAction<ClassifyStruct<SkillActionData>>[]{
+                // 選擇另一個玩家
+                new SkillAction<ClassifyStruct<SkillActionData>>(){
+                    action = (_) => {
+                        netCanvas.BindSelectPlayer(
+                            manager.GetOtherPlayers(),
+                            (index) => _.data.target = index
+                        );
+                        return Task.CompletedTask;
+                    },
+                    checker = (_) => {
+                        if(_.data.target == int.MinValue)
+                            return SkillAction.CheckerState.None;
 
+                        return SkillAction.CheckerState.Continue;
+                    }
+                }
+            };
+            skill2.serverActions = new SkillAction<ClassifyStruct<SkillActionData>>[]{
+                // Log雙方身分，檢查對方是否為為蓋伏的潛伏腳色
+                new SkillAction<ClassifyStruct<SkillActionData>>(){
+                    action = (_) => {
+                        var target = manager.players[_.data.target];
+                        manager.RpcLog(
+                            new LogBase(
+                                $"玩家 {playerStatus.playerIndex} ({playerStatus.playerName}) 為 {playerStatus.Team.name} 陣營",
+                                true,
+                                true,
+                                _.data.target
+                            ),
+                            target
+                        );
+                        manager.RpcLog(
+                            new LogBase(
+                                $"玩家 {_.data.target} ({target.playerName}) 為 {target.Team.name} 陣營",
+                                true,
+                                true,
+                                new int[] { playerStatus.playerIndex }
+                            ),
+                            playerStatus
+                        );
+                        return Task.CompletedTask;
+                    },
+                    checker = (_) => {
+                        var targetHero = manager.players[_.data.target].hero;
+                        if(targetHero.HeroType != HeroType.Hidden || targetHero.isHiding)
+                            return SkillAction.CheckerState.Finish;
+
+                        if(playerStatus.GetHandCardCount(Black) == 0)
+                            return SkillAction.CheckerState.Finish;
+
+                        return SkillAction.CheckerState.Continue;
+                    }
+                },
+                // 詢問是否放置黑情報並蓋伏對方腳色
+                new SkillAction<ClassifyStruct<SkillActionData>>(){
+                    action = async (_) => {
+                        await playerStatus.InitReturnDataMenu(
+                            "蓋伏對方角色，並放置一張黑情報在面前",
+                            "取消"
+                        );
+                    },
+                    checker = (_) => {
+                        if(playerStatus.isWaitingData)
+                            return SkillAction.CheckerState.None;
+
+                        if(playerStatus.tempData == 0)
+                            return SkillAction.CheckerState.Continue;
+                        else
+                            return SkillAction.CheckerState.Finish;
+                    }
+                },
+                // 選擇黑情報
+                new SkillAction<ClassifyStruct<SkillActionData>>(){
+                    action = async (_) => {
+                        await playerStatus.InitReturnHandCardMenu(
+                            playerStatus.playerIndex,
+                            Black
+                        );
+                    },
+                    checker = (_) => {
+                        if(playerStatus.isWaitingData)
+                            return SkillAction.CheckerState.None;
+
+                        return SkillAction.CheckerState.Continue;
+                    }
+                },
+                // 放置黑情報動作
+                new SkillAction<ClassifyStruct<SkillActionData>>(){
+                    action = (_) => {
+                        manager.players[_.data.target].AddCard(playerStatus.tempData);
+                        return Task.CompletedTask;
+                    }
+                }
+            };
+            skill2.commonServerBreaker = () =>
+                judgement.currentPhase != NetworkJudgement.Phase.HeroSkillReacting;
+
+            // 攤牌
+            // 翻開自己的身份牌，同時翻開另一位玩家的身份牌。
             var skill3 = new HeroSkill
             {
                 name = "攤牌",
@@ -188,6 +305,48 @@ namespace TBL.Hero
                         return false;
 
                     return true;
+                }
+            };
+            skill3.localActions = new SkillAction<ClassifyStruct<SkillActionData>>[]{
+                // 選擇對象
+                new SkillAction<ClassifyStruct<SkillActionData>>(){
+                    action = (_) => {
+                        netCanvas.BindSelectPlayer(
+                            manager.GetOtherPlayers(),
+                            (index) => _.data.target = index
+                        );
+                        return Task.CompletedTask;
+                    },
+                    checker = (_) => {
+                        if(_.data.target == int.MinValue)
+                            return SkillAction.CheckerState.None;
+
+                        return SkillAction.CheckerState.Continue;
+                    }
+                }
+            };
+            skill3.serverActions = new SkillAction<ClassifyStruct<SkillActionData>>[]{
+                // Log 玩家資訊
+                new SkillAction<ClassifyStruct<SkillActionData>>(){
+                    action = (_) => {
+                        playerStatus.SetSkillLimited(2, true);
+                        
+                        var target = manager.players[_.data.target];
+                        manager.TargetLogAll(
+                            new LogBase(
+                                $"玩家 {playerStatus.playerIndex} ({playerStatus.playerName}) 為 {playerStatus.Team.name} 陣營",
+                                true,
+                                false)
+                        );
+
+                        manager.TargetLogAll(
+                            new LogBase(
+                                $"玩家 {target.playerIndex} ({target.playerName}) 為 {target.Team.name} 陣營",
+                                true,
+                                false)
+                        );
+                        return Task.CompletedTask;
+                    }
                 }
             };
 

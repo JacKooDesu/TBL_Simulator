@@ -46,15 +46,20 @@ namespace TBL
         }
 
         [Server]
-        public void DrawCard(int amount)
+        public int[] DrawCard(int amount)
         {
+            var cards = new int[amount];
             for (int i = 0; i < amount; ++i)
             {
-                netHandCards.Add(manager.DeckManager.DrawCardFromTop().ID);
+                var card = manager.DeckManager.DrawCardFromTop().ID;
+                netHandCards.Add(card);
+                cards[i] = card;
             }
 
             if (manager.Judgement.currentRoundPlayerIndex == playerIndex)
                 CmdSetDraw(true);
+
+            return cards;
         }
 
         [Server]
@@ -174,6 +179,14 @@ namespace TBL
         public async Task InitReturnCardMenu(int playerIndex, params int[] requests)
         {
             this.TargetReturnCardMenu(playerIndex, requests);
+            await TaskExtend.WaitUntil(() => isWaitingData);
+            return;
+        }
+
+        [Server]
+        public async Task InitReturnCustomCardMenu(int[] cards, params int[] requests)
+        {
+            this.TargetReturnCustomCardMenu(cards, requests);
             await TaskExtend.WaitUntil(() => isWaitingData);
             return;
         }
