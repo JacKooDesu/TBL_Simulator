@@ -40,5 +40,20 @@
             "};"
 		],
 		"description": "Hero Skill"
+	},
+	"Skill Action Set":{
+		"prefix": "actionSet",
+		"body": [
+			"// ${comment}",
+			"new SkillAction<ClassifyStruct<SkillActionData>>(){",
+			"\taction = (_) => {",
+			"\t\treturn Task.CompletedTask;",
+			"\t},",
+			"\tchecker = (_) => {",
+			"\t\treturn SkillAction.CheckerState.None;",
+			"\t}",
+			"}"
+		],
+		"description": "action set"
 	}
 }
