@@ -20,12 +20,22 @@ namespace TBL.Game
             this.property = (CardEnum.Property)((int)color | (int)function | (int)type);
         }
 
+        public CardData(CardEnum.Property property)
+        {
+            this.property = property;
+
+            this.color = property.ConvertColor();
+            this.function = property.ConvertFunction();
+            this.type = property.ConvertType();
+        }
+
         public CardData(int id)
         {
             this.property = (CardEnum.Property)id;
-            this.color = (CardEnum.Color)id;
-            this.function = (CardEnum.Function)id;
-            this.type = (CardEnum.Type)id;
+
+            this.color = property.ConvertColor();
+            this.function = property.ConvertFunction();
+            this.type = property.ConvertType();
         }
 
         int id;

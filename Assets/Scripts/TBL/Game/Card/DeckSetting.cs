@@ -39,7 +39,9 @@ namespace TBL.Game
                     {
                         color = (CardEnum.Color)c,
                         function = (CardEnum.Function)f,
-                        type = CardEnum.Type.Direct
+                        type = CardEnum.Type.Direct,
+
+                        count = 3
                     };
                     set.Update();
                     CardSets.Add(set);

@@ -12,4 +12,166 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0750a4bc0ba59242a39cdc572fa19d5, type: 3}
   m_Name: Deck Setting
   m_EditorClassIdentifier: 
-  CardSets: []
+  CardSets:
+  - name: "\u85CD , \u9396\u5B9A , \u76F4\u9054"
+    property: 8210
+    color: 2
+    function: 16
+    type: 8192
+    count: 3
+  - name: "\u85CD , \u8ABF\u864E\u96E2\u5C71 , \u76F4\u9054"
+    property: 8226
+    color: 2
+    function: 32
+    type: 8192
+    count: 3
+  - name: "\u85CD , \u9000\u56DE , \u76F4\u9054"
+    property: 8258
+    color: 2
+    function: 64
+    type: 8192
+    count: 3
+  - name: "\u85CD , \u622A\u7372 , \u76F4\u9054"
+    property: 8322
+    color: 2
+    function: 128
+    type: 8192
+    count: 3
+  - name: "\u85CD , \u7834\u8B6F , \u76F4\u9054"
+    property: 8450
+    color: 2
+    function: 256
+    type: 8192
+    count: 3
+  - name: "\u85CD , \u71D2\u6BC0 , \u76F4\u9054"
+    property: 8706
+    color: 2
+    function: 512
+    type: 8192
+    count: 3
+  - name: "\u85CD , \u8B58\u7834 , \u76F4\u9054"
+    property: 9218
+    color: 2
+    function: 1024
+    type: 8192
+    count: 3
+  - name: "\u85CD , \u771F\u507D\u83AB\u8FA8 , \u76F4\u9054"
+    property: 10242
+    color: 2
+    function: 2048
+    type: 8192
+    count: 3
+  - name: "\u85CD , \u8A66\u63A2 , \u76F4\u9054"
+    property: 12290
+    color: 2
+    function: 4096
+    type: 8192
+    count: 3
+  - name: "\u7D05 , \u9396\u5B9A , \u76F4\u9054"
+    property: 8212
+    color: 4
+    function: 16
+    type: 8192
+    count: 3
+  - name: "\u7D05 , \u8ABF\u864E\u96E2\u5C71 , \u76F4\u9054"
+    property: 8228
+    color: 4
+    function: 32
+    type: 8192
+    count: 3
+  - name: "\u7D05 , \u9000\u56DE , \u76F4\u9054"
+    property: 8260
+    color: 4
+    function: 64
+    type: 8192
+    count: 3
+  - name: "\u7D05 , \u622A\u7372 , \u76F4\u9054"
+    property: 8324
+    color: 4
+    function: 128
+    type: 8192
+    count: 3
+  - name: "\u7D05 , \u7834\u8B6F , \u76F4\u9054"
+    property: 8452
+    color: 4
+    function: 256
+    type: 8192
+    count: 3
+  - name: "\u7D05 , \u71D2\u6BC0 , \u76F4\u9054"
+    property: 8708
+    color: 4
+    function: 512
+    type: 8192
+    count: 3
+  - name: "\u7D05 , \u8B58\u7834 , \u76F4\u9054"
+    property: 9220
+    color: 4
+    function: 1024
+    type: 8192
+    count: 3
+  - name: "\u7D05 , \u771F\u507D\u83AB\u8FA8 , \u76F4\u9054"
+    property: 10244
+    color: 4
+    function: 2048
+    type: 8192
+    count: 3
+  - name: "\u7D05 , \u8A66\u63A2 , \u76F4\u9054"
+    property: 12292
+    color: 4
+    function: 4096
+    type: 8192
+    count: 3
+  - name: "\u9ED1 , \u9396\u5B9A , \u76F4\u9054"
+    property: 8216
+    color: 8
+    function: 16
+    type: 8192
+    count: 3
+  - name: "\u9ED1 , \u8ABF\u864E\u96E2\u5C71 , \u76F4\u9054"
+    property: 8232
+    color: 8
+    function: 32
+    type: 8192
+    count: 3
+  - name: "\u9ED1 , \u9000\u56DE , \u76F4\u9054"
+    property: 8264
+    color: 8
+    function: 64
+    type: 8192
+    count: 3
+  - name: "\u9ED1 , \u622A\u7372 , \u76F4\u9054"
+    property: 8328
+    color: 8
+    function: 128
+    type: 8192
+    count: 3
+  - name: "\u9ED1 , \u7834\u8B6F , \u76F4\u9054"
+    property: 8456
+    color: 8
+    function: 256
+    type: 8192
+    count: 3
+  - name: "\u9ED1 , \u71D2\u6BC0 , \u76F4\u9054"
+    property: 8712
+    color: 8
+    function: 512
+    type: 8192
+    count: 3
+  - name: "\u9ED1 , \u8B58\u7834 , \u76F4\u9054"
+    property: 9224
+    color: 8
+    function: 1024
+    type: 8192
+    count: 3
+  - name: "\u9ED1 , \u771F\u507D\u83AB\u8FA8 , \u76F4\u9054"
+    property: 10248
+    color: 8
+    function: 2048
+    type: 8192
+    count: 3
+  - name: "\u9ED1 , \u8A66\u63A2 , \u76F4\u9054"
+    property: 12296
+    color: 8
+    function: 4096
+    type: 8192
+    count: 3

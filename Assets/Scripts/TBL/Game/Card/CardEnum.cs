@@ -138,6 +138,19 @@ namespace TBL.Game
             return result;
         }
 
+        public static int ConvertInt<T>(this Property value)
+        where T : Enum
+        {
+            int temp = 0;
+            foreach (var e in Enum.GetValues(typeof(T)))
+                temp |= (int)e;
+            temp &= (int)value;
+            return temp;
+        }
+        public static Color ConvertColor(this Property value) => (Color)value.ConvertInt<Color>();
+        public static Function ConvertFunction(this Property value) => (Function)value.ConvertInt<Function>();
+        public static Type ConvertType(this Property value) => (Type)value.ConvertInt<Type>();
+
         public static string ToDescription(this Enum value) =>
             value.GetType()
             .GetRuntimeField(value.ToString())
