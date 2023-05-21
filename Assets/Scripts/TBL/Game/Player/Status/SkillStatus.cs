@@ -4,7 +4,8 @@ using System.Collections.Generic;
 
 namespace TBL.Game
 {
-    public struct SkillStatus : IPlayerStatus<Dictionary<int,bool>>
+    [System.Serializable]
+    public class SkillStatus : IPlayerStatus<Dictionary<int,bool>>
     {
         Dictionary<int,bool> value;
         public Dictionary<int,bool> Current() => value;

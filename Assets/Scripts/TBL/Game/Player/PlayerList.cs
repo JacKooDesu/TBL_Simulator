@@ -6,6 +6,7 @@ using Cysharp.Threading.Tasks;
 namespace TBL.Game
 {
     using Setting;
+    [System.Serializable]
     public class PlayerList : Sys.IResource<int, TeamSetting, HeroSetting, PlayerList>
     {
         [SerializeField] Player[] players;
@@ -18,7 +19,7 @@ namespace TBL.Game
 
         public PlayerList Init(int count, TeamSetting teamSetting, HeroSetting heroSetting)
         {
-            var set = teamSetting.PlayerSets[count];
+            var set = teamSetting.PlayerSets.Find(s => s.PlayerCount == count);
             var playerCount = set.PlayerCount;
             var usedHero = new List<int>();
             var list = new List<Player>();
@@ -29,12 +30,12 @@ namespace TBL.Game
                 {
                     var p = new Player();
 
-                    p.TeamStatus.Update(new TeamStatus(team));
-                    
+                    p.UpdateStatus(PlayerStatusType.TeamStatus, new TeamStatus(team));
+
                     // TODO: Hero Enum, Hero List, Banned Hero ... etc
                     // TODO: Hero draw shoud placed after game init
                     // TODO: Which Player can choose from 2 hero
-                    p.HeroStatus.Update(new HeroStatus());
+                    // p.HeroStatus.Update(new HeroStatus());
 
                     list.Add(p);
                     teamCollection.Add(p);

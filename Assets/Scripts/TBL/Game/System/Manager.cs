@@ -9,12 +9,12 @@ namespace TBL.Game.Sys
     public class Manager : MonoBehaviour
     {
         [SerializeField] DeckSetting deckSetting;
-        [SerializeField] Deck deck;
+        [SerializeField] Deck deck = new Deck();
         public Deck Deck => deck;
 
         [SerializeField] TeamSetting teamSetting;
         [SerializeField] HeroSetting heroSetting;
-        [SerializeField] PlayerList playerList;
+        [SerializeField] PlayerList playerList = new PlayerList();
         public PlayerList PlayerList => playerList;
 
         void Start()

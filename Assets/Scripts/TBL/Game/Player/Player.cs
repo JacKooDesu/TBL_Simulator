@@ -7,49 +7,63 @@ namespace TBL.Game
     [System.Serializable]
     public class Player
     {
-        public ProfileStatus ProfileStatus { get; private set; }
-        public TeamStatus TeamStatus { get; private set; }
-        public CardStatus CardStatus { get; private set; }
-        public HeroStatus HeroStatus { get; private set; }
-        public SkillStatus SkillStatus { get; private set; }
+        [SerializeField] ProfileStatus profileStatus = new ProfileStatus();
+        public ProfileStatus ProfileStatus => profileStatus;
+
+        [SerializeField] TeamStatus teamStatus = new TeamStatus();
+        public TeamStatus TeamStatus => teamStatus;
+
+        [SerializeField] CardStatus cardStatus = new CardStatus();
+        public CardStatus CardStatus => cardStatus;
+
+        [SerializeField] HeroStatus heroStatus = new HeroStatus();
+        public HeroStatus HeroStatus => heroStatus;
+
+        [SerializeField] SkillStatus skillStatus = new SkillStatus();
+        public SkillStatus SkillStatus => skillStatus;
+
+        List<IPlayerStatus> StatusList => new List<IPlayerStatus>{
+            profileStatus,
+            teamStatus,
+            cardStatus,
+            heroStatus,
+            skillStatus
+        };
 
         public Player()
         {
-            
+            profileStatus = new ProfileStatus();
         }
 
         // 更新狀態
         public void UpdateStatus<T>(PlayerStatusType type, T status) where T : IPlayerStatus
         {
-            IPlayerStatus target = null;
             switch (type)
             {
                 case PlayerStatusType.ProfileStatus:
-                    target = ProfileStatus;
-                    break;
-
-                case PlayerStatusType.TeamStatus:
-                    target = TeamStatus;
+                    ProfileStatus.Update(status);
                     break;
 
                 case PlayerStatusType.CardStatus:
-                    target = CardStatus;
+                    CardStatus.Update(status);
                     break;
 
                 case PlayerStatusType.Hero:
-                    target = HeroStatus;
+                    HeroStatus.Update(status);
                     break;
 
                 case PlayerStatusType.Skill:
-                    target = SkillStatus;
+                    SkillStatus.Update(status);
+                    break;
+
+                case PlayerStatusType.TeamStatus:
+                    TeamStatus.Update(status);
                     break;
 
                 default:
                     Debug.LogError("Target not found!");
                     break;
             }
-
-            target?.Update(status);
         }
     }
 }

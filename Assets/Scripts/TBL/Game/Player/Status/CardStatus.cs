@@ -2,7 +2,9 @@ using System.Collections.Generic;
 
 namespace TBL.Game
 {
-    public struct CardStatus : IPlayerStatus<CardStatus>
+    [System.Serializable]
+
+    public class CardStatus : IPlayerStatus<CardStatus>
     {
         public CardStatus(List<int> hand = null, List<int> table = null)
         {
@@ -15,6 +17,11 @@ namespace TBL.Game
 
         public CardStatus Current() => this;
         public PlayerStatusType Type() => PlayerStatusType.CardStatus;
-        public void Update(IPlayerStatus status) => this = (CardStatus)status;
+        public void Update(IPlayerStatus status)
+        {
+            var target = ((CardStatus)status);
+            this.hand = target.hand;
+            this.table = target.table;
+        }
     }
 }

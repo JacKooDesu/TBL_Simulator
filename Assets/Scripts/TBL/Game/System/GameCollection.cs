@@ -5,6 +5,7 @@ using System.Collections;
 
 namespace TBL.Game.Sys
 {
+    [System.Serializable]
     public abstract class GameCollection<T>
     {
         // public GameCollection(int length)

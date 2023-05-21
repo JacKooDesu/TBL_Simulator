@@ -153,6 +153,16 @@ MonoBehaviour:
   deckSetting: {fileID: 11400000, guid: 3d6b6b7f1cfa5e44f9c3a76645237fb1, type: 2}
   deck:
     cardDatas: []
+    sleeping:
+      collection: []
+    hand:
+      collection: []
+    table:
+      collection: []
+    graveyard:
+      collection: []
+  teamSetting: {fileID: 11400000, guid: ee07d397832bb304c8897c1c58fa9017, type: 2}
+  heroSetting: {fileID: 11400000, guid: ab3e190fa1176834d9c3c2647de30c8f, type: 2}
 --- !u!4 &996191873
 Transform:
   m_ObjectHideFlags: 0

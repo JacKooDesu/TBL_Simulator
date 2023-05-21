@@ -1,7 +1,9 @@
 namespace TBL.Game
 {
-    public struct HeroStatus : IPlayerStatus<HeroStatus>
+    [System.Serializable]
+    public class HeroStatus : IPlayerStatus<HeroStatus>
     {
+        public HeroStatus() => heroId = int.MinValue;
         public HeroStatus(int heroId)
         {
             this.heroId = heroId;
@@ -13,7 +15,10 @@ namespace TBL.Game
 
         public PlayerStatusType Type() => PlayerStatusType.Hero;
 
-        public void Update(IPlayerStatus status) => this = (HeroStatus)status;
+        public void Update(IPlayerStatus status)
+        {
+            this.heroId = ((HeroStatus)status).heroId;
+        }
     }
 }
 
