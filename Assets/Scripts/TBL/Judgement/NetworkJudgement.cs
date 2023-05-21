@@ -79,11 +79,7 @@ namespace TBL.Judgement
 
         private void Start()
         {
-            netCanvas = FindObjectOfType<TBL.NetCanvas.GameScene>();
-            manager = ((NetworkRoomManager)NetworkManager.singleton);
 
-            if (isServer)
-                StartCoroutine(WaitAllPlayerInit());
         }
     }
 

@@ -15,6 +15,7 @@ namespace TBL.Networking
         public struct AuthRequestMessage : NetworkMessage
         {
             public string authUsername;
+            public bool isConnect;
         }
 
         public struct AuthResponseMessage : NetworkMessage
@@ -40,6 +41,18 @@ namespace TBL.Networking
         {
             print($"Auth request: {msg.authUsername}");
 
+            if (msg.isConnect)
+            {
+                AuthConnect(conn, msg);
+            }
+            else
+            {
+                AuthDisconnect(conn, msg);
+            }
+        }
+
+        void AuthConnect(NetworkConnectionToClient conn, AuthRequestMessage msg)
+        {
             if (connectionsPendingDisconnect.Contains(conn)) return;
 
             if (!playerNames.Contains(msg.authUsername))
@@ -75,6 +88,11 @@ namespace TBL.Networking
                 var delay = new Timer(1f, () => connectionsPendingDisconnect.Remove(conn));
             }
         }
+
+        void AuthDisconnect(NetworkConnectionToClient conn, AuthRequestMessage msg)
+        {
+            playerNames.Remove(msg.authUsername);
+        }
         #endregion
 
         #region Client
@@ -92,10 +110,21 @@ namespace TBL.Networking
         {
             AuthRequestMessage authRequestMessage = new AuthRequestMessage
             {
-                authUsername = GameUtils.PlayerName
+                authUsername = GameUtils.PlayerName,
+                isConnect = true
             };
 
             NetworkClient.connection.Send(authRequestMessage);
+        }
+
+        void RequestRemoveConnection()
+        {
+            AuthRequestMessage authMsg = new AuthRequestMessage
+            {
+                authUsername = GameUtils.PlayerName,
+                isConnect = false
+            };
+            NetworkClient.connection.Send(authMsg);
         }
 
         public void OnAuthResponseMessage(AuthResponseMessage msg)

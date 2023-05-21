@@ -17,6 +17,7 @@ namespace TBL.Judgement
 
         IEnumerator WaitAllPlayerInit()
         {
+            yield return new WaitUntil(()=>manager.roomSlots.Count == manager.players.Count);
             yield return new WaitUntil(
                 () => manager.players.Find(player => !player.isReady) == null);
 
@@ -262,7 +263,8 @@ namespace TBL.Judgement
 
                 var lastAction = cardActionQueue[cardActionQueue.Count - 1];
                 // 鋼鐵特JK的技能當作識破使用，但又不可被識破，故強制退出迴圈
-                if (((Card.CardSetting)lastAction.cardId).CardType == Card.CardType.Invalidate &&
+                if (Card.CardAttributeHelper.Compare(lastAction.cardId,Card.CardAttributeHelper.Invalidate) &&
+                    // ((Card.CardSetting)lastAction.cardId).CardType == Card.CardType.Invalidate &&
                     lastAction.suffix == 1)
                 {
                     timer = 0;
@@ -358,6 +360,12 @@ namespace TBL.Judgement
         public override void OnStartClient()
         {
             base.OnStartClient();
+
+            netCanvas = FindObjectOfType<TBL.NetCanvas.GameScene>();
+            manager = ((NetworkRoomManager)NetworkManager.singleton);
+
+            if (isServer)
+                StartCoroutine(WaitAllPlayerInit());
         }
     }
 
