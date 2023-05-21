@@ -18,6 +18,7 @@ namespace TBL.Game
     public enum PlayerStatusType
     {
         ProfileStatus,
+        TeamStatus,
         CardStatus,
         Hero,
         Skill

@@ -8,11 +8,17 @@ namespace TBL.Game
     public class Player
     {
         public ProfileStatus ProfileStatus { get; private set; }
+        public TeamStatus TeamStatus { get; private set; }
         public CardStatus CardStatus { get; private set; }
         public HeroStatus HeroStatus { get; private set; }
         public SkillStatus SkillStatus { get; private set; }
 
-        // 客戶端更新狀態
+        public Player()
+        {
+            
+        }
+
+        // 更新狀態
         public void UpdateStatus<T>(PlayerStatusType type, T status) where T : IPlayerStatus
         {
             IPlayerStatus target = null;
@@ -20,6 +26,10 @@ namespace TBL.Game
             {
                 case PlayerStatusType.ProfileStatus:
                     target = ProfileStatus;
+                    break;
+
+                case PlayerStatusType.TeamStatus:
+                    target = TeamStatus;
                     break;
 
                 case PlayerStatusType.CardStatus:

@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 953b2111d6efc2f439c1e0e10b56b37d, type: 3}
+  m_Name: TeamSetting
+  m_EditorClassIdentifier: 
+  PlayerSets:
+  - PlayerCount: 2
+    Blue: 1
+    Red: 1
+    Green: 0
+  - PlayerCount: 3
+    Blue: 1
+    Red: 1
+    Green: 0
+  - PlayerCount: 4
+    Blue: 2
+    Red: 2
+    Green: 0
+  - PlayerCount: 5
+    Blue: 2
+    Red: 2
+    Green: 1
+  - PlayerCount: 6
+    Blue: 2
+    Red: 2
+    Green: 2
+  - PlayerCount: 7
+    Blue: 2
+    Red: 2
+    Green: 3
+  - PlayerCount: 8
+    Blue: 3
+    Red: 3
+    Green: 2

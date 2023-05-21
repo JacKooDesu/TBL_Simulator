@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace TBL.Game
+namespace TBL.Game.Setting
 {
     [CreateAssetMenu(fileName = "Deck Setting", menuName = "TBL/Game/DeckSetting", order = 0)]
     public class DeckSetting : ScriptableObject

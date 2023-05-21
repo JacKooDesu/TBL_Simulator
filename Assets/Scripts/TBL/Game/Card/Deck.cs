@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace TBL.Game
 {
+    using Setting;
     [System.Serializable]
     public class Deck : Sys.IResource<DeckSetting, Deck>
     {
@@ -14,6 +15,7 @@ namespace TBL.Game
         [SerializeField] CardData[] cardDatas;
 #endif
         public ReadOnlyCollection<CardData> CardDatas;
+        public CardData this[int index] { get => CardDatas[index]; }
 
         public CardCollection sleeping = new CardCollection();
         public CardCollection hand = new CardCollection();
@@ -33,8 +35,6 @@ namespace TBL.Game
             cardDatas = list.ToArray();
 #endif
             CardDatas = list.AsReadOnly();
-
-            sleeping.AddRange(CardDatas);
 
             return this;
         }
