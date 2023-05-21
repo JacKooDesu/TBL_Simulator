@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace TBL
 {
     using Judgement;
-    using Hero;
+    using Game.Hero;
     using Card;
     using GameActionData;
     using static Card.CardAttributeHelper;

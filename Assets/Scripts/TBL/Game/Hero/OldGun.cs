@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using TBL.UI.LogSystem;
-namespace TBL.Hero
+namespace TBL.Game.Hero
 {
     using Judgement;
     using Util;

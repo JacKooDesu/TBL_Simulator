@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace TBL.Hero
+namespace TBL.Game.Hero
 {
     using GameActionData;
     public class AgentK : HeroBase

@@ -11,7 +11,7 @@ using System.Threading;
 namespace TBL
 {
     using Util;
-    using Hero;
+    using Game.Hero;
     public partial class NetworkPlayer : NetworkBehaviour
     {
         [SyncVar(hook = nameof(OnHeroIndexChange))] public int heroIndex = -1;

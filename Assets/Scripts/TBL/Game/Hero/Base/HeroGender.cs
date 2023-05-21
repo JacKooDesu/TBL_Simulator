@@ -1,4 +1,4 @@
-namespace TBL.Hero
+namespace TBL.Game.Hero
 {
     public enum HeroGender
     {

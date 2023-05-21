@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using System.Collections.Generic;
-namespace TBL.Hero
+namespace TBL.Game.Hero
 {
     using Judgement;
     using static Card.CardAttributeHelper;

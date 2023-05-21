@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 
 namespace TBL.UI.GameScene
 {
-    using Hero;
+    using Game.Hero;
     public class HeroSkillData : MonoBehaviour
     {
         public Animator animator;

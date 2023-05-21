@@ -3,7 +3,7 @@ using TBL.Card;
 using System.Collections;
 
 
-namespace TBL.Hero
+namespace TBL.Game.Hero
 {
     using Judgement;
     using GameActionData;

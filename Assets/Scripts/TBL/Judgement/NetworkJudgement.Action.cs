@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace TBL.Judgement
 {
-    using Hero;
+    using Game.Hero;
     using GameActionData;
     using UI.LogSystem;
     using Util;

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Threading;
 
-namespace TBL.Hero
+namespace TBL.Game.Hero
 {
     using GameActionData;
     using Util;

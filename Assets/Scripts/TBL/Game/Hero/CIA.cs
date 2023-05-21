@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-namespace TBL.Hero
+namespace TBL.Game.Hero
 {
     public class CIA : HeroBase
     {

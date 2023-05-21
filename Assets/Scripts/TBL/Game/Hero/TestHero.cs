@@ -4,7 +4,7 @@ using UnityEngine;
 using System.Threading.Tasks;
 using System.Threading;
 
-namespace TBL.Hero
+namespace TBL.Game.Hero
 {
     using Judgement;
     using Util;
