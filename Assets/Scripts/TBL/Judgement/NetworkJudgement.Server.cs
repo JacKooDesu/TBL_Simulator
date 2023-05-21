@@ -155,7 +155,7 @@ namespace TBL.Judgement
             var player = manager.players[currentRoundPlayerIndex];
 
             print("卡片傳送中");
-            manager.RpcLog(UI.LogSystem.LogGeneral.SendCard(player, (Card.CardSetting)currentRoundSendingCardId), player);
+            manager.RpcLog(UI.LogSystem.LogGeneral.SendCard(player, (ObsleteCard.CardSetting)currentRoundSendingCardId), player);
 
             int iter = 1;
             // foreach (NetworkPlayer p in cardSendQueue)
@@ -170,7 +170,7 @@ namespace TBL.Judgement
 
                 if (currentSendingPlayer == currentRoundPlayerIndex)
                 {
-                    manager.RpcLog(UI.LogSystem.LogGeneral.AcceptCard(p, (Card.CardSetting)currentRoundSendingCardId), p);
+                    manager.RpcLog(UI.LogSystem.LogGeneral.AcceptCard(p, (ObsleteCard.CardSetting)currentRoundSendingCardId), p);
                     p.AddCard(currentRoundSendingCardId);
                     p.acceptCard = true;
                     break;
@@ -178,7 +178,7 @@ namespace TBL.Judgement
 
                 if (p.isLocked)
                 {
-                    manager.RpcLog(UI.LogSystem.LogGeneral.AcceptCard(p, (Card.CardSetting)currentRoundSendingCardId), p);
+                    manager.RpcLog(UI.LogSystem.LogGeneral.AcceptCard(p, (ObsleteCard.CardSetting)currentRoundSendingCardId), p);
                     p.AddCard(currentRoundSendingCardId);
                     p.acceptCard = true;
                     break;
@@ -220,7 +220,7 @@ namespace TBL.Judgement
                     continue;
                 if (p.acceptCard)
                 {
-                    manager.RpcLog(UI.LogSystem.LogGeneral.AcceptCard(p, (Card.CardSetting)currentRoundSendingCardId), p);
+                    manager.RpcLog(UI.LogSystem.LogGeneral.AcceptCard(p, (ObsleteCard.CardSetting)currentRoundSendingCardId), p);
                     p.AddCard(currentRoundSendingCardId);
                     break;
                 }
@@ -262,7 +262,7 @@ namespace TBL.Judgement
 
                 var lastAction = cardActionQueue[cardActionQueue.Count - 1];
                 // 鋼鐵特JK的技能當作識破使用，但又不可被識破，故強制退出迴圈
-                if (((Card.CardSetting)lastAction.cardId).CardType == Card.CardType.Invalidate &&
+                if (((ObsleteCard.CardSetting)lastAction.cardId).CardType == ObsleteCard.CardType.Invalidate &&
                     lastAction.suffix == 1)
                 {
                     timer = 0;
@@ -286,10 +286,10 @@ namespace TBL.Judgement
 
                 currentCardAction = cardEffectQueue[i];
 
-                var tempCard = (Card.CardSetting)(currentCardAction.cardId);
-                if (tempCard.CardType == Card.CardType.Invalidate)
+                var tempCard = (ObsleteCard.CardSetting)(currentCardAction.cardId);
+                if (tempCard.CardType == ObsleteCard.CardType.Invalidate)
                 {
-                    var nextCard = (Card.CardSetting)(cardEffectQueue[i + 1].cardId);
+                    var nextCard = (ObsleteCard.CardSetting)(cardEffectQueue[i + 1].cardId);
                     i += 1;
 
                     print($"{tempCard.GetCardNameFully()} 無效化 {nextCard.GetCardNameFully()}");

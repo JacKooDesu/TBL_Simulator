@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TBL;
-using TBL.Card;
+using TBL.ObsleteCard;
 
 namespace TBL.UI.GameScene
 {

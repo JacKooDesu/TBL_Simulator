@@ -5,7 +5,7 @@ namespace TBL.Game.Hero
     using Judgement;
     using Util;
     using GameActionData;
-    using static Card.CardAttributeHelper;
+    using static ObsleteCard.CardAttributeHelper;
 
     public class Killer : HeroBase
     {
@@ -25,7 +25,7 @@ namespace TBL.Game.Hero
                         return false;
 
                     var targetPlayer = manager.players[judgement.currentSendingPlayer];
-                    if (((Card.CardSetting)judgement.currentRoundSendingCardId).CardColor == Card.CardColor.Black)
+                    if (((ObsleteCard.CardSetting)judgement.currentRoundSendingCardId).CardColor == ObsleteCard.CardColor.Black)
                         return true;
 
                     return false;

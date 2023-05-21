@@ -3,7 +3,7 @@ using System.Collections.Generic;
 namespace TBL.Game.Hero
 {
     using Judgement;
-    using static Card.CardAttributeHelper;
+    using static ObsleteCard.CardAttributeHelper;
     using GameActionData;
     using Util;
     public class Shining : HeroBase

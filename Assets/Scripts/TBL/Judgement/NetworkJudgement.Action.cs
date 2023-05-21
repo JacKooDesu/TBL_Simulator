@@ -11,7 +11,7 @@ namespace TBL.Judgement
     using GameActionData;
     using UI.LogSystem;
     using Util;
-    using Card;
+    using ObsleteCard;
     public partial class NetworkJudgement : NetworkBehaviour
     {
         [Server]

@@ -5,7 +5,7 @@ using TBL.UI.LogSystem;
 namespace TBL.Game.Hero
 {
     using Judgement;
-    using static Card.CardAttributeHelper;
+    using static ObsleteCard.CardAttributeHelper;
     using GameActionData;
     public class Kin : HeroBase
     {
@@ -27,7 +27,7 @@ namespace TBL.Game.Hero
                         if (actionIndex == -1 || actionIndex + 1 >= judgment.cardActionQueue.Count)
                             return false;
 
-                        return ((Card.CardSetting)judgment.currentCardAction.cardId).CardType == Card.CardType.Invalidate &&
+                        return ((ObsleteCard.CardSetting)judgment.currentCardAction.cardId).CardType == ObsleteCard.CardType.Invalidate &&
                                 judgment.cardActionQueue[actionIndex + 1].user == playerStatus.playerIndex;
                     }
                     return false;
@@ -89,7 +89,7 @@ namespace TBL.Game.Hero
                         return false;
 
                     var targetPlayer = manager.players[judgement.currentSendingPlayer];
-                    if (((Card.CardSetting)judgement.currentRoundSendingCardId).Compare(Black) &&
+                    if (((ObsleteCard.CardSetting)judgement.currentRoundSendingCardId).Compare(Black) &&
                         judgement.currentSendingPlayer == playerStatus.playerIndex &&
                         playerStatus.acceptCard)
                         return true;

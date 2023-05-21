@@ -1,4 +1,4 @@
-namespace TBL.Card
+namespace TBL.ObsleteCard
 {
     public static class CardAttributeHelper
     {

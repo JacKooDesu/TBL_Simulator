@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using TBL.Card;
+using TBL.ObsleteCard;
 using System.Collections;
 
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TBL.GameActionData;
 
-namespace TBL.Card
+namespace TBL.ObsleteCard
 {
     using Deck;
     using static CardAttributeHelper;

@@ -101,7 +101,7 @@ namespace TBL.Game.Hero
 
             //         var lastCardAction = judgement.cardActionQueue[judgement.cardActionQueue.Count - 1];
 
-            //         if (((Card.CardSetting)lastCardAction.cardId).CardType == Card.CardType.Invalidate &&
+            //         if (((ObsleteCard.CardSetting)lastCardAction.cardId).CardType == Card.CardType.Invalidate &&
             //             lastCardAction.suffix != -1)
             //             return true;
 

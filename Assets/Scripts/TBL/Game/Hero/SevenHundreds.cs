@@ -5,7 +5,7 @@ namespace TBL.Game.Hero
     using Judgement;
     using Util;
     using GameActionData;
-    using static Card.CardAttributeHelper;
+    using static ObsleteCard.CardAttributeHelper;
     public class SevenHundreds : HeroBase
     {
         protected override void BindSkill()
@@ -100,7 +100,7 @@ namespace TBL.Game.Hero
                     if (cardAction.user != playerStatus.playerIndex)
                         return false;
 
-                    if (!((Card.CardSetting)cardAction.cardId).Compare(Lock))
+                    if (!((ObsleteCard.CardSetting)cardAction.cardId).Compare(Lock))
                         return false;
 
                     return true;

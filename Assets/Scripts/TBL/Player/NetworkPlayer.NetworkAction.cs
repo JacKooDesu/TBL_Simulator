@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
-using TBL.Card;
+using TBL.ObsleteCard;
 using TBL.GameActionData;
 using System;
 using System.Linq;
@@ -71,7 +71,7 @@ namespace TBL
         [Command]
         public void CmdCardHToH(int id, int target)     // Hand To Hand
         {
-            print($"玩家 {playerIndex} 給予 玩家 {target} - {Card.CardSetting.IdToCard(id).name}");
+            print($"玩家 {playerIndex} 給予 玩家 {target} - {ObsleteCard.CardSetting.IdToCard(id).name}");
             netHandCards.Remove((int)id);
             manager.players[target].AddHandCard(id);
         }
@@ -79,7 +79,7 @@ namespace TBL
         [Command]
         public void CmdCardHToT(int id, int target)     // Hand to Table
         {
-            print($"玩家 {playerIndex} 給予 玩家 {target} - {Card.CardSetting.IdToCard(id).name}");
+            print($"玩家 {playerIndex} 給予 玩家 {target} - {ObsleteCard.CardSetting.IdToCard(id).name}");
             netHandCards.Remove((int)id);
             manager.players[target].AddCard(id);
         }

@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 namespace TBL.Game.Hero
 {
     using Judgement;
-    using static Card.CardAttributeHelper;
+    using static ObsleteCard.CardAttributeHelper;
     using GameActionData;
     public class KaidoKyuKyu : HeroBase
     {
@@ -22,7 +22,7 @@ namespace TBL.Game.Hero
                         return false;
 
                     var targetPlayer = manager.players[judgement.currentSendingPlayer];
-                    if (((Card.CardSetting)judgement.currentRoundSendingCardId).CardColor == Card.CardColor.Black &&
+                    if (((ObsleteCard.CardSetting)judgement.currentRoundSendingCardId).CardColor == ObsleteCard.CardColor.Black &&
                         judgement.currentRoundPlayerIndex == playerStatus.playerIndex)
                         return true;
 
@@ -109,7 +109,7 @@ namespace TBL.Game.Hero
                           return false;
 
                       var targetPlayer = manager.players[judgement.currentSendingPlayer];
-                      if (((Card.CardSetting)judgement.currentRoundSendingCardId).CardColor == Card.CardColor.Black &&
+                      if (((ObsleteCard.CardSetting)judgement.currentRoundSendingCardId).CardColor == ObsleteCard.CardColor.Black &&
                           judgement.currentSendingPlayer == playerStatus.playerIndex &&
                           playerStatus.acceptCard)
                           return true;

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using TBL.GameActionData;
 using UnityEngine;
 
-namespace TBL.Card
+namespace TBL.ObsleteCard
 {
     using static CardAttributeHelper;
     public class Burn : CardSetting

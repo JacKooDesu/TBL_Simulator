@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
-using TBL.Card;
+using TBL.ObsleteCard;
 using TBL.GameActionData;
 using System;
 

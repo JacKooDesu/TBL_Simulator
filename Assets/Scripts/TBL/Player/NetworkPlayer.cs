@@ -9,9 +9,9 @@ namespace TBL
 {
     using Judgement;
     using Game.Hero;
-    using Card;
+    using ObsleteCard;
     using GameActionData;
-    using static Card.CardAttributeHelper;
+    using static ObsleteCard.CardAttributeHelper;
     using Util;
 
     public partial class NetworkPlayer : NetworkBehaviour
@@ -284,7 +284,7 @@ namespace TBL
                 if (card.SendType == CardSendType.Public)
                     message += $"公開文本 - {RichTextHelper.TextWithColor(card.CardName, card.Color)}";
                 else
-                    message += (card.SendType == Card.CardSendType.Secret ? "密電" : "直達密電");
+                    message += (card.SendType == ObsleteCard.CardSendType.Secret ? "密電" : "直達密電");
                 UI.GameScene.TipCanvas.Singleton.Show(message, true);
 
                 netCanvas.SetButtonInteractable(accept: 1, reject: 1);

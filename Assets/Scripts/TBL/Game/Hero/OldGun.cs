@@ -6,7 +6,7 @@ namespace TBL.Game.Hero
     using Judgement;
     using Util;
     using GameActionData;
-    using static Card.CardAttributeHelper;
+    using static ObsleteCard.CardAttributeHelper;
     public class OldGun : HeroBase
     {
         protected override void BindSkill()
@@ -36,8 +36,8 @@ namespace TBL.Game.Hero
                     if (manager.Judgement.currentPhase != NetworkJudgement.Phase.Reacting)
                         return false;
 
-                    return (((Card.CardSetting)currentAction.cardId).CardType == Card.CardType.Lock ||
-                            ((Card.CardSetting)currentAction.cardId).CardType == Card.CardType.Test) &&
+                    return (((ObsleteCard.CardSetting)currentAction.cardId).CardType == ObsleteCard.CardType.Lock ||
+                            ((ObsleteCard.CardSetting)currentAction.cardId).CardType == ObsleteCard.CardType.Test) &&
                             currentAction.target == playerStatus.playerIndex;
                 }
             };

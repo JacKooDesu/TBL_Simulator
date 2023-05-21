@@ -50,7 +50,7 @@ namespace TBL.Game.Hero
             //           if (manager.Judgement.currentPhase != NetworkJudgement.Phase.Reacting)
             //               return false;
 
-            //           return ((Card.CardSetting)manager.Judgement.currentCardAction.cardId).CardType == Card.CardType.Test;
+            //           return ((ObsleteCard.CardSetting)manager.Judgement.currentCardAction.cardId).CardType == Card.CardType.Test;
             //       }
             // };
 

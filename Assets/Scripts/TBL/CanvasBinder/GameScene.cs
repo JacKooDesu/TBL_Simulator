@@ -10,7 +10,7 @@ using Mirror;
 
 namespace TBL.NetCanvas
 {
-    using Card;
+    using ObsleteCard;
     using Deck;
     using Judgement;
     public partial class GameScene : NetCanvasBinderBase

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace TBL.Deck
 {
-    using Card;
+    using ObsleteCard;
     using Judgement;
     
     [CreateAssetMenu(fileName = "DeckSetting", menuName = "TBL/Create DeckSetting", order = 0)]

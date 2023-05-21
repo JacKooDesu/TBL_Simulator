@@ -24,29 +24,29 @@ namespace TBL.GameActionData
 
         public string UsingLog()
         {
-            var card = (Card.CardSetting)cardId;
+            var card = (ObsleteCard.CardSetting)cardId;
             var user = (NetworkRoomManager.singleton as NetworkRoomManager).players[this.user];
             string log = $"玩家 {user.playerIndex} ({user.playerName}) ";
             NetworkPlayer target;
             switch (card.CardType)
             {
-                case Card.CardType.Invalidate:
-                case Card.CardType.Guess:
-                case Card.CardType.Gameble:
-                case Card.CardType.Return:
-                case Card.CardType.Intercept:
+                case ObsleteCard.CardType.Invalidate:
+                case ObsleteCard.CardType.Guess:
+                case ObsleteCard.CardType.Gameble:
+                case ObsleteCard.CardType.Return:
+                case ObsleteCard.CardType.Intercept:
                     break;
 
-                case Card.CardType.Lock:
-                case Card.CardType.Skip:
-                case Card.CardType.Test:
+                case ObsleteCard.CardType.Lock:
+                case ObsleteCard.CardType.Skip:
+                case ObsleteCard.CardType.Test:
                     target = (NetworkRoomManager.singleton as NetworkRoomManager).players[this.target];
                     log += $"對 玩家 {target.playerIndex} ({target.playerName}) ";
                     break;
 
-                case Card.CardType.Burn:
+                case ObsleteCard.CardType.Burn:
                     target = (NetworkRoomManager.singleton as NetworkRoomManager).players[this.target];
-                    var targetCard = (Card.CardSetting)target.netCards[suffix];
+                    var targetCard = (ObsleteCard.CardSetting)target.netCards[suffix];
                     log += $"對 玩家 {target.playerIndex} ({target.playerName}) 的 {RichTextHelper.TextWithBold(targetCard.CardName)} ";
                     break;
             }
@@ -60,29 +60,29 @@ namespace TBL.GameActionData
 
         public string EffectLog()
         {
-            var card = (Card.CardSetting)cardId;
+            var card = (ObsleteCard.CardSetting)cardId;
             var user = (NetworkRoomManager.singleton as NetworkRoomManager).players[this.user];
             string log = $"玩家 {user.playerIndex} ({user.playerName}) ";
             NetworkPlayer target;
             switch (card.CardType)
             {
-                case Card.CardType.Invalidate:
-                case Card.CardType.Guess:
-                case Card.CardType.Gameble:
-                case Card.CardType.Return:
-                case Card.CardType.Intercept:
+                case ObsleteCard.CardType.Invalidate:
+                case ObsleteCard.CardType.Guess:
+                case ObsleteCard.CardType.Gameble:
+                case ObsleteCard.CardType.Return:
+                case ObsleteCard.CardType.Intercept:
                     break;
 
-                case Card.CardType.Lock:
-                case Card.CardType.Skip:
-                case Card.CardType.Test:
+                case ObsleteCard.CardType.Lock:
+                case ObsleteCard.CardType.Skip:
+                case ObsleteCard.CardType.Test:
                     target = (NetworkRoomManager.singleton as NetworkRoomManager).players[this.target];
                     log += $"對 玩家 {target.playerIndex} ({target.playerName}) ";
                     break;
 
-                case Card.CardType.Burn:
+                case ObsleteCard.CardType.Burn:
                     target = (NetworkRoomManager.singleton as NetworkRoomManager).players[this.target];
-                    var targetCard = (Card.CardSetting)target.netCards[suffix];
+                    var targetCard = (ObsleteCard.CardSetting)target.netCards[suffix];
                     log += $"對 玩家 {target.playerIndex} ({target.playerName}) 的 {RichTextHelper.TextWithBold(targetCard.CardName)} ";
                     break;
             }

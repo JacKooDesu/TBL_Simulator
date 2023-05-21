@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace TBL.Card
+namespace TBL.ObsleteCard
 {
     public class CardObject : MonoBehaviour
     {

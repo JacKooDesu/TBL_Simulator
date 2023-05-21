@@ -15,11 +15,11 @@ namespace TBL.UI.LogSystem
             );
         }
 
-        public static LogBase SendCard(NetworkPlayer from, Card.CardSetting card)
+        public static LogBase SendCard(NetworkPlayer from, ObsleteCard.CardSetting card)
         {
             string cardName = $"{card.SendTypeText}";
             cardName = RichTextHelper.TextWithBold(cardName);
-            if (card.SendType == Card.CardSendType.Public)
+            if (card.SendType == ObsleteCard.CardSendType.Public)
                 cardName = RichTextHelper.TextWithColor(cardName, card.Color);
             else
                 cardName = RichTextHelper.TextWithColor(cardName, Color.magenta);
@@ -32,7 +32,7 @@ namespace TBL.UI.LogSystem
             );
         }
 
-        public static LogBase AcceptCard(NetworkPlayer accept, Card.CardSetting card)
+        public static LogBase AcceptCard(NetworkPlayer accept, ObsleteCard.CardSetting card)
         {
             string cardName = $"{card.SendTypeText}";
             cardName = RichTextHelper.TextWithBold(cardName);

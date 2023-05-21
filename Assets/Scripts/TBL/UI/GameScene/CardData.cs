@@ -14,7 +14,7 @@ namespace TBL.UI.GameScene
 
         NetCanvas.GameScene netCanvas;
 
-        public void SetUI(Card.CardSetting setting)
+        public void SetUI(ObsleteCard.CardSetting setting)
         {
             cardID = setting.ID;
             nameTextUI.text = setting.CardName;
@@ -60,23 +60,23 @@ namespace TBL.UI.GameScene
 
             string tipContent = "";
 
-            switch (((Card.CardSetting)setting.ID).SendType)
+            switch (((ObsleteCard.CardSetting)setting.ID).SendType)
             {
-                case Card.CardSendType.Direct:
+                case ObsleteCard.CardSendType.Direct:
                     tipContent += "直達密電\n";
                     break;
-                case Card.CardSendType.Secret:
+                case ObsleteCard.CardSendType.Secret:
                     tipContent += "密電\n";
                     break;
-                case Card.CardSendType.Public:
+                case ObsleteCard.CardSendType.Public:
                     tipContent += "公開文本\n";
                     break;
             }
 
 
-            if (setting.CardType == Card.CardType.Test)
+            if (setting.CardType == ObsleteCard.CardType.Test)
             {
-                Card.Test t = new Card.Test();
+                ObsleteCard.Test t = new ObsleteCard.Test();
                 t.ID = setting.ID;
                 tipContent += t.Tip;
             }

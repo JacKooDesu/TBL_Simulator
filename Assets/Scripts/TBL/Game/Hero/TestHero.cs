@@ -8,7 +8,7 @@ namespace TBL.Game.Hero
 {
     using Judgement;
     using Util;
-    using Card;
+    using ObsleteCard;
     using GameActionData;
 
     public class TestHero : HeroBase
