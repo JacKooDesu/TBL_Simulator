@@ -6,14 +6,14 @@ namespace TBL.Game
         {
             this.heroId = heroId;
         }
-        
+
         int heroId;
 
         public HeroStatus Current() => this;
 
         public PlayerStatusType Type() => PlayerStatusType.Hero;
 
-        public void Update(HeroStatus status) => this = status;
+        public void Update(IPlayerStatus status) => this = (HeroStatus)status;
     }
 }
 

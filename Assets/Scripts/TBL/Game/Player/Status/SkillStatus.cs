@@ -1,18 +1,24 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace TBL.Game
 {
-    public struct SkillStatus : IPlayerStatus<bool[]>
+    public struct SkillStatus : IPlayerStatus<Dictionary<int,bool>>
     {
-        bool[] value;
-        public bool[] Current() => value;
+        Dictionary<int,bool> value;
+        public Dictionary<int,bool> Current() => value;
         public PlayerStatusType Type() => PlayerStatusType.Skill;
 
-        public void Update(bool[] status) => this.value = status;
+        public void Update(Dictionary<int,bool> status) => this.value = status;
         public void Update<T>(T status) where T : IList
         {
-            value = status as bool[];
+            value = status as Dictionary<int,bool>;
+        }
+
+        public void Update(IPlayerStatus value)
+        {
+            this.value = ((SkillStatus)value).value;
         }
     }
 }
