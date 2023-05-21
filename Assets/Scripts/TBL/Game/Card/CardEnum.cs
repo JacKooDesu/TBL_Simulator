@@ -151,6 +151,18 @@ namespace TBL.Game
         public static Function ConvertFunction(this Property value) => (Function)value.ConvertInt<Function>();
         public static Type ConvertType(this Property value) => (Type)value.ConvertInt<Type>();
 
+        public static bool Contains(this Property source, Property target)
+        {
+            var value = (int)(target);
+            return ((int)source & value) == value;
+        }
+        public static bool Contains<T>(this Property source, T target)
+        where T : Enum, IConvertible
+        {
+            var value = Convert.ToInt32(target);
+            return ((int)source & value) == value;
+        }
+
         public static string ToDescription(this Enum value) =>
             value.GetType()
             .GetRuntimeField(value.ToString())

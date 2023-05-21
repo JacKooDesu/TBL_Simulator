@@ -42,9 +42,13 @@ namespace TBL.Game
         int unique;
 
         [SerializeField] CardEnum.Property property;
+        public CardEnum.Property Property => property;
 
         [SerializeField] CardEnum.Color color;
+        public CardEnum.Color Color => color;
         [SerializeField] CardEnum.Function function;
+        public CardEnum.Function Function => function;
         [SerializeField] CardEnum.Type type;
+        public CardEnum.Type Type => type;
     }
 }
