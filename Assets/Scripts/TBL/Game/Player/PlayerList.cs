@@ -29,8 +29,8 @@ namespace TBL.Game
                 for (int i = 0; i < c; ++i)
                 {
                     var p = new Player();
-
-                    p.UpdateStatus(PlayerStatusType.TeamStatus, new TeamStatus(team));
+                    p.UpdateStatus(new ValueTypeStatus<TeamEnum>(team, PlayerStatusType.TeamStatus));
+                    // p.UpdateStatus(PlayerStatusType.TeamStatus, new ValueTypeStatus<TeamEnum>(team, PlayerStatusType.TeamStatus));
 
                     // TODO: Hero Enum, Hero List, Banned Hero ... etc
                     // TODO: Hero draw shoud placed after game init

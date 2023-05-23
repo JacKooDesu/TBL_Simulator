@@ -1,17 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 namespace TBL.Game
 {
     [System.Serializable]
     public class Player
     {
+        // TODO: player shoud use property drawer to optimized!
         [SerializeField] ProfileStatus profileStatus = new ProfileStatus();
         public ProfileStatus ProfileStatus => profileStatus;
 
-        [SerializeField] TeamStatus teamStatus = new TeamStatus();
-        public TeamStatus TeamStatus => teamStatus;
+        [SerializeField] ValueTypeStatus<TeamEnum> teamStatus = new ValueTypeStatus<TeamEnum>(TeamEnum.Blue, PlayerStatusType.TeamStatus);
+        public ValueTypeStatus<TeamEnum> TeamStatus => teamStatus;
 
         [SerializeField] CardStatus cardStatus = new CardStatus();
         public CardStatus CardStatus => cardStatus;
@@ -36,28 +38,58 @@ namespace TBL.Game
         }
 
         // 更新狀態
-        public void UpdateStatus<T>(PlayerStatusType type, T status) where T : IPlayerStatus
+        public void UpdateStatus<S>(S status) where S : IPlayerStatus
+        {
+            switch (status.Type())
+            {
+                case PlayerStatusType.ProfileStatus:
+                    ProfileStatus.Update(status as ProfileStatus);
+                    break;
+
+                case PlayerStatusType.CardStatus:
+                    CardStatus.Update(status as CardStatus);
+                    break;
+
+                case PlayerStatusType.Hero:
+                    HeroStatus.Update(status as HeroStatus);
+                    break;
+
+                case PlayerStatusType.Skill:
+                    SkillStatus.Update(status as SkillStatus);
+                    break;
+
+                case PlayerStatusType.TeamStatus:
+                    TeamStatus.Update(status as ValueTypeStatus<TeamEnum>);
+                    break;
+
+                default:
+                    Debug.LogError("Target not found!");
+                    break;
+            }
+        }
+
+        public void UpdateStatus<T>(PlayerStatusType type, T status)
         {
             switch (type)
             {
                 case PlayerStatusType.ProfileStatus:
-                    ProfileStatus.Update(status);
+                    ProfileStatus.Update(status as ProfileStatus);
                     break;
 
                 case PlayerStatusType.CardStatus:
-                    CardStatus.Update(status);
+                    CardStatus.Update(status as CardStatus);
                     break;
 
                 case PlayerStatusType.Hero:
-                    HeroStatus.Update(status);
+                    HeroStatus.Update(status as HeroStatus);
                     break;
 
                 case PlayerStatusType.Skill:
-                    SkillStatus.Update(status);
+                    SkillStatus.Update(status as SkillStatus);
                     break;
 
                 case PlayerStatusType.TeamStatus:
-                    TeamStatus.Update(status);
+                    TeamStatus.Update(status as ValueTypeStatus<TeamEnum>);
                     break;
 
                 default:

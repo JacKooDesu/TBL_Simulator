@@ -1,8 +1,7 @@
+using System;
+
 namespace TBL.Game
 {
-    // TODO: Add event hook for value changed
-    public delegate void OnChanged<T>();
-    
     /// <summary>
     /// 提供玩家狀態，由伺服端請求所有玩家Update。
     /// </summary>
@@ -10,7 +9,9 @@ namespace TBL.Game
     public interface IPlayerStatus<T> : IPlayerStatus
     {
         T Current();
-        void Update(IPlayerStatus value);
+        void Update(T value);
+        void Update<S>(S status) where S : IPlayerStatus<T>;
+        event Action<T> OnChanged;
     }
 
     public interface IPlayerStatus
@@ -26,5 +27,12 @@ namespace TBL.Game
         CardStatus,
         Hero,
         Skill
+    }
+
+    public enum TeamEnum
+    {
+        Blue,
+        Red,
+        Green
     }
 }

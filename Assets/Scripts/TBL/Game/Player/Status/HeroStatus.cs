@@ -1,3 +1,5 @@
+using System;
+
 namespace TBL.Game
 {
     [System.Serializable]
@@ -11,13 +13,25 @@ namespace TBL.Game
 
         int heroId;
 
+        public event Action<HeroStatus> OnChanged;
+
         public HeroStatus Current() => this;
 
         public PlayerStatusType Type() => PlayerStatusType.Hero;
 
-        public void Update(IPlayerStatus status)
+        public void Update(IPlayerStatus<HeroStatus> status)
         {
             this.heroId = ((HeroStatus)status).heroId;
+        }
+
+        public void Update(HeroStatus value)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Update<S>(S status) where S : IPlayerStatus<HeroStatus>
+        {
+            throw new NotImplementedException();
         }
     }
 }

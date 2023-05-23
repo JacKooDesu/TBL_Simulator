@@ -1,6 +1,7 @@
+using System;
 namespace TBL.Game
 {
-    [System.Serializable]
+    [Serializable]
     public class ProfileStatus : IPlayerStatus<ProfileStatus>
     {
         public ProfileStatus() => this.name = "";
@@ -10,11 +11,19 @@ namespace TBL.Game
         }
 
         string name;
+
+        public event Action<ProfileStatus> OnChanged;
+
         public ProfileStatus Current() => this;
         public PlayerStatusType Type() => PlayerStatusType.ProfileStatus;
-        public void Update(IPlayerStatus status)
+        public void Update(ProfileStatus value)
         {
-            this.name = ((ProfileStatus)status).name;
+            throw new NotImplementedException();
+        }
+
+        public void Update<S>(S status) where S : IPlayerStatus<ProfileStatus>
+        {
+            throw new NotImplementedException();
         }
     }
 }
