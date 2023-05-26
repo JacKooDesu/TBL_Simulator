@@ -14,4 +14,13 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/GameScene.unity
     guid: f5b7c49f69a1eaa4a83e57b0711d730c
+  - enabled: 1
+    path: Assets/Scenes/Remake/Main.unity
+    guid: 8e6a724a10f0bc54da6a5514b78c5922
+  - enabled: 1
+    path: Assets/Scenes/Remake/Menu.unity
+    guid: 94b6c3371d535d1488f08ec6655ebb05
+  - enabled: 1
+    path: Assets/Scenes/Remake/Room.unity
+    guid: 8f65c91521af62b4e852e80986f5c925
   m_configObjects: {}
