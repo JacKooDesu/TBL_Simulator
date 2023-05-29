@@ -5,13 +5,14 @@ namespace TBL.Game
     [System.Serializable]
     public class HeroStatus : IPlayerStatus<HeroStatus>
     {
-        public HeroStatus() => heroId = int.MinValue;
+        public HeroStatus() => HeroId = int.MinValue;
         public HeroStatus(int heroId)
         {
-            this.heroId = heroId;
+            this.HeroId = heroId;
         }
 
-        int heroId;
+        public int HeroId { get; private set; }
+        public bool isHiding { get; private set; }
 
         public event Action<HeroStatus> OnChanged;
 
@@ -21,7 +22,7 @@ namespace TBL.Game
 
         public void Update(IPlayerStatus<HeroStatus> status)
         {
-            this.heroId = ((HeroStatus)status).heroId;
+            this.HeroId = ((HeroStatus)status).HeroId;
         }
 
         public void Update(HeroStatus value)

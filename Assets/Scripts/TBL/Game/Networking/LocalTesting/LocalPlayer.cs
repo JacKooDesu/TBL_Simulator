@@ -9,34 +9,37 @@ namespace TBL.Game.Networking
     /// <summary>
     /// 基本只拿來傳訊
     /// </summary>
-    public class NetworkPlayer : NetworkBehaviour, IPlayerStandalone
+    public class LocalPlayer : MonoBehaviour, IPlayerStandalone
     {
-        [SyncVar] int index;
+        int index;
         public int Index => index;
 
         event Action onCmd;
         event Action onRpc;
         event Action onTarget;
 
-        [ClientRpc, Server]
+        bool isClient;
+
+        public void Setup(int index, bool isClient)
+        {
+            
+        }
+
         public void RpcSend(string data)
         {
             onRpc.Invoke();
         }
 
-        [TargetRpc, Server]
         public void TargetSend(string data)
         {
             onTarget.Invoke();
         }
 
-        [Command]
         public void CmdSend(string data)
         {
             onCmd.Invoke();
         }
 
-        [Server]
         public async UniTask Request<T>(string data)
         {
             TargetSend(data);
@@ -63,12 +66,5 @@ namespace TBL.Game.Networking
             };
             action(data);
         }
-    }
-
-    public enum SendType
-    {
-        Rpc,
-        Cmd,
-        Target
     }
 }

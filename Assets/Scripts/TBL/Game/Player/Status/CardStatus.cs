@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System;
 
 namespace TBL.Game
@@ -15,11 +16,13 @@ namespace TBL.Game
 
         List<int> hand;
         List<int> table;
+        public ReadOnlyCollection<int> Hand => hand.AsReadOnly();
+        public ReadOnlyCollection<int> Table => table.AsReadOnly();
 
         public event Action<CardStatus> OnChanged;
 
         public CardStatus Current() => this;
-        public PlayerStatusType Type() => PlayerStatusType.CardStatus;
+        public PlayerStatusType Type() => PlayerStatusType.Card;
 
         public void Update(IPlayerStatus<CardStatus> status)
         {
@@ -27,7 +30,6 @@ namespace TBL.Game
             var target = status.Current();
             this.hand = target.hand;
             this.table = target.table;
-
             OnChanged.Invoke(this);
         }
 

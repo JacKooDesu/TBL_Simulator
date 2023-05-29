@@ -22,17 +22,26 @@ namespace TBL.Game
 
     public enum PlayerStatusType
     {
-        ProfileStatus,
-        TeamStatus,
-        CardStatus,
+        Profile,
+        Team,
+        Card,
         Hero,
-        Skill
+        Skill,
+        Reciver
     }
 
     public enum TeamEnum
     {
+        None = 0,
         Blue,
         Red,
         Green
+    }
+
+    [Flags]
+    public enum ReceiveEnum
+    {
+        Locked = 1 << 1,
+        Skipped = 1 << 2
     }
 }

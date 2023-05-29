@@ -12,7 +12,7 @@ namespace TBL.Game
         [SerializeField] ProfileStatus profileStatus = new ProfileStatus();
         public ProfileStatus ProfileStatus => profileStatus;
 
-        [SerializeField] TeamStatus teamStatus = new TeamStatus(TeamEnum.Blue, PlayerStatusType.TeamStatus);
+        [SerializeField] TeamStatus teamStatus = new TeamStatus(0, PlayerStatusType.Team);
         public TeamStatus TeamStatus => teamStatus;
 
         [SerializeField] CardStatus cardStatus = new CardStatus();
@@ -23,6 +23,8 @@ namespace TBL.Game
 
         [SerializeField] SkillStatus skillStatus = new SkillStatus();
         public SkillStatus SkillStatus => skillStatus;
+        [SerializeField] ReceiverStatus receiverStatus = new ReceiverStatus(0);
+        public ReceiverStatus ReceiverStatus => receiverStatus;
 
         List<IPlayerStatus> StatusList => new List<IPlayerStatus>{
             profileStatus,
@@ -42,11 +44,11 @@ namespace TBL.Game
         {
             switch (status.Type())
             {
-                case PlayerStatusType.ProfileStatus:
+                case PlayerStatusType.Profile:
                     ProfileStatus.Update(status as ProfileStatus);
                     break;
 
-                case PlayerStatusType.CardStatus:
+                case PlayerStatusType.Card:
                     CardStatus.Update(status as CardStatus);
                     break;
 
@@ -58,7 +60,7 @@ namespace TBL.Game
                     SkillStatus.Update(status as SkillStatus);
                     break;
 
-                case PlayerStatusType.TeamStatus:
+                case PlayerStatusType.Team:
                     TeamStatus.Update(status as ValueTypeStatus<TeamEnum>);
                     break;
 
@@ -72,11 +74,11 @@ namespace TBL.Game
         {
             switch (type)
             {
-                case PlayerStatusType.ProfileStatus:
+                case PlayerStatusType.Profile:
                     ProfileStatus.Update(status as ProfileStatus);
                     break;
 
-                case PlayerStatusType.CardStatus:
+                case PlayerStatusType.Card:
                     CardStatus.Update(status as CardStatus);
                     break;
 
@@ -88,7 +90,7 @@ namespace TBL.Game
                     SkillStatus.Update(status as SkillStatus);
                     break;
 
-                case PlayerStatusType.TeamStatus:
+                case PlayerStatusType.Team:
                     TeamStatus.Update(status as ValueTypeStatus<TeamEnum>);
                     break;
 

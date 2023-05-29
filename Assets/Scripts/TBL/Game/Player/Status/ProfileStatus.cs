@@ -15,7 +15,7 @@ namespace TBL.Game
         public event Action<ProfileStatus> OnChanged;
 
         public ProfileStatus Current() => this;
-        public PlayerStatusType Type() => PlayerStatusType.ProfileStatus;
+        public PlayerStatusType Type() => PlayerStatusType.Profile;
         public void Update(ProfileStatus value)
         {
             throw new NotImplementedException();

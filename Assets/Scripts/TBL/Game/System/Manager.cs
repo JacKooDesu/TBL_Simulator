@@ -2,6 +2,7 @@ using UnityEngine;
 namespace TBL.Game.Sys
 {
     using Setting;
+    using NetworkManager = Networking.NetworkRoomManager;
 
     /// <summary>
     /// 資源管理，伺服端使用操作所有遊戲物件。
@@ -19,6 +20,10 @@ namespace TBL.Game.Sys
 
         void Start()
         {
+            if (NetworkManager.singleton)
+            {
+                
+            }
             deck.Init(deckSetting)
                 .sleeping.AddRange(deck.CardDatas);
             playerList.Init(2, teamSetting, heroSetting);
