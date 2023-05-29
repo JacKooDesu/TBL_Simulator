@@ -3,7 +3,7 @@ namespace TBL.Game
 {
     [Serializable]
 
-    public class ValueTypeStatus<T> : IPlayerStatus<T>
+    public abstract class ValueTypeStatus<T> : IPlayerStatus<T>
     where T : struct
     {
         public ValueTypeStatus(T value, PlayerStatusType type)

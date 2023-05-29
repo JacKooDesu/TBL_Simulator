@@ -29,7 +29,7 @@ namespace TBL.Game
                 for (int i = 0; i < c; ++i)
                 {
                     var p = new Player();
-                    p.UpdateStatus(new ValueTypeStatus<TeamEnum>(team, PlayerStatusType.TeamStatus));
+                    p.UpdateStatus(new TeamStatus(team, PlayerStatusType.TeamStatus));
                     // p.UpdateStatus(PlayerStatusType.TeamStatus, new ValueTypeStatus<TeamEnum>(team, PlayerStatusType.TeamStatus));
 
                     // TODO: Hero Enum, Hero List, Banned Hero ... etc

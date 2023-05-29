@@ -12,8 +12,8 @@ namespace TBL.Game
         [SerializeField] ProfileStatus profileStatus = new ProfileStatus();
         public ProfileStatus ProfileStatus => profileStatus;
 
-        [SerializeField] ValueTypeStatus<TeamEnum> teamStatus = new ValueTypeStatus<TeamEnum>(TeamEnum.Blue, PlayerStatusType.TeamStatus);
-        public ValueTypeStatus<TeamEnum> TeamStatus => teamStatus;
+        [SerializeField] TeamStatus teamStatus = new TeamStatus(TeamEnum.Blue, PlayerStatusType.TeamStatus);
+        public TeamStatus TeamStatus => teamStatus;
 
         [SerializeField] CardStatus cardStatus = new CardStatus();
         public CardStatus CardStatus => cardStatus;
