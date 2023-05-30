@@ -8,6 +8,10 @@ namespace TBL.Game.Sys
     using Game.Networking;
     public interface IPlayerStandalone
     {
+        Player player { get; }
+        int Index { get; }
+        void Initialize();
         void Send<T>(SendType sendType, IPacket<T> packet);
+        public static IPlayerStandalone Me { get; set; }
     }
 }

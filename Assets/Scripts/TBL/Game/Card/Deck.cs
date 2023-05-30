@@ -6,7 +6,8 @@ namespace TBL.Game
 {
     using Setting;
     [System.Serializable]
-    public class Deck : Sys.IResource<DeckSetting, Deck>
+    public class Deck
+    //  : Sys.IResource<DeckSetting, Deck>
     {
 #if UNITY_EDITOR
         /// <summary>

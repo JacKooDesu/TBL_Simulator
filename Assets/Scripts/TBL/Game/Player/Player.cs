@@ -5,9 +5,12 @@ using System;
 
 namespace TBL.Game
 {
+    using Game.Sys;
+    using Game.Networking;
     [System.Serializable]
     public class Player
     {
+        [SerializeField] IPlayerStandalone playerStandalone;
         // TODO: player shoud use property drawer to optimized!
         [SerializeField] ProfileStatus profileStatus = new ProfileStatus();
         public ProfileStatus ProfileStatus => profileStatus;
@@ -34,9 +37,9 @@ namespace TBL.Game
             skillStatus
         };
 
-        public Player()
+        public Player(IPlayerStandalone standalone)
         {
-            profileStatus = new ProfileStatus();
+            playerStandalone = standalone;
         }
 
         // 更新狀態
@@ -98,6 +101,11 @@ namespace TBL.Game
                     Debug.LogError("Target not found!");
                     break;
             }
+        }
+
+        public void Handler(string data)
+        {
+
         }
     }
 }

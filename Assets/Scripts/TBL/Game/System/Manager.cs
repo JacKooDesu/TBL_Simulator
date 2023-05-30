@@ -3,6 +3,7 @@ namespace TBL.Game.Sys
 {
     using Setting;
     using NetworkManager = Networking.NetworkRoomManager;
+    using LocalManager = Networking.LocalManager;
 
     /// <summary>
     /// 資源管理，伺服端使用操作所有遊戲物件。
@@ -20,13 +21,24 @@ namespace TBL.Game.Sys
 
         void Start()
         {
+            if ((NetworkManager.singleton != null &&
+                (NetworkManager.singleton.Me() != null && NetworkManager.singleton.Me().isClient)) ||
+                LocalManager.Singleton == null)
+                return;
+
+            IPlayerStandalone[] standalones = null!;
             if (NetworkManager.singleton)
             {
-                
+                standalones = NetworkManager.singleton.players.ToArray();
             }
+            else if (LocalManager.Singleton)
+            {
+                standalones = LocalManager.Singleton.Players.ToArray();
+            }
+
             deck.Init(deckSetting)
                 .sleeping.AddRange(deck.CardDatas);
-            playerList.Init(2, teamSetting, heroSetting);
+            playerList.Init(teamSetting, heroSetting, standalones);
         }
     }
 }

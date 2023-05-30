@@ -345,7 +345,8 @@ MonoBehaviour:
   resizable: 0
   forceFocus: 0
   boarder: 0
-  prefab: {fileID: 0}
+  prefab: {fileID: 532617454452799948, guid: bedd9db72b0354444a4f157dedbf95d4, type: 3}
+  content: {fileID: 4144073505904973358}
 --- !u!1 &4144073505523461899
 GameObject:
   m_ObjectHideFlags: 0

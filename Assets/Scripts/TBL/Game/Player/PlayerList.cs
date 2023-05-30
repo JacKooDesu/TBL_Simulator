@@ -8,21 +8,27 @@ namespace TBL.Game
 {
     using Utils;
     using Setting;
-    using NetworkPlayer = Networking.NetworkPlayer;
+    using Game.Sys;
+    using Game.Networking;
     [System.Serializable]
-    public class PlayerList : Sys.IResource<int, TeamSetting, HeroSetting, PlayerList>
+    public class PlayerList
+    //  : Sys.IResource<int, TeamSetting, HeroSetting, PlayerList>
     {
-        [SerializeField] Player[] players;
-        public ReadOnlyCollection<Player> Players;
+        [SerializeField] List<Player> players;
+        public ReadOnlyCollection<Player> Players => players.AsReadOnly();
         public Player this[int index] { get => Players[index]; }
 
         public PlayerCollection Blue = new PlayerCollection();
         public PlayerCollection Red = new PlayerCollection();
         public PlayerCollection Green = new PlayerCollection();
 
-        public PlayerList Init(int count, TeamSetting teamSetting, HeroSetting heroSetting)
+        public PlayerList Init(
+            TeamSetting teamSetting, HeroSetting heroSetting,
+            params IPlayerStandalone[] standalones)
         {
-            var set = teamSetting.PlayerSets.Find(s => s.PlayerCount == count);
+            var standaloneQueue = new Queue<IPlayerStandalone>(new List<IPlayerStandalone>(standalones).Shuffle());
+
+            var set = teamSetting.PlayerSets.Find(s => s.PlayerCount == standaloneQueue.Count);
             var playerCount = set.PlayerCount;
             var usedHero = new List<int>();
             var list = new List<Player>();
@@ -31,7 +37,7 @@ namespace TBL.Game
             {
                 for (int i = 0; i < c; ++i)
                 {
-                    var p = new Player();
+                    var p = new Player(standaloneQueue.Dequeue());
                     p.UpdateStatus(new TeamStatus(team, PlayerStatusType.Team));
                     // p.UpdateStatus(PlayerStatusType.TeamStatus, new ValueTypeStatus<TeamEnum>(team, PlayerStatusType.TeamStatus));
 
@@ -49,22 +55,8 @@ namespace TBL.Game
             SetupTeam(ref Red, TeamEnum.Red, set.Red);
             SetupTeam(ref Green, TeamEnum.Green, set.Green);
 
-            Players = list.AsReadOnly();
-            players = list.ToArray();
+            players = list;
             return this;
-        }
-
-        public async UniTaskVoid BindPlayer(params NetworkPlayer[] players)
-        {
-            if (players.Length != Players.Count)
-                Debug.LogError("Network Player count not equals to Player count!");
-
-            var plist = new List<NetworkPlayer>(players).Shuffle();
-            foreach(var p in plist){
-                p.RpcSend("");
-            }
-            
-            await UniTask.CompletedTask;
         }
     }
 }

@@ -11,29 +11,36 @@ namespace TBL.Game.Networking
     /// </summary>
     public class NetworkPlayer : NetworkBehaviour, IPlayerStandalone
     {
+        public Player player { get; private set; }
         [SyncVar] int index;
         public int Index => index;
+        public event Action<string> OnCmd;
+        public event Action<string> OnRpc;
+        public event Action<string> OnTarget;
 
-        event Action onCmd;
-        event Action onRpc;
-        event Action onTarget;
+        public override void OnStartClient() => Initialize();
+        public void Initialize()
+        {
+            player = new(this);
+            if (isLocalPlayer) IPlayerStandalone.Me = this;
+        }
 
         [ClientRpc, Server]
         public void RpcSend(string data)
         {
-            onRpc.Invoke();
+            OnRpc.Invoke(data);
         }
 
         [TargetRpc, Server]
         public void TargetSend(string data)
         {
-            onTarget.Invoke();
+            OnTarget.Invoke(data);
         }
 
         [Command]
         public void CmdSend(string data)
         {
-            onCmd.Invoke();
+            OnCmd.Invoke(data);
         }
 
         [Server]
@@ -41,10 +48,10 @@ namespace TBL.Game.Networking
         {
             TargetSend(data);
             bool isFinished = false;
-            Action awaiter = () => isFinished = true;
-            onCmd += awaiter;
+            Action<string> awaiter = (_) => isFinished = true;
+            OnCmd += awaiter;
             await UniTask.WaitUntil(() => isFinished);
-            onCmd -= awaiter;
+            OnCmd -= awaiter;
         }
 
         public void Send<T>(SendType sendType, IPacket<T> packet)

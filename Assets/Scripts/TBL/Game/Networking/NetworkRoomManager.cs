@@ -8,6 +8,7 @@ namespace TBL.Game.Networking
 {
     public class NetworkRoomManager : Mirror.NetworkRoomManager
     {
+        public static new NetworkRoomManager singleton { get; internal set; }
         public bool showStartButton;
         [SerializeField] GameObject deckManagerPrefab;
 
@@ -42,6 +43,12 @@ namespace TBL.Game.Networking
                 ServerChangeScene(GameplayScene);
             }
         }
+        
+        /// <summary>
+        /// 查找客戶端物件。
+        /// </summary>
+        /// <returns></returns>
+        public NetworkPlayer Me() => players.Find(p => p.isLocalPlayer);
     }
 }
 

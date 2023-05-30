@@ -1,16 +1,17 @@
 using UnityEngine;
 using System;
-using Mirror;
 using Cysharp.Threading.Tasks;
 
 namespace TBL.Game.Networking
 {
     using Sys;
+    using UI.Main;
     /// <summary>
     /// 基本只拿來傳訊
     /// </summary>
     public class LocalPlayer : MonoBehaviour, IPlayerStandalone
     {
+        public Player player { get; private set; }
         int index;
         public int Index => index;
 
@@ -19,10 +20,14 @@ namespace TBL.Game.Networking
         event Action onTarget;
 
         bool isClient;
-
-        public void Setup(int index, bool isClient)
+        [SerializeField] bool isLocal;   // for debug
+        void Start() => Initialize();
+        public void Initialize()
         {
-            
+            player = new(this);
+            if (isLocal) IPlayerStandalone.Me = this;
+
+            MainUIManager.Singleton?.SetupUI(this);
         }
 
         public void RpcSend(string data)

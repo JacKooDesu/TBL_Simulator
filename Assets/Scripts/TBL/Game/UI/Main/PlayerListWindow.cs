@@ -3,13 +3,18 @@ using UnityEngine;
 namespace TBL.Game.UI.Main
 {
     using UI;
-    public class PlayerListWindow : Window
+    using Sys;
+    public class PlayerListWindow : Window, ISetupWith<IPlayerStandalone>
     {
         [SerializeField] PlayerListItem prefab;
 
-        public void Init(PlayerList playerList)
+        [SerializeField] Transform content;
+        public void Setup(IPlayerStandalone res)
         {
-            
+            var item = Instantiate(prefab, content);
+            item.Init(res);
+
+            item.transform.SetSiblingIndex(res.Index);
         }
     }
 }

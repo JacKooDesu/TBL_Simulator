@@ -1,3 +1,4 @@
+using UnityEditor;
 using UnityEngine;
 using System;
 using System.Collections.Generic;
@@ -18,29 +19,28 @@ namespace TBL.Game.Networking
         public List<LocalPlayer> Players => players;
         LocalPlayer current;
 
+        [ContextMenu("Init")]
         void InitPlayer()
         {
             if (playerPrefab == null) return;
             players = new();
             players.AddRange(GetComponentsInChildren<LocalPlayer>());
-            for (int i = players.Count; i < playerCount; ++i)
+            for (int i = 0; i < playerCount; ++i)
             {
-                var p = Instantiate(playerPrefab, transform);
-                p.name = $"Player {i}";
+                var p = PrefabUtility.InstantiatePrefab(playerPrefab, transform) as LocalPlayer;
                 players.Add(p);
             }
-            if (players.Count > playerCount)
-                players.RemoveRange(playerCount - 1, players.Count - playerCount);
-        }
-
-        void OnValidate()
-        {
-            InitPlayer();
+            var iter = 0;
+            foreach (var p in players)
+            {
+                p.gameObject.name = $"Player {iter}";
+                iter++;
+            }
         }
 
         void Start()
         {
-            foreach(Transform child in transform)
+            foreach (Transform child in transform)
                 child.gameObject.SetActive(false);
             SwitchPlayer(0);
         }

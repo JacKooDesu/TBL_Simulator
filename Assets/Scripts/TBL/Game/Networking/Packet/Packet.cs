@@ -55,8 +55,6 @@ namespace TBL.Game.Networking
     public interface IPacket<T> : IPacket
     {
         T Data { get; }
-        PacketType Type { get; }
-        bool Serialize(ref string data);
     }
 
     public enum PacketType
@@ -65,7 +63,11 @@ namespace TBL.Game.Networking
         PlayerStatus,
     }
 
-    public interface IPacket { }
+    public interface IPacket
+    {
+        PacketType Type { get; }
+        bool Serialize(ref string data);
+    }
 
     [JsonObject]
     public class BundledPacket : IPacket<List<object>>

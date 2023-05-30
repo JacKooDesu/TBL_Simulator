@@ -6,6 +6,7 @@ using System.Linq;
 namespace TBL.Game.UI.Main
 {
     using TBL.Game;
+    using Sys;
     public class PlayerListItem : MonoBehaviour
     {
         [SerializeField] Player player;
@@ -35,9 +36,9 @@ namespace TBL.Game.UI.Main
         [Header("任務")]
         [SerializeField] TMP_Text greenMission;
 
-        public void Init(Player player)
+        public void Init(IPlayerStandalone standalone)
         {
-            this.player = player;
+            this.player = standalone.player;
         }
 
         public void Bind()
