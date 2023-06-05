@@ -125,7 +125,7 @@ namespace TBL.NetCanvas
         #endregion
 
         #region BUTTON
-        public TBL.UI.GameScene.CardData selectCard;
+        public TBL.UI.GameScene.CardListItem selectCard;
         [Header("按鈕")]
         public Button drawButton;
         public Button sendButton;
@@ -220,7 +220,7 @@ namespace TBL.NetCanvas
             foreach (int id in manager.LocalPlayer.netHandCards)
             {
                 CardSetting tempCard = CardSetting.IdToCard(id);
-                UI.GameScene.CardData ui = Instantiate(cardTextPrefab, cardListUI).GetComponent<UI.GameScene.CardData>();
+                var ui = Instantiate(cardTextPrefab, cardListUI).GetComponent<UI.GameScene.CardListItem>();
                 ui.SetUI(tempCard);
             }
         }

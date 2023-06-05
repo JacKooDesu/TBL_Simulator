@@ -6,13 +6,32 @@ using UnityEngine.EventSystems;
 
 namespace TBL.UI.GameScene
 {
-    public class CardData : MonoBehaviour
+    using TBL.Game;
+    using CardEnum = TBL.Game.CardEnum;
+    public class CardListItem : MonoBehaviour
     {
         public Text nameTextUI;
         public int cardID;
         public bool isSelected = false;
 
         NetCanvas.GameScene netCanvas;
+
+        public void SetUI(int id)
+        {
+            var property = (CardEnum.Property)id;
+            var color = property.ConvertColor();
+            var function = property.ConvertFunction();
+            var type = property.ConvertType();
+            nameTextUI.color = color switch
+            {
+                CardEnum.Color.Blue => Color.blue,
+                CardEnum.Color.Red => Color.red,
+                CardEnum.Color.Black => Color.gray,
+                _ => throw new System.Exception()
+            };
+
+            nameTextUI.text = function.ToDescription();
+        }
 
         public void SetUI(ObsleteCard.CardSetting setting)
         {

@@ -17,7 +17,7 @@ namespace TBL.Game.Networking
 
         [SerializeField] List<LocalPlayer> players = new();
         public List<LocalPlayer> Players => players;
-        LocalPlayer current;
+        // LocalPlayer current => Sys.IPlayerStandalone.Me as LocalPlayer;
 
         [ContextMenu("Init")]
         void InitPlayer()
@@ -40,8 +40,8 @@ namespace TBL.Game.Networking
 
         void Start()
         {
-            foreach (Transform child in transform)
-                child.gameObject.SetActive(false);
+            // foreach (Transform child in transform)
+            //     child.gameObject.SetActive(false);
             SwitchPlayer(0);
         }
 
@@ -61,10 +61,11 @@ namespace TBL.Game.Networking
 
         void SwitchPlayer(int index)
         {
-            if (current != null)
-                current.gameObject.SetActive(false);
-            current = players[index];
-            current.gameObject.SetActive(true);
+            Sys.IPlayerStandalone.Me = players[index];
+            // if (current != null)
+            //     current.gameObject.SetActive(false);
+            // current = players[index];
+            // current.gameObject.SetActive(true);
         }
     }
 }
