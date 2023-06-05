@@ -17,6 +17,8 @@ namespace TBL.Game.Networking
         public event Action<string> OnCmd;
         public event Action<string> OnRpc;
         public event Action<string> OnTarget;
+        PacketHandler packetHandler = new();
+        public PacketHandler PacketHandler => packetHandler;
 
         public override void OnStartClient() => Initialize();
         public void Initialize()
@@ -28,19 +30,19 @@ namespace TBL.Game.Networking
         [ClientRpc, Server]
         public void RpcSend(PacketType type, string data)
         {
-            OnRpc.Invoke(data);
+            packetHandler.OnPacket(type, data);
         }
 
         [TargetRpc, Server]
         public void TargetSend(PacketType type, string data)
         {
-            OnTarget.Invoke(data);
+            packetHandler.OnPacket(type, data);
         }
 
         [Command]
         public void CmdSend(PacketType type, string data)
         {
-            OnCmd.Invoke(data);
+            packetHandler.OnPacket(type, data);
         }
 
         [Server]

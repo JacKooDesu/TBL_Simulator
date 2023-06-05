@@ -19,6 +19,9 @@ namespace TBL.Game.Networking
         event Action onRpc;
         event Action onTarget;
 
+        PacketHandler packetHandler = new();
+        public PacketHandler PacketHandler => packetHandler;
+
         bool isClient;
         [SerializeField] bool isLocal;   // for debug
         void Start() => Initialize();
@@ -28,21 +31,22 @@ namespace TBL.Game.Networking
             if (isLocal) IPlayerStandalone.Me = this;
 
             MainUIManager.Singleton?.SetupUI(this);
+            packetHandler.PlayerStatusPacketEvent += p => player.UpdateStatus(p.Data);
         }
 
         public void RpcSend(PacketType type, string data)
         {
-            onRpc.Invoke();
+            packetHandler.OnPacket(type, data);
         }
 
         public void TargetSend(PacketType type, string data)
         {
-            onTarget.Invoke();
+            packetHandler.OnPacket(type, data);
         }
 
         public void CmdSend(PacketType type, string data)
         {
-            onCmd.Invoke();
+            packetHandler.OnPacket(type, data);
         }
 
         public async UniTask Request<T>(PacketType type, string data)

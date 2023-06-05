@@ -12,7 +12,8 @@ namespace TBL.Game.UI.Main
         [SerializeField] Transform content;
         public void Setup(IPlayerStandalone res)
         {
-            IPlayerStandalone.Me.player.CardStatus.OnChanged += UpdateList;
+            if(res == IPlayerStandalone.Me)
+                IPlayerStandalone.Me.player.CardStatus.OnChanged += UpdateList;
         }
 
         public void UpdateList(CardStatus cs)

@@ -22,5 +22,7 @@ namespace TBL.Game
             result.AddRange(list.Select(x => new CardData(x)));
             return result;
         }
+
+        public List<int> ToIdList() => collection.Select(c => (int)c.Property).ToList();
     }
 }

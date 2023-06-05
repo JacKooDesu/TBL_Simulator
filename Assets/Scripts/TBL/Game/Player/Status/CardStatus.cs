@@ -19,7 +19,7 @@ namespace TBL.Game
         public ReadOnlyCollection<int> Hand => hand.AsReadOnly();
         public ReadOnlyCollection<int> Table => table.AsReadOnly();
 
-        public event Action<CardStatus> OnChanged;
+        public event Action<CardStatus> OnChanged = delegate { };
 
         public CardStatus Current() => this;
         public PlayerStatusType Type() => PlayerStatusType.Card;
@@ -35,12 +35,15 @@ namespace TBL.Game
 
         public void Update(CardStatus value)
         {
-            throw new NotImplementedException();
+            var old = this;
+            this.hand = value.hand;
+            this.table = value.table;
+            OnChanged.Invoke(this);
         }
 
-        public void Update<S>(S status) where S : IPlayerStatus<CardStatus>
-        {
-            throw new NotImplementedException();
-        }
+        public void Update<S>(S status)
+        where S : IPlayerStatus<CardStatus> =>
+            Update(status);
+
     }
 }

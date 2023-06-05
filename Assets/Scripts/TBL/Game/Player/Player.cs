@@ -37,9 +37,24 @@ namespace TBL.Game
             skillStatus
         };
 
-        public Player(IPlayerStandalone standalone)
+        public Player(IPlayerStandalone standalone, bool isServer = false)
         {
             playerStandalone = standalone;
+            if (isServer)
+                BindServerEvent();
+        }
+
+        public void BindServerEvent()
+        {
+            teamStatus.OnChanged += _ => playerStandalone.Send(SendType.Rpc, new PlayerStatusPacket(teamStatus));
+            heroStatus.OnChanged += _ => playerStandalone.Send(SendType.Rpc, new PlayerStatusPacket(heroStatus));
+            cardStatus.OnChanged += _ => playerStandalone.Send(SendType.Rpc, new PlayerStatusPacket(cardStatus));
+            profileStatus.OnChanged += _ => playerStandalone.Send(SendType.Rpc, new PlayerStatusPacket(profileStatus));
+            skillStatus.OnChanged += _ => playerStandalone.Send(SendType.Rpc, new PlayerStatusPacket(skillStatus));
+        }
+        public void BindClientEvent()
+        {
+
         }
 
         // 更新狀態
@@ -101,6 +116,12 @@ namespace TBL.Game
                     Debug.LogError("Target not found!");
                     break;
             }
+        }
+
+        public void UpdateStatus(PlayerStatusPacket.StatusData data)
+        {
+            foreach (var s in data.ToEnum())
+                if (s != null) UpdateStatus(s);
         }
 
         public void Handler(string data)

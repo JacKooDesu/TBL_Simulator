@@ -38,7 +38,6 @@ namespace TBL.Game
             this.type = property.ConvertType();
         }
 
-        int id;
         int unique;
 
         [SerializeField] CardEnum.Property property;

@@ -4,8 +4,6 @@ using UnityEngine;
 using Newtonsoft.Json;
 using System.Text;
 
-// FIXME: The packet system still very buggy,
-// FIXME: need be planned how to send/serialize/deserialize between data & packet!
 namespace TBL.Game.Networking
 {
     // TODO: currently using JsonUtility for testing, should use byte convert?
@@ -16,18 +14,18 @@ namespace TBL.Game.Networking
             return JsonConvert.SerializeObject(packet);
         }
 
-        public static IPacket Deserialize(string data)
+        public static IPacket Deserialize(this string data)
         {
             IPacket result = JsonConvert.DeserializeObject<IPacket>(data);
             return result;
         }
 
-        public static bool Deserialize<T>(string data, out T result)
+        public static bool Deserialize<T>(this string data, out T result)
         where T : IPacket
         {
             try
             {
-                result = JsonUtility.FromJson<T>(data);
+                result = JsonConvert.DeserializeObject<T>(data);
             }
             catch (Exception e)
             {

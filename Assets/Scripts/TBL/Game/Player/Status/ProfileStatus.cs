@@ -18,12 +18,12 @@ namespace TBL.Game
         public PlayerStatusType Type() => PlayerStatusType.Profile;
         public void Update(ProfileStatus value)
         {
-            throw new NotImplementedException();
+            // throw new NotImplementedException();
         }
 
         public void Update<S>(S status) where S : IPlayerStatus<ProfileStatus>
         {
-            throw new NotImplementedException();
+            // throw new NotImplementedException();
         }
     }
 }

@@ -2,6 +2,7 @@ using UnityEngine;
 namespace TBL.Game.Sys
 {
     using Setting;
+    using Networking;
     using NetworkManager = Networking.NetworkRoomManager;
     using LocalManager = Networking.LocalManager;
 
@@ -37,8 +38,12 @@ namespace TBL.Game.Sys
             }
 
             deck.Init(deckSetting)
-                .sleeping.AddRange(deck.CardDatas);
+                .sleeping.AddRange(deck.CardDatas)
+                .Shuffle();
             playerList.Init(teamSetting, heroSetting, standalones);
+
+            foreach (var p in playerList.Players)
+                p.CardStatus.Update(new(deck.Draw(7).ToIdList()));
         }
     }
 }

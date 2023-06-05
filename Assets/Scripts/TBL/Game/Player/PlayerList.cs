@@ -26,7 +26,8 @@ namespace TBL.Game
             TeamSetting teamSetting, HeroSetting heroSetting,
             params IPlayerStandalone[] standalones)
         {
-            var standaloneQueue = new Queue<IPlayerStandalone>(new List<IPlayerStandalone>(standalones).Shuffle());
+            var standaloneList = new List<IPlayerStandalone>(standalones).Shuffle();
+            var standaloneQueue = new Queue<IPlayerStandalone>(standaloneList);
 
             var set = teamSetting.PlayerSets.Find(s => s.PlayerCount == standaloneQueue.Count);
             var playerCount = set.PlayerCount;
@@ -37,7 +38,7 @@ namespace TBL.Game
             {
                 for (int i = 0; i < c; ++i)
                 {
-                    var p = new Player(standaloneQueue.Dequeue());
+                    var p = new Player(standaloneQueue.Dequeue(), true);
                     p.UpdateStatus(new TeamStatus(team, PlayerStatusType.Team));
                     // p.UpdateStatus(PlayerStatusType.TeamStatus, new ValueTypeStatus<TeamEnum>(team, PlayerStatusType.TeamStatus));
 

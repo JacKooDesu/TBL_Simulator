@@ -5,6 +5,7 @@ using UnityEngine;
 namespace TBL.Game
 {
     using Setting;
+    using Utils;
     [System.Serializable]
     public class Deck
     //  : Sys.IResource<DeckSetting, Deck>
@@ -38,6 +39,15 @@ namespace TBL.Game
             CardDatas = list.AsReadOnly();
 
             return this;
+        }
+
+        public CardCollection Draw(int count)
+        {
+            CardCollection result = new();
+            for (int i = 0; i < count; ++i)
+                result.Add(sleeping.MoveTo(0, hand));
+
+            return result;
         }
     }
 }
