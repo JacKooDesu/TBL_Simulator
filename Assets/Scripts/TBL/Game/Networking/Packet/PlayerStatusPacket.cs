@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 namespace TBL.Game.Networking
 {
     [JsonObject]
-    public class PlayerStatusPacket : IPacket<PlayerStatusPacket.StatusData>
+    public class PlayerStatusPacket : IPacket
     {
         [JsonObject]
         public struct StatusData
@@ -18,13 +18,12 @@ namespace TBL.Game.Networking
         }
         public PlayerStatusPacket(StatusData data)
         {
-            this.Type = PacketType.PlayerStatus;
             this.Data = data;
         }
         [JsonProperty]
         public StatusData Data { get; private set; }
-        [JsonProperty]
-        public PacketType Type { get; private set; }
+        
+        public PacketType Type() => PacketType.PlayerStatus;
 
         public bool Serialize(ref string data)
         {

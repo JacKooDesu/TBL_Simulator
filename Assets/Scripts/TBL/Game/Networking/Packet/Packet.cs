@@ -11,22 +11,9 @@ namespace TBL.Game.Networking
     // TODO: currently using JsonUtility for testing, should use byte convert?
     public static class PacketUtil
     {
-        public static string Serialize<T>(IPacket<T> packet)
-        {
-            return JsonConvert.SerializeObject(packet);
-        }
-
         public static string Serialize(IPacket packet)
         {
             return JsonConvert.SerializeObject(packet);
-        }
-
-
-        public static T Deserialize<T>(string data)
-        where T : IPacket
-        {
-            T result = JsonConvert.DeserializeObject<T>(data);
-            return result;
         }
 
         public static IPacket Deserialize(string data)
@@ -52,11 +39,6 @@ namespace TBL.Game.Networking
         }
     }
 
-    public interface IPacket<T> : IPacket
-    {
-        T Data { get; }
-    }
-
     public enum PacketType
     {
         Bundled,
@@ -65,24 +47,24 @@ namespace TBL.Game.Networking
 
     public interface IPacket
     {
-        PacketType Type { get; }
+        PacketType Type();
         bool Serialize(ref string data);
     }
 
-    [JsonObject]
-    public class BundledPacket : IPacket<List<object>>
-    {
-        public List<object> Data { get; private set; }
-        public PacketType Type => TYPE;
-        const PacketType TYPE = PacketType.Bundled;
+    // [JsonObject]
+    // public class BundledPacket : IPacket<List<object>>
+    // {
+    //     public List<object> Data { get; private set; }
+    //     public PacketType Type => TYPE;
+    //     const PacketType TYPE = PacketType.Bundled;
 
-        public BundledPacket(params IPacket[] packets) => this.Data = new(packets);
-        public void Add(params IPacket[] packets) => Data.AddRange(packets);
+    //     public BundledPacket(params IPacket[] packets) => this.Data = new(packets);
+    //     public void Add(params IPacket[] packets) => Data.AddRange(packets);
 
-        public bool Serialize(ref string data)
-        {
-            data = PacketUtil.Serialize(this);
-            return true;
-        }
-    }
+    //     public bool Serialize(ref string data)
+    //     {
+    //         data = PacketUtil.Serialize(this);
+    //         return true;
+    //     }
+    // }
 }

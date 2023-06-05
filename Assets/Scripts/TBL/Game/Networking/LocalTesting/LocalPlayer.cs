@@ -30,24 +30,24 @@ namespace TBL.Game.Networking
             MainUIManager.Singleton?.SetupUI(this);
         }
 
-        public void RpcSend(string data)
+        public void RpcSend(PacketType type, string data)
         {
             onRpc.Invoke();
         }
 
-        public void TargetSend(string data)
+        public void TargetSend(PacketType type, string data)
         {
             onTarget.Invoke();
         }
 
-        public void CmdSend(string data)
+        public void CmdSend(PacketType type, string data)
         {
             onCmd.Invoke();
         }
 
-        public async UniTask Request<T>(string data)
+        public async UniTask Request<T>(PacketType type, string data)
         {
-            TargetSend(data);
+            TargetSend(type, data);
             bool isFinished = false;
             Action awaiter = () => isFinished = true;
             onCmd += awaiter;
@@ -55,21 +55,21 @@ namespace TBL.Game.Networking
             onCmd -= awaiter;
         }
 
-        public void Send<T>(SendType sendType, IPacket<T> packet)
+        public void Send(SendType sendType, IPacket packet)
         {
             if (isClient && sendType != SendType.Cmd)
                 sendType = SendType.Cmd;
 
             var data = "";
             packet.Serialize(ref data);
-            Action<string> action = sendType switch
+            Action<PacketType, string> action = sendType switch
             {
                 SendType.Cmd => CmdSend,
                 SendType.Rpc => RpcSend,
                 SendType.Target => TargetSend,
-                _ => _ => Debug.Log($"Unknown Send Type!")
+                _ => (_, _) => Debug.Log($"Unknown Send Type!")
             };
-            action(data);
+            action(packet.Type(), data);
         }
     }
 }

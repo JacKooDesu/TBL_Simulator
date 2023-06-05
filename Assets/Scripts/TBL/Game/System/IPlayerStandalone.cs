@@ -11,7 +11,7 @@ namespace TBL.Game.Sys
         Player player { get; }
         int Index { get; }
         void Initialize();
-        void Send<T>(SendType sendType, IPacket<T> packet);
+        void Send(SendType sendType, IPacket packet);
         public static IPlayerStandalone Me { get; set; }
     }
 }
