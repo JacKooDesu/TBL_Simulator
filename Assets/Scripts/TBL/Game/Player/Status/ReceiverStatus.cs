@@ -3,6 +3,7 @@ namespace TBL.Game
 {
     public class ReceiverStatus : ValueTypeStatus<ReceiveEnum>
     {
-        public ReceiverStatus(ReceiveEnum value, PlayerStatusType type = PlayerStatusType.Reciver) : base(value, type) { }
+        public override PlayerStatusType Type() => PlayerStatusType.Reciver;
+        public ReceiverStatus(ReceiveEnum value) : base(value) { }
     }
 }

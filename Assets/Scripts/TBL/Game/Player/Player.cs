@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using System.Linq;
 
 namespace TBL.Game
 {
@@ -15,7 +16,7 @@ namespace TBL.Game
         [SerializeField] ProfileStatus profileStatus = new ProfileStatus();
         public ProfileStatus ProfileStatus => profileStatus;
 
-        [SerializeField] TeamStatus teamStatus = new TeamStatus(0, PlayerStatusType.Team);
+        [SerializeField] TeamStatus teamStatus = new TeamStatus(0);
         public TeamStatus TeamStatus => teamStatus;
 
         [SerializeField] CardStatus cardStatus = new CardStatus();
@@ -87,6 +88,9 @@ namespace TBL.Game
                     break;
             }
         }
+        public void UpdateStatuses<S>(params S[] statuses) where S : IPlayerStatus =>
+            statuses.ToList().ForEach(UpdateStatus);
+
 
         public void UpdateStatus<T>(PlayerStatusType type, T status)
         {
@@ -117,6 +121,11 @@ namespace TBL.Game
                     break;
             }
         }
+        public record UpdateStatusRecord(PlayerStatusType type, IPlayerStatus status);
+        public void UpdateStatus(UpdateStatusRecord record) =>
+            UpdateStatus(record.type, record.status);
+        public void UpdateStatuses(params UpdateStatusRecord[] records) =>
+            records.ToList().ForEach(UpdateStatus);
 
         public void UpdateStatus(PlayerStatusPacket.StatusData data)
         {

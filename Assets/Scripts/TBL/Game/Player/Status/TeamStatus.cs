@@ -2,6 +2,7 @@ namespace TBL.Game
 {
     public class TeamStatus : ValueTypeStatus<TeamEnum>
     {
-        public TeamStatus(TeamEnum value, PlayerStatusType type = PlayerStatusType.Team) : base(value, type) { }
+        public override PlayerStatusType Type() => PlayerStatusType.Team;
+        public TeamStatus(TeamEnum value) : base(value) { }
     }
 }

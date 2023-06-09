@@ -17,8 +17,10 @@ namespace TBL.Game.Sys
 
         [SerializeField] TeamSetting teamSetting;
         [SerializeField] HeroSetting heroSetting;
-        [SerializeField] PlayerList playerList = new PlayerList();
-        public PlayerList PlayerList => playerList;
+        [SerializeField] PlayerList players = new PlayerList();
+        public PlayerList Players => players;
+        int currentPlayerIndex = 0;
+        public Player CurrentPlayer => Players[currentPlayerIndex];
 
         void Start()
         {
@@ -40,10 +42,16 @@ namespace TBL.Game.Sys
             deck.Init(deckSetting)
                 .sleeping.AddRange(deck.CardDatas)
                 .Shuffle();
-            playerList.Init(teamSetting, heroSetting, standalones);
+            players.Init(teamSetting, heroSetting, standalones);
 
-            foreach (var p in playerList.Players)
-                p.CardStatus.Update(new(deck.Draw(7).ToIdList()));
+            foreach (var p in players.Players)
+                Draw(p, 7);
+
+            currentPlayerIndex = 0;
         }
+
+        public void Draw(Player p, int count) =>
+            p.CardStatus.Update(new(deck.Draw(count).ToIdList()));
+        public void Draw(int id, int count) => Draw(Players.QueryById(id), count);
     }
 }

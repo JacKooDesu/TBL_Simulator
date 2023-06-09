@@ -6,20 +6,18 @@ namespace TBL.Game
     public abstract class ValueTypeStatus<T> : IPlayerStatus<T>
     where T : struct
     {
-        public ValueTypeStatus(T value, PlayerStatusType type)
+        public ValueTypeStatus(T value)
         {
             this.value = value;
-            this.type = type;
             OnChanged = (v) => Current();
         }
 
-        readonly PlayerStatusType type;
         T value;
 
-        public event Action<T> OnChanged;
+        public event Action<T> OnChanged = _ => { };
 
         public T Current() => this.value;
-        public PlayerStatusType Type() => type;
+        public abstract PlayerStatusType Type();
 
         public void Update(T value)
         {

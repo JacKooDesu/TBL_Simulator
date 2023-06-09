@@ -38,8 +38,15 @@ namespace TBL.Game
             {
                 for (int i = 0; i < c; ++i)
                 {
-                    var p = new Player(standaloneQueue.Dequeue(), true);
-                    p.UpdateStatus(new TeamStatus(team, PlayerStatusType.Team));
+                    var s = standaloneQueue.Dequeue();
+                    var p = new Player(s, true);
+                    var id = i;
+
+                    p.ProfileStatus.Update(new($"P{id}", id));
+                    p.UpdateStatus(record: new(PlayerStatusType.Team, new TeamStatus(team)));
+                    // p.TeamStatus.Update(team);
+                    // p.UpdateStatus(new ProfileStatus());
+                    // p.UpdateStatus(new TeamStatus(team, PlayerStatusType.Team));
                     // p.UpdateStatus(PlayerStatusType.TeamStatus, new ValueTypeStatus<TeamEnum>(team, PlayerStatusType.TeamStatus));
 
                     // TODO: Hero Enum, Hero List, Banned Hero ... etc
@@ -59,5 +66,7 @@ namespace TBL.Game
             players = list;
             return this;
         }
+
+        public Player QueryById(int id) => players.Find(p => p.ProfileStatus.Id == id);
     }
 }

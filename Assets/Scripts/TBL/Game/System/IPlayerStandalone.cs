@@ -9,6 +9,9 @@ namespace TBL.Game.Sys
     public interface IPlayerStandalone
     {
         Player player { get; }
+        /// <summary>
+        /// 玩家真正的順位
+        /// </summary>
         int Index { get; }
         PacketHandler PacketHandler { get; }
         void Initialize();
