@@ -12,6 +12,7 @@ namespace TBL.Game
     public class Player
     {
         [SerializeField] IPlayerStandalone playerStandalone;
+        public IPlayerStandalone PlayerStandalone => playerStandalone;
         // TODO: player shoud use property drawer to optimized!
         [SerializeField] ProfileStatus profileStatus = new ProfileStatus();
         public ProfileStatus ProfileStatus => profileStatus;
@@ -27,6 +28,7 @@ namespace TBL.Game
 
         [SerializeField] SkillStatus skillStatus = new SkillStatus();
         public SkillStatus SkillStatus => skillStatus;
+
         [SerializeField] ReceiverStatus receiverStatus = new ReceiverStatus(0);
         public ReceiverStatus ReceiverStatus => receiverStatus;
 
@@ -60,67 +62,20 @@ namespace TBL.Game
 
         // 更新狀態
         public void UpdateStatus<S>(S status) where S : IPlayerStatus
-        {
-            switch (status.Type())
-            {
-                case PlayerStatusType.Profile:
-                    ProfileStatus.Update(status as ProfileStatus);
-                    break;
-
-                case PlayerStatusType.Card:
-                    CardStatus.Update(status as CardStatus);
-                    break;
-
-                case PlayerStatusType.Hero:
-                    HeroStatus.Update(status as HeroStatus);
-                    break;
-
-                case PlayerStatusType.Skill:
-                    SkillStatus.Update(status as SkillStatus);
-                    break;
-
-                case PlayerStatusType.Team:
-                    TeamStatus.Update(status as ValueTypeStatus<TeamEnum>);
-                    break;
-
-                default:
-                    Debug.LogError("Target not found!");
-                    break;
-            }
-        }
+            => UpdateStatus(status.Type(), status);
         public void UpdateStatuses<S>(params S[] statuses) where S : IPlayerStatus =>
             statuses.ToList().ForEach(UpdateStatus);
 
-
         public void UpdateStatus<T>(PlayerStatusType type, T status)
+        where T : IPlayerStatus
         {
-            switch (type)
-            {
-                case PlayerStatusType.Profile:
-                    ProfileStatus.Update(status as ProfileStatus);
-                    break;
-
-                case PlayerStatusType.Card:
-                    CardStatus.Update(status as CardStatus);
-                    break;
-
-                case PlayerStatusType.Hero:
-                    HeroStatus.Update(status as HeroStatus);
-                    break;
-
-                case PlayerStatusType.Skill:
-                    SkillStatus.Update(status as SkillStatus);
-                    break;
-
-                case PlayerStatusType.Team:
-                    TeamStatus.Update(status as ValueTypeStatus<TeamEnum>);
-                    break;
-
-                default:
-                    Debug.LogError("Target not found!");
-                    break;
-            }
+            var target = StatusList.Find(s => s.Type() == type);
+            if (target == null)
+                Debug.LogError("Target status not found!");
+            else
+                target.Update(status);
         }
+
         public record UpdateStatusRecord(PlayerStatusType type, IPlayerStatus status);
         public void UpdateStatus(UpdateStatusRecord record) =>
             UpdateStatus(record.type, record.status);

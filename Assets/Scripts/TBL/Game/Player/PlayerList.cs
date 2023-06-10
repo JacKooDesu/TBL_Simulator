@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -68,5 +70,11 @@ namespace TBL.Game
         }
 
         public Player QueryById(int id) => players.Find(p => p.ProfileStatus.Id == id);
+
+        public void Foreach(Action<Player> action)
+        {
+            foreach (var p in players)
+                action(p);
+        }
     }
 }

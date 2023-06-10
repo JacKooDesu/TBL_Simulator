@@ -20,11 +20,6 @@ namespace TBL.Game
 
         public PlayerStatusType Type() => PlayerStatusType.Hero;
 
-        public void Update(IPlayerStatus<HeroStatus> status)
-        {
-            this.HeroId = ((HeroStatus)status).HeroId;
-        }
-
         public void Update(HeroStatus value)
         {
             throw new NotImplementedException();
@@ -34,6 +29,9 @@ namespace TBL.Game
         {
             throw new NotImplementedException();
         }
+
+        public void Update(IPlayerStatus value) =>
+            Update(value as HeroStatus);
     }
 }
 

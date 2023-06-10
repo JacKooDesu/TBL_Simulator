@@ -34,5 +34,8 @@ namespace TBL.Game
             if (!old.Equals(this.value))
                 OnChanged.Invoke(value);
         }
+
+        public void Update(IPlayerStatus value)
+            => Update(value as ValueTypeStatus<T>);
     }
 }

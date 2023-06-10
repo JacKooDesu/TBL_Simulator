@@ -26,6 +26,7 @@ namespace TBL.Game.Sys
 
         public PhaseManager(Manager manager)
         {
+            this.manager = manager;
             // reverse default flow for stack
             PHASE_FLOW.Reverse();
             flow = new(PHASE_FLOW);
@@ -42,7 +43,7 @@ namespace TBL.Game.Sys
                 current = Phase.Get(flow.Peek().type);
                 var dt = 0f;
 
-                current.Enter();
+                current.Enter(manager);
                 do
                 {
                     await UniTask.Yield(PlayerLoopTiming.EarlyUpdate);
@@ -58,7 +59,16 @@ namespace TBL.Game.Sys
                 if (interrupt)
                     continue;
                 else
+                {
+                    current.Exit();
                     flow.Pop();
+                }
+
+                if (flow.Count == 0)
+                {
+                    Debug.Log("Phase manager finished all stacks!");
+                    break;
+                }
             }
         }
 

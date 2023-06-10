@@ -17,7 +17,7 @@ namespace TBL.Game
     public interface IPlayerStatus
     {
         PlayerStatusType Type();
-        // void Update(IPlayerStatus value);
+        void Update(IPlayerStatus value);
     }
 
     public enum PlayerStatusType

@@ -24,15 +24,6 @@ namespace TBL.Game
         public CardStatus Current() => this;
         public PlayerStatusType Type() => PlayerStatusType.Card;
 
-        public void Update(IPlayerStatus<CardStatus> status)
-        {
-            var old = this;
-            var target = status.Current();
-            this.hand = target.hand;
-            this.table = target.table;
-            OnChanged.Invoke(this);
-        }
-
         public void Update(CardStatus value)
         {
             var old = this;
@@ -45,5 +36,21 @@ namespace TBL.Game
         where S : IPlayerStatus<CardStatus> =>
             Update(status);
 
+        public void Update(IPlayerStatus value) =>
+            Update(value as CardStatus);
+
+        #region SERVER_ONLY
+        public void AddHandCards(params int[] ids)
+        {
+            hand.AddRange(ids);
+            OnChanged.Invoke(this);
+        }
+
+        public void AddTableCards(params int[] ids)
+        {
+            table.AddRange(ids);
+            OnChanged.Invoke(this);
+        }
+        #endregion
     }
 }

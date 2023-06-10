@@ -4,19 +4,14 @@ using System;
 namespace TBL.Game
 {
     [System.Serializable]
-    public class SkillStatus : IPlayerStatus<Dictionary<int,bool>>
+    public class SkillStatus : IPlayerStatus<Dictionary<int, bool>>
     {
-        Dictionary<int,bool> value;
+        Dictionary<int, bool> value;
 
         public event Action<Dictionary<int, bool>> OnChanged;
 
-        public Dictionary<int,bool> Current() => value;
+        public Dictionary<int, bool> Current() => value;
         public PlayerStatusType Type() => PlayerStatusType.Skill;
-
-        public void Update(IPlayerStatus<Dictionary<int, bool>> value)
-        {
-            throw new NotImplementedException();
-        }
 
         public void Update<S>(S status) where S : IPlayerStatus<Dictionary<int, bool>>
         {
@@ -27,6 +22,9 @@ namespace TBL.Game
         {
             throw new NotImplementedException();
         }
+
+        public void Update(IPlayerStatus value) =>
+            Update(value as SkillStatus);
     }
 }
 

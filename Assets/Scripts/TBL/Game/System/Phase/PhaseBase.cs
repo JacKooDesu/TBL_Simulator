@@ -3,15 +3,26 @@ using System.Collections.ObjectModel;
 using System.Collections.Generic;
 namespace TBL.Game.Sys
 {
+    using Networking;
     public abstract class PhaseBase
     {
+        protected abstract PhaseType PhaseType { get; }
         protected float timeCurrent;
         protected abstract float Time { get; }
-        public virtual void Enter(object parameter = null) => timeCurrent = 0;
+
+        protected Manager manager;
+        protected bool forceExit = false;
+        public virtual void Enter(Manager manager, object parameter = null)
+        {
+            this.manager = manager;
+            manager.Broadcast(new ChangePhasePacket(PhaseType));
+            timeCurrent = 0;
+        }
+
         public virtual bool Update(float dt)
         {
             timeCurrent += dt;
-            return timeCurrent < Time;
+            return timeCurrent < Time & !forceExit;
         }
         public abstract void Exit();
     }

@@ -32,5 +32,8 @@ namespace TBL.Game
         public void Update<S>(S status)
         where S : IPlayerStatus<ProfileStatus>
             => Update(status);
+
+        public void Update(IPlayerStatus value) =>
+            Update(value as ProfileStatus);
     }
 }

@@ -41,6 +41,7 @@ namespace TBL.Game.Networking
     {
         Bundled,
         PlayerStatus,
+        ChangePhase,
     }
 
     public interface IPacket
