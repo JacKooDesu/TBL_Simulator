@@ -16,13 +16,15 @@ namespace TBL.Game.Networking
             public HeroStatus? heroStatus;
             public SkillStatus? skillStatus;
             public TeamStatus? teamStatus;
+            public PhaseQuestStatus? phaseQuestStatus;
             public IPlayerStatus?[] ToEnum() =>
                 new IPlayerStatus?[]{
                     profileStatus,
                     cardStatus,
                     heroStatus,
                     skillStatus,
-                    teamStatus
+                    teamStatus,
+                    phaseQuestStatus
                 };
         }
         [JsonConstructor]
@@ -56,6 +58,10 @@ namespace TBL.Game.Networking
                     case PlayerStatusType.Profile:
                         data.profileStatus = s as ProfileStatus;
                         continue;
+
+                    case PlayerStatusType.Quest:
+                        data.phaseQuestStatus = s as PhaseQuestStatus;
+                        continue;
                 }
             }
             this.Data = data;
@@ -69,6 +75,7 @@ namespace TBL.Game.Networking
                 heroStatus = player.HeroStatus,
                 skillStatus = player.SkillStatus,
                 teamStatus = player.TeamStatus,
+                phaseQuestStatus = player.PhaseQuestStatus
             };
         }
         [JsonProperty]

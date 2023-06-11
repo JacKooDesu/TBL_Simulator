@@ -39,9 +39,16 @@ namespace TBL.Game.Networking
 
     public enum PacketType
     {
+        // Client
+        _CLIENT_ = 1,
         Bundled,
         PlayerStatus,
         ChangePhase,
+
+        // Server
+        _SERVER_ = 1000,
+        FinishedQuest,
+
     }
 
     public interface IPacket

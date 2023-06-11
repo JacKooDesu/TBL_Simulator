@@ -24,7 +24,7 @@ namespace TBL.Game.Networking
 
         bool isClient;
         [SerializeField] bool isLocal;   // for debug
-        void Start() => Initialize();
+        // void Start() => Initialize();
         public void Initialize()
         {
             player = new(this);
@@ -36,17 +36,17 @@ namespace TBL.Game.Networking
 
         public void RpcSend(PacketType type, string data)
         {
-            packetHandler.OnPacket(type, data);
+            packetHandler.OnClientPacket(type, data);
         }
 
         public void TargetSend(PacketType type, string data)
         {
-            packetHandler.OnPacket(type, data);
+            packetHandler.OnClientPacket(type, data);
         }
 
         public void CmdSend(PacketType type, string data)
         {
-            packetHandler.OnPacket(type, data);
+            packetHandler.OnClientPacket(type, data);
         }
 
         public async UniTask Request<T>(PacketType type, string data)

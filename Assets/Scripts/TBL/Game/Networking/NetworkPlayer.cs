@@ -30,19 +30,19 @@ namespace TBL.Game.Networking
         [ClientRpc, Server]
         public void RpcSend(PacketType type, string data)
         {
-            packetHandler.OnPacket(type, data);
+            packetHandler.OnClientPacket(type, data);
         }
 
         [TargetRpc, Server]
         public void TargetSend(PacketType type, string data)
         {
-            packetHandler.OnPacket(type, data);
+            packetHandler.OnClientPacket(type, data);
         }
 
         [Command]
         public void CmdSend(PacketType type, string data)
         {
-            packetHandler.OnPacket(type, data);
+            packetHandler.OnClientPacket(type, data);
         }
 
         [Server]

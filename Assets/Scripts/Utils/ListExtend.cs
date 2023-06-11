@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 namespace TBL.Utils
 {
     public static class ListExtend
@@ -20,6 +21,9 @@ namespace TBL.Utils
 
             return list;
         }
+
+        public static bool TryGet<T>(this IList<T> list, Predicate<T> match, out T result) =>
+            (result = list.ToList().Find(match)) != null;
     }
 
 }

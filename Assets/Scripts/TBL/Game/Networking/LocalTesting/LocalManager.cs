@@ -10,6 +10,7 @@ namespace TBL.Game.Networking
     public class LocalManager : MonoBehaviour
     {
         public static LocalManager Singleton { get; private set; }
+        public bool InitComplete { get; private set; }
         void Awake() => Singleton = this;
 
         [SerializeField, Range(1, 8)] int playerCount;
@@ -40,9 +41,10 @@ namespace TBL.Game.Networking
 
         void Start()
         {
-            // foreach (Transform child in transform)
-            //     child.gameObject.SetActive(false);
-            SwitchPlayer(0);
+            foreach (var p in Players)
+                p.Initialize();
+            // SwitchPlayer(0);
+            InitComplete = true;
         }
 
         const KeyCode KEYCODE_BEGIN = KeyCode.Alpha1;

@@ -27,7 +27,8 @@ namespace TBL.Game
         Card,
         Hero,
         Skill,
-        Reciver
+        Reciver,
+        Quest
     }
 
     public enum TeamEnum

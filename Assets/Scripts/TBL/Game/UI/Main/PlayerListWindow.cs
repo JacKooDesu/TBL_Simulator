@@ -13,6 +13,7 @@ namespace TBL.Game.UI.Main
         {
             var item = Instantiate(prefab, content);
             item.Init(res);
+            item.Bind();
 
             item.transform.SetSiblingIndex(res.Index);
         }

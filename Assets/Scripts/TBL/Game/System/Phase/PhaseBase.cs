@@ -8,7 +8,8 @@ namespace TBL.Game.Sys
     {
         protected abstract PhaseType PhaseType { get; }
         protected float timeCurrent;
-        protected abstract float Time { get; }
+        protected abstract float time { get; }
+        public float Time => time;
 
         protected Manager manager;
         protected bool forceExit = false;
@@ -22,7 +23,7 @@ namespace TBL.Game.Sys
         public virtual bool Update(float dt)
         {
             timeCurrent += dt;
-            return timeCurrent < Time & !forceExit;
+            return timeCurrent < time & !forceExit;
         }
         public abstract void Exit();
     }

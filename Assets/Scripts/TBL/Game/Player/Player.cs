@@ -29,6 +29,9 @@ namespace TBL.Game
         [SerializeField] SkillStatus skillStatus = new SkillStatus();
         public SkillStatus SkillStatus => skillStatus;
 
+        [SerializeField] PhaseQuestStatus phaseQuestStatus = new();
+        public PhaseQuestStatus PhaseQuestStatus => phaseQuestStatus;
+
         [SerializeField] ReceiverStatus receiverStatus = new ReceiverStatus(0);
         public ReceiverStatus ReceiverStatus => receiverStatus;
 
@@ -37,7 +40,9 @@ namespace TBL.Game
             teamStatus,
             cardStatus,
             heroStatus,
-            skillStatus
+            skillStatus,
+            phaseQuestStatus,
+            receiverStatus
         };
 
         public Player(IPlayerStandalone standalone, bool isServer = false)
@@ -54,6 +59,7 @@ namespace TBL.Game
             cardStatus.OnChanged += _ => playerStandalone.Send(SendType.Rpc, new PlayerStatusPacket(cardStatus));
             profileStatus.OnChanged += _ => playerStandalone.Send(SendType.Rpc, new PlayerStatusPacket(profileStatus));
             skillStatus.OnChanged += _ => playerStandalone.Send(SendType.Rpc, new PlayerStatusPacket(skillStatus));
+            phaseQuestStatus.OnChanged += _ => playerStandalone.Send(SendType.Rpc, new PlayerStatusPacket(phaseQuestStatus));
         }
         public void BindClientEvent()
         {
