@@ -14,6 +14,7 @@ namespace TBL.Game
         public enum QuestType
         {
             DrawCard,
+            SelectCard,
             PassCard,
             ReceiveCard
         }

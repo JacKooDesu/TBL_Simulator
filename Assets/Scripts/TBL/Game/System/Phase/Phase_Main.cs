@@ -1,12 +1,11 @@
 using Cysharp.Threading.Tasks;
 namespace TBL.Game.Sys
 {
-    public class Phase_Draw : PhaseBase
+    public class Phase_Main : PhaseBase
     {
-        protected override PhaseType PhaseType => PhaseType.Draw;
+        protected override PhaseType PhaseType => PhaseType.Main;
         protected override float time => 5f;
-        const int DRAW_COUNT = 2;
-        const PhaseQuestStatus.QuestType QUEST = PhaseQuestStatus.QuestType.DrawCard;
+        const PhaseQuestStatus.QuestType QUEST = PhaseQuestStatus.QuestType.SelectCard;
 
         public override void Enter(Manager manager, object parameter = null)
         {
@@ -25,8 +24,10 @@ namespace TBL.Game.Sys
 
         public override void Exit()
         {
+            if (Check())
+                manager.DiscardHandAll(manager.CurrentPlayer);
+
             manager.FinishQuest(manager.CurrentPlayer, QUEST);
-            manager.Draw(manager.CurrentPlayer, 2);
         }
     }
 }

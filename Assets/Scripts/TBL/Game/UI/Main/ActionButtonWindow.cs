@@ -33,7 +33,6 @@ namespace TBL.Game.UI.Main
 
         void BindEvent(PhaseQuestStatus status)
         {
-            Debug.Log("Hello");
             if (status.Quest.Contains(QuestType.DrawCard))
                 draw.onClick.ReBind(Draw);
 
@@ -48,7 +47,7 @@ namespace TBL.Game.UI.Main
         void ResetTimer(ChangePhasePacket packet)
         {
             if (cts != null)
-                cts.Cancel();
+                cts.Cancel(true);
             cts = new();
             var ct = gameObject.GetCancellationTokenOnDestroy();
             cts.AddTo(ct);

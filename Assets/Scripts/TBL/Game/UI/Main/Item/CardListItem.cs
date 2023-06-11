@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
@@ -15,6 +16,9 @@ namespace TBL.UI.GameScene
         public bool isSelected = false;
 
         NetCanvas.GameScene netCanvas;
+
+        public UnityEvent<int> SelectEvent { get; } = new();
+        [SerializeField] Button button;
 
         public void SetUI(int id)
         {
@@ -31,6 +35,7 @@ namespace TBL.UI.GameScene
             };
 
             nameTextUI.text = function.ToDescription();
+            button?.onClick.AddListener(() => SelectEvent.Invoke(id));
         }
 
         public void SetUI(ObsleteCard.CardSetting setting)
@@ -103,18 +108,6 @@ namespace TBL.UI.GameScene
                 tipContent += ((NetworkRoomManager)NetworkRoomManager.singleton).DeckManager.Deck.GetCardPrototype(setting.ID).Tip;
 
             GetComponent<TipTrigger>().content = tipContent;
-        }
-
-        // Start is called before the first frame update
-        void Start()
-        {
-            netCanvas = FindObjectOfType<NetCanvas.GameScene>();
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
         }
     }
 

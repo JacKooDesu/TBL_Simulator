@@ -31,7 +31,12 @@ namespace TBL.Game.Sys
     public enum PhaseType
     {
         Draw = 1,
+        Main,
+        Passing,
+        Receive,
+        End,
 
+        Reacting = 100
     }
 
     public static class Phase
@@ -40,6 +45,7 @@ namespace TBL.Game.Sys
             new Dictionary<PhaseType, PhaseBase>()
             {
                 {PhaseType.Draw, new Phase_Draw()},
+                {PhaseType.Main, new Phase_Main()},
             }
         );
 

@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
 namespace TBL.Game.Sys
@@ -63,6 +64,14 @@ namespace TBL.Game.Sys
         public void Draw(Player p, int count) =>
             p.CardStatus.AddHandCards(deck.Draw(count).ToIdList().ToArray());
         public void Draw(int id, int count) => Draw(Players.QueryById(id), count);
+        public void DiscardHand(Player p, params int[] ids) =>
+            p.CardStatus.RemoveHandCards(ids);
+        public void DiscardHandAll(Player p) =>
+            DiscardHand(p, p.CardStatus.Hand.ToArray());
+        public void DiscardTable(Player p, params int[] ids) =>
+            p.CardStatus.RemoveTableCards(ids);
+        public void DiscardTableAll(Player p) =>
+            DiscardTable(p, p.CardStatus.Table.ToArray());
 
         public void AddQuest(Player p, QuestType q)
         {

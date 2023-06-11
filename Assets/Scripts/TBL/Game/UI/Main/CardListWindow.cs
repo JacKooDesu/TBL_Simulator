@@ -10,9 +10,11 @@ namespace TBL.Game.UI.Main
         [SerializeField] TBL.UI.GameScene.CardListItem prefab;
 
         [SerializeField] Transform content;
+        public int SelectId { get; private set; }
+
         public void Setup(IPlayerStandalone res)
         {
-            if(res == IPlayerStandalone.Me)
+            if (res == IPlayerStandalone.Me)
                 IPlayerStandalone.Me.player.CardStatus.OnChanged += UpdateList;
         }
 
@@ -27,6 +29,8 @@ namespace TBL.Game.UI.Main
                 // var tempCard = CardSetting.IdToCard(id);
                 var ui = Instantiate(prefab, content);
                 ui.SetUI(id);
+                ui.SelectEvent.AddListener(id => SelectId = id);
+                ui.SelectEvent.AddListener(id => Debug.Log(id));
             }
         }
     }

@@ -13,7 +13,8 @@ namespace TBL.Game.Sys
     {
         record PhaseData(PhaseType type, System.Object parameter = null);
         readonly PhaseData[] PHASE_FLOW = {
-            new(PhaseType.Draw)
+            // new(PhaseType.Draw),
+            new(PhaseType.Main),
         };
 
         readonly Stack<PhaseData> flow = new();
@@ -28,8 +29,7 @@ namespace TBL.Game.Sys
         {
             this.manager = manager;
             // reverse default flow for stack
-            PHASE_FLOW.Reverse();
-            flow = new(PHASE_FLOW);
+            flow = new(PHASE_FLOW.Reverse());
         }
 
         void ResetFlow() => PHASE_FLOW.ToList().ForEach(p => flow.Push(p));

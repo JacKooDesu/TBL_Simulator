@@ -51,6 +51,22 @@ namespace TBL.Game
             table.AddRange(ids);
             OnChanged.Invoke(this);
         }
+
+        public void RemoveHandCards(params int[] ids)
+        {
+            foreach (var id in ids)
+                hand.Remove(id);
+
+            OnChanged.Invoke(this);
+        }
+
+        public void RemoveTableCards(params int[] ids)
+        {
+            foreach (var id in ids)
+                table.Remove(id);
+
+            OnChanged.Invoke(this);
+        }
         #endregion
     }
 }
