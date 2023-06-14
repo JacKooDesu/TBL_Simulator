@@ -14,8 +14,11 @@ namespace TBL.Game.UI.Main
 
         public void Setup(IPlayerStandalone res)
         {
-            if (res == IPlayerStandalone.Me)
-                IPlayerStandalone.Me.player.CardStatus.OnChanged += UpdateList;
+            if (res != IPlayerStandalone.Me)
+                return;
+
+            IPlayerStandalone.Me.player.CardStatus.OnChanged += UpdateList;
+            UpdateList(res.player.CardStatus);
         }
 
         public void UpdateList(CardStatus cs)

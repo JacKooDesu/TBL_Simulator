@@ -6,12 +6,17 @@ using Cysharp.Threading.Tasks;
 namespace TBL.Game.Networking
 {
     using Sys;
+    using Game.Networking;
     /// <summary>
     /// 基本只拿來傳訊
     /// </summary>
     public class NetworkPlayer : NetworkBehaviour, IPlayerStandalone
     {
         public Player player { get; private set; }
+        [SyncVar] bool isReady = false;
+        public bool IsReady => isReady;
+        [Server] public void SetReady() => isReady = true;
+
         [SyncVar] int index;
         public int Index => index;
         public event Action<string> OnCmd;
@@ -25,6 +30,8 @@ namespace TBL.Game.Networking
         {
             player = new(this);
             if (isLocalPlayer) IPlayerStandalone.Me = this;
+
+            Send(SendType.Cmd, new PlayerReadyPacket());
         }
 
         [ClientRpc, Server]

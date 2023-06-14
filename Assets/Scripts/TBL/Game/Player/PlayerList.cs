@@ -24,24 +24,29 @@ namespace TBL.Game
         public PlayerCollection Red = new PlayerCollection();
         public PlayerCollection Green = new PlayerCollection();
 
-        public PlayerList Init(
-            TeamSetting teamSetting, HeroSetting heroSetting,
-            params IPlayerStandalone[] standalones)
+        public PlayerList Init(params IPlayerStandalone[] standalones)
         {
-            var standaloneList = new List<IPlayerStandalone>(standalones).Shuffle();
-            var standaloneQueue = new Queue<IPlayerStandalone>(standaloneList);
+            var list = new List<Player>(standalones.Length);
+            foreach (var s in standalones)
+                list.Add(new(s, true));
 
-            var set = teamSetting.PlayerSets.Find(s => s.PlayerCount == standaloneQueue.Count);
+            players = list;
+            return this;
+        }
+
+        public void SetupTeam(TeamSetting teamSetting, HeroSetting heroSetting)
+        {
+            var pQueue = new Queue<Player>(players.Shuffle());
+
+            var set = teamSetting.PlayerSets.Find(s => s.PlayerCount == players.Count);
             var playerCount = set.PlayerCount;
             var usedHero = new List<int>();
-            var list = new List<Player>();
 
             void SetupTeam(ref PlayerCollection teamCollection, TeamEnum team, int c)
             {
                 for (int i = 0; i < c; ++i)
                 {
-                    var s = standaloneQueue.Dequeue();
-                    var p = new Player(s, true);
+                    var p = pQueue.Dequeue();
                     var id = i;
 
                     p.ProfileStatus.Update(new($"P{id}", id));
@@ -56,7 +61,6 @@ namespace TBL.Game
                     // TODO: Which Player can choose from 2 hero
                     // p.HeroStatus.Update(new HeroStatus());
 
-                    list.Add(p);
                     teamCollection.Add(p);
                 }
             }
@@ -64,9 +68,6 @@ namespace TBL.Game
             SetupTeam(ref Blue, TeamEnum.Blue, set.Blue);
             SetupTeam(ref Red, TeamEnum.Red, set.Red);
             SetupTeam(ref Green, TeamEnum.Green, set.Green);
-
-            players = list;
-            return this;
         }
 
         public Player QueryById(int id) => players.Find(p => p.ProfileStatus.Id == id);

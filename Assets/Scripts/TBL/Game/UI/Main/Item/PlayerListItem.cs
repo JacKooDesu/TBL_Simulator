@@ -39,6 +39,9 @@ namespace TBL.Game.UI.Main
         public void Init(IPlayerStandalone standalone)
         {
             this.player = standalone.player;
+            UpdateCard(player.CardStatus);
+            UpdateHero(player.HeroStatus);
+            UpdateReciver(player.ReceiverStatus.Current());
         }
 
         public void Bind()
@@ -57,6 +60,10 @@ namespace TBL.Game.UI.Main
             blackCount.text = $"{table.Black().Count}";
         }
 
+        void UpdateProfile(ProfileStatus status){
+            // transform.SetSiblingIndex()
+        }
+
         void UpdateHero(HeroStatus status)
         {
             // heroAvatar.
@@ -64,7 +71,8 @@ namespace TBL.Game.UI.Main
 
         void UpdateReciver(ReceiveEnum status)
         {
-            
+            skipBg.color = status.HasFlag(ReceiveEnum.Skipped) ? activeColor : inactiveColor;
+            lockBg.color = status.HasFlag(ReceiveEnum.Locked) ? activeColor : inactiveColor;
         }
     }
 }

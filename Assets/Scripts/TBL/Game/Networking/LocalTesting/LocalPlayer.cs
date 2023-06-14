@@ -12,6 +12,8 @@ namespace TBL.Game.Networking
     public class LocalPlayer : MonoBehaviour, IPlayerStandalone
     {
         public Player player { get; private set; }
+        public bool IsReady { get; private set; } = true;
+        public void SetReady() => IsReady = true;
         int index;
         public int Index => index;
 
@@ -29,8 +31,10 @@ namespace TBL.Game.Networking
         {
             player = new(this);
             if (isLocal) IPlayerStandalone.Me = this;
+            Send(SendType.Cmd, new PlayerReadyPacket());
 
-            MainUIManager.Singleton?.SetupUI(this);
+            // MainUIManager.Singleton?.SetupUI(this);
+            packetHandler.GameStartPacketEvent += _ => MainUIManager.Singleton?.SetupUI(this);
             packetHandler.PlayerStatusPacketEvent += p => player.UpdateStatus(p.Data);
         }
 
@@ -46,7 +50,7 @@ namespace TBL.Game.Networking
 
         public void CmdSend(PacketType type, string data)
         {
-            packetHandler.OnClientPacket(type, data);
+            packetHandler.OnServerPacket(type, data);
         }
 
         public async UniTask Request<T>(PacketType type, string data)

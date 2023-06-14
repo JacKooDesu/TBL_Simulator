@@ -25,13 +25,19 @@ namespace TBL.Game.Networking
 
             switch (type)
             {
+                case PacketType.GameStart:
+                {
+                    data.Deserialize(out GameStartPacket packet);
+                    GameStartPacketEvent(packet);
+                    break;
+                }
+
                 case PacketType.PlayerStatus:
                 {
                     data.Deserialize(out PlayerStatusPacket packet);
                     PlayerStatusPacketEvent(packet);
                     break;
                 }
-
 
                 case PacketType.ChangePhase:
                 {
@@ -46,6 +52,16 @@ namespace TBL.Game.Networking
         {
             if (CustomDeserializer(type, data))
                 return;
+
+            switch (type)
+            {
+                case PacketType.PlayerReady:
+                {
+                    data.Deserialize(out PlayerReadyPacket packet);
+                    PlayerReadyPacketEvent(packet);
+                    break;
+                }
+            }
         }
 
         bool CustomDeserializer(PacketType type, string data)

@@ -9,6 +9,8 @@ namespace TBL.Game.Sys
     public interface IPlayerStandalone
     {
         Player player { get; }
+        bool IsReady { get; }
+        void SetReady();
         /// <summary>
         /// 玩家真正的順位
         /// </summary>

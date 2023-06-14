@@ -42,11 +42,13 @@ namespace TBL.Game.Networking
         // Client
         _CLIENT_ = 1,
         Bundled,
+        GameStart,
         PlayerStatus,
         ChangePhase,
 
         // Server
         _SERVER_ = 1000,
+        PlayerReady,
         FinishedQuest,
 
     }

@@ -49,13 +49,19 @@ namespace TBL.Game.Sys
             deck.Init(deckSetting)
                 .sleeping.AddRange(deck.CardDatas)
                 .Shuffle();
-            players.Init(teamSetting, heroSetting, standalones);
+
+            players.Init(standalones);
+
+            await UniTask.WaitUntil(() => standalones.FirstOrDefault(x => x.IsReady == false) == null);
+
+            players.SetupTeam(teamSetting, heroSetting);
 
             foreach (var p in players.Players)
                 Draw(p, 7);
-
+            
+            Broadcast(new GameStartPacket(), SendType.Rpc);
+            
             currentPlayerIndex = 0;
-
             phaseManager = new(this);
             var ct = gameObject.GetCancellationTokenOnDestroy();
             phaseManager.Run(ct).Forget();
@@ -91,9 +97,11 @@ namespace TBL.Game.Sys
             p.PhaseQuestStatus.FinishQuest(q);
 
         /// <summary>
-        /// 廣播訊息，使用 Target RPC。
+        /// 廣播訊息。
         /// </summary>
-        public void Broadcast(IPacket packet) =>
-            players.Foreach(p => p.PlayerStandalone.Send(SendType.Target, packet));
+        /// <param name="packet"></param>
+        /// <param name="sendType">Default = SendType.Target</param>
+        public void Broadcast(IPacket packet, SendType sendType = SendType.Target) =>
+            players.Foreach(p => p.PlayerStandalone.Send(sendType, packet));
     }
 }
