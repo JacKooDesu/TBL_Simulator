@@ -91,7 +91,7 @@ namespace TBL.Game
 
         public void UpdateStatus(PlayerStatusPacket.StatusData data)
         {
-            foreach (var s in data.ToEnum())
+            foreach (var s in data.ToArray())
                 if (s != null) UpdateStatus(s);
         }
 

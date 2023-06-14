@@ -17,7 +17,7 @@ namespace TBL.Game.Networking
             public SkillStatus? skillStatus;
             public TeamStatus? teamStatus;
             public PhaseQuestStatus? phaseQuestStatus;
-            public IPlayerStatus?[] ToEnum() =>
+            public IPlayerStatus?[] ToArray() =>
                 new IPlayerStatus?[]{
                     profileStatus,
                     cardStatus,

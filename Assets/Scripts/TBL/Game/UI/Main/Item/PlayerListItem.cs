@@ -41,6 +41,7 @@ namespace TBL.Game.UI.Main
             this.player = standalone.player;
             UpdateCard(player.CardStatus);
             UpdateHero(player.HeroStatus);
+            UpdateProfile(player.ProfileStatus);
             UpdateReciver(player.ReceiverStatus.Current());
         }
 
@@ -60,8 +61,11 @@ namespace TBL.Game.UI.Main
             blackCount.text = $"{table.Black().Count}";
         }
 
-        void UpdateProfile(ProfileStatus status){
+        void UpdateProfile(ProfileStatus status)
+        {
             // transform.SetSiblingIndex()
+            // TODO: 尚未定義名稱，此處為測試
+            greenMission.text = status.Name;
         }
 
         void UpdateHero(HeroStatus status)

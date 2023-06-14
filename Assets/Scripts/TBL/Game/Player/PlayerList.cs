@@ -41,13 +41,13 @@ namespace TBL.Game
             var set = teamSetting.PlayerSets.Find(s => s.PlayerCount == players.Count);
             var playerCount = set.PlayerCount;
             var usedHero = new List<int>();
-
+            var iter = 0;
             void SetupTeam(ref PlayerCollection teamCollection, TeamEnum team, int c)
             {
                 for (int i = 0; i < c; ++i)
                 {
                     var p = pQueue.Dequeue();
-                    var id = i;
+                    var id = iter;
 
                     p.ProfileStatus.Update(new($"P{id}", id));
                     p.UpdateStatus(record: new(PlayerStatusType.Team, new TeamStatus(team)));
@@ -62,6 +62,7 @@ namespace TBL.Game
                     // p.HeroStatus.Update(new HeroStatus());
 
                     teamCollection.Add(p);
+                    iter++;
                 }
             }
 

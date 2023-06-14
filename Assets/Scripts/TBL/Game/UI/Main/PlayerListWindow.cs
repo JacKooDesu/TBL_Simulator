@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace TBL.Game.UI.Main
@@ -21,7 +22,9 @@ namespace TBL.Game.UI.Main
             item.Init(res);
             item.Bind();
 
-            item.transform.SetSiblingIndex(res.Index);
+            foreach (var (k, v) in playerItemDict)
+                v.transform.SetSiblingIndex(k.player.ProfileStatus.Id);
+
             playerItemDict.Add(res, item);
         }
     }
