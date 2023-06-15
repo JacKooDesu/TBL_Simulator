@@ -13,8 +13,13 @@ namespace TBL.Game.Networking
             // Regist!
             DeserializerDict.Add(
                 PacketType.FinishedQuest,
-                new(FinishedQuestPacket.Deserialize,
+                new(FinishedQuestPacket.Deserializer,
                     packet => FinishedQuestPacketEvent.Invoke(packet as FinishedQuestPacket))
+            );
+            DeserializerDict.Add(
+                PacketType.PassCard,
+                new(PassCardPacket.Deserializer,
+                    packet => PassCardPacketEvent.Invoke(packet as PassCardPacket))
             );
         }
 
@@ -26,25 +31,25 @@ namespace TBL.Game.Networking
             switch (type)
             {
                 case PacketType.GameStart:
-                {
-                    data.Deserialize(out GameStartPacket packet);
-                    GameStartPacketEvent(packet);
-                    break;
-                }
+                    {
+                        data.Deserialize(out GameStartPacket packet);
+                        GameStartPacketEvent(packet);
+                        break;
+                    }
 
                 case PacketType.PlayerStatus:
-                {
-                    data.Deserialize(out PlayerStatusPacket packet);
-                    PlayerStatusPacketEvent(packet);
-                    break;
-                }
+                    {
+                        data.Deserialize(out PlayerStatusPacket packet);
+                        PlayerStatusPacketEvent(packet);
+                        break;
+                    }
 
                 case PacketType.ChangePhase:
-                {
-                    data.Deserialize(out ChangePhasePacket packet);
-                    ChangePhasePacketEvent(packet);
-                    break;
-                }
+                    {
+                        data.Deserialize(out ChangePhasePacket packet);
+                        ChangePhasePacketEvent(packet);
+                        break;
+                    }
             }
         }
 
@@ -56,11 +61,11 @@ namespace TBL.Game.Networking
             switch (type)
             {
                 case PacketType.PlayerReady:
-                {
-                    data.Deserialize(out PlayerReadyPacket packet);
-                    PlayerReadyPacketEvent(packet);
-                    break;
-                }
+                    {
+                        data.Deserialize(out PlayerReadyPacket packet);
+                        PlayerReadyPacketEvent(packet);
+                        break;
+                    }
             }
         }
 

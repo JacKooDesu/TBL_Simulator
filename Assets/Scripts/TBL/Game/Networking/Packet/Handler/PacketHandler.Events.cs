@@ -11,6 +11,7 @@ namespace TBL.Game.Networking
 
         #region Server
         public event Action<PlayerReadyPacket> PlayerReadyPacketEvent = _ => { };
+        public event Action<PassCardPacket> PassCardPacketEvent = _ => { };
         public event Action<FinishedQuestPacket> FinishedQuestPacketEvent = _ => { };
         #endregion
     }

@@ -1057,6 +1057,7 @@ GameObject:
   - component: {fileID: 1914363204964902556}
   - component: {fileID: 1914363204964902558}
   - component: {fileID: 532617454452799948}
+  - component: {fileID: 8132200733373977351}
   m_Layer: 5
   m_Name: Player List Item
   m_TagString: Untagged
@@ -1179,6 +1180,18 @@ MonoBehaviour:
   inactiveColor: {r: 0.29803923, g: 0.29803923, b: 0.29803923, a: 1}
   handCardCount: {fileID: 6807065229822424674}
   greenMission: {fileID: 6696219990069790054}
+--- !u!225 &8132200733373977351
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1914363204964902554}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &1914363205059344087
 GameObject:
   m_ObjectHideFlags: 0

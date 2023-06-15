@@ -31,6 +31,7 @@ namespace TBL.Game.Networking
         {
             player = new(this);
             if (isLocal) IPlayerStandalone.Me = this;
+            IPlayerStandalone.Regist(this);
             Send(SendType.Cmd, new PlayerReadyPacket());
 
             // MainUIManager.Singleton?.SetupUI(this);
@@ -63,7 +64,7 @@ namespace TBL.Game.Networking
             onCmd -= awaiter;
         }
 
-        public void Send(SendType sendType, IPacket packet)
+        public void Send<P>(SendType sendType, P packet) where P : IPacket
         {
             if (isClient && sendType != SendType.Cmd)
                 sendType = SendType.Cmd;
@@ -79,5 +80,6 @@ namespace TBL.Game.Networking
             };
             action(packet.Type(), data);
         }
+
     }
 }

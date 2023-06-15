@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
@@ -9,7 +7,10 @@ namespace TBL.UI.GameScene
 {
     using TBL.Game;
     using CardEnum = TBL.Game.CardEnum;
-    public class CardListItem : MonoBehaviour
+    using Game.UI;
+    using System;
+
+    public class CardListItem : MonoBehaviour, ISelectable<CardEnum.Property>
     {
         public Text nameTextUI;
         public int cardID;
@@ -17,12 +18,17 @@ namespace TBL.UI.GameScene
 
         NetCanvas.GameScene netCanvas;
 
-        public UnityEvent<int> SelectEvent { get; } = new();
+        // public UnityEvent<int> SelectEvent { get; } = new();
         [SerializeField] Button button;
+
+        public SelectableType Type => SelectableType.Card;
+        public UnityEvent<CardEnum.Property> OnSelectEvent { get; } = new();
+        public CardEnum.Property data => (CardEnum.Property)cardID;
 
         public void SetUI(int id)
         {
             var property = (CardEnum.Property)id;
+            cardID = id;
             var color = property.ConvertColor();
             var function = property.ConvertFunction();
             var type = property.ConvertType();
@@ -35,9 +41,10 @@ namespace TBL.UI.GameScene
             };
 
             nameTextUI.text = function.ToDescription();
-            button?.onClick.AddListener(() => SelectEvent.Invoke(id));
+            button?.onClick.AddListener(() => OnSelectEvent.Invoke(property));
         }
 
+        #region  OBSLETE
         public void SetUI(ObsleteCard.CardSetting setting)
         {
             cardID = setting.ID;
@@ -109,6 +116,7 @@ namespace TBL.UI.GameScene
 
             GetComponent<TipTrigger>().content = tipContent;
         }
+        #endregion
     }
 
 }

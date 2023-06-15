@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Cysharp.Threading.Tasks;
 using System.Threading;
+using System;
 
 namespace TBL.Game.UI.Main
 {
@@ -34,14 +35,48 @@ namespace TBL.Game.UI.Main
         void BindEvent(PhaseQuestStatus status)
         {
             if (status.Quest.Contains(QuestType.DrawCard))
+            {
                 draw.onClick.ReBind(Draw);
+                draw.interactable = true;
+            }
+            else
+                draw.interactable = false;
 
-            // if(status.Quest.Contains(QuestType.PassCard))
+
+            MainUIManager.Singleton.OnChangeSelectCard.RemoveListener(UpdatePassBtnState);
+            if (status.Quest.Contains(QuestType.PassCard))
+            {
+                MainUIManager.Singleton.OnChangeSelectCard.AddListener(UpdatePassBtnState);
+                UpdatePassBtnState(0);
+            }
         }
 
         void Draw() =>
             IPlayerStandalone.Me.Send(SendType.Cmd, new FinishedQuestPacket(QuestType.DrawCard));
 
+        void UpdatePassBtnState(CardEnum.Property card)
+        {
+            pass.interactable = card != 0;
+            Predicate<ProfileStatus> canPassCheck;
+            if (card.HasFlag(CardEnum.Property.Direct))
+                canPassCheck = s => s.Id != IPlayerStandalone.MyPlayer.ProfileStatus.Id;
+            else
+            {
+                var count = IPlayerStandalone.Standalones.Count - 1;
+                var myId = IPlayerStandalone.Me.player.ProfileStatus.Id;
+                var next = myId + 1 > count ? 0 : myId + 1;
+                var last = myId - 1 < 0 ? count : myId - 1;
+                canPassCheck = s =>
+                    s.Id == next ||
+                    s.Id == last;
+            }
+
+            pass.onClick.ReBind(() =>
+                MainUIManager.Singleton.PlayerListWindow.EnterPlayerSelect(
+                    p => canPassCheck(p.player.ProfileStatus),
+                    target => IPlayerStandalone.Me.Send<PassCardPacket>(SendType.Cmd, new(card, target))),
+                    true);
+        }
         void PassCard() { }
 
         void ResetTimer(ChangePhasePacket packet)

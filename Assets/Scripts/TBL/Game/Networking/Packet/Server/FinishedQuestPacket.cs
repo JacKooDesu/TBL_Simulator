@@ -15,8 +15,8 @@ namespace TBL.Game.Networking
 
         public PacketType Type() => PacketType.FinishedQuest;
 
-        PacketHandler.Deserializer Deserializer = Deserialize;
-        public static bool Deserialize(string data, out IPacket packet)
+        public static PacketHandler.Deserializer Deserializer => Deserialize;
+        static bool Deserialize(string data, out IPacket packet)
         {
             packet = null;
             if (Int32.TryParse(data, out var questInt))

@@ -50,7 +50,7 @@ namespace TBL.Game.Networking
         _SERVER_ = 1000,
         PlayerReady,
         FinishedQuest,
-
+        PassCard,
     }
 
     public interface IPacket

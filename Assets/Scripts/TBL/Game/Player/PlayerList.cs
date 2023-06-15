@@ -34,9 +34,14 @@ namespace TBL.Game
             return this;
         }
 
-        public void SetupTeam(TeamSetting teamSetting, HeroSetting heroSetting)
+        public void SetupTeam(TeamSetting teamSetting, HeroSetting heroSetting, bool withoutShuffle = false)
         {
-            var pQueue = new Queue<Player>(players.Shuffle());
+            // FIXME: 暫時將玩家名稱設定
+            for (int i = 0; i < players.Count; ++i)
+                players[i].ProfileStatus.Update(new($"P{i}", i));
+
+            List<Player> pList = withoutShuffle ? new(players) : players;
+            var pQueue = new Queue<Player>(pList.Shuffle());
 
             var set = teamSetting.PlayerSets.Find(s => s.PlayerCount == players.Count);
             var playerCount = set.PlayerCount;
@@ -49,7 +54,7 @@ namespace TBL.Game
                     var p = pQueue.Dequeue();
                     var id = iter;
 
-                    p.ProfileStatus.Update(new($"P{id}", id));
+                    // p.ProfileStatus.Update(new($"P{id}", id));
                     p.UpdateStatus(record: new(PlayerStatusType.Team, new TeamStatus(team)));
                     // p.TeamStatus.Update(team);
                     // p.UpdateStatus(new ProfileStatus());

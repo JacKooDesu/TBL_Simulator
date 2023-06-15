@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace TBL.Game.UI.Main
 {
@@ -10,7 +11,6 @@ namespace TBL.Game.UI.Main
         [SerializeField] TBL.UI.GameScene.CardListItem prefab;
 
         [SerializeField] Transform content;
-        public int SelectId { get; private set; }
 
         public void Setup(IPlayerStandalone res)
         {
@@ -32,8 +32,8 @@ namespace TBL.Game.UI.Main
                 // var tempCard = CardSetting.IdToCard(id);
                 var ui = Instantiate(prefab, content);
                 ui.SetUI(id);
-                ui.SelectEvent.AddListener(id => SelectId = id);
-                ui.SelectEvent.AddListener(id => Debug.Log(id));
+                ui.OnSelectEvent.AddListener(c => Debug.Log(c));
+                ui.OnSelectEvent.AddListener(c => MainUIManager.Singleton.SetSelect(ui));
             }
         }
     }

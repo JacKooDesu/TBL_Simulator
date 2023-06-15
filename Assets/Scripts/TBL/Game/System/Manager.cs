@@ -54,13 +54,13 @@ namespace TBL.Game.Sys
 
             await UniTask.WaitUntil(() => standalones.FirstOrDefault(x => x.IsReady == false) == null);
 
-            players.SetupTeam(teamSetting, heroSetting);
+            players.SetupTeam(teamSetting, heroSetting, true);
 
             foreach (var p in players.Players)
                 Draw(p, 7);
-            
+
             Broadcast(new GameStartPacket(), SendType.Rpc);
-            
+
             currentPlayerIndex = 0;
             phaseManager = new(this);
             var ct = gameObject.GetCancellationTokenOnDestroy();

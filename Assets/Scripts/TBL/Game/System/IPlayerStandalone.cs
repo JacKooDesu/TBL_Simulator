@@ -1,5 +1,7 @@
 using UnityEngine;
 using System;
+using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using Mirror;
 using Cysharp.Threading.Tasks;
 
@@ -17,7 +19,13 @@ namespace TBL.Game.Sys
         int Index { get; }
         PacketHandler PacketHandler { get; }
         void Initialize();
-        void Send(SendType sendType, IPacket packet);
+        void Send<T>(SendType sendType, T packet) where T : IPacket;
+
+
         public static IPlayerStandalone Me { get; set; }
+        public static Player MyPlayer => Me?.player;
+        public static ReadOnlyCollection<IPlayerStandalone> Standalones => standalones.AsReadOnly();
+        private static List<IPlayerStandalone> standalones = new();
+        public static void Regist(IPlayerStandalone p) => standalones.Add(p);
     }
 }

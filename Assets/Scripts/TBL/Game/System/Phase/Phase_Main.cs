@@ -4,8 +4,8 @@ namespace TBL.Game.Sys
     public class Phase_Main : PhaseBase
     {
         protected override PhaseType PhaseType => PhaseType.Main;
-        protected override float time => 5f;
-        const PhaseQuestStatus.QuestType QUEST = PhaseQuestStatus.QuestType.SelectCard;
+        protected override float time => 20f;
+        const PhaseQuestStatus.QuestType QUEST = PhaseQuestStatus.QuestType.PassCard;
 
         public override void Enter(Manager manager, object parameter = null)
         {
