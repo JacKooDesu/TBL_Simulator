@@ -40,12 +40,19 @@ namespace TBL.Utils
             Add(new(EventTriggerType.Drag, e => sr.OnDrag(e as PointerEventData)));
         }
 
-        public SmartEventTrigger Add(TriggerSetting setting)
+        public SmartEventTrigger Add(TriggerSetting setting, bool asDestroyCheck = false)
         {
+            Action<BaseEventData> action = asDestroyCheck ?
+            (_) =>
+            {
+                setting.action(_);
+                ForceDestroy();
+            }
+            : setting.action;
 
             EventTrigger.Entry entry = new EventTrigger.Entry();
             entry.eventID = setting.type;
-            entry.callback.AddListener(setting.action.Invoke);
+            entry.callback.AddListener(action.Invoke);
             et.triggers.Add(entry);
 
             return this;
