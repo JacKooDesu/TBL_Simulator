@@ -19,12 +19,14 @@ namespace TBL.Game.UI.Main
 
         ISelectable currentSelect;
         public UnityEvent<CardEnum.Property> OnChangeSelectCard { get; } = new();
+        public UnityEvent<ISelectable> OnChangeSelect { get; } = new();
         bool hasSelectFlag = false;
 
         public void SetSelect(ISelectable selectable)
         {
             hasSelectFlag = true;
             currentSelect = selectable;
+            OnChangeSelect.Invoke(selectable);
             OnChangeSelectCard.Invoke((selectable as ISelectable<CardEnum.Property>)?.data ?? 0);
         }
 

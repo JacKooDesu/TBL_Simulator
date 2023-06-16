@@ -75,7 +75,7 @@ namespace TBL.Game.UI.Main
                 MainUIManager.Singleton.PlayerListWindow.EnterPlayerSelect(
                     p => canPassCheck(p.player.ProfileStatus),
                     target => IPlayerStandalone.Me.Send<PassCardPacket>(SendType.Cmd, new(card, target))),
-                    true);
+                true);
         }
         void PassCard() { }
 

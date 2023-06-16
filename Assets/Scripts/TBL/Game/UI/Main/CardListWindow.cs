@@ -1,16 +1,24 @@
 using UnityEngine;
 using UnityEngine.Events;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace TBL.Game.UI.Main
 {
     using UI;
     using Sys;
     using Utils;
+    using TBL.UI.GameScene;
     public class CardListWindow : Window, ISetupWith<IPlayerStandalone>
     {
-        [SerializeField] TBL.UI.GameScene.CardListItem prefab;
+        [SerializeField] CardListItem prefab;
+        List<CardListItem> items = new();
 
         [SerializeField] Transform content;
+
+        [Header("Visual Setting")]
+        [SerializeField] Color onSelectColor = new Color(1, 1, .2f, 1);
+        [SerializeField] GameObject selector;
 
         public void Setup(IPlayerStandalone res)
         {
@@ -19,10 +27,14 @@ namespace TBL.Game.UI.Main
 
             IPlayerStandalone.Me.player.CardStatus.OnChanged += UpdateList;
             UpdateList(res.player.CardStatus);
+
+            BindSelector();
         }
 
         public void UpdateList(CardStatus cs)
         {
+            selector.SetActive(false);
+            
             var cards = cs.Hand;
 
             content.DestroyChildren();
@@ -34,7 +46,25 @@ namespace TBL.Game.UI.Main
                 ui.SetUI(id);
                 ui.OnSelectEvent.AddListener(c => Debug.Log(c));
                 ui.OnSelectEvent.AddListener(c => MainUIManager.Singleton.SetSelect(ui));
+
+                items.Add(ui);
             }
+        }
+
+        void BindSelector()
+        {
+            MainUIManager.Singleton.OnChangeSelect.AddListener(
+                s =>
+                {
+                    if (items.TryGet(x => (x as ISelectable) == s, out var target))
+                    {
+                        selector.SetActive(true);
+                        selector.transform.position = target.transform.position;
+                    }
+                    else
+                        selector.SetActive(false);
+                }
+            );
         }
     }
 }

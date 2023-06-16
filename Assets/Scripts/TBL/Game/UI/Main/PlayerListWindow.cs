@@ -1,8 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System;
+using System.Threading;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using Cysharp.Threading.Tasks;
 
 namespace TBL.Game.UI.Main
 {
@@ -16,6 +19,9 @@ namespace TBL.Game.UI.Main
         [Header("顏色設定")]
         [SerializeField] Color roundHostColor;
         [SerializeField] Color cardPassingColor;
+
+        [Header("Visual Setting")]
+        [SerializeField] float blinkTime = .8f;
 
         Dictionary<IPlayerStandalone, PlayerListItem> playerItemDict = new();
 
@@ -42,9 +48,11 @@ namespace TBL.Game.UI.Main
         {
             condition = condition ?? (_ => true);
             List<SmartEventTrigger> triggers = new(playerItemDict.Count);
+            CancellationTokenSource cts = new();
             Action<int> action = _ =>
             {
                 nextAction?.Invoke(_);
+                cts.Cancel();
                 triggers.ForEach(t => t.ForceDestroy());
             };
             foreach (var (standalone, ui) in playerItemDict)
@@ -57,6 +65,7 @@ namespace TBL.Game.UI.Main
                             _ => action(standalone.player.ProfileStatus.Id)),
                         true);
                     triggers.Add(trigger);
+                    ui.GetComponent<Image>().Blink(Color.yellow * .5f, blinkTime, cts.Token, true).Forget();
                 }
             }
         }
