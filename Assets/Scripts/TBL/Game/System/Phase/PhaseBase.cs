@@ -45,6 +45,8 @@ namespace TBL.Game.Sys
             new Dictionary<PhaseType, PhaseBase>()
             {
                 {PhaseType.Draw, new Phase_Draw()},
+                {PhaseType.Passing, new Phase_Passing()},
+                {PhaseType.End, new Phase_End()},
                 {PhaseType.Main, new Phase_Main()},
             }
         );

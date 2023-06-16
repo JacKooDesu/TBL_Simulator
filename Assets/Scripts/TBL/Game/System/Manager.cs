@@ -1,9 +1,11 @@
 using System;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
 using Cysharp.Threading.Tasks;
 namespace TBL.Game.Sys
 {
+    using Utils;
     using Setting;
     using Networking;
     using NetworkManager = Networking.NetworkRoomManager;
@@ -27,6 +29,7 @@ namespace TBL.Game.Sys
         public Player CurrentPlayer => Players[currentPlayerIndex];
 
         PhaseManager phaseManager;
+        public PhaseManager PhaseManager => phaseManager;
 
         async void Start()
         {
@@ -79,8 +82,14 @@ namespace TBL.Game.Sys
         public void DiscardTableAll(Player p) =>
             DiscardTable(p, p.CardStatus.Table.ToArray());
 
+        public void PassCard(Player p, Player target, CardEnum.Property card)
+        {
+
+        }
+
         public void AddQuest(Player p, QuestType q)
         {
+            AddQuest(p, q, new());
             p.PhaseQuestStatus.AddQuest(q);
             Action<FinishedQuestPacket> check = _ => { };
             check = packet =>
@@ -92,6 +101,11 @@ namespace TBL.Game.Sys
                 p.PlayerStandalone.PacketHandler.FinishedQuestPacketEvent -= check;
             };
             p.PlayerStandalone.PacketHandler.FinishedQuestPacketEvent += check;
+        }
+        public void AddQuest(Player p, QuestType q, UnityEvent listener)
+        {
+            p.PhaseQuestStatus.AddQuest(q);
+            listener.AutoRemoveListener(() => FinishQuest(p, q));
         }
         public void FinishQuest(Player p, QuestType q) =>
             p.PhaseQuestStatus.FinishQuest(q);

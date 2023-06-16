@@ -1,0 +1,31 @@
+{
+    "Phase Simple":{
+        "prefix": "PHASE",
+        "body": [
+            "namespace TBL.Game.Sys",
+            "{",
+            "public class Phase_${name} : PhaseBase",
+            "{",
+            "protected override PhaseType PhaseType => PhaseType.${type};",
+            "protected override float time => ${time};",
+            "",
+            "public override void Enter(Manager manager, object parameter = null)",
+            "{",
+            "base.Enter(manager);",
+            "}",
+            "",
+            "public override bool Update(float dt) =>",
+            "Check() & base.Update(dt);",
+            "",
+            "bool Check() => true;",
+            "",
+            "public override void Exit()",
+            "{",
+            "",
+            "}",
+            "}",
+            "}",
+
+        ]
+    }
+}

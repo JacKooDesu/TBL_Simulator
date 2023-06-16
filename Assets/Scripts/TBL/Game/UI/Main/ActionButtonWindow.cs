@@ -89,7 +89,7 @@ namespace TBL.Game.UI.Main
 
             time = Phase.Get(packet.PhaseType).Time;
 
-            UpdateTime(ct).Forget();
+            UpdateTime(cts.Token).Forget();
         }
 
         async UniTask UpdateTime(CancellationToken ct)

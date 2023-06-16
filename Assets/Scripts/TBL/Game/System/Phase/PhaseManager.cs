@@ -11,7 +11,7 @@ namespace TBL.Game.Sys
 {
     public class PhaseManager
     {
-        record PhaseData(PhaseType type, System.Object parameter = null);
+        public record PhaseData(PhaseType type, System.Object parameter = null);
         readonly PhaseData[] PHASE_FLOW = {
             // new(PhaseType.Draw),
             new(PhaseType.Main),
@@ -43,7 +43,7 @@ namespace TBL.Game.Sys
                 current = Phase.Get(flow.Peek().type);
                 var dt = 0f;
 
-                current.Enter(manager);
+                current.Enter(manager, flow.Peek().parameter);
                 do
                 {
                     await UniTask.Yield(PlayerLoopTiming.EarlyUpdate);
@@ -60,8 +60,8 @@ namespace TBL.Game.Sys
                     continue;
                 else
                 {
-                    current.Exit();
                     flow.Pop();
+                    current.Exit();
                 }
 
                 if (flow.Count == 0)
@@ -73,5 +73,8 @@ namespace TBL.Game.Sys
         }
 
         public void Insert(PhaseType p, System.Object parameter = null) => flow.Push(new(p, parameter));
+
+        public void InsertRange(params PhaseData[] phaseDatas) =>
+            phaseDatas.Reverse().ToList().ForEach(data => flow.Push(data));
     }
 }

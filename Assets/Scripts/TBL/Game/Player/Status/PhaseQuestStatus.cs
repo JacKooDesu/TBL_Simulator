@@ -16,6 +16,7 @@ namespace TBL.Game
             DrawCard,
             SelectCard,
             PassCard,
+            AskRecieve,
             ReceiveCard
         }
         [JsonProperty]
