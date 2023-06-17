@@ -2,11 +2,13 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Linq;
+using Cysharp.Threading.Tasks;
 
 namespace TBL.Game.UI.Main
 {
     using TBL.Game;
     using Sys;
+    using TBL.Utils;
     public class PlayerListItem : MonoBehaviour
     {
         [SerializeField] Player player;
@@ -50,6 +52,7 @@ namespace TBL.Game.UI.Main
             player.CardStatus.OnChanged += UpdateCard;
             player.HeroStatus.OnChanged += UpdateHero;
             player.ReceiverStatus.OnChanged += UpdateReciver;
+            player.PhaseQuestStatus.OnChanged += UpdateQuest;
         }
 
         void UpdateCard(CardStatus status)
@@ -77,6 +80,16 @@ namespace TBL.Game.UI.Main
         {
             skipBg.color = status.HasFlag(ReceiveEnum.Skipped) ? activeColor : inactiveColor;
             lockBg.color = status.HasFlag(ReceiveEnum.Locked) ? activeColor : inactiveColor;
+        }
+
+        void UpdateQuest(PhaseQuestStatus status)
+        {
+            if (status.Quest.Contains(PhaseQuestStatus.QuestType.AskRecieve))
+            {
+                GetComponent<Image>().Blink(
+                    Color.green * .5f, 1f,new(), true
+                );
+            }
         }
     }
 }

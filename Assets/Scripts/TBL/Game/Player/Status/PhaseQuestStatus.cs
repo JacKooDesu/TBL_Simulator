@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 namespace TBL.Game
 {
     using Utils;
-    [Serializable]
+    [JsonObject, Serializable]
     public class PhaseQuestStatus : IPlayerStatus<PhaseQuestStatus>
     {
         public PhaseQuestStatus() { }

@@ -22,6 +22,7 @@ namespace TBL.Utils
         public static UniTask Blink<T>(this T graphic, Color color, float time, CancellationToken ct, bool loop = false)
         where T : Graphic
         {
+            DOTween.Kill(graphic, true);
             var origin = graphic.color;
             var tween = DOTween.To(
                 () => graphic.color,

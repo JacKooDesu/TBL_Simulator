@@ -4,7 +4,7 @@ namespace TBL.Game.Networking
     public class NewRoundPacket : IPacket
     {
         public PacketType Type() => PacketType.NewRound;
-        public int HostId { get; private set; }
+        public int HostId { get; init; }
 
         public bool Serialize(ref string data)
         {

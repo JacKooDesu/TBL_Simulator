@@ -20,6 +20,7 @@ namespace TBL.Game.Networking
         public List<LocalPlayer> Players => players;
         // LocalPlayer current => Sys.IPlayerStandalone.Me as LocalPlayer;
 
+#if UNITY_EDITOR
         [ContextMenu("Init")]
         void InitPlayer()
         {
@@ -38,6 +39,7 @@ namespace TBL.Game.Networking
                 iter++;
             }
         }
+#endif
 
         void Start()
         {

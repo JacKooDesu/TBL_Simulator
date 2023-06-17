@@ -33,7 +33,7 @@ namespace TBL.Game.UI.Main
             var standalones = IPlayerStandalone.Standalones.AsEnumerable().OrderBy(x => x.player.ProfileStatus.Id);
             playerItemDict = new(standalones.Count());
             content.DestroyChildren();
-            
+
             foreach (var s in standalones)
             {
                 var item = Instantiate(prefab, content);
@@ -45,6 +45,8 @@ namespace TBL.Game.UI.Main
 
                 playerItemDict.Add(s, item);
             }
+
+            IPlayerStandalone.Me.PacketHandler.NewRoundPacketEvent += UpdateRoundHostPlayer;
         }
 
         /// <summary>
@@ -78,6 +80,17 @@ namespace TBL.Game.UI.Main
                     ui.GetComponent<Image>().Blink(Color.yellow * .5f, blinkTime, cts.Token, true).Forget();
                 }
             }
+        }
+
+        void UpdateRoundHostPlayer(Networking.NewRoundPacket packet)
+        {
+            var target = playerItemDict.Keys
+                          .ToList()
+                          .Find(x => x.player.ProfileStatus.Id == packet.HostId);
+
+            playerItemDict[target].GetComponent<Image>().Blink(
+                Color.red * .4f, 1f, gameObject.GetCancellationTokenOnDestroy(), true
+            );
         }
     }
 }

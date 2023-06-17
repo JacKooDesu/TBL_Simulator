@@ -75,8 +75,13 @@ namespace TBL.Game.Sys
             currentPlayerIndex++;
             if (currentPlayerIndex >= players.Players.Count)
                 currentPlayerIndex = 0;
-            
+
             phaseManager.ResetFlow();
+
+            Broadcast(
+                new NewRoundPacket { HostId = CurrentPlayer.ProfileStatus.Id },
+                SendType.Target
+            );
         }
 
         public void Draw(Player p, int count) =>
