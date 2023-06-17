@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/Remake/LocalTest.unity
+    guid: ff514858b9ac477499c88db579a3d3c5
+  - enabled: 1
     path: Assets/Scenes/OfflineScene.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   - enabled: 1

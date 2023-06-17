@@ -1,0 +1,43 @@
+name: Build 🥖😭🌭
+
+on:
+  schedule:
+    # 分 時 日 月 星期幾
+    - cron: '0 4 * * 1,3,5'
+
+jobs:
+  build:
+    name: Build Project
+    runs-on: ubuntu-latest
+    steps:
+      # 查看repo
+      - name: Checkout repo
+        uses: actions/checkout@v2
+        with:
+          lfs: true # 使用 LFS
+
+      # (可選) Cache可以讓你之後Build更快
+      - name: Cache
+        uses: actions/cache@v2
+        with:
+          path: Library
+          key: Library-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+          restore-keys: |
+            Library-
+
+      # 用Game-CI Builder建置專案
+      - name: Build project
+        uses: game-ci/unity-builder@v2
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          targetPlatform: StandaloneWindows64
+
+      # 輸出成artifact
+      - uses: actions/upload-artifact@v2
+        with:
+          name: Build
+          path: build
+          retention-days: 2     # 幾天後會刪除，這邊是兩天
