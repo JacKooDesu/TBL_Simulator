@@ -1,6 +1,7 @@
 name: Build 🥖😭🌭
 
 on:
+  workflow_dispatch: {}
   schedule:
     # 分 時 日 月 星期幾
     - cron: '0 4 * * 1,3,5'
