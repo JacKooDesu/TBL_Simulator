@@ -23,12 +23,12 @@ namespace TBL.Game.Hero
                     await Task.CompletedTask;
                     return new SkillActionData(skill: 0);
                 },
-                action = async (_) =>
-                {
-                    playerStatus.DrawCard(2);
-                    playerStatus.CmdChangeHeroState(false);
-                    return true;
-                },
+                // action = async (_) =>
+                // {
+                //     playerStatus.DrawCard(2);
+                //     playerStatus.CmdChangeHeroState(false);
+                //     return true;
+                // },
                 checker = () =>
                 {
                     var currentAction = manager.Judgement.currentCardAction;
@@ -278,25 +278,25 @@ namespace TBL.Game.Hero
 
                     return skillAction;
                 },
-                action = async (_) =>
-                {
-                    var target = manager.players[_.target];
-                    manager.TargetLogAll(
-                        new LogBase(
-                            $"玩家 {playerStatus.playerIndex} ({playerStatus.playerName}) 為 {playerStatus.Team.name} 陣營",
-                            true,
-                            false)
-                    );
+                // action = async (_) =>
+                // {
+                //     var target = manager.players[_.target];
+                //     manager.TargetLogAll(
+                //         new LogBase(
+                //             $"玩家 {playerStatus.playerIndex} ({playerStatus.playerName}) 為 {playerStatus.Team.name} 陣營",
+                //             true,
+                //             false)
+                //     );
 
-                    manager.TargetLogAll(
-                        new LogBase(
-                            $"玩家 {target.playerIndex} ({target.playerName}) 為 {target.Team.name} 陣營",
-                            true,
-                            false)
-                    );
+                //     manager.TargetLogAll(
+                //         new LogBase(
+                //             $"玩家 {target.playerIndex} ({target.playerName}) 為 {target.Team.name} 陣營",
+                //             true,
+                //             false)
+                //     );
 
-                    return true;
-                },
+                //     return true;
+                // },
                 checker = () =>
                 {
                     if (skills[2].limited)

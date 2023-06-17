@@ -14,7 +14,7 @@ public class ThreadTest : MonoBehaviour
     Action<MyClass> myclassAction;
    public UnityEngine.UI.Button btn;
 
-    private async void Start()
+    private void Start()
     {
         cs = new CancellationTokenSource();
         // thread = new Thread(Test);
