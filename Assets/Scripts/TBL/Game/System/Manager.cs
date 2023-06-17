@@ -62,7 +62,7 @@ namespace TBL.Game.Sys
             foreach (var p in players.Players)
                 Draw(p, 7);
 
-            Broadcast(new GameStartPacket(), SendType.Rpc);
+            Broadcast(new GameStartPacket(), SendType.Target);
 
             phaseManager = new(this);
             NewRound();

@@ -27,14 +27,24 @@ namespace TBL.Game.UI.Main
 
         public void Setup(IPlayerStandalone res)
         {
-            var item = Instantiate(prefab, content);
-            item.Init(res);
-            item.Bind();
+            if (res != IPlayerStandalone.Me)
+                return;
 
-            foreach (var (k, v) in playerItemDict)
-                v.transform.SetSiblingIndex(k.player.ProfileStatus.Id);
+            var standalones = IPlayerStandalone.Standalones.AsEnumerable().OrderBy(x => x.player.ProfileStatus.Id);
+            playerItemDict = new(standalones.Count());
+            content.DestroyChildren();
+            
+            foreach (var s in standalones)
+            {
+                var item = Instantiate(prefab, content);
+                item.Init(res);
+                item.Bind();
 
-            playerItemDict.Add(res, item);
+                // foreach (var (k, v) in playerItemDict)
+                //     v.transform.SetSiblingIndex(k.player.ProfileStatus.Id);
+
+                playerItemDict.Add(s, item);
+            }
         }
 
         /// <summary>

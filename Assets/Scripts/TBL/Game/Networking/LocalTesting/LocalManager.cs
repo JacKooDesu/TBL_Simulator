@@ -63,11 +63,12 @@ namespace TBL.Game.Networking
 
         void SwitchPlayer(int index)
         {
-            Sys.IPlayerStandalone.Me = players[index];
-            // if (current != null)
-            //     current.gameObject.SetActive(false);
-            // current = players[index];
-            // current.gameObject.SetActive(true);
+            var target = players[index];
+            Debug.Log($"Switch Player:{Sys.IPlayerStandalone.Me} -> {target}");
+            Sys.IPlayerStandalone.Me = target;
+
+            UI.Main.MainUIManager.Singleton.SetupUI(target);
+            target.player.ForceUpdateAll();
         }
     }
 }

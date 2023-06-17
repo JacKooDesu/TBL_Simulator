@@ -38,6 +38,7 @@ namespace TBL.Game.UI.Main
 
         public void SetupUI(IPlayerStandalone standalone)
         {
+            SetSelect(null);
             foreach (var ui in UIs)
                 ui.Setup(standalone);
         }

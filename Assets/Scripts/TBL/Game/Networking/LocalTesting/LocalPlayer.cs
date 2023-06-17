@@ -35,7 +35,8 @@ namespace TBL.Game.Networking
             Send(SendType.Cmd, new PlayerReadyPacket());
 
             // MainUIManager.Singleton?.SetupUI(this);
-            packetHandler.GameStartPacketEvent += _ => MainUIManager.Singleton?.SetupUI(this);
+            if (isLocal)
+                packetHandler.GameStartPacketEvent += _ => MainUIManager.Singleton?.SetupUI(this);
             packetHandler.PlayerStatusPacketEvent += p => player.UpdateStatus(p.Data);
         }
 

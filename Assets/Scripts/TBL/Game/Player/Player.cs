@@ -99,5 +99,9 @@ namespace TBL.Game
         {
 
         }
+
+        #region  DEBUG
+        public void ForceUpdateAll() => UpdateStatuses(StatusList.ToArray());
+        #endregion
     }
 }

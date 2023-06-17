@@ -22,12 +22,12 @@ namespace TBL.Game
 
         public void Update(HeroStatus value)
         {
-            throw new NotImplementedException();
+            // throw new NotImplementedException();
         }
 
         public void Update<S>(S status) where S : IPlayerStatus<HeroStatus>
         {
-            throw new NotImplementedException();
+            // throw new NotImplementedException();
         }
 
         public void Update(IPlayerStatus value) =>
