@@ -27,5 +27,10 @@ namespace TBL.Game.Sys
         public static ReadOnlyCollection<IPlayerStandalone> Standalones => standalones.AsReadOnly();
         private static List<IPlayerStandalone> standalones = new();
         public static void Regist(IPlayerStandalone p) => standalones.Add(p);
+
+#if UNITY_EDITOR
+        [RuntimeInitializeOnLoadMethod]
+        private static void ClearStatic() => standalones = new();
+#endif
     }
 }
