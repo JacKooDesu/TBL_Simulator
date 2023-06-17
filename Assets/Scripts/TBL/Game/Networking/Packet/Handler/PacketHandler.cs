@@ -21,6 +21,16 @@ namespace TBL.Game.Networking
                 new(PassCardPacket.Deserializer,
                     packet => PassCardPacketEvent.Invoke(packet as PassCardPacket))
             );
+            DeserializerDict.Add(
+                PacketType.AcceptCard,
+                new(AcceptCardPacket.Deserializer,
+                    packet => AcceptCardPacketEvent(packet as AcceptCardPacket))
+            );
+            DeserializerDict.Add(
+                PacketType.RejectCard,
+                new(RejectCardPacket.Deserializer,
+                    packet => RejectCardPacketEvent(packet as RejectCardPacket))
+            );
         }
 
         public void OnClientPacket(PacketType type, string data)

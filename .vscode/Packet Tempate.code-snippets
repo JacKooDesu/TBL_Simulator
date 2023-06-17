@@ -1,0 +1,19 @@
+{
+    "Packet Snippet":{
+        "prefix": "PACKET",
+        "body": [
+            "using System;",
+            "namespace TBL.Game.Networking",
+            "{",
+            "public class ${name}Packet : IPacket",
+            "{",
+            "public PacketType Type() => PacketType.AcceptCard;",
+            "public bool Serialize(ref string data)",
+            "{",
+            "    return true;",
+            "}",
+            "}",
+            "}",
+        ]
+    }
+}

@@ -51,6 +51,8 @@ namespace TBL.Game.Networking
         PlayerReady,
         FinishedQuest,
         PassCard,
+        AcceptCard,
+        RejectCard,
     }
 
     public interface IPacket

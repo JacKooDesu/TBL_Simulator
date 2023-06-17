@@ -55,6 +55,9 @@ namespace TBL.Game.Sys
                     InitQueue(passTarget, card)
                         .Select(p => new PhaseManager.PhaseData(PhaseType.Passing, p))
                         .ToArray());
+
+                manager.DiscardHand(manager.CurrentPlayer, (int)card);
+                manager.Deck.hand.MoveTo(c => c.Property == card, manager.Deck.table);
             }
         }
 

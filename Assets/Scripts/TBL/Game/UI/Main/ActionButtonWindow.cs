@@ -28,31 +28,61 @@ namespace TBL.Game.UI.Main
             if (res != IPlayerStandalone.Me)
                 return;
 
-            res.player.PhaseQuestStatus.OnChanged += BindEvent;
-            res.PacketHandler.ChangePhasePacketEvent += ResetTimer;
+            res.player.PhaseQuestStatus.OnChanged += OnQuestChange;
+            res.PacketHandler.ChangePhasePacketEvent += OnPhaseChange;
         }
 
-        void BindEvent(PhaseQuestStatus status)
+        void OnQuestChange(PhaseQuestStatus status)
         {
-            if (status.Quest.Contains(QuestType.DrawCard))
+            Func<QuestType, bool> check = q => status.Quest.Contains(q);
+            OnQuestDrawButton(check(QuestType.DrawCard));
+            OnQuestPassButton(check(QuestType.PassCard));
+            OnQuestReciveCardButton(check(QuestType.AskRecieve));
+        }
+
+        void OnQuestDrawButton(bool b)
+        {
+            if (b)
             {
                 draw.onClick.ReBind(Draw);
                 draw.interactable = true;
             }
             else
                 draw.interactable = false;
-
-
+        }
+        void OnQuestPassButton(bool b)
+        {
             MainUIManager.Singleton.OnChangeSelectCard.RemoveListener(UpdatePassBtnState);
-            if (status.Quest.Contains(QuestType.PassCard))
-            {
+            if (b)
                 MainUIManager.Singleton.OnChangeSelectCard.AddListener(UpdatePassBtnState);
-                UpdatePassBtnState(0);
+            UpdatePassBtnState(0);
+        }
+        void OnQuestReciveCardButton(bool b)
+        {
+            if (!b)
+            {
+                (accept.interactable, reject.interactable) = (false, false);
+                return;
             }
+            accept.onClick.ReBind(Accept, true);
+            reject.onClick.ReBind(Reject, true);
+            (accept.interactable, reject.interactable) = (true, true);
+        }
+
+
+        void OnPhaseChange(ChangePhasePacket packet)
+        {
+            ResetTimer(Phase.Get(packet.PhaseType).Time);
         }
 
         void Draw() =>
             IPlayerStandalone.Me.Send(SendType.Cmd, new FinishedQuestPacket(QuestType.DrawCard));
+
+        void Accept() =>
+            IPlayerStandalone.Me.Send(SendType.Cmd, new AcceptCardPacket());
+
+        void Reject() =>
+            IPlayerStandalone.Me.Send(SendType.Cmd, new RejectCardPacket());
 
         void UpdatePassBtnState(CardEnum.Property card)
         {
@@ -79,7 +109,7 @@ namespace TBL.Game.UI.Main
         }
         void PassCard() { }
 
-        void ResetTimer(ChangePhasePacket packet)
+        void ResetTimer(float time)
         {
             if (cts != null)
                 cts.Cancel(true);
@@ -87,7 +117,7 @@ namespace TBL.Game.UI.Main
             var ct = gameObject.GetCancellationTokenOnDestroy();
             cts.AddTo(ct);
 
-            time = Phase.Get(packet.PhaseType).Time;
+            this.time = time;
 
             UpdateTime(cts.Token).Forget();
         }

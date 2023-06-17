@@ -31,7 +31,22 @@ namespace TBL.Game.Sys
             return c;
         }
 
+        public T MoveTo(T item, GameCollection<T> target)
+        {
+            var index = collection.IndexOf(item);
+            if (index == -1)
+            {
+                Debug.LogWarning("Item is not in target collection!");
+                return item;
+            }
+            return MoveTo(index, target);
+        }
+
+        public T MoveTo(Predicate<T> predicate, GameCollection<T> target) =>
+            MoveTo(First(predicate), target);
+
         public List<T> Filter(Predicate<T> predicate) => collection.FindAll(predicate);
+        public T First(Predicate<T> predicate) => Filter(predicate).First();
         public int Count => collection.Count;
 
         public GameCollection<T> Shuffle()
