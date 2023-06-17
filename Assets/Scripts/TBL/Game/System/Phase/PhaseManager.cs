@@ -72,7 +72,8 @@ namespace TBL.Game.Sys
             }
         }
 
-        public void Insert(PhaseType p, System.Object parameter = null) => flow.Push(new(p, parameter));
+        public void Insert(PhaseType type, System.Object parameter = null) => flow.Push(new(type, parameter));
+        public void Insert(PhaseData data) => Insert(data.type, data.parameter);
 
         public void InsertRange(params PhaseData[] phaseDatas) =>
             phaseDatas.Reverse().ToList().ForEach(data => flow.Push(data));

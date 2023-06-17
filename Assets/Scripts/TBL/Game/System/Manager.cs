@@ -81,11 +81,8 @@ namespace TBL.Game.Sys
             p.CardStatus.RemoveTableCards(ids);
         public void DiscardTableAll(Player p) =>
             DiscardTable(p, p.CardStatus.Table.ToArray());
-
-        public void PassCard(Player p, Player target, CardEnum.Property card)
-        {
-
-        }
+        public void AddTable(Player p, params int[] ids) =>
+            p.CardStatus.AddTableCards(ids);
 
         public void AddQuest(Player p, QuestType q)
         {

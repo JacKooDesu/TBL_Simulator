@@ -6,19 +6,40 @@ using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 namespace TBL.Game.Sys
 {
+    using Game.Networking;
+
     public class Phase_Passing : PhaseBase
     {
         protected override PhaseType PhaseType => PhaseType.Passing;
         protected override float time => 5f;
+        public record PassingData(Queue<Player> queue, CardEnum.Property card);
+        public PassingData data;
         Player target;
-        public Queue<Player> playerQueue = new();
         const PhaseQuestStatus.QuestType QUEST = PhaseQuestStatus.QuestType.AskRecieve;
         public UnityEvent FinishEvent { get; } = new();
+
+        public PhaseManager.PhaseData nextPhase = null;
 
         public override void Enter(Manager manager, object parameter)
         {
             base.Enter(manager);
-            this.target = parameter as Player;
+            if (parameter != null)
+                data = parameter as PassingData;
+
+            target = data.queue.Dequeue();
+            if (target == manager.CurrentPlayer)
+            {
+                nextPhase = CreateRecivePhase();
+                forceExit = true;
+                return;
+            }
+
+            target.PlayerStandalone
+                  .PacketHandler
+                  .AcceptCardPacketEvent += OnFinish;
+            target.PlayerStandalone
+                  .PacketHandler
+                  .RejectCardPacketEvent += OnFinish;
 
             manager.AddQuest(target, QUEST, FinishEvent);
         }
@@ -32,13 +53,32 @@ namespace TBL.Game.Sys
 
         public override void Exit()
         {
-            manager.FinishQuest(target, QUEST);
+            if (Check())
+            {
+                manager.FinishQuest(target, QUEST);
+                nextPhase = new(PhaseType.Passing);
+            }
+
+            manager.PhaseManager.Insert(nextPhase);
+
             this.target = null;
+            this.nextPhase = null;
         }
 
-        void OnFinish(Unit _)
+        void OnFinish(IPacket p)
         {
+            if (p is AcceptCardPacket)
+                nextPhase = CreateRecivePhase();
+            else
+                nextPhase = CreatePassingPhase();
+
             FinishEvent.Invoke();
         }
+
+        PhaseManager.PhaseData CreateRecivePhase() =>
+            new(PhaseType.Receive, new Phase_Recive.ReciveData(target, data.card));
+
+        PhaseManager.PhaseData CreatePassingPhase() =>
+            new(PhaseType.Passing);
     }
 }

@@ -48,6 +48,7 @@ namespace TBL.Game.Sys
                 {PhaseType.Passing, new Phase_Passing()},
                 {PhaseType.End, new Phase_End()},
                 {PhaseType.Main, new Phase_Main()},
+                {PhaseType.Receive, new Phase_Recive()},
             }
         );
 

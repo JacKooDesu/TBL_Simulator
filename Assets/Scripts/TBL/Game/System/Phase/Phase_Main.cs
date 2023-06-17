@@ -51,10 +51,11 @@ namespace TBL.Game.Sys
             }
             else
             {
-                manager.PhaseManager.InsertRange(
-                    InitQueue(passTarget, card)
-                        .Select(p => new PhaseManager.PhaseData(PhaseType.Passing, p))
-                        .ToArray());
+                manager.PhaseManager.Insert(
+                    new(PhaseType.Passing,
+                        new Phase_Passing.PassingData(
+                            InitQueue(passTarget, card),
+                            card)));
 
                 manager.DiscardHand(manager.CurrentPlayer, (int)card);
                 manager.Deck.hand.MoveTo(c => c.Property == card, manager.Deck.table);
@@ -68,13 +69,13 @@ namespace TBL.Game.Sys
             card = packet.card;
         }
 
-        List<Player> InitQueue(Player target, CardEnum.Property card)
+        Queue<Player> InitQueue(Player target, CardEnum.Property card)
         {
-            List<Player> queue = new();
+            List<Player> list = new();
             if (card.HasFlag(CardEnum.Property.Direct))
             {
-                queue.Add(target);
-                queue.Add(manager.CurrentPlayer);
+                list.Add(target);
+                list.Add(manager.CurrentPlayer);
             }
             else
             {
@@ -86,7 +87,7 @@ namespace TBL.Game.Sys
                     iter = iter > 0 ? -1 : 1;
 
                 int current = beginId;
-                while (queue.Count != players.Count)
+                while (list.Count != players.Count)
                 {
                     if (current > players.Count - 1)
                         current = 0;
@@ -94,12 +95,12 @@ namespace TBL.Game.Sys
                         current = players.Count - 1;
 
                     if (!players[current].ReceiverStatus.Current().HasFlag(ReceiveEnum.Skipped))
-                        queue.Add(players[current]);
+                        list.Add(players[current]);
 
                     current += iter;
                 }
             }
-            return queue;
+            return new(list);
         }
     }
 }
