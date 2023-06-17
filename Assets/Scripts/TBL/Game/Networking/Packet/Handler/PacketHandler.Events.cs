@@ -7,6 +7,7 @@ namespace TBL.Game.Networking
         public event Action<GameStartPacket> GameStartPacketEvent = _ => { };
         public event Action<PlayerStatusPacket> PlayerStatusPacketEvent = _ => { };
         public event Action<ChangePhasePacket> ChangePhasePacketEvent = _ => { };
+        public event Action<NewRoundPacket> NewRoundPacketEvent = _ => { };
         #endregion
 
         #region Server

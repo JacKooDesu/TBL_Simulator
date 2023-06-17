@@ -25,7 +25,7 @@ namespace TBL.Game.Sys
         [SerializeField] HeroSetting heroSetting;
         [SerializeField] PlayerList players = new PlayerList();
         public PlayerList Players => players;
-        int currentPlayerIndex = 0;
+        int currentPlayerIndex = -1;
         public Player CurrentPlayer => Players[currentPlayerIndex];
 
         PhaseManager phaseManager;
@@ -64,10 +64,19 @@ namespace TBL.Game.Sys
 
             Broadcast(new GameStartPacket(), SendType.Rpc);
 
-            currentPlayerIndex = 0;
             phaseManager = new(this);
+            NewRound();
             var ct = gameObject.GetCancellationTokenOnDestroy();
             phaseManager.Run(ct).Forget();
+        }
+
+        public void NewRound()
+        {
+            currentPlayerIndex++;
+            if (currentPlayerIndex >= players.Players.Count)
+                currentPlayerIndex = 0;
+            
+            phaseManager.ResetFlow();
         }
 
         public void Draw(Player p, int count) =>

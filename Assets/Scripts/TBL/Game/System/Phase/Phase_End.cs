@@ -3,7 +3,7 @@ namespace TBL.Game.Sys
     public class Phase_End : PhaseBase
     {
         protected override PhaseType PhaseType => PhaseType.End;
-        protected override float time => 10;
+        protected override float time => 3;
 
         public override void Enter(Manager manager, object parameter = null)
         {
@@ -15,9 +15,8 @@ namespace TBL.Game.Sys
 
         bool Check() => true;
 
-        public override void Exit()
-        {
+        public override void Exit() =>
+            manager.NewRound();
 
-        }
     }
 }

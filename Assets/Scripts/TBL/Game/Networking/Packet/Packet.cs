@@ -45,6 +45,7 @@ namespace TBL.Game.Networking
         GameStart,
         PlayerStatus,
         ChangePhase,
+        NewRound,
 
         // Server
         _SERVER_ = 1000,

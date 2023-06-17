@@ -29,10 +29,10 @@ namespace TBL.Game.Sys
         {
             this.manager = manager;
             // reverse default flow for stack
-            flow = new(PHASE_FLOW.Reverse());
+            // flow = new(PHASE_FLOW.Reverse());
         }
 
-        void ResetFlow() => PHASE_FLOW.ToList().ForEach(p => flow.Push(p));
+        public void ResetFlow() => InsertRange(PHASE_FLOW.Reverse().ToArray());
 
         public async UniTask Run(CancellationToken ct)
         {
