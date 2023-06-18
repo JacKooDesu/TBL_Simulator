@@ -37,7 +37,7 @@ namespace TBL.Game.UI.Main
             foreach (var s in standalones)
             {
                 var item = Instantiate(prefab, content);
-                item.Init(res);
+                item.Init(s);
                 item.Bind();
 
                 // foreach (var (k, v) in playerItemDict)

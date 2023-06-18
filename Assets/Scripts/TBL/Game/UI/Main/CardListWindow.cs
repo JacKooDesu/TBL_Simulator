@@ -34,7 +34,7 @@ namespace TBL.Game.UI.Main
         public void UpdateList(CardStatus cs)
         {
             selector.SetActive(false);
-            
+
             var cards = cs.Hand;
 
             content.DestroyChildren();
@@ -53,16 +53,19 @@ namespace TBL.Game.UI.Main
 
         void BindSelector()
         {
-            MainUIManager.Singleton.OnChangeSelect.AddListener(
+            MainUIManager.Singleton.OnChangeSelect.ReBind(
                 s =>
                 {
                     if (items.TryGet(x => (x as ISelectable) == s, out var target))
                     {
-                        selector.SetActive(true);
                         selector.transform.position = target.transform.position;
+                        selector.SetActive(true);
                     }
                     else
+                    // {
+                    //     selector.transform.SetParent(transform);
                         selector.SetActive(false);
+                    // }
                 }
             );
         }

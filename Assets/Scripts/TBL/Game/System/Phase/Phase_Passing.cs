@@ -33,6 +33,9 @@ namespace TBL.Game.Sys
                 forceExit = true;
                 return;
             }
+            else
+                forceExit = false;
+
 
             target.PlayerStandalone
                   .PacketHandler

@@ -55,6 +55,14 @@ namespace TBL.Game.UI.Main
             player.PhaseQuestStatus.OnChanged += UpdateQuest;
         }
 
+        void OnDestroy()
+        {
+            player.CardStatus.OnChanged -= UpdateCard;
+            player.HeroStatus.OnChanged -= UpdateHero;
+            player.ReceiverStatus.OnChanged -= UpdateReciver;
+            player.PhaseQuestStatus.OnChanged -= UpdateQuest;
+        }
+
         void UpdateCard(CardStatus status)
         {
             handCardCount.text = $"{status.Hand.Count}";
@@ -87,7 +95,7 @@ namespace TBL.Game.UI.Main
             if (status.Quest.Contains(PhaseQuestStatus.QuestType.AskRecieve))
             {
                 GetComponent<Image>().Blink(
-                    Color.green * .5f, 1f,new(), true
+                    Color.green * .5f, 1f, new(), true
                 );
             }
         }
