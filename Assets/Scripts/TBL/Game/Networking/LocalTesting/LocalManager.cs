@@ -10,17 +10,17 @@ using Cysharp.Threading.Tasks;
 
 namespace TBL.Game.Networking
 {
-    public class LocalManager : MonoBehaviour
+    using Game.Sys;
+    public class LocalManager : MonoBehaviour, IStandaloneManager
     {
-        public static LocalManager Singleton { get; private set; }
-        public bool InitComplete { get; private set; }
-        void Awake() => Singleton = this;
+        public bool InitializeComplete { get; private set; }
+        void Awake() => IStandaloneManager.Singleton = this;
 
         [SerializeField, Range(1, 8)] int playerCount;
         [SerializeField] LocalPlayer playerPrefab;
 
         [SerializeField] List<LocalPlayer> players = new();
-        public List<LocalPlayer> Players => players;
+        public IPlayerStandalone[] GetStandalones() => players.ToArray();
         // LocalPlayer current => Sys.IPlayerStandalone.Me as LocalPlayer;
 
 #if UNITY_EDITOR
@@ -46,10 +46,10 @@ namespace TBL.Game.Networking
 
         void Start()
         {
-            foreach (var p in Players)
+            foreach (var p in players)
                 p.Initialize();
             // SwitchPlayer(0);
-            InitComplete = true;
+            InitializeComplete = true;
         }
 
         const KeyCode KEYCODE_BEGIN = KeyCode.Alpha1;

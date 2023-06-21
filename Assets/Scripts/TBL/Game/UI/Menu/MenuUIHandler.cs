@@ -19,7 +19,7 @@ namespace TBL.UI.Menu
 
         protected async void Start()
         {
-            NetworkManager manager = NetworkManager.singleton;
+            NetworkManager manager = NetworkManager.singleton as NetworkManager;
             await UniTask.WaitUntil(() => (manager = NetworkManager.singleton as NetworkManager) != null);
 
             nameField.text = GameUtils.PlayerName;

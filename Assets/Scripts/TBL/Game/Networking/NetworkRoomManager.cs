@@ -1,24 +1,27 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Mirror;
 using UnityEngine;
-using TBL.Settings;
+using Cysharp.Threading.Tasks;
 
 namespace TBL.Game.Networking
 {
-    public class NetworkRoomManager : Mirror.NetworkRoomManager
+    using TBL.Game.Sys;
+    public class NetworkRoomManager : Mirror.NetworkRoomManager, IStandaloneManager
     {
-        public static new NetworkRoomManager singleton { get; internal set; }
         public bool showStartButton;
         [SerializeField] GameObject deckManagerPrefab;
 
-        public List<NetworkPlayer> players = new List<NetworkPlayer>();
+        public List<NetworkPlayer> Players { get; } = new();
+        public IPlayerStandalone[] GetStandalones() => Players.ToArray();
+
+        public bool InitializeComplete { get; private set; }
+
         public override void Awake()
         {
             if (singleton != null)
                 Destroy(gameObject);
             base.Awake();
-            singleton = this;
+            IStandaloneManager.Singleton = this;
         }
 
         public override void OnRoomServerPlayersReady()
@@ -32,12 +35,23 @@ namespace TBL.Game.Networking
 
         public override void OnRoomServerSceneChanged(string sceneName)
         {
-            base.OnRoomServerSceneChanged(sceneName);
-
+            if (sceneName == RoomScene)
+                InitializeComplete = false;
             if (sceneName == GameplayScene)
-            {
+                WaitInitStandalone().Forget();
+        }
 
-            }
+        public override GameObject OnRoomServerCreateGamePlayer(NetworkConnectionToClient conn, GameObject roomPlayer)
+        {
+            var player = Instantiate(playerPrefab);
+            Players.Add(player.GetComponent<NetworkPlayer>());
+            return player;
+        }
+
+        async UniTask WaitInitStandalone()
+        {
+            await UniTask.WaitUntil(() => roomSlots.Count == Players.Count);
+            InitializeComplete = true;
         }
 
         public override void OnGUI()
@@ -55,7 +69,8 @@ namespace TBL.Game.Networking
         /// 查找客戶端物件。
         /// </summary>
         /// <returns></returns>
-        public NetworkPlayer Me() => players.Find(p => p.isLocalPlayer);
+        public NetworkPlayer Me() => Players.Find(p => p.isLocalPlayer);
+
     }
 }
 

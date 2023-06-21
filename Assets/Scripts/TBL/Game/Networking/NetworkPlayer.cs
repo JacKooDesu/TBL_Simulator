@@ -7,6 +7,7 @@ namespace TBL.Game.Networking
 {
     using Sys;
     using Game.Networking;
+    using NetworkManager = Game.Networking.NetworkRoomManager;
     /// <summary>
     /// 基本只拿來傳訊
     /// </summary>

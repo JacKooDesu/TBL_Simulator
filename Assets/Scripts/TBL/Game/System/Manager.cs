@@ -33,21 +33,13 @@ namespace TBL.Game.Sys
 
         async void Start()
         {
-            if ((NetworkManager.singleton != null &&
-                (NetworkManager.singleton.Me() != null && NetworkManager.singleton.Me().isClient)) ||
-                LocalManager.Singleton == null)
+            if (IStandaloneManager.Singleton == null)
                 return;
 
+            await UniTask.WaitUntil(() => IStandaloneManager.Singleton.InitializeComplete);
+
             IPlayerStandalone[] standalones = null!;
-            if (NetworkManager.singleton)
-            {
-                standalones = NetworkManager.singleton.players.ToArray();
-            }
-            else if (LocalManager.Singleton)
-            {
-                await UniTask.WaitUntil(() => LocalManager.Singleton.InitComplete);
-                standalones = LocalManager.Singleton.Players.ToArray();
-            }
+            standalones = IStandaloneManager.Singleton.GetStandalones();
 
             deck.Init(deckSetting)
                 .sleeping.AddRange(deck.CardDatas)
