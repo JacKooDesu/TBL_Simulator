@@ -13,6 +13,13 @@ namespace TBL.Game.Networking
         [SerializeField] GameObject deckManagerPrefab;
 
         public List<NetworkPlayer> players = new List<NetworkPlayer>();
+        public override void Awake()
+        {
+            if (singleton != null)
+                Destroy(gameObject);
+            base.Awake();
+            singleton = this;
+        }
 
         public override void OnRoomServerPlayersReady()
         {
@@ -43,7 +50,7 @@ namespace TBL.Game.Networking
                 ServerChangeScene(GameplayScene);
             }
         }
-        
+
         /// <summary>
         /// 查找客戶端物件。
         /// </summary>

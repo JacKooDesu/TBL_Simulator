@@ -4,6 +4,7 @@ namespace TBL.Game.Sys
     public class Phase_Draw : PhaseBase
     {
         protected override PhaseType PhaseType => PhaseType.Draw;
+        public override string PhaseName => "抽牌階段";
         protected override float time => 5f;
         const int DRAW_COUNT = 2;
         const PhaseQuestStatus.QuestType QUEST = PhaseQuestStatus.QuestType.DrawCard;

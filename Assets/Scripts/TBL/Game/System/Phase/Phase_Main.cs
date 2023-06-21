@@ -8,6 +8,7 @@ namespace TBL.Game.Sys
     public class Phase_Main : PhaseBase
     {
         protected override PhaseType PhaseType => PhaseType.Main;
+        public override string PhaseName => "主要階段";
         protected override float time => 20f;
         const PhaseQuestStatus.QuestType QUEST = PhaseQuestStatus.QuestType.PassCard;
         public UnityEvent FinishEvent { get; } = new();

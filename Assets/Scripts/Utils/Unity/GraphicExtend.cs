@@ -30,8 +30,7 @@ namespace TBL.Utils
                 color,
                 time
             );
-            if (loop)
-                tween.SetLoops(-1, LoopType.Yoyo);
+            tween.SetLoops(loop ? -1 : 1, LoopType.Yoyo);
 
             tween.OnKill(() => graphic.color = origin);
 

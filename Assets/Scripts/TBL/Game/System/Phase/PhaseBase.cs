@@ -7,6 +7,7 @@ namespace TBL.Game.Sys
     public abstract class PhaseBase
     {
         protected abstract PhaseType PhaseType { get; }
+        public abstract string PhaseName { get; }
         protected float timeCurrent;
         protected abstract float time { get; }
         public float Time => time;

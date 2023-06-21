@@ -3,6 +3,7 @@ namespace TBL.Game.Sys
     public class Phase_Recive : PhaseBase
     {
         protected override PhaseType PhaseType => PhaseType.Receive;
+        public override string PhaseName => "接收階段";
         protected override float time => 5;
         public record ReciveData(Player target, CardEnum.Property card);
         ReciveData data;

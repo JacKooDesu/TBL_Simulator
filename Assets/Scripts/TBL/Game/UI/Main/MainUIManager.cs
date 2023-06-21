@@ -22,6 +22,8 @@ namespace TBL.Game.UI.Main
         public UnityEvent<ISelectable> OnChangeSelect { get; } = new();
         bool hasSelectFlag = false;
 
+        [SerializeField] CommonUI commonUI;
+
         public void SetSelect(ISelectable selectable)
         {
             hasSelectFlag = true;
@@ -41,6 +43,9 @@ namespace TBL.Game.UI.Main
             SetSelect(null);
             foreach (var ui in UIs)
                 ui.Setup(standalone);
+
+            commonUI = commonUI ?? FindObjectOfType<CommonUI>();
+            commonUI?.Setup(standalone);
         }
     }
 }

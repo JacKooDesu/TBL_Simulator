@@ -11,6 +11,7 @@ namespace TBL.Game.Sys
     public class Phase_Passing : PhaseBase
     {
         protected override PhaseType PhaseType => PhaseType.Passing;
+        public override string PhaseName => "卡片傳遞階段";
         protected override float time => 5f;
         public record PassingData(Queue<Player> queue, CardEnum.Property card);
         public PassingData data;

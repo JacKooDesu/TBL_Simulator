@@ -1,6 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
-
+using Cysharp.Threading.Tasks;
 namespace TBL.UI.Menu
 {
     using NetworkManager = Game.Networking.NetworkRoomManager;
@@ -17,10 +17,11 @@ namespace TBL.UI.Menu
         [SerializeField]
         InputField nameField = default;
 
-        protected void Start()
+        protected async void Start()
         {
-            var manager = NetworkManager.singleton;
-            
+            NetworkManager manager = NetworkManager.singleton;
+            await UniTask.WaitUntil(() => (manager = NetworkManager.singleton as NetworkManager) != null);
+
             nameField.text = GameUtils.PlayerName;
 
             host.onClick.AddListener(manager.StartHost);
