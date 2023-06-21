@@ -8,6 +8,7 @@ namespace TBL.Game.Networking
     using Sys;
     using Game.Networking;
     using NetworkManager = Game.Networking.NetworkRoomManager;
+    using Game.UI.Main;
     /// <summary>
     /// 基本只拿來傳訊
     /// </summary>
@@ -33,16 +34,21 @@ namespace TBL.Game.Networking
             if (isLocalPlayer) IPlayerStandalone.Me = this;
             IPlayerStandalone.Regist(this);
 
-            Send(SendType.Cmd, new PlayerReadyPacket());
+            PacketHandler.ServerReadyPacketEvent += _ =>
+                Send(SendType.Cmd, new PlayerReadyPacket());
+
+            if (isLocalPlayer)
+                packetHandler.GameStartPacketEvent += _ => MainUIManager.Singleton?.SetupUI(this);
+            packetHandler.PlayerStatusPacketEvent += p => player.UpdateStatus(p.Data);
         }
 
-        [ClientRpc, Server]
+        [ClientRpc]
         public void RpcSend(PacketType type, string data)
         {
             packetHandler.OnClientPacket(type, data);
         }
 
-        [TargetRpc, Server]
+        [TargetRpc]
         public void TargetSend(PacketType type, string data)
         {
             packetHandler.OnClientPacket(type, data);
@@ -51,7 +57,7 @@ namespace TBL.Game.Networking
         [Command]
         public void CmdSend(PacketType type, string data)
         {
-            packetHandler.OnClientPacket(type, data);
+            packetHandler.OnServerPacket(type, data);
         }
 
         [Server]
@@ -67,8 +73,11 @@ namespace TBL.Game.Networking
 
         public void Send<P>(SendType sendType, P packet) where P : IPacket
         {
-            if (isClient && sendType != SendType.Cmd)
+            if (!isServer && sendType != SendType.Cmd)
+            {
                 sendType = SendType.Cmd;
+                Debug.LogWarning("[Standalone] Trying send non-cmd function on client!");
+            }
 
             var data = "";
             packet.Serialize(ref data);

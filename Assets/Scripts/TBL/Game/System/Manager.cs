@@ -46,6 +46,7 @@ namespace TBL.Game.Sys
                 .Shuffle();
 
             players.Init(standalones);
+            Broadcast(new ServerReadyPacket(), SendType.Target);
 
             await UniTask.WaitUntil(() => standalones.FirstOrDefault(x => x.IsReady == false) == null);
 

@@ -45,6 +45,12 @@ namespace TBL.Game.Networking
 
             switch (type)
             {
+                case PacketType.ServerReady:
+                    {
+                        data.Deserialize(out ServerReadyPacket packet);
+                        ServerReadyPacketEvent(packet);
+                        break;
+                    }
                 case PacketType.GameStart:
                     {
                         data.Deserialize(out GameStartPacket packet);

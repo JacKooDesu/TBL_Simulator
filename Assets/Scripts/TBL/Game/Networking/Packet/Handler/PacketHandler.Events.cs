@@ -4,6 +4,7 @@ namespace TBL.Game.Networking
     public partial class PacketHandler
     {
         #region Client
+        public event Action<ServerReadyPacket> ServerReadyPacketEvent = _ => { };
         public event Action<GameStartPacket> GameStartPacketEvent = _ => { };
         public event Action<PlayerStatusPacket> PlayerStatusPacketEvent = _ => { };
         public event Action<ChangePhasePacket> ChangePhasePacketEvent = _ => { };
