@@ -3,6 +3,8 @@ using UnityEngine.Events;
 using System.Linq;
 using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
+using TBL.Utils;
+
 namespace TBL.Game.Sys
 {
     public class Phase_Main : PhaseBase
@@ -23,7 +25,7 @@ namespace TBL.Game.Sys
             card = 0;
 
             var p = manager.CurrentPlayer;
-            p.PlayerStandalone.PacketHandler.PassCardPacketEvent += OnFinish;
+            p.PlayerStandalone.PacketHandler.PassCardPacketEvent.AutoRemoveListener(OnFinish);
             manager.AddQuest(p, QUEST, FinishEvent);
         }
 
@@ -40,7 +42,8 @@ namespace TBL.Game.Sys
             manager.CurrentPlayer
                    .PlayerStandalone
                    .PacketHandler
-                   .PassCardPacketEvent -= OnFinish;
+                   .PassCardPacketEvent
+                   .RemoveAllListeners();
 
             if (Check() || passTarget == null)
             {

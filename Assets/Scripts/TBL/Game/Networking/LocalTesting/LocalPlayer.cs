@@ -5,6 +5,7 @@ using Cysharp.Threading.Tasks;
 namespace TBL.Game.Networking
 {
     using Sys;
+    using TBL.Utils;
     using UI.Main;
     /// <summary>
     /// 基本只拿來傳訊
@@ -36,8 +37,8 @@ namespace TBL.Game.Networking
 
             // MainUIManager.Singleton?.SetupUI(this);
             if (isLocal)
-                packetHandler.GameStartPacketEvent += _ => MainUIManager.Singleton?.SetupUI(this);
-            packetHandler.PlayerStatusPacketEvent += p => player.UpdateStatus(p.Data);
+                packetHandler.GameStartPacketEvent.AutoRemoveListener(_ => MainUIManager.Singleton?.SetupUI(this));
+            packetHandler.PlayerStatusPacketEvent.AddListener(p => player.UpdateStatus(p.Data));
         }
 
         public void RpcSend(PacketType type, string data)

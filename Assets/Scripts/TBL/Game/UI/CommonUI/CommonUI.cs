@@ -15,7 +15,7 @@ namespace TBL.Game.UI
             if (res != IPlayerStandalone.Me)
                 return;
 
-            res.PacketHandler.ChangePhasePacketEvent += ChangePacket;
+            res.PacketHandler.ChangePhasePacketEvent.AddListener(ChangePacket);
         }
 
         void ChangePacket(Networking.ChangePhasePacket packet)

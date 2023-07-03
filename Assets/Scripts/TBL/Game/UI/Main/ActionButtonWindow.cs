@@ -29,7 +29,7 @@ namespace TBL.Game.UI.Main
                 return;
 
             res.player.PhaseQuestStatus.OnChanged += OnQuestChange;
-            res.PacketHandler.ChangePhasePacketEvent += OnPhaseChange;
+            res.PacketHandler.ChangePhasePacketEvent.AddListener(OnPhaseChange);
         }
 
         void OnQuestChange(PhaseQuestStatus status)

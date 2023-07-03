@@ -38,12 +38,15 @@ namespace TBL.Game.Sys
                 forceExit = false;
 
 
+            // FIXME: 應該合併卡片接收的封包?
             target.PlayerStandalone
                   .PacketHandler
-                  .AcceptCardPacketEvent += OnFinish;
+                  .AcceptCardPacketEvent
+                  .AddListener(OnFinish);
             target.PlayerStandalone
                   .PacketHandler
-                  .RejectCardPacketEvent += OnFinish;
+                  .RejectCardPacketEvent
+                  .AddListener(OnFinish);
 
             manager.AddQuest(target, QUEST, FinishEvent);
         }
@@ -64,6 +67,15 @@ namespace TBL.Game.Sys
             }
 
             manager.PhaseManager.Insert(nextPhase);
+
+            target.PlayerStandalone
+                  .PacketHandler
+                  .AcceptCardPacketEvent
+                  .RemoveAllListeners();
+            target.PlayerStandalone
+                  .PacketHandler
+                  .RejectCardPacketEvent
+                  .RemoveAllListeners();
 
             this.target = null;
             this.nextPhase = null;

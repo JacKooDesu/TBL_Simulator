@@ -46,7 +46,9 @@ namespace TBL.Game.UI.Main
                 playerItemDict.Add(s, item);
             }
 
-            IPlayerStandalone.Me.PacketHandler.NewRoundPacketEvent += UpdateRoundHostPlayer;
+            IPlayerStandalone.Me.PacketHandler
+                                .NewRoundPacketEvent
+                                .AddListener(UpdateRoundHostPlayer);
         }
 
         /// <summary>

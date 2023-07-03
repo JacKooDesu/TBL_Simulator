@@ -30,8 +30,8 @@ namespace TBL.Utils
             Action proxy = () => { };
             proxy = () =>
             {
-                action();
                 e.RemoveListener(proxy.Invoke);
+                action();
             };
 
             e.AddListener(proxy.Invoke);
@@ -43,8 +43,8 @@ namespace TBL.Utils
             Action<T> proxy = (_) => { };
             proxy = (_) =>
             {
-                action(_);
                 e.RemoveListener(proxy.Invoke);
+                action(_);
             };
 
             e.AddListener(proxy.Invoke);

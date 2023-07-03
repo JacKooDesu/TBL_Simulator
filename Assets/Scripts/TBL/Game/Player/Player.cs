@@ -8,6 +8,8 @@ namespace TBL.Game
 {
     using Game.Sys;
     using Game.Networking;
+    using TBL.Utils;
+
     [System.Serializable]
     public class Player
     {
@@ -54,7 +56,7 @@ namespace TBL.Game
 
         public void BindServerEvent()
         {
-            playerStandalone.PacketHandler.PlayerReadyPacketEvent += _ => playerStandalone.SetReady();
+            playerStandalone.PacketHandler.PlayerReadyPacketEvent.AutoRemoveListener(_ => playerStandalone.SetReady());
             teamStatus.OnChanged += _ => playerStandalone.Send(SendType.Rpc, new PlayerStatusPacket(teamStatus));
             heroStatus.OnChanged += _ => playerStandalone.Send(SendType.Rpc, new PlayerStatusPacket(heroStatus));
             cardStatus.OnChanged += _ => playerStandalone.Send(SendType.Rpc, new PlayerStatusPacket(cardStatus));

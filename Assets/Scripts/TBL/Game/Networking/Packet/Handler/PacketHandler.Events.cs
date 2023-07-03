@@ -1,22 +1,24 @@
 using System;
+using UnityEngine.Events;
+
 namespace TBL.Game.Networking
 {
     public partial class PacketHandler
     {
         #region Client
-        public event Action<ServerReadyPacket> ServerReadyPacketEvent = _ => { };
-        public event Action<GameStartPacket> GameStartPacketEvent = _ => { };
-        public event Action<PlayerStatusPacket> PlayerStatusPacketEvent = _ => { };
-        public event Action<ChangePhasePacket> ChangePhasePacketEvent = _ => { };
-        public event Action<NewRoundPacket> NewRoundPacketEvent = _ => { };
+        public UnityEvent<ServerReadyPacket> ServerReadyPacketEvent { get; } = new();
+        public UnityEvent<GameStartPacket> GameStartPacketEvent { get; } = new();
+        public UnityEvent<PlayerStatusPacket> PlayerStatusPacketEvent { get; } = new();
+        public UnityEvent<ChangePhasePacket> ChangePhasePacketEvent { get; } = new();
+        public UnityEvent<NewRoundPacket> NewRoundPacketEvent { get; } = new();
         #endregion
 
         #region Server
-        public event Action<PlayerReadyPacket> PlayerReadyPacketEvent = _ => { };
-        public event Action<PassCardPacket> PassCardPacketEvent = _ => { };
-        public event Action<FinishedQuestPacket> FinishedQuestPacketEvent = _ => { };
-        public event Action<AcceptCardPacket> AcceptCardPacketEvent = _ => { };
-        public event Action<RejectCardPacket> RejectCardPacketEvent = _ => { };
+        public UnityEvent<PlayerReadyPacket> PlayerReadyPacketEvent { get; } = new();
+        public UnityEvent<PassCardPacket> PassCardPacketEvent { get; } = new();
+        public UnityEvent<FinishedQuestPacket> FinishedQuestPacketEvent { get; } = new();
+        public UnityEvent<AcceptCardPacket> AcceptCardPacketEvent { get; } = new();
+        public UnityEvent<RejectCardPacket> RejectCardPacketEvent { get; } = new();
         #endregion
     }
 }

@@ -102,9 +102,10 @@ namespace TBL.Game.Sys
                     return;
 
                 FinishQuest(p, q);
-                p.PlayerStandalone.PacketHandler.FinishedQuestPacketEvent -= check;
             };
-            p.PlayerStandalone.PacketHandler.FinishedQuestPacketEvent += check;
+            p.PlayerStandalone.PacketHandler
+                              .FinishedQuestPacketEvent
+                              .AutoRemoveListener(check);
         }
         public void AddQuest(Player p, QuestType q, UnityEvent listener)
         {

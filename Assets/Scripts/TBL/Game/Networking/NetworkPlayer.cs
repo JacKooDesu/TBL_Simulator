@@ -9,6 +9,8 @@ namespace TBL.Game.Networking
     using Game.Networking;
     using NetworkManager = Game.Networking.NetworkRoomManager;
     using Game.UI.Main;
+    using TBL.Utils;
+
     /// <summary>
     /// 基本只拿來傳訊
     /// </summary>
@@ -34,12 +36,12 @@ namespace TBL.Game.Networking
             if (isLocalPlayer) IPlayerStandalone.Me = this;
             IPlayerStandalone.Regist(this);
 
-            PacketHandler.ServerReadyPacketEvent += _ =>
-                Send(SendType.Cmd, new PlayerReadyPacket());
+            PacketHandler.ServerReadyPacketEvent.AutoRemoveListener(
+                _ => Send(SendType.Cmd, new PlayerReadyPacket()));
 
             if (isLocalPlayer)
-                packetHandler.GameStartPacketEvent += _ => MainUIManager.Singleton?.SetupUI(this);
-            packetHandler.PlayerStatusPacketEvent += p => player.UpdateStatus(p.Data);
+                packetHandler.GameStartPacketEvent.AutoRemoveListener(_ => MainUIManager.Singleton?.SetupUI(this));
+            packetHandler.PlayerStatusPacketEvent.AddListener(p => player.UpdateStatus(p.Data));
         }
 
         [ClientRpc]

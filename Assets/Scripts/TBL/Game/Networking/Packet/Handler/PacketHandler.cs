@@ -24,17 +24,17 @@ namespace TBL.Game.Networking
             DeserializerDict.Add(
                 PacketType.AcceptCard,
                 new(AcceptCardPacket.Deserializer,
-                    packet => AcceptCardPacketEvent(packet as AcceptCardPacket))
+                    packet => AcceptCardPacketEvent.Invoke(packet as AcceptCardPacket))
             );
             DeserializerDict.Add(
                 PacketType.RejectCard,
                 new(RejectCardPacket.Deserializer,
-                    packet => RejectCardPacketEvent(packet as RejectCardPacket))
+                    packet => RejectCardPacketEvent.Invoke(packet as RejectCardPacket))
             );
             DeserializerDict.Add(
                 PacketType.NewRound,
                 new(NewRoundPacket.Deserializer,
-                    packet => NewRoundPacketEvent(packet as NewRoundPacket))
+                    packet => NewRoundPacketEvent.Invoke(packet as NewRoundPacket))
             );
         }
 
@@ -48,27 +48,27 @@ namespace TBL.Game.Networking
                 case PacketType.ServerReady:
                     {
                         data.Deserialize(out ServerReadyPacket packet);
-                        ServerReadyPacketEvent(packet);
+                        ServerReadyPacketEvent.Invoke(packet);
                         break;
                     }
                 case PacketType.GameStart:
                     {
                         data.Deserialize(out GameStartPacket packet);
-                        GameStartPacketEvent(packet);
+                        GameStartPacketEvent.Invoke(packet);
                         break;
                     }
 
                 case PacketType.PlayerStatus:
                     {
                         data.Deserialize(out PlayerStatusPacket packet);
-                        PlayerStatusPacketEvent(packet);
+                        PlayerStatusPacketEvent.Invoke(packet);
                         break;
                     }
 
                 case PacketType.ChangePhase:
                     {
                         data.Deserialize(out ChangePhasePacket packet);
-                        ChangePhasePacketEvent(packet);
+                        ChangePhasePacketEvent.Invoke(packet);
                         break;
                     }
             }
@@ -84,7 +84,7 @@ namespace TBL.Game.Networking
                 case PacketType.PlayerReady:
                     {
                         data.Deserialize(out PlayerReadyPacket packet);
-                        PlayerReadyPacketEvent(packet);
+                        PlayerReadyPacketEvent.Invoke(packet);
                         break;
                     }
             }
