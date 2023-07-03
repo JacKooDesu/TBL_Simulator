@@ -1,3 +1,4 @@
+using UnityEngine.Events;
 using System;
 
 namespace TBL.Game
@@ -11,7 +12,7 @@ namespace TBL.Game
         T Current();
         void Update(T value);
         void Update<S>(S status) where S : IPlayerStatus<T>;
-        event Action<T> OnChanged;
+        UnityEvent<T> OnChanged { get; }
     }
 
     public interface IPlayerStatus

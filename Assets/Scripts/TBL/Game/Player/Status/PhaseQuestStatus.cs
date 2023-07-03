@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using Newtonsoft.Json;
 namespace TBL.Game
 {
+    using UnityEngine.Events;
     using Utils;
     [JsonObject, Serializable]
     public class PhaseQuestStatus : IPlayerStatus<PhaseQuestStatus>
@@ -24,7 +25,7 @@ namespace TBL.Game
         [JsonIgnore]
         public ReadOnlyCollection<QuestType> Quest => quests.AsReadOnly();
 
-        public event Action<PhaseQuestStatus> OnChanged = _ => { };
+        public UnityEvent<PhaseQuestStatus> OnChanged { get; } = new();
 
         public PhaseQuestStatus Current() => this;
         public PlayerStatusType Type() => PlayerStatusType.Quest;
@@ -51,7 +52,7 @@ namespace TBL.Game
         {
             if (quests.Remove(q))
             {
-                OnChanged(this);
+                OnChanged.Invoke(this);
                 return true;
             }
             return false;

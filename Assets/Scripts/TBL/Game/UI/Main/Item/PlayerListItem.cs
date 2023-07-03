@@ -49,18 +49,18 @@ namespace TBL.Game.UI.Main
 
         public void Bind()
         {
-            player.CardStatus.OnChanged += UpdateCard;
-            player.HeroStatus.OnChanged += UpdateHero;
-            player.ReceiverStatus.OnChanged += UpdateReciver;
-            player.PhaseQuestStatus.OnChanged += UpdateQuest;
+            player.CardStatus.OnChanged.AddListener(UpdateCard);
+            player.HeroStatus.OnChanged.AddListener(UpdateHero);
+            player.ReceiverStatus.OnChanged.AddListener(UpdateReciver);
+            player.PhaseQuestStatus.OnChanged.AddListener(UpdateQuest);
         }
 
         void OnDestroy()
         {
-            player.CardStatus.OnChanged -= UpdateCard;
-            player.HeroStatus.OnChanged -= UpdateHero;
-            player.ReceiverStatus.OnChanged -= UpdateReciver;
-            player.PhaseQuestStatus.OnChanged -= UpdateQuest;
+            player.CardStatus.OnChanged.AddListener(UpdateCard);
+            player.HeroStatus.OnChanged.AddListener(UpdateHero);
+            player.ReceiverStatus.OnChanged.AddListener(UpdateReciver);
+            player.PhaseQuestStatus.OnChanged.AddListener(UpdateQuest);
         }
 
         void UpdateCard(CardStatus status)

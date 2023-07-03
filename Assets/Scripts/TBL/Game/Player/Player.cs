@@ -57,12 +57,12 @@ namespace TBL.Game
         public void BindServerEvent()
         {
             playerStandalone.PacketHandler.PlayerReadyPacketEvent.AutoRemoveListener(_ => playerStandalone.SetReady());
-            teamStatus.OnChanged += _ => playerStandalone.Send(SendType.Rpc, new PlayerStatusPacket(teamStatus));
-            heroStatus.OnChanged += _ => playerStandalone.Send(SendType.Rpc, new PlayerStatusPacket(heroStatus));
-            cardStatus.OnChanged += _ => playerStandalone.Send(SendType.Rpc, new PlayerStatusPacket(cardStatus));
-            profileStatus.OnChanged += _ => playerStandalone.Send(SendType.Rpc, new PlayerStatusPacket(profileStatus));
-            skillStatus.OnChanged += _ => playerStandalone.Send(SendType.Rpc, new PlayerStatusPacket(skillStatus));
-            phaseQuestStatus.OnChanged += _ => playerStandalone.Send(SendType.Rpc, new PlayerStatusPacket(phaseQuestStatus));
+            teamStatus.OnChanged.AddListener(_ => playerStandalone.Send(SendType.Rpc, new PlayerStatusPacket(teamStatus)));
+            heroStatus.OnChanged.AddListener(_ => playerStandalone.Send(SendType.Rpc, new PlayerStatusPacket(heroStatus)));
+            cardStatus.OnChanged.AddListener(_ => playerStandalone.Send(SendType.Rpc, new PlayerStatusPacket(cardStatus)));
+            profileStatus.OnChanged.AddListener(_ => playerStandalone.Send(SendType.Rpc, new PlayerStatusPacket(profileStatus)));
+            skillStatus.OnChanged.AddListener(_ => playerStandalone.Send(SendType.Rpc, new PlayerStatusPacket(skillStatus)));
+            phaseQuestStatus.OnChanged.AddListener(_ => playerStandalone.Send(SendType.Rpc, new PlayerStatusPacket(phaseQuestStatus)));
         }
         public void BindClientEvent()
         {

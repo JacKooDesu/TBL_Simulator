@@ -28,7 +28,7 @@ namespace TBL.Game.UI.Main
             if (res != IPlayerStandalone.Me)
                 return;
 
-            res.player.PhaseQuestStatus.OnChanged += OnQuestChange;
+            res.player.PhaseQuestStatus.OnChanged.AddListener(OnQuestChange);
             res.PacketHandler.ChangePhasePacketEvent.AddListener(OnPhaseChange);
         }
 

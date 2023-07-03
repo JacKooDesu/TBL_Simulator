@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System;
+using UnityEngine.Events;
 
 namespace TBL.Game
 {
@@ -8,7 +9,7 @@ namespace TBL.Game
     {
         Dictionary<int, bool> value;
 
-        public event Action<Dictionary<int, bool>> OnChanged;
+        public UnityEvent<Dictionary<int, bool>> OnChanged { get; } = new();
 
         public Dictionary<int, bool> Current() => value;
         public PlayerStatusType Type() => PlayerStatusType.Skill;

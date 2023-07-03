@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System;
+using UnityEngine.Events;
 
 namespace TBL.Game
 {
@@ -19,7 +20,7 @@ namespace TBL.Game
         public ReadOnlyCollection<int> Hand => hand.AsReadOnly();
         public ReadOnlyCollection<int> Table => table.AsReadOnly();
 
-        public event Action<CardStatus> OnChanged = delegate { };
+        public UnityEvent<CardStatus> OnChanged { get; } = new();
 
         public CardStatus Current() => this;
         public PlayerStatusType Type() => PlayerStatusType.Card;

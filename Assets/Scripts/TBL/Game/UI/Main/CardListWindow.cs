@@ -25,7 +25,7 @@ namespace TBL.Game.UI.Main
             if (res != IPlayerStandalone.Me)
                 return;
 
-            IPlayerStandalone.Me.player.CardStatus.OnChanged += UpdateList;
+            IPlayerStandalone.Me.player.CardStatus.OnChanged.AddListener(UpdateList);
             UpdateList(res.player.CardStatus);
 
             BindSelector();

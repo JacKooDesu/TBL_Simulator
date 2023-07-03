@@ -22,7 +22,9 @@ namespace TBL.Networking
         {
             AuthRequestMessage authRequestMessage = new AuthRequestMessage
             {
-                authUsername = GameUtils.PlayerName
+                // FIXME: 應該用其他驗證方式?
+                // authUsername = GameUtils.PlayerName
+                authUsername = System.Guid.NewGuid().ToString()
             };
 
             NetworkClient.connection.Send(authRequestMessage);

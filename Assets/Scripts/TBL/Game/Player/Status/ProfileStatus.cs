@@ -1,8 +1,10 @@
 using System;
 using Newtonsoft.Json;
+using UnityEngine.Events;
+
 namespace TBL.Game
 {
-    [Serializable,JsonObject]
+    [Serializable, JsonObject]
     public class ProfileStatus : IPlayerStatus<ProfileStatus>
     {
         public ProfileStatus() { }
@@ -25,7 +27,7 @@ namespace TBL.Game
         /// </summary>
         public int Id => id;
 
-        public event Action<ProfileStatus> OnChanged = delegate { };
+        public UnityEvent<ProfileStatus> OnChanged { get; } = new();
 
         public ProfileStatus Current() => this;
         public PlayerStatusType Type() => PlayerStatusType.Profile;

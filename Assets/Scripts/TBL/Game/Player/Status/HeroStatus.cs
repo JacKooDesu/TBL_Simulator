@@ -1,4 +1,5 @@
 using System;
+using UnityEngine.Events;
 
 namespace TBL.Game
 {
@@ -14,7 +15,7 @@ namespace TBL.Game
         public int HeroId { get; private set; }
         public bool isHiding { get; private set; }
 
-        public event Action<HeroStatus> OnChanged;
+        public UnityEvent<HeroStatus> OnChanged { get; } = new();
 
         public HeroStatus Current() => this;
 

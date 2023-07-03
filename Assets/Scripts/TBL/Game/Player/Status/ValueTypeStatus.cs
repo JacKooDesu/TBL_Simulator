@@ -1,4 +1,6 @@
 using System;
+using UnityEngine.Events;
+
 namespace TBL.Game
 {
     [Serializable]
@@ -9,12 +11,11 @@ namespace TBL.Game
         public ValueTypeStatus(T value)
         {
             this.value = value;
-            OnChanged = (v) => Current();
         }
 
         T value;
 
-        public event Action<T> OnChanged = _ => { };
+        public UnityEvent<T> OnChanged { get; } = new();
 
         public T Current() => this.value;
         public abstract PlayerStatusType Type();
