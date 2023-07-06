@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace TBL.Game
 {
-    public static class CardEnum
+    public static partial class CardEnum
     {
         /// <summary>
         /// 卡片單元，不可使用。

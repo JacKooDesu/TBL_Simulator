@@ -55,6 +55,7 @@ namespace TBL.Game.Networking
         PassCard,
         AcceptCard,
         RejectCard,
+        UseCard,
     }
 
     public interface IPacket

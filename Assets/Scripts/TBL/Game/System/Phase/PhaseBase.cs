@@ -31,13 +31,15 @@ namespace TBL.Game.Sys
 
     public enum PhaseType
     {
+        None = -1,
+
         Draw = 1,
         Main,
         Passing,
         Receive,
         End,
 
-        Reacting = 100
+        Reacting = 100,
     }
 
     public static class Phase

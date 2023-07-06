@@ -40,7 +40,10 @@ namespace TBL.Game.Networking
                 _ => Send(SendType.Cmd, new PlayerReadyPacket()));
 
             if (isLocalPlayer)
+            {
                 packetHandler.GameStartPacketEvent.AutoRemoveListener(_ => MainUIManager.Singleton?.SetupUI(this));
+                GameState.Create(packetHandler);
+            }
             packetHandler.PlayerStatusPacketEvent.AddListener(p => player.UpdateStatus(p.Data));
         }
 

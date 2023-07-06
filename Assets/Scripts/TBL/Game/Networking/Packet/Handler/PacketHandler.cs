@@ -36,6 +36,11 @@ namespace TBL.Game.Networking
                 new(NewRoundPacket.Deserializer,
                     packet => NewRoundPacketEvent.Invoke(packet as NewRoundPacket))
             );
+            DeserializerDict.Add(
+                PacketType.UseCard,
+                new(UseCardPacket.Deserializer,
+                    packet => UseCardPacketEvent.Invoke(packet as UseCardPacket))
+            );
         }
 
         public void OnClientPacket(PacketType type, string data)

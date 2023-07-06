@@ -18,7 +18,7 @@ namespace TBL.Game.UI.Main
         [SerializeField] List<ISetupWith<IPlayerStandalone>> UIs = new();
 
         ISelectable currentSelect;
-        public UnityEvent<CardEnum.Property> OnChangeSelectCard { get; } = new();
+        public UnityEvent<CardEnum.Property?> OnChangeSelectCard { get; } = new();
         public UnityEvent<ISelectable> OnChangeSelect { get; } = new();
         bool hasSelectFlag = false;
 
@@ -31,6 +31,7 @@ namespace TBL.Game.UI.Main
             OnChangeSelect.Invoke(selectable);
             OnChangeSelectCard.Invoke((selectable as ISelectable<CardEnum.Property>)?.data ?? 0);
         }
+        public void UpdateSelect() => SetSelect(currentSelect);
 
         void Awake()
         {
@@ -46,6 +47,13 @@ namespace TBL.Game.UI.Main
 
             commonUI = commonUI ?? FindObjectOfType<CommonUI>();
             commonUI?.Setup(standalone);
+
+            BindEvent();
+        }
+
+        void BindEvent()
+        {
+            GameState.Instance.OnPhaseChange.AddListener(_ => UpdateSelect());
         }
     }
 }

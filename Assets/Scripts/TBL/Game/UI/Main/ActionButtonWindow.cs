@@ -29,7 +29,7 @@ namespace TBL.Game.UI.Main
                 return;
 
             res.player.PhaseQuestStatus.OnChanged.AddListener(OnQuestChange);
-            res.PacketHandler.ChangePhasePacketEvent.AddListener(OnPhaseChange);
+            GameState.Instance.OnPhaseChange.AddListener(OnPhaseChange);
         }
 
         void OnQuestChange(PhaseQuestStatus status)
@@ -55,7 +55,7 @@ namespace TBL.Game.UI.Main
             MainUIManager.Singleton.OnChangeSelectCard.RemoveListener(UpdatePassBtnState);
             if (b)
                 MainUIManager.Singleton.OnChangeSelectCard.AddListener(UpdatePassBtnState);
-            UpdatePassBtnState(0);
+            MainUIManager.Singleton.UpdateSelect();
         }
         void OnQuestReciveCardButton(bool b)
         {
@@ -70,9 +70,16 @@ namespace TBL.Game.UI.Main
         }
 
 
-        void OnPhaseChange(ChangePhasePacket packet)
+        void OnPhaseChange(PhaseType phaseType)
         {
-            ResetTimer(Phase.Get(packet.PhaseType).Time);
+            ResetTimer(Phase.Get(phaseType).Time);
+            OnPhaseChangeUseBtn();
+        }
+        void OnPhaseChangeUseBtn()
+        {
+            MainUIManager.Singleton.OnChangeSelectCard.RemoveListener(UpdatePassBtnState);
+            MainUIManager.Singleton.OnChangeSelectCard.AddListener(UpdateUseBtnState);
+            MainUIManager.Singleton.UpdateSelect();
         }
 
         void Draw() =>
@@ -84,11 +91,18 @@ namespace TBL.Game.UI.Main
         void Reject() =>
             IPlayerStandalone.Me.Send(SendType.Cmd, new RejectCardPacket());
 
-        void UpdatePassBtnState(CardEnum.Property card)
+        void UpdatePassBtnState(CardEnum.Property? card)
         {
-            pass.interactable = card != 0;
+            pass.interactable = card.HasValue;
+            if (!card.HasValue)
+            {
+                pass.onClick.RemoveAllListeners();
+                return;
+            }
+
+            var cardValue = card.Value!;
             Predicate<ProfileStatus> canPassCheck;
-            if (card.HasFlag(CardEnum.Property.Direct))
+            if (cardValue.HasFlag(CardEnum.Property.Direct))
                 canPassCheck = s => s.Id != IPlayerStandalone.MyPlayer.ProfileStatus.Id;
             else
             {
@@ -104,10 +118,12 @@ namespace TBL.Game.UI.Main
             pass.onClick.ReBind(() =>
                 MainUIManager.Singleton.PlayerListWindow.EnterPlayerSelect(
                     p => canPassCheck(p.player.ProfileStatus),
-                    target => IPlayerStandalone.Me.Send<PassCardPacket>(SendType.Cmd, new(card, target))),
+                    target => IPlayerStandalone.Me.Send<PassCardPacket>(SendType.Cmd, new(cardValue, target))),
                 true);
         }
-        void PassCard() { }
+
+        void UpdateUseBtnState(CardEnum.Property? card) =>
+           use.interactable = card?.ConvertFunction().Check() ?? false;
 
         void ResetTimer(float time)
         {

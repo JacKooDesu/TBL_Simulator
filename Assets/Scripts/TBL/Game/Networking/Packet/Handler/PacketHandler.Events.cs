@@ -19,6 +19,7 @@ namespace TBL.Game.Networking
         public UnityEvent<FinishedQuestPacket> FinishedQuestPacketEvent { get; } = new();
         public UnityEvent<AcceptCardPacket> AcceptCardPacketEvent { get; } = new();
         public UnityEvent<RejectCardPacket> RejectCardPacketEvent { get; } = new();
+        public UnityEvent<UseCardPacket> UseCardPacketEvent { get; } = new();
         #endregion
     }
 }
