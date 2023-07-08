@@ -91,6 +91,9 @@ namespace TBL.Game.UI.Main
         void Reject() =>
             IPlayerStandalone.Me.Send(SendType.Cmd, new RejectCardPacket());
 
+        void Use(CardEnum.Property card) =>
+            IPlayerStandalone.Me.Send(SendType.Cmd, new UseCardPacket(card));
+
         void UpdatePassBtnState(CardEnum.Property? card)
         {
             pass.interactable = card.HasValue;
@@ -122,8 +125,15 @@ namespace TBL.Game.UI.Main
                 true);
         }
 
-        void UpdateUseBtnState(CardEnum.Property? card) =>
-           use.interactable = card?.ConvertFunction().Check() ?? false;
+        void UpdateUseBtnState(CardEnum.Property? card)
+        {
+            var useable = card?.ConvertFunction().ClientCheck() ?? false;
+            use.interactable = useable;
+            Action action = useable ?
+                () => Use(card.Value) :
+                () => { };
+            use.onClick.ReBind(action);
+        }
 
         void ResetTimer(float time)
         {

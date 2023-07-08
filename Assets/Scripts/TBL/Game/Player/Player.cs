@@ -56,7 +56,13 @@ namespace TBL.Game
 
         public void BindServerEvent()
         {
-            playerStandalone.PacketHandler.PlayerReadyPacketEvent.AutoRemoveListener(_ => playerStandalone.SetReady());
+            var handler = playerStandalone.PacketHandler;
+            if (!Manager.TryGet()(out var manager))
+                throw new Exception("Manager not found!");
+
+            handler.PlayerReadyPacketEvent.AutoRemoveListener(_ => playerStandalone.SetReady());
+            handler.UseCardPacketEvent.AddListener(_ => manager.UseCard(this, _.card));
+
             teamStatus.OnChanged.AddListener(_ => playerStandalone.Send(SendType.Rpc, new PlayerStatusPacket(teamStatus)));
             heroStatus.OnChanged.AddListener(_ => playerStandalone.Send(SendType.Rpc, new PlayerStatusPacket(heroStatus)));
             cardStatus.OnChanged.AddListener(_ => playerStandalone.Send(SendType.Rpc, new PlayerStatusPacket(cardStatus)));

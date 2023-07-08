@@ -7,6 +7,7 @@ namespace TBL.Game.Sys
     public abstract class PhaseBase
     {
         protected abstract PhaseType PhaseType { get; }
+        public PhaseType Type() => PhaseType;
         public abstract string PhaseName { get; }
         protected float timeCurrent;
         protected abstract float time { get; }
@@ -39,6 +40,8 @@ namespace TBL.Game.Sys
         Receive,
         End,
 
+        Action,
+
         Reacting = 100,
     }
 
@@ -52,6 +55,7 @@ namespace TBL.Game.Sys
                 {PhaseType.End, new Phase_End()},
                 {PhaseType.Main, new Phase_Main()},
                 {PhaseType.Receive, new Phase_Recive()},
+                {PhaseType.Action, new Phase_Action()}
             }
         );
 

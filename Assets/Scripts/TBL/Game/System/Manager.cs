@@ -11,6 +11,7 @@ namespace TBL.Game.Sys
     using NetworkManager = Networking.NetworkRoomManager;
     using LocalManager = Networking.LocalManager;
     using QuestType = PhaseQuestStatus.QuestType;
+    using System.Collections.Generic;
 
     /// <summary>
     /// 資源管理，伺服端使用操作所有遊戲物件。
@@ -30,6 +31,8 @@ namespace TBL.Game.Sys
 
         PhaseManager phaseManager;
         public PhaseManager PhaseManager => phaseManager;
+        public delegate bool GetManagerDelegate(out Manager manager);
+        public static GetManagerDelegate TryGet() => (out Manager manager) => manager = FindObjectOfType<Manager>();
 
         async void Start()
         {
@@ -114,6 +117,19 @@ namespace TBL.Game.Sys
         }
         public void FinishQuest(Player p, QuestType q) =>
             p.PhaseQuestStatus.FinishQuest(q);
+
+        public void UseCard(Player p, CardEnum.Property card)
+        {
+            var function = card.ConvertFunction();
+            if (!function.ServerCheck(p, this))
+                return;
+
+            DiscardHand(p, ((int)card));
+            function.ExecuteAction()(p, this);
+        }
+
+        public void AddGameAction(GameAction action) =>
+            phaseManager.Insert(new(PhaseType.Action, action));
 
         /// <summary>
         /// 廣播訊息。

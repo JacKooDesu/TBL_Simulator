@@ -8,6 +8,8 @@ using Cysharp.Threading.Tasks;
 namespace TBL.Game.Sys
 {
     using Game.Networking;
+    using UnityEngine.SceneManagement;
+
     public interface IPlayerStandalone
     {
         Player player { get; }
@@ -32,5 +34,13 @@ namespace TBL.Game.Sys
         [RuntimeInitializeOnLoadMethod]
         private static void ClearStatic() => standalones = new();
 #endif
+        [RuntimeInitializeOnLoadMethod]
+        private static void OnReload()
+        {
+            SceneManager.sceneLoaded += (s, m) =>
+            {
+                if (s.name is "Menu") ClearStatic();
+            };
+        }
     }
 }

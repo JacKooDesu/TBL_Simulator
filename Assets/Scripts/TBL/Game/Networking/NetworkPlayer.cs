@@ -42,6 +42,7 @@ namespace TBL.Game.Networking
             if (isLocalPlayer)
             {
                 packetHandler.GameStartPacketEvent.AutoRemoveListener(_ => MainUIManager.Singleton?.SetupUI(this));
+                packetHandler.ActionRequestPacketEvent.AddListener(_ => GameAction.Create(_).Execute());
                 GameState.Create(packetHandler);
             }
             packetHandler.PlayerStatusPacketEvent.AddListener(p => player.UpdateStatus(p.Data));

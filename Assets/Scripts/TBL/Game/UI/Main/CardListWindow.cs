@@ -39,6 +39,8 @@ namespace TBL.Game.UI.Main
 
             content.DestroyChildren();
 
+            items.Clear();
+
             foreach (var id in cards)
             {
                 // var tempCard = CardSetting.IdToCard(id);

@@ -47,6 +47,7 @@ namespace TBL.Game.Networking
         PlayerStatus,
         ChangePhase,
         NewRound,
+        ActionRequest,
 
         // Server
         _SERVER_ = 1000,
@@ -56,6 +57,7 @@ namespace TBL.Game.Networking
         AcceptCard,
         RejectCard,
         UseCard,
+        ActionResponse,
     }
 
     public interface IPacket

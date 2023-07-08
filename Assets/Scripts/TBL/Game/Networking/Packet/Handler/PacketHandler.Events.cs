@@ -11,6 +11,7 @@ namespace TBL.Game.Networking
         public UnityEvent<PlayerStatusPacket> PlayerStatusPacketEvent { get; } = new();
         public UnityEvent<ChangePhasePacket> ChangePhasePacketEvent { get; } = new();
         public UnityEvent<NewRoundPacket> NewRoundPacketEvent { get; } = new();
+        public UnityEvent<ActionRequestPacket> ActionRequestPacketEvent { get; } = new();
         #endregion
 
         #region Server
@@ -20,6 +21,7 @@ namespace TBL.Game.Networking
         public UnityEvent<AcceptCardPacket> AcceptCardPacketEvent { get; } = new();
         public UnityEvent<RejectCardPacket> RejectCardPacketEvent { get; } = new();
         public UnityEvent<UseCardPacket> UseCardPacketEvent { get; } = new();
+        public UnityEvent<ActionResponsePacket> ActionResponsePacketEvent { get; } = new();
         #endregion
     }
 }

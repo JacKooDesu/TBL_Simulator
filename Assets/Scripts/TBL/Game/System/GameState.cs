@@ -21,8 +21,8 @@ namespace TBL.Game.Sys
 
         void RegistEvent(PacketHandler handler)
         {
+            SetPassingEvent();
             handler.ChangePhasePacketEvent.AddListener(SetPhase);
-            handler.ChangePhasePacketEvent.AddListener(SetPassing);
             handler.NewRoundPacketEvent.AddListener(SetNewRound);
         }
 
@@ -38,22 +38,21 @@ namespace TBL.Game.Sys
 
         public int? CurrnetPassingPlayer { get; private set; } = null;
         public UnityEvent<int?> OnPassingPlayerChange { get; } = new();
-        void SetPassing(ChangePhasePacket packet) =>
-            OnPassingPlayerChange.Invoke(
-                CurrnetPassingPlayer = packet.PhaseType switch
-                {
-                    PhaseType.Passing =>
-                        IPlayerStandalone
-                            .Standalones
-                            .Select(ps => ps.player)
-                            .First(
-                                x => x.PhaseQuestStatus
-                                    .Quest
-                                    .Contains(QuestType.AskRecieve))
-                            .ProfileStatus
-                            .Id,
-                    _ => null
-                });
+        void SetPassingEvent()
+        {
+            Action<Player, PhaseQuestStatus> action = (p, x) =>
+            {
+                if (x.Quest.Contains(QuestType.AskRecieve))
+                    SetPassing(p.ProfileStatus.Id);
+            };
+            foreach (var p in IPlayerStandalone.Standalones.Select(x => x.player))
+                p.PhaseQuestStatus
+                 .OnChanged
+                 .AddListener(x => action(p, x));
+        }
+
+        void SetPassing(int? id) =>
+            OnPassingPlayerChange.Invoke(CurrnetPassingPlayer = id);
 
         public void Dispose() => Instance = null;
     }

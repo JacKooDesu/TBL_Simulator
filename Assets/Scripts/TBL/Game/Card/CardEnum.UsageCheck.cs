@@ -6,9 +6,11 @@ using System;
 namespace TBL.Game
 {
     using Sys;
+    using static TBL.Game.PhaseQuestStatus;
+
     public static partial class CardEnum
     {
-        public static bool Check(this Function function)
+        public static bool ClientCheck(this Function function)
         {
             var phase = GameState.Instance.CurrentPhase;
             var isRoundHost =
@@ -16,10 +18,32 @@ namespace TBL.Game
             var isAskingRecive =
                 (GameState.Instance.CurrnetPassingPlayer ?? -1) == IPlayerStandalone.MyPlayer.ProfileStatus.Id;
 
-            return function switch
+            return CommonCheck(function, phase, isRoundHost, isAskingRecive);
+        }
+
+        public static bool ServerCheck(
+            this Function function,
+            Player player,
+            Manager manager,
+            Func<Player, Manager, bool> checkFunc = null)
+        {
+            var phase = manager.PhaseManager.Current().Type();
+            var isRoundHost =
+                manager.CurrentPlayer.ProfileStatus.Id == player.ProfileStatus.Id;
+            var isAskingRecive =
+                phase == PhaseType.Passing ?
+                player.PhaseQuestStatus.Quest.Contains(QuestType.AskRecieve) :
+                false;
+
+            return CommonCheck(function, phase, isRoundHost, isAskingRecive) &
+                   (checkFunc?.Invoke(player, manager) ?? true);
+        }
+
+        static bool CommonCheck(Function function, PhaseType phase, bool isRoundHost, bool isAskingRecive) =>
+            function switch
             {
                 Function.Burn => phase is not PhaseType.None,
-                
+
                 Function.Guess or
                 Function.Gameble or
                 Function.Lock or
@@ -29,9 +53,8 @@ namespace TBL.Game
                 Function.Skip => phase is PhaseType.Main,
                 Function.Return => isAskingRecive && phase is PhaseType.Passing,
                 Function.Invalidate => phase is PhaseType.Reacting,
-                
+
                 _ => false
             };
-        }
     }
 }
