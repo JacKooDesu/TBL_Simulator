@@ -16,16 +16,21 @@ namespace TBL.Game.Sys
         public override void Enter(Manager manager, object parameter = null)
         {
             action = parameter as GameAction;
-            
+
             complete = false;
-            action.Callback.AutoRemoveListener(_ => complete = true);
 
             var standalone = action.Player.PlayerStandalone;
             standalone.PacketHandler
                       .ActionResponsePacketEvent
-                      .AutoRemoveListener(action.Callback.Invoke);
+                      .AutoRemoveListener(GetResponse);
             standalone.Send(SendType.Target, action.RequestCreate());
             base.Enter(manager);
+        }
+
+        void GetResponse(ActionResponsePacket packet)
+        {
+            action.SetResponse(packet);
+            complete = true;
         }
 
         public override bool Update(float dt) =>
@@ -35,7 +40,8 @@ namespace TBL.Game.Sys
 
         public override void Exit()
         {
-            if (complete) action.DiscardCallback.Invoke();
+            if (complete) action.CompleteCallback.Invoke();
+            else action.DiscardCallback.Invoke();
             action = null;
         }
     }

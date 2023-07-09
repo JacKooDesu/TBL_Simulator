@@ -20,7 +20,7 @@ namespace TBL.Game
         void SelectPlayer(Player user, Manager manager)
         {
             var action = SelectPlayerAction(user, manager);
-            action.Callback.AutoRemoveListener(_ => SelectCard(user, manager, action.Result));
+            action.CompleteCallback.AutoRemoveListener(() => SelectCard(user, manager, action.Result));
             manager.AddGameAction(action);
         }
         GameAction_SelectPlayer SelectPlayerAction(Player user, Manager manager) =>
@@ -48,8 +48,8 @@ namespace TBL.Game
             Func<GameAction_SelectCard, int[]> GetResultIds = action =>
                 action.Result.Select(x => ((int)x)).ToArray();
 
-            action.Callback.AutoRemoveListener(
-                _ => manager.DiscardTable(target, GetResultIds(action)));
+            action.CompleteCallback.AutoRemoveListener(
+                () => manager.DiscardTable(target, GetResultIds(action)));
 
             manager.AddGameAction(action);
         }

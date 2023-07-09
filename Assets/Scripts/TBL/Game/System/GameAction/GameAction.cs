@@ -11,7 +11,7 @@ namespace TBL.Game.Sys
         public GameAction(Player player)
         {
             this.Player = player;
-            Callback = new();
+            CompleteCallback = new();
             DiscardCallback = new();
         }
 
@@ -20,7 +20,7 @@ namespace TBL.Game.Sys
         protected abstract ActionType ActionType { get; }
         public abstract Func<ActionRequestPacket> RequestCreate { get; }
         public abstract void SetResponse(ActionResponsePacket packet);
-        public UnityEvent<ActionResponsePacket> Callback { get; }
+        public UnityEvent CompleteCallback { get; }
         public UnityEvent DiscardCallback { get; }
         #endregion
 

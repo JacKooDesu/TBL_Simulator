@@ -18,7 +18,6 @@ namespace TBL.Game.Sys
         public GameAction_SelectCard(Player player, ActionData data) : base(player)
         {
             Data = data;
-            Callback.AddListener(SetResponse);
         }
         public override Func<ActionRequestPacket> RequestCreate => _RequestCreate;
         ActionRequestPacket _RequestCreate()

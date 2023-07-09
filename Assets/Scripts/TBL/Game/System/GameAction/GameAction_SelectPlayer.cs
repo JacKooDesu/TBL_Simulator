@@ -18,7 +18,6 @@ namespace TBL.Game.Sys
         public GameAction_SelectPlayer(Player player, int[] targets) : base(player)
         {
             Targets = targets;
-            Callback.AddListener(SetResponse);
         }
         public override Func<ActionRequestPacket> RequestCreate => _PacketCreate;
         ActionRequestPacket _PacketCreate()
