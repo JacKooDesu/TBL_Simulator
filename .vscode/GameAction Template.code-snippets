@@ -1,0 +1,100 @@
+{
+    "GameAction Snippet":{
+        "prefix": "GAMEACTION",
+        "body": [
+            "using System;",
+            "using System.Linq;",
+            "",
+            "namespace TBL.Game.Sys",
+            "{",
+            "using Networking;",
+            "using UI.Main;",
+            "public class GameAction_${name} : GameAction",
+            "{",
+            "protected override ActionType ActionType => ActionType.${type};",
+            "",
+            "#region SERVER",
+            "public GameAction_${name}(Player player, object param) : base(player)",
+            "{",
+            "",
+            "}",
+            "public override Func<ActionRequestPacket> PacketCreate => throw new NotImplementedException();",
+            "ActionRequestPacket _PacketCreate()",
+            "{",
+            "string data = \"\";",
+            "return new(ActionType, data);",
+            "}",
+            "",
+            "#endregion",
+            "",
+            "#region CLIENT",
+            "public GameAction_${name}(ActionRequestPacket request)",
+            "{",
+            "",
+            "}",
+            "public override void Execute()",
+            "{",
+            "",
+            "}",
+            "void Response(object x)",
+            "{",
+            "IPlayerStandalone.Me.Send(",
+            "SendType.Cmd,",
+            "new ActionResponsePacket()",
+            ".WithData($\"{x}\")",
+            ".WithType(ActionType)",
+            ");",
+            "}",
+            "#endregion",
+            "}",
+            "}",            
+        ]
+    }
+}
+
+
+
+
+
+
+    
+    
+    
+    
+        
+
+        
+        
+        
+
+        
+        
+        
+        
+            
+            
+        
+
+        
+
+        
+        
+        
+
+        
+        
+        
+
+        
+        
+        
+            
+                
+                
+                    
+                    
+            
+        
+        
+    
+
