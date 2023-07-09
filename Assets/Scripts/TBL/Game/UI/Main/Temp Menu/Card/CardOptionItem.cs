@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TBL.Utils;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -36,6 +37,8 @@ namespace TBL.Game.UI.Main
             };
 
             textUI.text = function.ToDescription();
+
+            button.onClick.ReBind(() => OnSelect.Invoke(Data));
         }
     }
 }

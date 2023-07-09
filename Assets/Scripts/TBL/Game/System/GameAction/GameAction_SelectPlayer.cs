@@ -12,17 +12,26 @@ namespace TBL.Game.Sys
     {
         protected override ActionType ActionType => ActionType.SelectPlayer;
         public int[] Targets { get; private set; }
+        public int Result { get; private set; }
 
         #region SERVER
         public GameAction_SelectPlayer(Player player, int[] targets) : base(player)
         {
             Targets = targets;
+            Callback.AddListener(SetResponse);
         }
-        public override Func<ActionRequestPacket> PacketCreate => _PacketCreate;
+        public override Func<ActionRequestPacket> RequestCreate => _PacketCreate;
         ActionRequestPacket _PacketCreate()
         {
             string data = JsonConvert.SerializeObject(Targets);
             return new(ActionType, data);
+        }
+
+        public override void SetResponse(ActionResponsePacket packet)
+        {
+            if (!Int32.TryParse(packet.Data, out var res))
+                throw new Exception("Unknow Packet Data!");
+            Result = res;
         }
         #endregion
 

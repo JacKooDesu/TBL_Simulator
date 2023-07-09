@@ -10,6 +10,7 @@ namespace TBL.Game.UI.Main
     where TSetup : TempMenuBase<TData, TSetup, TResponse>.SetupDataBase
     {
         public record SetupDataBase(TData[] datas);
+        protected TSetup Data { get; set; }
         [SerializeField] protected OptionItemBase<TData> itemPrefab;
         [SerializeField] protected int poolSize = 10;
         [SerializeField] protected Transform itemParent;
@@ -27,7 +28,8 @@ namespace TBL.Game.UI.Main
 
             for (int i = 0; i < poolSize; ++i)
                 ItemPool.Enqueue(InitItem());
-
+                
+            OnConfirm.AddListener(_ => Close());
             Close();
         }
         protected virtual OptionItemBase<TData> InitItem()
@@ -38,9 +40,10 @@ namespace TBL.Game.UI.Main
         }
         public virtual TempMenuBase<TData, TSetup, TResponse> Create(TSetup setup)
         {
+            Data = setup;
             foreach (var d in setup.datas)
                 CreateItem(d);
-
+            gameObject.SetActive(true);
             return this;
         }
         protected virtual OptionItemBase<TData> CreateItem(TData data)

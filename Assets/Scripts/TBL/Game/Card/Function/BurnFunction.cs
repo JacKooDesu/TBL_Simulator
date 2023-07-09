@@ -8,17 +8,21 @@ namespace TBL.Game
     using TBL.Game.Networking;
     using TBL.Utils;
     using UnityEngine;
+    using System;
 
     public class BurnFunction : ICardFunction
     {
         // public ICardFunction.ExecuteAction Execute => ExecuteAction;
-        public void ExecuteAction(Player user, Manager manager)
-        {
-            GameAction_SelectPlayer selectPlayer = SelectPlayerAction(user, manager);
-            selectPlayer.Callback.AutoRemoveListener(p => SelectCard(user, manager, p));
-            manager.AddGameAction(selectPlayer);
-        }
+        public void ExecuteAction(Player user, Manager manager) =>
+            SelectPlayer(user, manager);
 
+
+        void SelectPlayer(Player user, Manager manager)
+        {
+            var action = SelectPlayerAction(user, manager);
+            action.Callback.AutoRemoveListener(_ => SelectCard(user, manager, action.Result));
+            manager.AddGameAction(action);
+        }
         GameAction_SelectPlayer SelectPlayerAction(Player user, Manager manager) =>
             new(user,
                 manager
@@ -32,13 +36,26 @@ namespace TBL.Game
                 .Select(x => x.ProfileStatus.Id)
                 .ToArray());
 
-        void SelectCard(Player user, Manager manager, ActionResponsePacket response)
-        { Debug.Log($"Select Card {response.Data}"); }
-
-        public void Step()
+        void SelectCard(Player user, Manager manager, int targetId)
         {
-            throw new System.NotImplementedException();
+            var target = manager.Players.QueryById(targetId);
+            var cards = target.CardStatus
+                              .Table
+                              .Select(x => (Property)x)
+                              .Where(x => x.Contains(Property.Black))
+                              .ToArray();
+            var action = SelectCardAction(user, cards);
+            Func<GameAction_SelectCard, int[]> GetResultIds = action =>
+                action.Result.Select(x => ((int)x)).ToArray();
+
+            action.Callback.AutoRemoveListener(
+                _ => manager.DiscardTable(target, GetResultIds(action)));
+
+            manager.AddGameAction(action);
         }
+
+        GameAction_SelectCard SelectCardAction(Player user, Property[] cards) =>
+            new(user, new(cards));
 
         public static bool AdditionCheck(Manager manager)
         {

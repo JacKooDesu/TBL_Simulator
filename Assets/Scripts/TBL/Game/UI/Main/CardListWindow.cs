@@ -46,7 +46,7 @@ namespace TBL.Game.UI.Main
                 // var tempCard = CardSetting.IdToCard(id);
                 var ui = Instantiate(prefab, content);
                 ui.SetUI(id);
-                ui.OnSelectEvent.AddListener(c => Debug.Log(c));
+                // ui.OnSelectEvent.AddListener(c => Debug.Log(c));
                 ui.OnSelectEvent.AddListener(c => MainUIManager.Singleton.SetSelect(ui));
 
                 items.Add(ui);

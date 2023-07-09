@@ -23,6 +23,8 @@ namespace TBL.Game.UI.Main
         bool hasSelectFlag = false;
 
         [SerializeField] CommonUI commonUI;
+        [SerializeField] TempMenuManager tempMenuManager;
+        public TempMenuManager TempMenuManager => tempMenuManager;
 
         public void SetSelect(ISelectable selectable)
         {

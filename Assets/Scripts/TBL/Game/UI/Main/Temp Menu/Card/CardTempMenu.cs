@@ -13,8 +13,8 @@ namespace TBL.Game.UI.Main
     {
         public record SetupData(Property[] cards, int count) : SetupDataBase(cards);
 
-        private Button confirmBtn;
-        private Button cancelBtn;
+        [SerializeField] Button confirmBtn;
+        [SerializeField] Button cancelBtn;
 
         List<OptionItemBase<Property>> SelectedCardList { get; } = new();
 
@@ -24,6 +24,7 @@ namespace TBL.Game.UI.Main
             SelectedCardList.Clear();
             confirmBtn.onClick.ReBind(Confirm);
             OnSelectEvent.ReBind(Swap);
+            CheckCount();
             return this;
         }
         void Confirm() =>
@@ -35,7 +36,12 @@ namespace TBL.Game.UI.Main
                 SelectedCardList.Remove(item);
             else
                 SelectedCardList.Add(item);
+            
+            CheckCount();
         }
+
+        void CheckCount() =>
+            confirmBtn.interactable = (SelectedCardList.Count == Data.count);
 
         public override void Cancel() { }
     }

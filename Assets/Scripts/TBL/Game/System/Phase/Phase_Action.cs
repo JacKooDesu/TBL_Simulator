@@ -24,7 +24,7 @@ namespace TBL.Game.Sys
             standalone.PacketHandler
                       .ActionResponsePacketEvent
                       .AutoRemoveListener(action.Callback.Invoke);
-            standalone.Send(SendType.Target, action.PacketCreate());
+            standalone.Send(SendType.Target, action.RequestCreate());
             base.Enter(manager);
         }
 
