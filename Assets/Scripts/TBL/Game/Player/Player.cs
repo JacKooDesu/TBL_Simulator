@@ -69,6 +69,7 @@ namespace TBL.Game
             profileStatus.OnChanged.AddListener(_ => playerStandalone.Send(SendType.Rpc, new PlayerStatusPacket(profileStatus)));
             skillStatus.OnChanged.AddListener(_ => playerStandalone.Send(SendType.Rpc, new PlayerStatusPacket(skillStatus)));
             phaseQuestStatus.OnChanged.AddListener(_ => playerStandalone.Send(SendType.Rpc, new PlayerStatusPacket(phaseQuestStatus)));
+            receiverStatus.OnChanged.AddListener(_ => playerStandalone.Send(SendType.Rpc, new PlayerStatusPacket(receiverStatus)));
         }
         public void BindClientEvent()
         {

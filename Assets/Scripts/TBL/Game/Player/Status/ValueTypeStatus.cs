@@ -1,9 +1,10 @@
 using System;
+using Newtonsoft.Json;
 using UnityEngine.Events;
 
 namespace TBL.Game
 {
-    [Serializable]
+    [Serializable, JsonObject]
 
     public abstract class ValueTypeStatus<T> : IPlayerStatus<T>
     where T : struct
@@ -12,7 +13,7 @@ namespace TBL.Game
         {
             this.value = value;
         }
-
+        [JsonProperty]
         protected T value;
 
         public UnityEvent<T> OnChanged { get; } = new();
