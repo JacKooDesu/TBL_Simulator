@@ -9,17 +9,17 @@ namespace TBL.Game
     {
         static ReadOnlyDictionary<Function, ICardFunction> FunctionExecuteDict => new(
             new Dictionary<Function, ICardFunction>{
-                {Function.Lock, null},
-                {Function.Skip, null},
+                {Function.Lock, new LockFunction()},
+                {Function.Skip, new SkipFunction()},
                 {Function.Return, null},
                 {Function.Intercept, null},
                 {Function.Guess, null},
                 {Function.Burn, new BurnFunction()},
-                {Function.Invalidate, null},
+                {Function.Invalidate, new InvalidateFunction()},
                 {Function.Gameble, null},
                 {Function.Test, null}});
 
-        public static Action<Player, Manager> ExecuteAction(this Function function) =>
-            FunctionExecuteDict[function].ExecuteAction;
+        public static ICardFunction ToExecutable(this Function function) =>
+            FunctionExecuteDict[function];
     }
 }

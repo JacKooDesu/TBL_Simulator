@@ -9,53 +9,42 @@ namespace TBL.Game
     using TBL.Utils;
     using UnityEngine;
     using System;
+    using static CardFunctionUtil;
+    using UnityEngine.Events;
 
     public class BurnFunction : ICardFunction
     {
-        // public ICardFunction.ExecuteAction Execute => ExecuteAction;
         public void ExecuteAction(Player user, Manager manager) =>
             SelectPlayer(user, manager);
 
 
         void SelectPlayer(Player user, Manager manager)
         {
-            var action = SelectPlayerAction(user, manager);
-            action.CompleteCallback.AutoRemoveListener(() => SelectCard(user, manager, action.Result));
-            manager.AddGameAction(action);
+            Func<Player, bool> fileter =
+                p => p.CardStatus
+                      .Table
+                      .Any(c => ((Property)c).Contains(Property.Black));
+            SelectPlayerAction(user, manager, fileter)
+                .AndThen<int>(id => SelectCard(user, manager, id))
+                .AddToFlow();
         }
-        GameAction_SelectPlayer SelectPlayerAction(Player user, Manager manager) =>
-            new(user,
-                manager
-                    .Players
-                    .Players
-                    .Where(
-                        p => p.CardStatus
-                            .Table
-                            .Any(c => ((Property)c)
-                            .Contains(Property.Black)))
-                .Select(x => x.ProfileStatus.Id)
-                .ToArray());
 
         void SelectCard(Player user, Manager manager, int targetId)
         {
             var target = manager.Players.QueryById(targetId);
-            var cards = target.CardStatus
-                              .Table
-                              .Select(x => (Property)x)
-                              .Where(x => x.Contains(Property.Black))
-                              .ToArray();
-            var action = SelectCardAction(user, cards);
-            Func<GameAction_SelectCard, int[]> GetResultIds = action =>
-                action.Result.Select(x => ((int)x)).ToArray();
+            Func<Property[], int[]> GetResultIds = cards =>
+                cards.Select(x => ((int)x)).ToArray();
 
-            action.CompleteCallback.AutoRemoveListener(
-                () => manager.DiscardTable(target, GetResultIds(action)));
-
-            manager.AddGameAction(action);
+            SelectTableCardAction(
+                user,
+                manager,
+                target,
+                p => p.Contains(Property.Black))
+                .AndThen<Property[]>(
+                    cards => manager.AddResolve(
+                        () => manager.DiscardTable(target, GetResultIds(cards))))
+                .AddToFlow();
         }
-
-        GameAction_SelectCard SelectCardAction(Player user, Property[] cards) =>
-            new(user, new(cards));
 
         public static bool AdditionCheck(Manager manager)
         {

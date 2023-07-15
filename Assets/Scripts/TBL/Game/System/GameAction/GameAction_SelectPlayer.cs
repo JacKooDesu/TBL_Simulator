@@ -12,8 +12,7 @@ namespace TBL.Game.Sys
     {
         protected override ActionType ActionType => ActionType.SelectPlayer;
         public int[] Targets { get; private set; }
-        public int Result { get; private set; }
-
+        // public int Result { get; private set; }
         #region SERVER
         public GameAction_SelectPlayer(Player player, int[] targets) : base(player)
         {

@@ -52,7 +52,7 @@ namespace TBL.Game
                 Function.Intercept => !isAskingRecive && phase is PhaseType.Passing,
                 Function.Skip => phase is PhaseType.Main,
                 Function.Return => isAskingRecive && phase is PhaseType.Passing,
-                Function.Invalidate => phase is PhaseType.Reacting,
+                Function.Invalidate => phase is PhaseType.Resolving,
 
                 _ => false
             };

@@ -44,7 +44,7 @@ namespace TBL.Game.Sys
                 var dt = 0f;
 
                 current.Enter(manager, flow.Peek().parameter);
-                do
+                while (current.Update(dt))
                 {
                     await UniTask.Yield(PlayerLoopTiming.EarlyUpdate);
                     ct.ThrowIfCancellationRequested();
@@ -54,7 +54,7 @@ namespace TBL.Game.Sys
                         interrupt = true;
                         break;
                     }
-                } while (current.Update(dt));
+                }
 
                 if (interrupt)
                     continue;

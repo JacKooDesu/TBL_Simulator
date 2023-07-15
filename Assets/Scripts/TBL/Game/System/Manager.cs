@@ -32,10 +32,13 @@ namespace TBL.Game.Sys
         PhaseManager phaseManager;
         public PhaseManager PhaseManager => phaseManager;
         public delegate bool GetManagerDelegate(out Manager manager);
-        public static GetManagerDelegate TryGet() => (out Manager manager) => manager = FindObjectOfType<Manager>();
+        public static GetManagerDelegate TryGet() => (out Manager manager) => manager = Instance;
+        public static Manager Instance { get; private set; }
 
         async void Start()
         {
+            Instance = this;
+
             if (IStandaloneManager.Singleton == null)
                 return;
 
@@ -94,6 +97,9 @@ namespace TBL.Game.Sys
         public void AddTable(Player p, params int[] ids) =>
             p.CardStatus.AddTableCards(ids);
 
+        public void AddReciverStatus(Player p, ReceiveEnum r) =>
+            p.ReceiverStatus.AddReciverStatus(r);
+
         public void AddQuest(Player p, QuestType q)
         {
             AddQuest(p, q, new());
@@ -125,11 +131,20 @@ namespace TBL.Game.Sys
                 return;
 
             DiscardHand(p, ((int)card));
-            function.ExecuteAction()(p, this);
+            var executable = function.ToExecutable();
+            executable.ExecuteAction(p, this);
         }
 
         public void AddGameAction(GameAction action) =>
             phaseManager.Insert(new(PhaseType.Action, action));
+
+        public void AddResolve(Action action)
+        {
+            if (PhaseManager.Current() is Phase_Resolving)
+                (PhaseManager.Current() as Phase_Resolving).ActionStack.Push(action);
+            else
+                PhaseManager.Insert(PhaseType.Resolving, action);
+        }
 
         /// <summary>
         /// 廣播訊息。

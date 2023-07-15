@@ -43,6 +43,7 @@ namespace TBL.Game.Sys
         Action,
 
         Reacting = 100,
+        Resolving = 101,
     }
 
     public static class Phase
@@ -55,7 +56,9 @@ namespace TBL.Game.Sys
                 {PhaseType.End, new Phase_End()},
                 {PhaseType.Main, new Phase_Main()},
                 {PhaseType.Receive, new Phase_Recive()},
-                {PhaseType.Action, new Phase_Action()}
+                {PhaseType.Action, new Phase_Action()},
+                {PhaseType.Reacting, new Phase_Reacting()},
+                {PhaseType.Resolving, new Phase_Resolving()}
             }
         );
 

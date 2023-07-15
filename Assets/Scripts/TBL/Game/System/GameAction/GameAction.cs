@@ -5,6 +5,8 @@ using UnityEngine.Events;
 namespace TBL.Game.Sys
 {
     using Game.Networking;
+    using TBL.Utils;
+
     public abstract class GameAction
     {
         public GameAction() { }
@@ -16,11 +18,12 @@ namespace TBL.Game.Sys
         }
 
         #region  SERVER
+        public object Result { get; protected set; }
         public Player Player { get; private set; }
         protected abstract ActionType ActionType { get; }
         public abstract Func<ActionRequestPacket> RequestCreate { get; }
         public abstract void SetResponse(ActionResponsePacket packet);
-        public UnityEvent CompleteCallback { get; }
+        public UnityEvent<object> CompleteCallback { get; }
         public UnityEvent DiscardCallback { get; }
         #endregion
 
@@ -38,30 +41,23 @@ namespace TBL.Game.Sys
                 ActionType.SelectCard => new GameAction_SelectCard(request),
                 _ => null
             };
-    }
 
-    // TODO: 未完成
-    public class GameActionContainer : GameAction
-    {
-        public GameActionContainer(ActionRequestPacket request) : base()
+        public GameAction WhenDiscard(Func<Action> action)
         {
+            DiscardCallback.AutoRemoveListener(action());
+            return this;
         }
 
-        Queue<GameAction> Actions { get; set; } = new();
-        protected override ActionType ActionType => throw new NotImplementedException();
-
-        public override Func<ActionRequestPacket> RequestCreate => throw new NotImplementedException();
-
-        public GameAction Next() => Actions.Dequeue();
-
-        public override void Execute()
+        public GameAction AndThen<T>(Action<T> nextAction)
         {
-            throw new NotImplementedException();
+            CompleteCallback.AutoRemoveListener(_ => nextAction((T)_));
+            return this;
         }
 
-        public override void SetResponse(ActionResponsePacket packet)
+        public GameAction AddToFlow()
         {
-            throw new NotImplementedException();
+            Manager.Instance.AddGameAction(this);
+            return this;
         }
     }
 

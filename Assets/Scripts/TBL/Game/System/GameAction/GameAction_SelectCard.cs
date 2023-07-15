@@ -13,7 +13,7 @@ namespace TBL.Game.Sys
         protected override ActionType ActionType => ActionType.SelectCard;
         public record ActionData(Property[] Cards, int Count = 1);
         public ActionData Data { get; private set; }
-        public Property[] Result { get; private set; }
+        // public Property[] Result { get; private set; }
         #region SERVER
         public GameAction_SelectCard(Player player, ActionData data) : base(player)
         {

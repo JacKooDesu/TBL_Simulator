@@ -3,9 +3,9 @@ using UnityEngine;
 
 namespace TBL.Game.Sys
 {
-    public abstract class Phase_Reacting : PhaseBase
+    public class Phase_Reacting : PhaseBase
     {
-        public record Data(ReactingType rType, Func<bool> escFunc);
+        public record Data(ReactingType rType, Action action, Func<bool> escFunc);
         Data data { get; set; }
 
         protected override PhaseType PhaseType => PhaseType.Reacting;
@@ -32,10 +32,8 @@ namespace TBL.Game.Sys
 
         bool Check() => data.escFunc();
 
-        public override void Exit()
-        {
-
-        }
+        public override void Exit() =>
+            data.action();
 
         public static PhaseManager.PhaseData Create(Data data) =>
             new(PhaseType.Reacting, data);

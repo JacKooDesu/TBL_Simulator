@@ -13,7 +13,7 @@ namespace TBL.Game
             this.value = value;
         }
 
-        T value;
+        protected T value;
 
         public UnityEvent<T> OnChanged { get; } = new();
 

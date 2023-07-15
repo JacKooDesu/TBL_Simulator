@@ -1,8 +1,11 @@
 using Cysharp.Threading.Tasks;
+using System;
+using UnityEngine.Events;
 
 namespace TBL.Game
 {
     using Sys;
+
     public interface ICardFunction
     {
         // void Step();

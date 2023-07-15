@@ -40,7 +40,7 @@ namespace TBL.Game.Sys
 
         public override void Exit()
         {
-            if (complete) action.CompleteCallback.Invoke();
+            if (complete) action.CompleteCallback.Invoke(action.Result);
             else action.DiscardCallback.Invoke();
             action = null;
         }
