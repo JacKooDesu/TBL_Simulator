@@ -10,7 +10,8 @@ namespace TBL.Game
         /// <summary>
         /// 卡片單元，不可使用。
         /// </summary>
-        public const int None = 1 << 0;
+        public const int NONE = 1 << 0;
+        public const int UNIQUE_BIT = 16;
 
         /// <summary>
         /// 用於存放卡片所有屬性，多使用於ID轉換。
@@ -55,7 +56,7 @@ namespace TBL.Game
             [Description("密電")]
             Secret = 1 << 14,
             [Description("文本")]
-            Public = 1 << 15
+            Public = 1 << 15,
             #endregion
         }
 

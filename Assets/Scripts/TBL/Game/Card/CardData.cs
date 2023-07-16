@@ -36,9 +36,13 @@ namespace TBL.Game
             this.color = property.ConvertColor();
             this.function = property.ConvertFunction();
             this.type = property.ConvertType();
+
+            this.id = id;
         }
 
-        int unique;
+        [SerializeField] int id;
+        public int Id => id;
+        public int Unique { get; private set; }
 
         [SerializeField] CardEnum.Property property;
         public CardEnum.Property Property => property;

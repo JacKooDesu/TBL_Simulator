@@ -18,7 +18,7 @@ namespace TBL.Game.UI.Main
         [SerializeField] List<ISetupWith<IPlayerStandalone>> UIs = new();
 
         ISelectable currentSelect;
-        public UnityEvent<CardEnum.Property?> OnChangeSelectCard { get; } = new();
+        public UnityEvent<int?> OnChangeSelectCard { get; } = new();
         public UnityEvent<ISelectable> OnChangeSelect { get; } = new();
         bool hasSelectFlag = false;
 
@@ -31,7 +31,7 @@ namespace TBL.Game.UI.Main
             hasSelectFlag = true;
             currentSelect = selectable;
             OnChangeSelect.Invoke(selectable);
-            OnChangeSelectCard.Invoke((selectable as ISelectable<CardEnum.Property>)?.data ?? 0);
+            OnChangeSelectCard.Invoke((selectable as ISelectable<int>)?.data ?? null);
         }
         public void UpdateSelect() => SetSelect(currentSelect);
 

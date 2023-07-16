@@ -30,7 +30,10 @@ namespace TBL.Game
             foreach (var set in setting.CardSets)
             {
                 for (int i = 0; i < set.count; ++i)
-                    list.Add(new CardData(set.property));
+                {
+                    var unique = 1 << (CardEnum.UNIQUE_BIT + i);
+                    list.Add(new CardData((int)set.property | unique));
+                }
             }
 
 #if UNITY_EDITOR

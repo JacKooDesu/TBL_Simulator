@@ -10,7 +10,7 @@ namespace TBL.UI.GameScene
     using Game.UI;
     using System;
 
-    public class CardListItem : MonoBehaviour, ISelectable<CardEnum.Property>
+    public class CardListItem : MonoBehaviour, ISelectable<int>
     {
         public Text nameTextUI;
         public int cardID;
@@ -22,8 +22,8 @@ namespace TBL.UI.GameScene
         [SerializeField] Button button;
 
         public SelectableType Type => SelectableType.Card;
-        public UnityEvent<CardEnum.Property> OnSelectEvent { get; } = new();
-        public CardEnum.Property data => (CardEnum.Property)cardID;
+        public UnityEvent<int> OnSelectEvent { get; } = new();
+        public int data => cardID;
 
         public void SetUI(int id)
         {
@@ -41,7 +41,7 @@ namespace TBL.UI.GameScene
             };
 
             nameTextUI.text = function.ToDescription();
-            button?.onClick.AddListener(() => OnSelectEvent.Invoke(property));
+            button?.onClick.AddListener(() => OnSelectEvent.Invoke(data));
         }
 
         #region  OBSLETE

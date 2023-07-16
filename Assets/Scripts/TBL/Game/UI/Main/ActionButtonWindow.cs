@@ -91,21 +91,21 @@ namespace TBL.Game.UI.Main
         void Reject() =>
             IPlayerStandalone.Me.Send(SendType.Cmd, new RejectCardPacket());
 
-        void Use(CardEnum.Property card) =>
-            IPlayerStandalone.Me.Send(SendType.Cmd, new UseCardPacket(card));
+        void Use(int cardId) =>
+            IPlayerStandalone.Me.Send(SendType.Cmd, new UseCardPacket(cardId));
 
-        void UpdatePassBtnState(CardEnum.Property? card)
+        void UpdatePassBtnState(int? cardId)
         {
-            pass.interactable = card.HasValue;
-            if (!card.HasValue)
+            pass.interactable = cardId.HasValue;
+            if (!cardId.HasValue)
             {
                 pass.onClick.RemoveAllListeners();
                 return;
             }
 
-            var cardValue = card.Value!;
+            var card = (CardEnum.Property)cardId.Value!;
             Predicate<ProfileStatus> canPassCheck;
-            if (cardValue.HasFlag(CardEnum.Property.Direct))
+            if (card.HasFlag(CardEnum.Property.Direct))
                 canPassCheck = s => s.Id != IPlayerStandalone.MyPlayer.ProfileStatus.Id;
             else
             {
@@ -121,16 +121,24 @@ namespace TBL.Game.UI.Main
             pass.onClick.ReBind(() =>
                 MainUIManager.Singleton.PlayerListWindow.EnterPlayerSelect(
                     p => canPassCheck(p.player.ProfileStatus),
-                    target => IPlayerStandalone.Me.Send<PassCardPacket>(SendType.Cmd, new(cardValue, target))),
+                    target => IPlayerStandalone.Me.Send<PassCardPacket>(SendType.Cmd, new(cardId.Value, target))),
                 true);
         }
 
-        void UpdateUseBtnState(CardEnum.Property? card)
+        void UpdateUseBtnState(int? cardId)
         {
-            var useable = card?.ConvertFunction().ClientCheck() ?? false;
+            if (!cardId.HasValue)
+            {
+                use.interactable = false;
+                use.onClick.RemoveAllListeners();
+                return;
+            }
+
+            var card = (CardEnum.Property)cardId;
+            var useable = card.ConvertFunction().ClientCheck();
             use.interactable = useable;
             Action action = useable ?
-                () => Use(card.Value) :
+                () => Use(cardId.Value) :
                 () => { };
             use.onClick.ReBind(action);
         }

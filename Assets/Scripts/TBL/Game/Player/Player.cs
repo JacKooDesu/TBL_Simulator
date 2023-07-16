@@ -61,7 +61,7 @@ namespace TBL.Game
                 throw new Exception("Manager not found!");
 
             handler.PlayerReadyPacketEvent.AutoRemoveListener(_ => playerStandalone.SetReady());
-            handler.UseCardPacketEvent.AddListener(_ => manager.UseCard(this, _.card));
+            handler.UseCardPacketEvent.AddListener(_ => manager.UseCard(this, _.cardId));
 
             teamStatus.OnChanged.AddListener(_ => playerStandalone.Send(SendType.Rpc, new PlayerStatusPacket(teamStatus)));
             heroStatus.OnChanged.AddListener(_ => playerStandalone.Send(SendType.Rpc, new PlayerStatusPacket(heroStatus)));

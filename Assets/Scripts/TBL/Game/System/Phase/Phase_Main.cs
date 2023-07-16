@@ -15,14 +15,14 @@ namespace TBL.Game.Sys
         const PhaseQuestStatus.QuestType QUEST = PhaseQuestStatus.QuestType.PassCard;
         public UnityEvent FinishEvent { get; } = new();
         Player passTarget = null;
-        CardEnum.Property card = 0;
+        int cardId = 0;
 
         public override void Enter(Manager manager, object parameter = null)
         {
             base.Enter(manager);
 
             passTarget = null;
-            card = 0;
+            cardId = 0;
 
             var p = manager.CurrentPlayer;
             p.PlayerStandalone.PacketHandler.PassCardPacketEvent.AutoRemoveListener(OnFinish);
@@ -39,6 +39,7 @@ namespace TBL.Game.Sys
 
         public override void Exit()
         {
+            var card = (CardEnum.Property)cardId;
             manager.CurrentPlayer
                    .PlayerStandalone
                    .PacketHandler
@@ -61,8 +62,8 @@ namespace TBL.Game.Sys
                             InitQueue(passTarget, card),
                             card)));
 
-                manager.DiscardHand(manager.CurrentPlayer, (int)card);
-                manager.Deck.hand.MoveTo(c => c.Property == card, manager.Deck.table);
+                manager.DiscardHand(manager.CurrentPlayer, cardId);
+                manager.Deck.hand.MoveTo(c => c.Id == cardId, manager.Deck.table);
             }
         }
 
@@ -70,7 +71,7 @@ namespace TBL.Game.Sys
         {
             FinishEvent.Invoke();
             passTarget = manager.Players.QueryById(packet.target);
-            card = packet.card;
+            cardId = packet.cardId;
         }
 
         Queue<Player> InitQueue(Player target, CardEnum.Property card)

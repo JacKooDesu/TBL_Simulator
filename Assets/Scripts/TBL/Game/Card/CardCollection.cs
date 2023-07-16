@@ -23,6 +23,6 @@ namespace TBL.Game
             return result;
         }
 
-        public List<int> ToIdList() => collection.Select(c => (int)c.Property).ToList();
+        public List<int> ToIdList() => collection.Select(c => c.Id).ToList();
     }
 }

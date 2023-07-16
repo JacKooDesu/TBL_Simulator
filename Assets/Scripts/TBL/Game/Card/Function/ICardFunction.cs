@@ -9,8 +9,10 @@ namespace TBL.Game
     public interface ICardFunction
     {
         // void Step();
-        void ExecuteAction(Player user, Manager manager);
+        void ExecuteAction(Player user, Manager manager, int id);
         // delegate UniTask ExecuteAction(Player user, Player target, Manager manager);
         // ExecuteAction Execute { get; }
+        bool ServerCheck();
+        bool ClientCheck();
     }
 }

@@ -3,16 +3,16 @@ namespace TBL.Game.Networking
 {
     public class UseCardPacket : IPacket
     {
-        public CardEnum.Property card { get; set; }
+        public int cardId { get; set; }
         public PacketType Type() => PacketType.UseCard;
-        public UseCardPacket(CardEnum.Property card)
+        public UseCardPacket(int cardId)
         {
-            this.card = card;
+            this.cardId = cardId;
         }
 
         public bool Serialize(ref string data)
         {
-            data = $"{(int)card}";
+            data = $"{cardId}";
             return true;
         }
 
@@ -20,9 +20,9 @@ namespace TBL.Game.Networking
         static bool Deserialize(string data, out IPacket packet)
         {
             packet = null;
-            if (Int32.TryParse(data, out var card))
+            if (Int32.TryParse(data, out var cardId))
             {
-                packet = new UseCardPacket((CardEnum.Property)card);
+                packet = new UseCardPacket(cardId);
                 return true;
             }
 

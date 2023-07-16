@@ -14,7 +14,20 @@ namespace TBL.Game
 
     public class BurnFunction : ICardFunction
     {
-        public void ExecuteAction(Player user, Manager manager) =>
+        public bool ClientCheck() =>
+            IPlayerStandalone.Standalones
+                             .Select(x => x.player.CardStatus.Table)
+                             .Any(x =>
+                                x.Any(c => ((Property)c).Contains(Property.Black)));
+
+        public bool ServerCheck() =>
+            Manager.Instance
+                   .Players.Players
+                   .Select(x => x.CardStatus.Table)
+                   .Any(x =>
+                        x.Any(c => ((Property)c).Contains(Property.Black)));
+
+        public void ExecuteAction(Player user, Manager manager, int id) =>
             SelectPlayer(user, manager);
 
 

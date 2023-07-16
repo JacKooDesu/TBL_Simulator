@@ -8,7 +8,11 @@ namespace TBL.Game
     using static CardFunctionUtil;
     public class InvalidateFunction : ICardFunction
     {
-        public void ExecuteAction(Player user, Manager manager) =>
+        public bool ClientCheck() => true;
+
+        public bool ServerCheck() => true;
+
+        public void ExecuteAction(Player user, Manager manager, int id) =>
             manager.AddResolve(Resolve);
 
         void Resolve() =>

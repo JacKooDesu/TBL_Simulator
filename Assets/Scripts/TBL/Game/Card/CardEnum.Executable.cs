@@ -17,7 +17,7 @@ namespace TBL.Game
                 {Function.Burn, new BurnFunction()},
                 {Function.Invalidate, new InvalidateFunction()},
                 {Function.Gameble, null},
-                {Function.Test, null}});
+                {Function.Test, new TestFunction()}});
 
         public static ICardFunction ToExecutable(this Function function) =>
             FunctionExecuteDict[function];

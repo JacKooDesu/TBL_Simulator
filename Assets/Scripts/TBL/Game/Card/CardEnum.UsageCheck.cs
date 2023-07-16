@@ -18,7 +18,11 @@ namespace TBL.Game
             var isAskingRecive =
                 (GameState.Instance.CurrnetPassingPlayer ?? -1) == IPlayerStandalone.MyPlayer.ProfileStatus.Id;
 
-            return CommonCheck(function, phase, isRoundHost, isAskingRecive);
+            var executable = function.ToExecutable();
+
+            return CommonCheck(function, phase, isRoundHost, isAskingRecive) &&
+                   // FIXME 尚未實作所有卡牌功能!!
+                   (executable == null ? false : executable.ClientCheck());
         }
 
         public static bool ServerCheck(
@@ -35,8 +39,12 @@ namespace TBL.Game
                 player.PhaseQuestStatus.Quest.Contains(QuestType.AskRecieve) :
                 false;
 
-            return CommonCheck(function, phase, isRoundHost, isAskingRecive) &
-                   (checkFunc?.Invoke(player, manager) ?? true);
+            var executable = function.ToExecutable();
+
+            return CommonCheck(function, phase, isRoundHost, isAskingRecive) &&
+                   (checkFunc?.Invoke(player, manager) ?? true) &&
+                   // FIXME 尚未實作所有卡牌功能!!
+                   (executable == null ? false : executable.ServerCheck());
         }
 
         static bool CommonCheck(Function function, PhaseType phase, bool isRoundHost, bool isAskingRecive) =>

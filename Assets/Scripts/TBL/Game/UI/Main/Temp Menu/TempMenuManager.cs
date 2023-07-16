@@ -8,5 +8,7 @@ namespace TBL.Game.UI.Main
     {
         [SerializeField] CardTempMenu cardTempMenu;
         public CardTempMenu CardTempMenu => cardTempMenu;
+        [SerializeField] ActionTempMenu actionTempMenu;
+        public ActionTempMenu ActionTempMenu => actionTempMenu;
     }
 }

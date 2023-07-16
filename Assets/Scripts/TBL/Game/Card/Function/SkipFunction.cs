@@ -1,14 +1,24 @@
 using System;
-using UnityEngine;
+using System.Linq;
 
 namespace TBL.Game
 {
     using Sys;
-    using Property = CardEnum.Property;
     using static CardFunctionUtil;
     public class SkipFunction : ICardFunction
     {
-        public void ExecuteAction(Player user, Manager manager)
+        public bool ClientCheck() =>
+            IPlayerStandalone.Standalones
+                             .Select(x => x.player.ReceiverStatus.Current())
+                             .Any(x => !x.HasFlag(ReceiveEnum.Skipped));
+
+        public bool ServerCheck() =>
+            Manager.Instance
+                   .Players.Players
+                   .Select(x => x.ReceiverStatus.Current())
+                   .Any(x => !x.HasFlag(ReceiveEnum.Skipped));
+
+        public void ExecuteAction(Player user, Manager manager, int id)
         {
             SelectPlayer(user, manager);
         }
@@ -18,7 +28,7 @@ namespace TBL.Game
             SelectPlayerAction(
                 user,
                 manager,
-                p => !p.ReceiverStatus.Current().HasFlag(ReceiveEnum.Skipped))
+                p => !p.Equals(user) && !p.ReceiverStatus.Current().HasFlag(ReceiveEnum.Skipped))
                 .AndThen<int>(
                     id => manager.AddResolve(
                         () => manager.AddReciverStatus(

@@ -124,15 +124,15 @@ namespace TBL.Game.Sys
         public void FinishQuest(Player p, QuestType q) =>
             p.PhaseQuestStatus.FinishQuest(q);
 
-        public void UseCard(Player p, CardEnum.Property card)
+        public void UseCard(Player p, int cardId)
         {
-            var function = card.ConvertFunction();
+            var function = ((CardEnum.Property)cardId).ConvertFunction();
             if (!function.ServerCheck(p, this))
                 return;
 
-            DiscardHand(p, ((int)card));
+            DiscardHand(p, cardId);
             var executable = function.ToExecutable();
-            executable.ExecuteAction(p, this);
+            executable.ExecuteAction(p, this, cardId);
         }
 
         public void AddGameAction(GameAction action) =>

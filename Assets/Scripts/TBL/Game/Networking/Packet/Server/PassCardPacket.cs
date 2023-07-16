@@ -5,17 +5,17 @@ namespace TBL.Game.Networking
     using QuestType = PhaseQuestStatus.QuestType;
     public class PassCardPacket : IPacket
     {
-        public CardEnum.Property card;
+        public int cardId;
         public int target;
 
-        public PassCardPacket(CardEnum.Property card, int target)
+        public PassCardPacket(int cardId, int target)
         {
-            this.card = card;
+            this.cardId = cardId;
             this.target = target;
         }
         public bool Serialize(ref string data)
         {
-            data = $"{(int)card},{target}";
+            data = $"{cardId},{target}";
             return true;
         }
 
@@ -26,10 +26,10 @@ namespace TBL.Game.Networking
         {
             packet = null;
             var array = data.Split(',');
-            if (Int32.TryParse(array[0], out var card) &&
+            if (Int32.TryParse(array[0], out var cardId) &&
                 Int32.TryParse(array[1], out var target))
             {
-                packet = new PassCardPacket((CardEnum.Property)card, target);
+                packet = new PassCardPacket(cardId, target);
                 return true;
             }
 
