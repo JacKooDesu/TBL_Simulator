@@ -12,6 +12,7 @@ namespace TBL.Game
         /// </summary>
         public const int NONE = 1 << 0;
         public const int UNIQUE_BIT = 16;
+        public static int GetUniqueId(this int id) => id >> UNIQUE_BIT;
 
         /// <summary>
         /// 用於存放卡片所有屬性，多使用於ID轉換。

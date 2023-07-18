@@ -10,7 +10,7 @@ namespace TBL.Game.UI.Main
 {
     using TBL.Utils;
     using Sys;
-    using ActionOption = Sys.GameAction_SelectAction.Option;
+    using ActionOption = Sys.GameAction_SelectAction.OptionBase;
 
     public sealed class ActionOptionItem : OptionItemBase<ActionOption>
     {

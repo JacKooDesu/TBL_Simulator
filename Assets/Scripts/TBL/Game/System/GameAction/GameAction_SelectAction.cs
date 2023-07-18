@@ -5,12 +5,14 @@ using Newtonsoft.Json;
 namespace TBL.Game.Sys
 {
     using Networking;
+    using TBL.Utils;
     using UI.Main;
     public class GameAction_SelectAction : GameAction
     {
-        protected override ActionType ActionType => ActionType.SelectOption;
-        public record Option(string name, Action action);
-        public record ActionData(Option[] options);
+        protected override ActionType ActionType => ActionType.SelectAction;
+        public record OptionBase(string name);
+        public record Option(string name, Action action) : OptionBase(name);
+        public record ActionData(OptionBase[] options);
         public ActionData Data { get; private set; }
         #region SERVER
         public GameAction_SelectAction(Player player, ActionData data) : base(player)
@@ -22,7 +24,9 @@ namespace TBL.Game.Sys
 
         ActionRequestPacket _PacketCreate()
         {
-            string data = JsonConvert.SerializeObject(Data);
+            OptionBase[] converted = Data.options.Select(x => new OptionBase(x.name)).ToArray();
+            string data = JsonConvert.SerializeObject(
+                Data with { options = converted });
             return new(ActionType, data);
         }
 
@@ -30,6 +34,12 @@ namespace TBL.Game.Sys
         {
             if (Int32.TryParse(packet.Data, out var value))
                 Result = value;
+
+            var option = Data.options[value];
+            if (option is not Option)
+                return;
+
+            (option as Option).action();
         }
         #endregion
 
@@ -45,15 +55,16 @@ namespace TBL.Game.Sys
                              .TempMenuManager
                              .ActionTempMenu
                              .Create(new(Data.options));
+            menu.OnConfirm.AutoRemoveListener(Response);
         }
-        void Response(object x)
+        void Response(int x)
         {
             IPlayerStandalone.Me.Send(
-            SendType.Cmd,
-            new ActionResponsePacket()
-            .WithData($"{x}")
-            .WithType(ActionType)
-            );
+                SendType.Cmd,
+                new ActionResponsePacket()
+                .WithData($"{x}")
+                .WithType(ActionType)
+                );
         }
         #endregion
     }

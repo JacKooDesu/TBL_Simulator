@@ -31,7 +31,7 @@ namespace TBL.Game
             {
                 for (int i = 0; i < set.count; ++i)
                 {
-                    var unique = 1 << (CardEnum.UNIQUE_BIT + i);
+                    var unique = i << (CardEnum.UNIQUE_BIT);
                     list.Add(new CardData((int)set.property | unique));
                 }
             }

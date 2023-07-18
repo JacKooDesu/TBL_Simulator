@@ -39,6 +39,7 @@ namespace TBL.Game.Sys
             {
                 ActionType.SelectPlayer => new GameAction_SelectPlayer(request),
                 ActionType.SelectCard => new GameAction_SelectCard(request),
+                ActionType.SelectAction => new GameAction_SelectAction(request),
                 _ => null
             };
 
@@ -65,6 +66,6 @@ namespace TBL.Game.Sys
     {
         SelectPlayer,
         SelectCard,
-        SelectOption,
+        SelectAction,
     }
 }

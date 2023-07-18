@@ -42,7 +42,7 @@ namespace TBL.Game
 
         [SerializeField] int id;
         public int Id => id;
-        public int Unique { get; private set; }
+        public int Unique => Id >> CardEnum.UNIQUE_BIT;
 
         [SerializeField] CardEnum.Property property;
         public CardEnum.Property Property => property;

@@ -6,7 +6,7 @@ namespace TBL.Game.Sys
     public class Phase_Resolving : PhaseBase
     {
         protected override PhaseType PhaseType => PhaseType.Resolving;
-        protected override float time => 8;
+        protected override float time => 2;
 
         public override string PhaseName => "效果處理";
 
