@@ -52,14 +52,15 @@ namespace TBL.Game
             {
                 Function.Burn => phase is not PhaseType.None,
 
-                Function.Guess or
                 Function.Gameble or
                 Function.Lock or
                 Function.Test => isRoundHost && phase is PhaseType.Main,
 
-                Function.Intercept => !isAskingRecive && phase is PhaseType.Passing,
+                Function.Guess => !isRoundHost && isAskingRecive && phase is PhaseType.Passing,
+                Function.Intercept => !isRoundHost && !isAskingRecive && phase is PhaseType.Passing,
+                Function.Return => !isRoundHost && isAskingRecive && phase is PhaseType.Passing,
+
                 Function.Skip => phase is PhaseType.Main,
-                Function.Return => isAskingRecive && phase is PhaseType.Passing,
                 Function.Invalidate => phase is PhaseType.Resolving,
 
                 _ => false

@@ -6012,7 +6012,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb43533f7b8fc1249840cd5de8cef968, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  deckSetting: {fileID: 11400000, guid: 3d6b6b7f1cfa5e44f9c3a76645237fb1, type: 2}
+  deckSetting: {fileID: 11400000, guid: e4e43e99d95807c40abcee8d1053f120, type: 2}
   deck:
     cardDatas: []
     sleeping:

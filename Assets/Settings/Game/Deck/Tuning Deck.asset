@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6c7dcfa4c3012e44bd65f7afb094e66, type: 3}
+  m_Name: Tuning Deck
+  m_EditorClassIdentifier: 
+  CardSets:
+  - name: "\u85CD , \u622A\u7372 , \u5BC6\u96FB"
+    property: 16514
+    color: 2
+    function: 128
+    type: 16384
+    count: 30
+  - name: "\u85CD , \u8B58\u7834 , \u5BC6\u96FB"
+    property: 17410
+    color: 2
+    function: 1024
+    type: 16384
+    count: 30

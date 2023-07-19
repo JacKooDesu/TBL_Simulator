@@ -17,8 +17,8 @@ namespace TBL.Game
     //  : Sys.IResource<int, TeamSetting, HeroSetting, PlayerList>
     {
         [SerializeField] List<Player> players;
-        public ReadOnlyCollection<Player> Players => players.AsReadOnly();
-        public Player this[int index] { get => Players[index]; }
+        public ReadOnlyCollection<Player> List => players.AsReadOnly();
+        public Player this[int index] { get => List[index]; }
 
         public PlayerCollection Blue = new PlayerCollection();
         public PlayerCollection Red = new PlayerCollection();

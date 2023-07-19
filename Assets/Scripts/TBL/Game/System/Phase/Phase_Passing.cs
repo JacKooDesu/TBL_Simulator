@@ -13,9 +13,16 @@ namespace TBL.Game.Sys
         protected override PhaseType PhaseType => PhaseType.Passing;
         public override string PhaseName => "卡片傳遞階段";
         protected override float time => 5f;
-        public record PassingData(Queue<Player> queue, CardEnum.Property card);
-        public PassingData data;
+
+        public record PassingData(Queue<Player> queue, int cardId);
+        PassingData data;
+        public PassingData Data => data;
+
+        Stack<Player> PassedPlayer { get; } = new();
+
         Player target;
+        public Player Target => target;
+
         const PhaseQuestStatus.QuestType QUEST = PhaseQuestStatus.QuestType.AskRecieve;
         public UnityEvent FinishEvent { get; } = new();
 
@@ -25,10 +32,13 @@ namespace TBL.Game.Sys
         {
             base.Enter(manager);
             if (parameter != null)
+            {
                 data = parameter as PassingData;
+                PassedPlayer.Clear();
+            }
 
             target = data.queue.Dequeue();
-            if (target == manager.CurrentPlayer)
+            if (target == manager.CurrentPlayer || data.queue.Count == 0)
             {
                 nextPhase = CreateRecivePhase();
                 forceExit = true;
@@ -60,7 +70,8 @@ namespace TBL.Game.Sys
 
         public override void Exit()
         {
-            if (Check())
+            PassedPlayer.Push(target);
+            if (Check() && !forceExit)
             {
                 manager.FinishQuest(target, QUEST);
                 nextPhase = new(PhaseType.Passing);
@@ -92,9 +103,26 @@ namespace TBL.Game.Sys
         }
 
         PhaseManager.PhaseData CreateRecivePhase() =>
-            new(PhaseType.Receive, new Phase_Recive.ReciveData(target, data.card));
+            new(PhaseType.Receive, new Phase_Recive.ReciveData(target, (CardEnum.Property)data.cardId));
 
         PhaseManager.PhaseData CreatePassingPhase() =>
             new(PhaseType.Passing);
+
+        public void Return()
+        {
+            data.queue.Clear();
+            while (PassedPlayer.TryPop(out var p))
+                data.queue.Enqueue(p);
+
+            forceExit = true;
+        }
+
+        public void Intercept(Player user)
+        {
+            data.queue.Clear();
+            data.queue.Enqueue(user);
+
+            forceExit = true;
+        }
     }
 }

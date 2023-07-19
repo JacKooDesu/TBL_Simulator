@@ -58,7 +58,7 @@ namespace TBL.Game.Sys
 
             players.SetupTeam(teamSetting, heroSetting, true);
 
-            foreach (var p in players.Players)
+            foreach (var p in players.List)
                 Draw(p, 7);
 
             Broadcast(new GameStartPacket(), SendType.Target);
@@ -72,7 +72,7 @@ namespace TBL.Game.Sys
         public void NewRound()
         {
             currentPlayerIndex++;
-            if (currentPlayerIndex >= players.Players.Count)
+            if (currentPlayerIndex >= players.List.Count)
                 currentPlayerIndex = 0;
 
             phaseManager.ResetFlow();

@@ -60,7 +60,7 @@ namespace TBL.Game.Sys
                     new(PhaseType.Passing,
                         new Phase_Passing.PassingData(
                             InitQueue(passTarget, card),
-                            card)));
+                            cardId)));
 
                 manager.DiscardHand(manager.CurrentPlayer, cardId);
                 manager.Deck.hand.MoveTo(c => c.Id == cardId, manager.Deck.table);
@@ -84,7 +84,7 @@ namespace TBL.Game.Sys
             }
             else
             {
-                var players = manager.Players.Players;
+                var players = manager.Players.List;
                 var beginId = target.ProfileStatus.Id;
                 var ownerId = manager.CurrentPlayer.ProfileStatus.Id;
                 int iter = beginId - ownerId;

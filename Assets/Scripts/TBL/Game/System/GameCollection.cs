@@ -47,6 +47,7 @@ namespace TBL.Game.Sys
 
         public List<T> Filter(Predicate<T> predicate) => collection.FindAll(predicate);
         public T First(Predicate<T> predicate) => Filter(predicate).First();
+        public T First() => collection[0];
         public int Count => collection.Count;
 
         public GameCollection<T> Shuffle()

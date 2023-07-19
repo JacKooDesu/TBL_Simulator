@@ -14,7 +14,7 @@ namespace TBL.Game
             new(
                 user,
                 manager.Players
-                    .Players
+                    .List
                     .Where(fileter)
                     .Select(x => x.ProfileStatus.Id)
                     .ToArray()

@@ -20,6 +20,7 @@ namespace TBL.Game.Sys
             this.manager = manager;
             manager.Broadcast(new ChangePhasePacket(PhaseType));
             timeCurrent = 0;
+            forceExit = false;
         }
 
         public virtual bool Update(float dt)

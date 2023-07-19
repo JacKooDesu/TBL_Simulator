@@ -22,7 +22,7 @@ namespace TBL.Game
 
         public bool ServerCheck() =>
             Manager.Instance
-                   .Players.Players
+                   .Players.List
                    .Select(x => x.CardStatus.Table)
                    .Any(x =>
                         x.Any(c => ((Property)c).Contains(Property.Black)));
@@ -63,7 +63,7 @@ namespace TBL.Game
         {
             return manager
                     .Players
-                    .Players
+                    .List
                     .Any(x => x.CardStatus
                                 .Table
                                 .Any(c => ((Property)c).Contains(Property.Black)));

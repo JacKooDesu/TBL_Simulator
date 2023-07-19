@@ -11,12 +11,12 @@ namespace TBL.Game
             new Dictionary<Function, ICardFunction>{
                 {Function.Lock, new LockFunction()},
                 {Function.Skip, new SkipFunction()},
-                {Function.Return, null},
-                {Function.Intercept, null},
-                {Function.Guess, null},
+                {Function.Return, new ReturnFunction()},
+                {Function.Intercept, new InterceptFunction()},
+                {Function.Guess, new GuessFunction()},
                 {Function.Burn, new BurnFunction()},
                 {Function.Invalidate, new InvalidateFunction()},
-                {Function.Gameble, null},
+                {Function.Gameble, new GamebleFunction()},
                 {Function.Test, new TestFunction()}});
 
         public static ICardFunction ToExecutable(this Function function) =>

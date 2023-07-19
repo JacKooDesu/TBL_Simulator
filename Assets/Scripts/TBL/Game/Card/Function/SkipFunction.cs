@@ -14,7 +14,7 @@ namespace TBL.Game
 
         public bool ServerCheck() =>
             Manager.Instance
-                   .Players.Players
+                   .Players.List
                    .Select(x => x.ReceiverStatus.Current())
                    .Any(x => !x.HasFlag(ReceiveEnum.Skipped));
 
