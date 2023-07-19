@@ -4,13 +4,14 @@ using System.Linq;
 namespace TBL.Game.Sys
 {
     using Game.Networking;
+    using TBL.Utils;
     using UnityEngine.Events;
     using static TBL.Game.PhaseQuestStatus;
 
     /// <summary>
     /// 存在於所有玩家，用於紀錄當前遊戲狀態。
     /// </summary>
-    public sealed class GameState : IDisposable
+    public sealed partial class GameState : IDisposable
     {
         public static GameState Instance { get; private set; }
         public static void Create(PacketHandler handler)
@@ -21,9 +22,9 @@ namespace TBL.Game.Sys
 
         void RegistEvent(PacketHandler handler)
         {
-            SetPassingEvent();
             handler.ChangePhasePacketEvent.AddListener(SetPhase);
             handler.NewRoundPacketEvent.AddListener(SetNewRound);
+            OnPhaseChange.AddListener(OnPhaseChangeAction);
         }
 
         public PhaseType CurrentPhase { get; private set; } = PhaseType.None;
@@ -38,21 +39,44 @@ namespace TBL.Game.Sys
 
         public int? CurrnetPassingPlayer { get; private set; } = null;
         public UnityEvent<int?> OnPassingPlayerChange { get; } = new();
-        void SetPassingEvent()
+
+        void OnPhaseChangeAction(PhaseType packet)
         {
-            Action<Player, PhaseQuestStatus> action = (p, x) =>
+            Action action = packet switch
             {
-                if (x.Quest.Contains(QuestType.AskRecieve))
-                    SetPassing(p.ProfileStatus.Id);
+                PhaseType.Passing => SetPassing,
+                PhaseType.Receive => SetReceive,
+                _ => () => { }
             };
-            foreach (var p in IPlayerStandalone.Standalones.Select(x => x.player))
-                p.PhaseQuestStatus
-                 .OnChanged
-                 .AddListener(x => action(p, x));
+            action.Invoke();
         }
 
-        void SetPassing(int? id) =>
-            OnPassingPlayerChange.Invoke(CurrnetPassingPlayer = id);
+        void SetPassingPlayer(int? id)
+        {
+            CurrnetPassingPlayer = id;
+            OnPassingPlayerChange.Invoke(CurrnetPassingPlayer);
+        }
+
+        void SetPassing()
+        {
+            foreach (var p in IPlayerStandalone.Standalones.Select(x => x.player))
+            {
+                UnityAction<PhaseQuestStatus> action = s =>
+                {
+                    if (!s.Quest.Contains(QuestType.AskRecieve))
+                        return;
+                    SetPassingPlayer(p.ProfileStatus.Id);
+                };
+                p.PhaseQuestStatus.OnChanged.AddListener(action);
+
+                E_Phase_Recive.AutoRemoveListener(
+                    () => p.PhaseQuestStatus.OnChanged.RemoveListener(action));
+            }
+        }
+        private void SetReceive()
+        {
+            E_Phase_Recive.Invoke();
+        }
 
         public void Dispose() => Instance = null;
     }

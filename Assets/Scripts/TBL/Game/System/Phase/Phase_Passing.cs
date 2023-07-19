@@ -111,8 +111,12 @@ namespace TBL.Game.Sys
         public void Return()
         {
             data.queue.Clear();
-            while (PassedPlayer.TryPop(out var p))
-                data.queue.Enqueue(p);
+            // 只有 Host 的情況
+            if (PassedPlayer.Count == 0)
+                data.queue.Enqueue(manager.CurrentPlayer);
+            else
+                while (PassedPlayer.TryPop(out var p))
+                    data.queue.Enqueue(p);
 
             forceExit = true;
         }

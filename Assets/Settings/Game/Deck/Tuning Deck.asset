@@ -19,9 +19,9 @@ MonoBehaviour:
     function: 128
     type: 16384
     count: 30
-  - name: "\u85CD , \u8B58\u7834 , \u5BC6\u96FB"
-    property: 17410
-    color: 2
+  - name: "\u7D05 , \u8B58\u7834 , \u5BC6\u96FB"
+    property: 17412
+    color: 4
     function: 1024
     type: 16384
     count: 30
