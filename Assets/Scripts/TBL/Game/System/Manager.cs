@@ -26,40 +26,34 @@ namespace TBL.Game.Sys
         [SerializeField] HeroSetting heroSetting;
         [SerializeField] PlayerList players = new PlayerList();
         public PlayerList Players => players;
+
         int currentPlayerIndex = -1;
         public Player CurrentPlayer => Players[currentPlayerIndex];
 
         PhaseManager phaseManager;
         public PhaseManager PhaseManager => phaseManager;
+
+        HeroManager heroManager = new();
+        public HeroManager HeroManager => heroManager;
+
         public delegate bool GetManagerDelegate(out Manager manager);
         public static GetManagerDelegate TryGet() => (out Manager manager) => manager = Instance;
         public static Manager Instance { get; private set; }
 
-        async void Start()
+        async UniTask Start()
         {
-            Instance = this;
-
-            if (IStandaloneManager.Singleton == null)
+            if (!InitManager())
                 return;
 
-            await UniTask.WaitUntil(() => IStandaloneManager.Singleton.InitializeComplete);
-
-            IPlayerStandalone[] standalones = null!;
-            standalones = IStandaloneManager.Singleton.GetStandalones();
-
-            deck.Init(deckSetting)
-                .sleeping.AddRange(deck.CardDatas)
-                .Shuffle();
-
-            players.Init(standalones);
-            Broadcast(new ServerReadyPacket(), SendType.Target);
-
-            await UniTask.WaitUntil(() => standalones.FirstOrDefault(x => x.IsReady == false) == null);
+            await InitGame();
 
             players.SetupTeam(teamSetting, heroSetting, true);
 
             foreach (var p in players.List)
+            {
+                p.HeroStatus.Update(new(heroManager.Draw()));
                 Draw(p, 7);
+            }
 
             Broadcast(new GameStartPacket(), SendType.Target);
 
@@ -67,6 +61,33 @@ namespace TBL.Game.Sys
             NewRound();
             var ct = gameObject.GetCancellationTokenOnDestroy();
             phaseManager.Run(ct).Forget();
+        }
+
+        bool InitManager()
+        {
+            Instance = this;
+
+            if (IStandaloneManager.Singleton == null)
+                return false;
+
+            deck.Init(deckSetting)
+                .sleeping.AddRange(deck.CardDatas)
+                .Shuffle();
+
+            return true;
+        }
+
+        async UniTask InitGame()
+        {
+            await UniTask.WaitUntil(() => IStandaloneManager.Singleton.InitializeComplete);
+
+            IPlayerStandalone[] standalones = null!;
+            standalones = IStandaloneManager.Singleton.GetStandalones();
+
+            players.Init(standalones);
+            Broadcast(new ServerReadyPacket(), SendType.Target);
+
+            await UniTask.WaitUntil(() => standalones.FirstOrDefault(x => x.IsReady == false) == null);
         }
 
         public void NewRound()
