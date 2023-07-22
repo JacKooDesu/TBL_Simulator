@@ -10,13 +10,13 @@ namespace TBL.Game.Networking
         [SyncVar(hook = nameof(OnPlayerNameChange))] public string playerName;
         void OnPlayerNameChange(string oldName, string newName)
         {
-            if (roomUi == null)
-                roomUi = FindObjectOfType<NetCanvas.RoomScene>();
+            // if (roomUi == null)
+            //     roomUi = FindObjectOfType<NetCanvas.RoomScene>();
 
-            roomUi?.UpdatePlayerList();
+            // roomUi?.UpdatePlayerList();
         }
 
-        NetCanvas.RoomScene roomUi;
+        // NetCanvas.RoomScene roomUi;
 
         [SerializeField]
         GameObject playerUIPrefab = default;
@@ -40,17 +40,17 @@ namespace TBL.Game.Networking
 
         public override void OnClientEnterRoom()
         {
-            if (roomUi == null)
-                roomUi = FindObjectOfType<NetCanvas.RoomScene>();
+            // if (roomUi == null)
+            //     roomUi = FindObjectOfType<NetCanvas.RoomScene>();
 
-            roomUi?.UpdatePlayerList();
+            // roomUi?.UpdatePlayerList();
 
             base.OnClientEnterRoom();
         }
 
         public override void ReadyStateChanged(bool oldReadyState, bool newReadyState)
         {
-            roomUi?.UpdatePlayerList();
+            // roomUi?.UpdatePlayerList();
         }
 
         public override void OnDisable()
