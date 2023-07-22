@@ -1,5 +1,6 @@
 using System;
 using TBL.Game.Sys;
+using UnityEngine;
 
 namespace TBL.Game
 {
@@ -34,6 +35,8 @@ namespace TBL.Game
 
             GameAction_SelectAction result =
                 new(user, new(new[] { red, blue, black }));
+
+            result.AddToFlow();
         }
 
         // FIXME 確認是否為公開文本
