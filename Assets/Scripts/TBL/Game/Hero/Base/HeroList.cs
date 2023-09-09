@@ -9,7 +9,7 @@ namespace TBL.Game.Hero
         };
 
         public static HeroBase GetHero(int id) => GetHero((HeroId)id);
-        public static HeroBase GetHero(HeroId id) => Dict[id];
+        public static HeroBase GetHero(HeroId id) => Dict.TryGetValue(id, out var hero) ? hero : null;
     }
 
     public enum HeroId : int

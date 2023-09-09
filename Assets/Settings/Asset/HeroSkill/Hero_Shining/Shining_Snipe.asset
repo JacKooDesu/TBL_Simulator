@@ -9,12 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f967783eaee2c8842b24e3bc30b31059, type: 3}
-  m_Name: HeroAsset
+  m_Script: {fileID: 11500000, guid: 6571dbffe67178f409ae06a183ebc71d, type: 3}
+  m_Name: Shining_Snipe
   m_EditorClassIdentifier: 
-  <Settings>k__BackingField:
-  - DisplayName: Hero_Shining
-    id: 0
-    name: 
-    icon: {fileID: 0}
-  <Skills>k__BackingField: []
+  <ID>k__BackingField: 0
+  <Name>k__BackingField: 
+  <Desc>k__BackingField: 
