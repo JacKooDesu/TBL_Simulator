@@ -6,6 +6,7 @@ using System.Linq;
 using System.Collections.Generic;
 
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace TBL.Game.Sys
 {
@@ -24,6 +25,8 @@ namespace TBL.Game.Sys
         public PhaseBase Next() => Phase.Get(flow.Peek().type);
 
         readonly Manager manager;
+
+        public UnityEvent<PhaseBase> AfterEnter { get; } = new();
 
         public PhaseManager(Manager manager)
         {
@@ -44,6 +47,7 @@ namespace TBL.Game.Sys
                 var dt = 0f;
 
                 current.Enter(manager, flow.Peek().parameter);
+                AfterEnter.Invoke(current);
                 while (current.Update(dt))
                 {
                     await UniTask.Yield(PlayerLoopTiming.EarlyUpdate);

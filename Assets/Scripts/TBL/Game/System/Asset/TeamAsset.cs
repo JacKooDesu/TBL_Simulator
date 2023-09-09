@@ -9,11 +9,11 @@ namespace TBL.Game.Sys
     [CreateAssetMenu(fileName = "TeamAsset", menuName = "TBL/Asset/Team", order = 0)]
     public class TeamAsset : ScriptableObject
     {
-
         [System.Serializable]
         public class Setting
         {
             public TeamEnum id;
+            public string name;
             public Sprite icon;
         }
 

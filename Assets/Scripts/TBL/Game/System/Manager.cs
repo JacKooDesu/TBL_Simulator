@@ -33,7 +33,7 @@ namespace TBL.Game.Sys
         PhaseManager phaseManager;
         public PhaseManager PhaseManager => phaseManager;
 
-        HeroManager heroManager = new();
+        [SerializeField] HeroManager heroManager = new();
         public HeroManager HeroManager => heroManager;
 
         public delegate bool GetManagerDelegate(out Manager manager);
@@ -51,13 +51,12 @@ namespace TBL.Game.Sys
 
             foreach (var p in players.List)
             {
-                p.HeroStatus.Update(new(heroManager.Draw()));
+                heroManager.SetupForPlayer(p, this);
                 Draw(p, 7);
             }
 
             Broadcast(new GameStartPacket(), SendType.Target);
 
-            phaseManager = new(this);
             NewRound();
             var ct = gameObject.GetCancellationTokenOnDestroy();
             phaseManager.Run(ct).Forget();
@@ -73,7 +72,7 @@ namespace TBL.Game.Sys
             deck.Init(deckSetting)
                 .sleeping.AddRange(deck.CardDatas)
                 .Shuffle();
-
+            phaseManager = new(this);
             return true;
         }
 

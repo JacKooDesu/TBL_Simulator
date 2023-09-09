@@ -14,8 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   settings:
   - id: 1
+    name: "\u8ECD\u60C5"
     icon: {fileID: 21300000, guid: 6278230fbf0ef5945a86f374ba3313f9, type: 3}
   - id: 2
+    name: "\u6F5B\u4F0F"
     icon: {fileID: 21300000, guid: af00def31cd4277419d3cfbd77df11a0, type: 3}
   - id: 3
+    name: "\u91AC\u6CB9"
     icon: {fileID: 21300000, guid: 750658d456db6ad4eb59374b9b669324, type: 3}

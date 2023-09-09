@@ -36,12 +36,14 @@ namespace TBL.Game.UI.Main
         void UpdateHero(HeroStatus status)
         {
             var asset = AssetHandler.Instance.Hero.Get(status.HeroId);
+            heroNameText?.SetText(asset.name);
             heroImage.sprite = asset.icon;
         }
 
         void UpdateTeam(TeamEnum status)
         {
             var asset = AssetHandler.Instance.Team.Get(status);
+            teamNameText?.SetText(asset.name);
             teamImage.sprite = asset.icon;
         }
     }

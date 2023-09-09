@@ -13,6 +13,7 @@ namespace TBL.Game.Sys
         public class Setting
         {
             public HeroId id;
+            public string name;
             public Sprite icon;
         }
 

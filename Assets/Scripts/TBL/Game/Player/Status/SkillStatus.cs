@@ -5,27 +5,44 @@ using UnityEngine.Events;
 namespace TBL.Game
 {
     [System.Serializable]
-    public class SkillStatus : IPlayerStatus<Dictionary<int, bool>>
+    public class SkillStatus : IPlayerStatus<SkillStatus>
     {
-        Dictionary<int, bool> value;
+        bool[] value;
 
-        public UnityEvent<Dictionary<int, bool>> OnChanged { get; } = new();
+        public SkillStatus() { }
+        public SkillStatus(bool[] value)
+        {
+            this.value = value;
+        }
 
-        public Dictionary<int, bool> Current() => value;
+        public UnityEvent<SkillStatus> OnChanged { get; } = new();
+        public SkillStatus Current() => this;
         public PlayerStatusType Type() => PlayerStatusType.Skill;
 
-        public void Update<S>(S status) where S : IPlayerStatus<Dictionary<int, bool>>
+        public void Update(int index, bool value)
         {
-            this.value = status.Current();
+            if (index >= this.value.Length ||
+                !this.value[index] ^ value)
+                return;
+
+            this.value[index] = value;
+            OnChanged.Invoke(this);
         }
 
-        public void Update(Dictionary<int, bool> value)
+        public void Update<S>(S status) where S : IPlayerStatus<SkillStatus>
         {
-            throw new NotImplementedException();
+            value = status.Current().value;
+            OnChanged.Invoke(this);
         }
 
-        public void Update(IPlayerStatus value) =>
-            Update(value as SkillStatus);
+        public void Update(SkillStatus s)
+        {
+            this.value = s.value;
+            OnChanged.Invoke(this);
+        }
+
+        public void Update(IPlayerStatus s) =>
+            Update(s as SkillStatus);
     }
 }
 

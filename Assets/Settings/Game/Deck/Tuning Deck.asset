@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: Tuning Deck
   m_EditorClassIdentifier: 
   CardSets:
-  - name: "\u85CD , \u622A\u7372 , \u5BC6\u96FB"
-    property: 16514
-    color: 2
-    function: 128
+  - name: "\u9ED1 , \u7834\u8B6F , \u5BC6\u96FB"
+    property: 16648
+    color: 8
+    function: 256
     type: 16384
     count: 30
   - name: "\u7D05 , \u8B58\u7834 , \u5BC6\u96FB"

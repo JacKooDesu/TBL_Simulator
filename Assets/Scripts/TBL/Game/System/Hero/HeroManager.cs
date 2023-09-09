@@ -8,8 +8,11 @@ namespace TBL.Game.Sys
     using Game.Hero;
     using TBL.Utils;
 
+    [Serializable]
     public class HeroManager
     {
+        int DEBUG_ITER = 0;
+        [SerializeField] HeroId[] DEBUG_POOL;
         Queue<int> Pool { get; set; } = new();
 
         // TODO Debug階段不洗牌部生成Pool
@@ -23,6 +26,22 @@ namespace TBL.Game.Sys
 
         public int Draw() =>
             Random.Range(0, (int)HeroId.MAX);
-            // Pool.Dequeue();
+        // Pool.Dequeue();
+
+        public void SetupForPlayer(Player p, Manager manager)
+        {
+            var heroId = -1;
+            if (DEBUG_POOL.Length is not 0)
+            {
+                heroId = ((int)DEBUG_POOL[DEBUG_ITER % DEBUG_POOL.Length]);
+                DEBUG_ITER++;
+            }
+            else
+            {
+                heroId = Draw();
+            }
+
+            HeroList.GetHero(heroId).SetupForPlayer(p, manager);
+        }
     }
 }
