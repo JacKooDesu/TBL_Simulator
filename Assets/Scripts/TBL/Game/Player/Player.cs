@@ -62,6 +62,7 @@ namespace TBL.Game
 
             handler.PlayerReadyPacketEvent.AutoRemoveListener(_ => playerStandalone.SetReady());
             handler.UseCardPacketEvent.AddListener(_ => manager.UseCard(this, _.cardId));
+            handler.UseSkillPacketEvent.AddListener(_ => manager.UseSkill(this, _.HeroId, _.Id));
 
             teamStatus.OnChanged.AddListener(_ => playerStandalone.Send(SendType.Rpc, new PlayerStatusPacket(teamStatus)));
             heroStatus.OnChanged.AddListener(_ => playerStandalone.Send(SendType.Rpc, new PlayerStatusPacket(heroStatus)));

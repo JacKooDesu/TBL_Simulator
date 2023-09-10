@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Settings>k__BackingField:
   - DisplayName: Hero_Shining
-    id: 0
-    name: 
-    icon: {fileID: 0}
+    id: 1
+    name: "\u9583\u9748"
+    icon: {fileID: 21300000, guid: 3f5896a6cb72c9c43a23c9fc7a972472, type: 3}
   <Skills>k__BackingField: []

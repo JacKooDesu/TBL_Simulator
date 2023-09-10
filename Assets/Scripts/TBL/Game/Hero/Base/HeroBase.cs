@@ -11,11 +11,23 @@ namespace TBL.Game.Hero
         public abstract Gender Gender { get; protected set; }
         public abstract SpecialPassive SpecialPassive { get; protected set; }
 
-        public readonly HeroSkill[] _skills;
+        readonly HeroSkill[] _skills;
         public abstract IEnumerable<HeroSkill> Skills();
         public IEnumerable<int> GetAllSkillId() => _skills.Select(x => x.Id);
         public HeroSkill GetSkillById(int id) => _skills.FirstOrDefault(x => x.Id == id);
-        public HeroSkill GetSkillByIndex(int index) => _skills[index];
+        public HeroSkill GetSkillByIndex(int index) =>
+            TryGetSkillByIndex(index, out var skill) ? skill : null;
+        public bool TryGetSkillByIndex(int index, out HeroSkill skill)
+        {
+            skill = null;
+            if (index >= _skills.Length)
+                return false;
+
+            skill = _skills[index];
+            return true;
+        }
+        public bool TryGetSkillById(int id, out HeroSkill skill) =>
+            (skill = _skills.FirstOrDefault(x => x.Id == id)) is not null;
 
         protected HeroBase()
         {

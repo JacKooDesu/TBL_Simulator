@@ -57,6 +57,7 @@ namespace TBL.Game.Networking
         AcceptCard,
         RejectCard,
         UseCard,
+        UseSkill,
         ActionResponse,
     }
 

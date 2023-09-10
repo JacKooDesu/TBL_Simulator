@@ -41,7 +41,9 @@ namespace TBL.Game.UI.Main
         }
 
         void CheckCount() =>
-            confirmBtn.interactable = (SelectedCardList.Count == Data.Max);
+            confirmBtn.interactable =
+                SelectedCardList.Count >= Data.Min &&
+                SelectedCardList.Count <= Data.Max;
 
         public override void Cancel() { }
     }

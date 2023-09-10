@@ -1,5 +1,6 @@
 using System;
 using Newtonsoft.Json;
+using TBL.Game.Hero;
 using UnityEngine.Events;
 
 namespace TBL.Game

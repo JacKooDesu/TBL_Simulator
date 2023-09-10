@@ -42,6 +42,11 @@ namespace TBL.Game.Networking
                     packet => UseCardPacketEvent.Invoke(packet as UseCardPacket))
             );
             DeserializerDict.Add(
+                PacketType.UseSkill,
+                new(UseSkillPacket.Deserializer,
+                    packet => UseSkillPacketEvent.Invoke(packet as UseSkillPacket))
+            );
+            DeserializerDict.Add(
                 PacketType.ActionRequest,
                 new(ActionRequestPacket.Deserializer,
                     packet => ActionRequestPacketEvent.Invoke(packet as ActionRequestPacket))

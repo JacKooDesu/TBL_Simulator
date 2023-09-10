@@ -17,7 +17,7 @@ namespace TBL.Game.Sys
         public int ID { get; private set; }
         [field: SerializeField]
         public string Name { get; private set; }
-        [field: SerializeField]
+        [field: SerializeField, TextArea(2, 10)]
         public string Desc { get; private set; }
 
 #if UNITY_EDITOR
@@ -29,16 +29,19 @@ namespace TBL.Game.Sys
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);
 
-            var result = ScriptableObject.CreateInstance<HeroSkillAsset>();
+            HeroSkillAsset result = null;
             path += $"{skillName}.asset";
-            if (!Directory.Exists(path))
+            if (!File.Exists(path))
+            {
+                result = ScriptableObject.CreateInstance<HeroSkillAsset>();
                 AssetDatabase.CreateAsset(result, path);
+                AssetDatabase.SaveAssets();
+            }
             else
                 result = AssetDatabase.LoadAssetAtPath<HeroSkillAsset>(path);
 
             result.ID = id;
 
-            AssetDatabase.SaveAssets();
             return result;
         }
 #endif

@@ -1,13 +1,25 @@
 using System.Collections.Generic;
 using System;
 using UnityEngine.Events;
+using System.Linq;
+using TBL.Game.Hero;
+using Newtonsoft.Json;
 
 namespace TBL.Game
 {
-    [System.Serializable]
+    [System.Serializable, JsonObject]
     public class SkillStatus : IPlayerStatus<SkillStatus>
     {
-        bool[] value;
+        [JsonProperty]
+        bool[] value = { };
+
+        [JsonIgnore]
+        public ReadOnlySpan<bool> Value => value.AsSpan();
+        /// <summary>
+        /// 回傳可使用 Skill Index
+        /// </summary>
+        public IEnumerable<int> GetAvailables() =>
+            value.Where(x => x).Select((_, index) => index);
 
         public SkillStatus() { }
         public SkillStatus(bool[] value)

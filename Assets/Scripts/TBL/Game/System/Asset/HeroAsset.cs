@@ -29,6 +29,8 @@ namespace TBL.Game.Sys
         public Setting Get(int id) => Settings.FirstOrDefault(x => ((int)x.id) == id);
         public Setting Get(HeroId id) => Settings.FirstOrDefault(x => x.id == id);
 
+        public HeroSkillAsset GetSkill(int id) => Skills.FirstOrDefault(x => x.ID == id);
+
 #if UNITY_EDITOR
         [ContextMenu("Auto Build")]
         void AutoBuild()

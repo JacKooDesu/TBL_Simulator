@@ -8,7 +8,8 @@ namespace TBL.Game.Hero
     using Property = CardEnum.Property;
     public class Shining_Snipe : HeroSkill
     {
-        public override int Id => Hero_Shining.SNIPE_SKILL_ID;
+        protected override int _Id => Hero_Shining.SNIPE_SKILL_ID;
+        protected override HeroId Hero => HeroId.Shining;
         public override void Bind(Manager manager, Player player, int index)
         {
             manager.PhaseManager.AfterEnter.AddListener(
@@ -37,7 +38,7 @@ namespace TBL.Game.Hero
             var target = manager.Players.QueryById(targetId);
             var cards = target.CardStatus.Table;
             GameAction_SelectCard selectCards = new(user, new(cards.Select(x => x.AsProperty()).ToArray(), 3, 1));
-            selectCards.AndThen<Property[]>(cards => Resolve(user, manager, cards));
+            selectCards.AndThen<Property[]>(cards => Resolve(target, manager, cards));
             selectCards.AddToFlow();
         }
 

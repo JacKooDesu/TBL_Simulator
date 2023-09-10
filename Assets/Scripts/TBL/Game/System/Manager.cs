@@ -12,6 +12,7 @@ namespace TBL.Game.Sys
     using LocalManager = Networking.LocalManager;
     using QuestType = PhaseQuestStatus.QuestType;
     using System.Collections.Generic;
+    using TBL.Game.Hero;
 
     /// <summary>
     /// 資源管理，伺服端使用操作所有遊戲物件。
@@ -153,6 +154,16 @@ namespace TBL.Game.Sys
             DiscardHand(p, cardId);
             var executable = function.ToExecutable();
             executable.ExecuteAction(p, this, cardId);
+        }
+
+        internal void UseSkill(Player player, HeroId heroId, int id)
+        {
+            if (!HeroList.TryGetHero(heroId, out var hero) ||
+                !hero.TryGetSkillById(id, out var skill) ||
+                !skill.UsageCheck(this))
+                return;
+
+            skill.Execute(this, player);
         }
 
         public void AddGameAction(GameAction action) =>
