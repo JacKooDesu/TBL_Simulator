@@ -11,7 +11,7 @@ namespace TBL.Game.UI.Main
     public sealed class CardTempMenu :
     TempMenuBase<Property, CardTempMenu.SetupData, Property[]>
     {
-        public record SetupData(Property[] cards, int count) : SetupDataBase(cards);
+        public record SetupData(Property[] Cards, int Max, int Min) : SetupDataBase(Cards);
 
         [SerializeField] Button confirmBtn;
         [SerializeField] Button cancelBtn;
@@ -36,12 +36,12 @@ namespace TBL.Game.UI.Main
                 SelectedCardList.Remove(item);
             else
                 SelectedCardList.Add(item);
-            
+
             CheckCount();
         }
 
         void CheckCount() =>
-            confirmBtn.interactable = (SelectedCardList.Count == Data.count);
+            confirmBtn.interactable = (SelectedCardList.Count == Data.Max);
 
         public override void Cancel() { }
     }

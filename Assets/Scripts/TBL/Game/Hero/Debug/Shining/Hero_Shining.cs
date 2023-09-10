@@ -1,4 +1,7 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine.Events;
 
 namespace TBL.Game.Hero
 {
@@ -10,9 +13,10 @@ namespace TBL.Game.Hero
         public override Gender Gender { get; protected set; } = Gender.Female;
         public override SpecialPassive SpecialPassive { get; protected set; } = 0;
 
-        internal Hero_Shining()
-        {
-            skillDict.Add(SNIPE_SKILL_ID, new Shining_Snipe());
-        }
+        internal Hero_Shining() : base() { }
+
+        public override IEnumerable<HeroSkill> Skills() => new HeroSkill[]{
+            new Shining_Snipe(),
+        };
     }
 }

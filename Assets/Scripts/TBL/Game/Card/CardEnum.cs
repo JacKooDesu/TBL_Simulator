@@ -152,6 +152,7 @@ namespace TBL.Game
         public static Color ConvertColor(this Property value) => (Color)value.ConvertInt<Color>();
         public static Function ConvertFunction(this Property value) => (Function)value.ConvertInt<Function>();
         public static Type ConvertType(this Property value) => (Type)value.ConvertInt<Type>();
+        public static Property AsProperty(this int value) => (Property)value;
 
         public static bool Contains(this Property source, Property target)
         {

@@ -83,5 +83,8 @@ namespace TBL.Game
             foreach (var p in players)
                 action(p);
         }
+
+        public IEnumerable<Player> Filter(Func<Player, bool> filter) =>
+            players.Where(filter);
     }
 }

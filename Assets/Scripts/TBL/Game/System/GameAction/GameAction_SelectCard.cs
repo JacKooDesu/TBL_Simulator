@@ -11,7 +11,7 @@ namespace TBL.Game.Sys
     public class GameAction_SelectCard : GameAction
     {
         protected override ActionType ActionType => ActionType.SelectCard;
-        public record ActionData(Property[] Cards, int Count = 1);
+        public record ActionData(Property[] Cards, int Max = 1, int Min = 1);
         public ActionData Data { get; private set; }
         // public Property[] Result { get; private set; }
         #region SERVER
@@ -43,7 +43,7 @@ namespace TBL.Game.Sys
                 MainUIManager.Singleton
                              .TempMenuManager
                              .CardTempMenu
-                             .Create(new(Data.Cards, Data.Count));
+                             .Create(new(Data.Cards, Data.Max, Data.Min));
             menu.OnConfirm.AutoRemoveListener(Response);
         }
         void Response(Property[] x)

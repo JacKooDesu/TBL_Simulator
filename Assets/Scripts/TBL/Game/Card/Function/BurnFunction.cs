@@ -18,14 +18,14 @@ namespace TBL.Game
             IPlayerStandalone.Standalones
                              .Select(x => x.player.CardStatus.Table)
                              .Any(x =>
-                                x.Any(c => ((Property)c).Contains(Property.Black)));
+                                x.Any(c => c.AsProperty().Contains(Property.Black)));
 
         public bool ServerCheck() =>
             Manager.Instance
                    .Players.List
                    .Select(x => x.CardStatus.Table)
                    .Any(x =>
-                        x.Any(c => ((Property)c).Contains(Property.Black)));
+                        x.Any(c => (c.AsProperty()).Contains(Property.Black)));
 
         public void ExecuteAction(Player user, Manager manager, int id) =>
             SelectPlayer(user, manager);
@@ -36,7 +36,7 @@ namespace TBL.Game
             Func<Player, bool> fileter =
                 p => p.CardStatus
                       .Table
-                      .Any(c => ((Property)c).Contains(Property.Black));
+                      .Any(c => (c.AsProperty()).Contains(Property.Black));
             SelectPlayerAction(user, manager, fileter)
                 .AndThen<int>(id => SelectCard(user, manager, id))
                 .AddToFlow();
@@ -66,7 +66,7 @@ namespace TBL.Game
                     .List
                     .Any(x => x.CardStatus
                                 .Table
-                                .Any(c => ((Property)c).Contains(Property.Black)));
+                                .Any(c => (c.AsProperty()).Contains(Property.Black)));
         }
     }
 }

@@ -17,7 +17,7 @@ namespace TBL.Game
             this.function = function;
             this.type = type;
 
-            this.property = (CardEnum.Property)((int)color | (int)function | (int)type);
+            this.property = ((int)color | (int)function | (int)type).AsProperty();
         }
 
         public CardData(CardEnum.Property property)
@@ -31,7 +31,7 @@ namespace TBL.Game
 
         public CardData(int id)
         {
-            this.property = (CardEnum.Property)id;
+            this.property = id.AsProperty();
 
             this.color = property.ConvertColor();
             this.function = property.ConvertFunction();

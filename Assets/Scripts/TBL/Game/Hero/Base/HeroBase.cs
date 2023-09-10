@@ -11,14 +11,21 @@ namespace TBL.Game.Hero
         public abstract Gender Gender { get; protected set; }
         public abstract SpecialPassive SpecialPassive { get; protected set; }
 
-        public readonly Dictionary<int, HeroSkill> skillDict = new();
-        public int[] GetAllSkillId() => skillDict.Keys.ToArray();
-        public HeroSkill GetHeroSkill(int id) => skillDict[id];
+        public readonly HeroSkill[] _skills;
+        public abstract IEnumerable<HeroSkill> Skills();
+        public IEnumerable<int> GetAllSkillId() => _skills.Select(x => x.Id);
+        public HeroSkill GetSkillById(int id) => _skills.FirstOrDefault(x => x.Id == id);
+        public HeroSkill GetSkillByIndex(int index) => _skills[index];
+
+        protected HeroBase()
+        {
+            _skills = Skills().ToArray();
+        }
 
         public void SetupForPlayer(Player p, Manager manager)
         {
             int iter = 0;
-            foreach (var (id, skill) in skillDict)
+            foreach (var skill in _skills)
             {
                 var index = iter;
                 skill.Bind(manager, p, index);
