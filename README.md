@@ -32,26 +32,36 @@ participant M as GameManager
 participant S as Server
 end
 box Client
-participant C as Client
+participant P1 as A
+end
+box Client
+participant P2 as B
 end
 
 M -->> S: Wait Initialize
 
 critical Enter Game Scene
-S --> S: Create Network Players
-C --> +C: Create Network Players
-Note over C: Wait ServerReadyPacket
+S --> +S: Create All Network Players
+P1 --> +P1: Create Network Player
+Note over P1: Wait ServerReadyPacket
+P2 --> +P2: Create Network Player
+Note over P2: Wait ServerReadyPacket
 end
 
 M ->> S: [Broadcast] ServerReadyPacket
-S ->> C: ServerReadyPacket
+S ->> P1: ServerReadyPacket
+S ->> P2: ServerReadyPacket
 
-C ->> -S: PlayerReadyPacket
-
+P1 ->> -S: PlayerReadyPacket
 S ->> M: PlayerReadyPacket
+
+P2 ->> -S: PlayerReadyPacket
+S ->> M: PlayerReadyPacket
+
 Note over S,M: Wait all PlayerReadyPacket
 
 M ->> S: [Broadcast] GameStartPacket
-S ->> C: GameStartPacket
+S ->> P1: GameStartPacket
+S ->> P2: GameStartPacket
 
 ```
