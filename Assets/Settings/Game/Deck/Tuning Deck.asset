@@ -25,3 +25,9 @@ MonoBehaviour:
     function: 1024
     type: 16384
     count: 30
+  - name: "\u9ED1 , \u71D2\u6BC0 , \u5BC6\u96FB"
+    property: 16904
+    color: 8
+    function: 512
+    type: 16384
+    count: 30

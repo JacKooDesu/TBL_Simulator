@@ -41,7 +41,7 @@ end
 M -->> S: Wait Initialize
 
 critical Enter Game Scene
-S --> +S: Create All Network Players
+S --> S: Create All Network Players
 P1 --> +P1: Create Network Player
 Note over P1: Wait ServerReadyPacket
 P2 --> +P2: Create Network Player

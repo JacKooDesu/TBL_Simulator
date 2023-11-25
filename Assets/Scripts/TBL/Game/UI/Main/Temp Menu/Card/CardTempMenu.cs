@@ -27,8 +27,11 @@ namespace TBL.Game.UI.Main
             CheckCount();
             return this;
         }
-        void Confirm() =>
+        void Confirm()
+        {
             OnConfirm.Invoke(SelectedCardList.Select(x => x.Data).ToArray());
+            Close();
+        }
 
         void Swap(OptionItemBase<CardEnum.Property> item)
         {

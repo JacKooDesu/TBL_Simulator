@@ -104,7 +104,6 @@ namespace TBL.Game.UI.Main
             {
                 UseSkill(index);
                 _selectingSkill = false;
-                menu.Close();
             });
         }
     }

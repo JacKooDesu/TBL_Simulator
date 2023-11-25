@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6571dbffe67178f409ae06a183ebc71d, type: 3}
   m_Name: Shining_Snipe
   m_EditorClassIdentifier: 
-  <ID>k__BackingField: 0
-  <Name>k__BackingField: 
+  <ID>k__BackingField: 1000
+  <Name>k__BackingField: "\u9EDE\u5C04"
   <Desc>k__BackingField: 
