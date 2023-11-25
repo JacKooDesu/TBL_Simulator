@@ -5,6 +5,7 @@ using UnityEngine.EventSystems;
 
 namespace TBL.UI.GameScene
 {
+    using Core.UI;
     using TBL.Game;
     using CardEnum = TBL.Game.CardEnum;
     using Game.UI;

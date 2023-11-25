@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace TBL.Game.UI
+namespace TBL.Core.UI
 {
     [RequireComponent(typeof(Window))]
     public class DraggableWindow : MonoBehaviour

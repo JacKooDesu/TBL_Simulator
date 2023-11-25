@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace TBL.Game.UI
+namespace TBL.Core.UI
 {
     public sealed class UIStacker : MonoBehaviour
     {

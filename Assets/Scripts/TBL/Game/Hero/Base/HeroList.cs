@@ -23,6 +23,8 @@ namespace TBL.Game.Hero
 
         Debugger = 0,
         Shining = 1,
+        AgentK = 2,
+        OldGun = 3,
 
         MAX,
     }

@@ -6,6 +6,7 @@ using UnityEngine.Events;
 
 namespace TBL.Game.UI.Main
 {
+    using Core.UI;
     public abstract class TempMenuBase<TData, TSetup, TResponse> : Window
     where TSetup : TempMenuBase<TData, TSetup, TResponse>.SetupDataBase
     {

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace TBL.Game.UI
+namespace TBL.Core.UI
 {
     /// <summary>
     /// 遊戲內UI根類別。

@@ -6,6 +6,7 @@ using Cysharp.Threading.Tasks;
 
 namespace TBL.Game.UI.Main
 {
+    using Core.UI;
     using Sys;
 
     public class MainUIManager : MonoBehaviour

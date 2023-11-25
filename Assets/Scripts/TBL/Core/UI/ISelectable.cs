@@ -1,7 +1,7 @@
 using System;
 using UnityEngine.Events;
 
-namespace TBL.Game.UI
+namespace TBL.Core.UI
 {
     public interface ISelectable<T> : ISelectable
     {

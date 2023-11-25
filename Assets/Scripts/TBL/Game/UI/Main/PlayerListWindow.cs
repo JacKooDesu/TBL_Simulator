@@ -9,7 +9,7 @@ using Cysharp.Threading.Tasks;
 
 namespace TBL.Game.UI.Main
 {
-    using UI;
+    using Core.UI;
     using Sys;
     using Utils;
     public class PlayerListWindow : Window, ISetupWith<IPlayerStandalone>

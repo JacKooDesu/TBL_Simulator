@@ -8,6 +8,7 @@ using UnityEngine.UI;
 
 namespace TBL.Game.UI.Main
 {
+    using Core.UI;
     public sealed class CardOptionItem : OptionItemBase<CardEnum.Property>
     {
         [SerializeField] TMP_Text textUI;

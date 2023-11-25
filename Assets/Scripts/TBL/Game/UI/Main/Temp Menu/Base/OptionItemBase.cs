@@ -3,6 +3,7 @@ using UnityEngine.Events;
 
 namespace TBL.Game.UI.Main
 {
+    using Core.UI;
     public abstract class OptionItemBase<TData> : MonoBehaviour, ISelectable
     {
         public abstract SelectableType Type { get; }
