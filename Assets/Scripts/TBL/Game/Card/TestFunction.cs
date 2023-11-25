@@ -21,7 +21,11 @@ namespace TBL.Game
         {
             Action<int> ResolveAction =
                 id => manager.AddResolve(
-                    () => GetActions(manager, id, cardId).AddToFlow());
+                    Phase_Resolving.ResolveDetail.Card(
+                        detail => GetActions(manager, detail.target, cardId).AddToFlow(),
+                        CardEnum.Function.Test,
+                        user,
+                        Manager.Instance.Players.QueryById(id)));
 
             SelectPlayerAction(user, manager, p => !user.Equals(p))
                 .AndThen<int>(ResolveAction)
@@ -29,16 +33,15 @@ namespace TBL.Game
         }
 
         GameAction_SelectAction GetActions(
-            Manager manager, int targetId, int cardId)
+            Manager manager, Player target, int cardId)
         {
             var unique = cardId.GetUniqueId();
-            var player = Manager.Instance.Players.QueryById(targetId);
             var flag = false;   // TODO Hero 要有 flag
 
             var preset = GetPreset(unique);
             var presetStr = GetPresetString(preset);
 
-            Action DrawAction = () => manager.Draw(player, 1);
+            Action DrawAction = () => manager.Draw(target, 1);
             Action TalkAction = () => Debug.Log("我是一個好人");
 
             var mainAction = preset.isDraw ? DrawAction : TalkAction;
@@ -56,11 +59,11 @@ namespace TBL.Game
             else
             {
                 list.Add(
-                    preset.team == player.TeamStatus.Current() ?
+                    preset.team == target.TeamStatus.Current() ?
                     mainOption : subOption);
             }
 
-            return new GameAction_SelectAction(player, new(list.ToArray()));
+            return new GameAction_SelectAction(target, new(list.ToArray()));
         }
 
         public record PresetSetting(TeamEnum team, bool isDraw);

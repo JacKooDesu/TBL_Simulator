@@ -38,16 +38,21 @@ namespace TBL.Game.Hero
             var target = manager.Players.QueryById(targetId);
             var cards = target.CardStatus.Table;
             GameAction_SelectCard selectCards = new(user, new(cards.Select(x => x.AsProperty()).ToArray(), 3, 1));
-            selectCards.AndThen<Property[]>(cards => Resolve(target, manager, cards));
+            selectCards.AndThen<Property[]>(cards => Resolve(user,target, manager, cards));
             selectCards.AddToFlow();
         }
 
-        void Resolve(Player target, Manager manager, Property[] cards)
+        void Resolve(Player user, Player target, Manager manager, Property[] cards)
         {
             manager.AddResolve(
-                () => manager.DiscardTable(
-                        target,
-                        cards.Select(x => (int)x).ToArray()));
+                Phase_Resolving.ResolveDetail.Skill(
+                    detail => manager.DiscardTable(
+                        detail.target,
+                        cards.Select(x => (int)x).ToArray()),
+                    Hero,
+                    _Id,
+                    user,
+                    target));
         }
 
         IEnumerable<Player> Filter(Manager manager) =>

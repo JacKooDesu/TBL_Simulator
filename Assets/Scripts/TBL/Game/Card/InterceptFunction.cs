@@ -10,7 +10,12 @@ namespace TBL.Game
             if (phase.Type() is not PhaseType.Passing)
                 return;
 
-            manager.AddResolve(() => (phase as Phase_Passing)?.Intercept(user));
+            manager.AddResolve(
+                Phase_Resolving.ResolveDetail.Card(
+                    detail => (phase as Phase_Passing)?.Intercept(detail.user),
+                    CardEnum.Function.Intercept,
+                    user,
+                    null));
         }
 
         public bool ClientCheck() => true;

@@ -5,7 +5,11 @@ namespace TBL.Game
     internal class GamebleFunction : ICardFunction
     {
         public void ExecuteAction(Player user, Manager manager, int id) =>
-            manager.AddResolve(() => FlipCards(manager));
+            manager.AddResolve(Phase_Resolving.ResolveDetail.Card(
+                _ => FlipCards(manager),
+                CardEnum.Function.Gameble,
+                user,
+                null));
 
         void FlipCards(Manager manager)
         {

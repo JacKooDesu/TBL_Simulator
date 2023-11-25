@@ -53,9 +53,11 @@ namespace TBL.Game
                 manager,
                 target,
                 p => p.Contains(Property.Black))
-                .AndThen<Property[]>(
-                    cards => manager.AddResolve(
-                        () => manager.DiscardTable(target, GetResultIds(cards))))
+                .AndThen<Property[]>(cards => manager.AddResolve(Phase_Resolving.ResolveDetail.Card(
+                        detail => manager.DiscardTable(detail.target, GetResultIds(cards)),
+                        CardEnum.Function.Burn,
+                        user,
+                        target)))
                 .AddToFlow();
         }
 

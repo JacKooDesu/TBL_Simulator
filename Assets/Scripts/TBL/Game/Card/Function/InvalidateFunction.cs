@@ -13,11 +13,11 @@ namespace TBL.Game
         public bool ServerCheck() => true;
 
         public void ExecuteAction(Player user, Manager manager, int id) =>
-            manager.AddResolve(Resolve);
+            manager.AddResolve(Resolve(user));
 
-        void Resolve() =>
-            (Manager.Instance.PhaseManager.Current() as Phase_Resolving)
-                    .ActionStack
-                    .TryPop(out var _);
+        Phase_Resolving.ResolveDetail Resolve(Player user) =>
+            Phase_Resolving.ResolveDetail.Just(
+                _ => (Manager.Instance.PhaseManager.Current() as Phase_Resolving).Pop(),
+                user);
     }
 }

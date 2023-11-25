@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 2248119619729677822}
   - component: {fileID: 2248119619729677817}
   - component: {fileID: 2248119619729677816}
-  - component: {fileID: 961539879798055769}
   - component: {fileID: 8457989617810212983}
   - component: {fileID: 6084129523808814251}
   - component: {fileID: 4609843599745888651}
@@ -33,6 +32,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -89,21 +89,7 @@ MonoBehaviour:
   m_ChildControlHeight: 0
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
---- !u!114 &961539879798055769
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2248119619729677818}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c318126f9f0e4443ab91140e6e55629, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  optionPrefab: {fileID: 7783438525633077450, guid: fe5dc4bb7c4c3674d94abb9c0f558936,
-    type: 3}
-  contentParent: {fileID: 2248119619729677819}
+  m_ReverseArrangement: 0
 --- !u!114 &8457989617810212983
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -119,6 +105,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 0.80784315, g: 0.8392157, b: 0.8784314, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:

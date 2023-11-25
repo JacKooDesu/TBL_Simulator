@@ -31,3 +31,9 @@ MonoBehaviour:
     function: 512
     type: 16384
     count: 30
+  - name: "\u9ED1 , \u8A66\u63A2 , \u5BC6\u96FB"
+    property: 20488
+    color: 8
+    function: 4096
+    type: 16384
+    count: 30

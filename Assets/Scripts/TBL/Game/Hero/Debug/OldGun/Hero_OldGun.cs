@@ -9,6 +9,8 @@ namespace TBL.Game.Hero
     using Property = CardEnum.Property;
     public class Hero_OldGun : HeroBase
     {
+        public const int COUNTER_SKILL_ID = 0;
+
         public override HeroId Id => HeroId.OldGun;
 
         public override Gender Gender { get; protected set; } = Gender.Male;

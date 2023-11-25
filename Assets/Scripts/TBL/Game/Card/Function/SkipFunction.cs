@@ -31,8 +31,12 @@ namespace TBL.Game
                 p => !p.Equals(user) && !p.ReceiverStatus.Current().HasFlag(ReceiveEnum.Skipped))
                 .AndThen<int>(
                     id => manager.AddResolve(
-                        () => manager.AddReciverStatus(
-                            manager.Players.QueryById(id), ReceiveEnum.Skipped)))
+                        Phase_Resolving.ResolveDetail.Card(
+                            detail => manager.AddReciverStatus(
+                                detail.target, ReceiveEnum.Skipped),
+                            CardEnum.Function.Skip,
+                            user,
+                            manager.Players.QueryById(id))))
                 .AddToFlow();
         }
     }

@@ -17,7 +17,11 @@ namespace TBL.Game
 
             Property card = (Property)(phase as Phase_Passing).Data.cardId;
 
-            manager.AddResolve(() => AskColor(user, manager, card));
+            manager.AddResolve(
+                Phase_Resolving.ResolveDetail.Card(
+                    detail => AskColor(detail.user, manager, card),
+                    CardEnum.Function.Guess,
+                    user));
         }
 
         void AskColor(Player user, Manager manager, Property card)

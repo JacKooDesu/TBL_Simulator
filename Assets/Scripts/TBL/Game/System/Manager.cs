@@ -169,12 +169,12 @@ namespace TBL.Game.Sys
         public void AddGameAction(GameAction action) =>
             phaseManager.Insert(new(PhaseType.Action, action));
 
-        public void AddResolve(Action action)
+        public void AddResolve(Phase_Resolving.ResolveDetail detail)
         {
             if (PhaseManager.Current() is Phase_Resolving)
-                (PhaseManager.Current() as Phase_Resolving).ActionStack.Push(action);
+                (PhaseManager.Current() as Phase_Resolving).Push(detail);
             else
-                PhaseManager.Insert(PhaseType.Resolving, action);
+                PhaseManager.Insert(PhaseType.Resolving, detail);
         }
 
         /// <summary>
